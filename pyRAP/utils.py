@@ -24,14 +24,104 @@ __copyright__ = '(C) 2021, CNR-IMAA'
 
 __revision__ = '$Format:%H$'
 
+from copy import copy
 import numpy as np
 
+
 def function(f):
-    def helper(*args,**kwargs):
+    def helper(*args, **kwargs):
         helper.nargin = len(args)
         # helper.varargin = cellarray(args)
-        return f(*args,**kwargs)
+        return f(*args, **kwargs)
+
     return helper
+
+
+@function
+def constants(string=None, *args, **kwargs):
+    """This routine will provide values and units for all the
+    universal constants that I needed in my work.
+
+    Nico, 2000
+
+    History
+    2003/06/06 - Added 'Rdry' and 'Rwatvap'
+    2005/12/10 - Added 'Tcosmicbkg'
+    2021/03/09 - Added 'avogadro', 'gravity'
+
+    Args:
+        string (str, optional): String specifying which constant is needed. Defaults to None.
+        Avalaible right now:
+              'avogadro'          Avogadro number [mol-1]
+              'boltzmann'         Boltzmann constant [J K-1]
+              'EarthRadius'       Earth radius [km]
+              'light'             Light speed [m s-1]
+              'Np2dB'             Neper to Decibel [dB/Np]
+              'planck'            Planck constant [J Hz-1]
+              'Rdry'              Gas constant of dry air [J kg-1 K-1]
+              'Rwatvap'           Gas constant of water vapor [J kg-1 K-1]
+              'Tcosmicbkg'        Cosmic Background Temperature [K]
+    Raises:
+        ValueError: [description]
+
+    Returns:
+        float const: Numerical Value of the asked constant
+        str units: String specifying which units are used
+
+    Reference (not for all):
+    ----------
+    .. [1] P.J. Mohr, B.N. Taylor, and D.B. Newell (2015), "The 2014 CODATA Recommended
+            Values of the Fundamental Physical Constants" (Web Version 7.0), http://physics.nist.gov/cuu/index.html
+            Values as of 11/12/2015
+    """
+
+    if string == 'avogadro':
+        nA = 6.022140857e+23
+        units = '[mol-1]'
+        out = copy(nA)
+    elif string == 'boltzmann':
+        K = np.dot(1.380658, 1e-23)
+        units = '[J K-1]'
+        out = copy(K)
+    elif string == 'EarthRadius':
+        R = 6370.949
+        units = '[Km]'
+        out = copy(R)
+    elif string == 'gravity':
+        g = 9.80665
+        units = '[m s-2]'
+        out = copy(g)
+    elif string == 'light':
+        c = 299792458
+        units = '[m s-1]'
+        out = copy(c)
+    elif string == 'Np2dB':
+        Np2dB = np.dot(10, log10(exp(1)))
+        units = '[dB/Np]'
+        out = copy(Np2dB)
+    elif string == 'planck':
+        h = np.dot(6.6260755, 1e-34)
+        units = '[J Hz-1]'
+        out = copy(h)
+    elif string == 'Rdry':
+        Rd = 287.04
+        units = '[J kg-1 K-1]'
+        out = copy(Rd)
+    elif string == 'Rwatvap':
+        Rv = 461.5
+        units = '[J kg-1 K-1]'
+        out = copy(Rv)
+    elif string == 'Tcosmicbkg':
+        # Tcos = 2.736; # +/- 0.017 [K] Cosmic Background Temperature, 
+        # from Janssen, Atmospheric Remote Sensing by Microwave Radiometry, pag.12
+        Tcos = 2.728
+        units = '[K]'
+        out = copy(Tcos)
+    else:
+        raise ValueError('No constant avalaible with this name: {} . Sorry...'.format(strng))
+
+    return out, units
+
 
 @function
 def gas_mass(gasid=None, *args, **kwargs):
@@ -121,6 +211,7 @@ def gas_mass(gasid=None, *args, **kwargs):
 
     return mass_molecule
 
+
 @function
 def ppmv2gkg(ppmv=None, gasid=None, *args, **kwargs):
     """Convert volume mixing ratio in ppmv to mass mixing ratio in g/kg.
@@ -145,6 +236,7 @@ def ppmv2gkg(ppmv=None, gasid=None, *args, **kwargs):
     gkg = np.dot(gg, 1000)
 
     return gkg
+
 
 @function
 def mr2rh(p=None, t=None, w=None, Tconvert=None, *args, **kwargs):
@@ -191,6 +283,40 @@ def mr2rh(p=None, t=None, w=None, Tconvert=None, *args, **kwargs):
 
     return rh1, rh2
 
+
+@function
+def mr2rho(mr=None, tk=None, p=None, *args, **kwargs):
+    """Determine water vapor density (g/m3) given
+    reference pressure (mbar), temperature (t,K), and
+    water vapor mass mixing ratio (g/kg)
+
+    Equations were provided by Holger Linne' from Max Planck Institute.
+    
+    Nico 2002/05/09 (Looking at rho2mr.email.m from DCT)
+    Nico 2018/06/20
+
+    Args:
+        mr ([type], optional): [description]. Defaults to None.
+        tk ([type], optional): [description]. Defaults to None.
+        p ([type], optional): [description]. Defaults to None.
+
+    Returns:
+        [type]: [description]
+    """
+    rho = np.multiply(np.multiply(mr, p), 0.3477) / (tk)
+
+    # I think the above is an approximation valid within ~1#.
+    # To be consistent with Vapor_xxx.m and mr2rh.m (see
+    # Compute_Transmittances_for_RTTOV_dsb.m), it should be:
+    rvap = np.dot(constants('Rwatvap'), 1e-05)
+
+    eps = 0.621970585
+    rho = np.multiply(np.multiply(mr, p), 1.0) / (np.dot(
+        (np.dot(1000.0, eps) + mr), rvap)) / (tk)
+
+    return rho
+
+
 @function
 def mr2e(p=None, mr=None, *args, **kwargs):
     """Compute H2O partial pressure (e,mbar) given
@@ -212,6 +338,7 @@ def mr2e(p=None, mr=None, *args, **kwargs):
 
     return e
 
+
 @function
 def e2mr(p=None, e=None, *args, **kwargs):
     """Compute H2O mass mixing ratio (mr,g/kg) given
@@ -232,6 +359,7 @@ def e2mr(p=None, e=None, *args, **kwargs):
     mr = np.multiply(np.dot(1000.0, eps), e) / (p - e)
 
     return mr
+
 
 @function
 def satmix(p=None, T=None, Tconvert=None, *args, **kwargs):
@@ -265,6 +393,7 @@ def satmix(p=None, T=None, Tconvert=None, *args, **kwargs):
     wsat = e2mr(p, esat)
 
     return wsat
+
 
 @function
 def satvap(T=None, Tconvert=None, *args, **kwargs):
@@ -333,12 +462,13 @@ def eswat_goffgratch(T=None, *args, **kwargs):
     c5 = 0.0081328
     c6 = 3.49149
     tmp = (np.dot(np.dot(-1.0, c1), (t_ratio - 1.0))) + (np.dot(c2, np.log10(t_ratio))) - (
-        np.dot(c3, (10.0**(np.dot(c4, (1.0 - rt_ratio))) - 1.0))) + (np.dot(
-            c5, (10.0**(np.dot(np.dot(-1.0, c6),
-                            (t_ratio - 1.0))) - 1.0))) + np.log10(sl_pressure)
-    svp = 10.0**tmp
+        np.dot(c3, (10.0 ** (np.dot(c4, (1.0 - rt_ratio))) - 1.0))) + (np.dot(
+        c5, (10.0 ** (np.dot(np.dot(-1.0, c6),
+                             (t_ratio - 1.0))) - 1.0))) + np.log10(sl_pressure)
+    svp = 10.0 ** tmp
 
     return svp
+
 
 @function
 def esice_goffgratch(T=None, *args, **kwargs):
@@ -372,7 +502,7 @@ def esice_goffgratch(T=None, *args, **kwargs):
     ratio = 273.15 / T
     tmp = (np.dot(-c1, (ratio - 1.0))) - (np.dot(c2, np.log10(ratio))) + (np.dot(
         c3, (1.0 - (1.0 / ratio)))) + np.log10(ewi)
-    
-    svp = 10.0**tmp
+
+    svp = 10.0 ** tmp
 
     return svp
