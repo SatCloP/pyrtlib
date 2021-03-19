@@ -58,8 +58,6 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 language = None
 
 # -- Options for HTML output -------------------------------------------------
-# tell the theme which language to we're currently building
-html_context['current_language'] = 'en'
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
@@ -92,6 +90,31 @@ else:
 # add sourcecode to path
 sys.path.insert(0, os.path.abspath('../../'))
 
+############################
+# SETUP THE RTD LOWER-LEFT #
+############################
+try:
+   html_context
+except NameError:
+   html_context = dict()
+html_context['display_lower_left'] = True
+
+if 'REPO_NAME' in os.environ:
+	REPO_NAME = os.environ['REPO_NAME']
+else:
+	REPO_NAME = ''
+ 
+# SET CURRENT_LANGUAGE
+if 'current_language' in os.environ:
+   # get the current_language env var set by buildDocs.sh
+   current_language = os.environ['current_language']
+else:
+   # the user is probably doing `make html`
+   # set this build's current language to english
+   current_language = 'en'
+
+# tell the theme which language to we're currently building
+html_context['current_language'] = 'en'
 
 html_context['display_github'] = True
 html_context['github_user'] = 'slarosa'
