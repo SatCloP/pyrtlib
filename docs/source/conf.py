@@ -38,7 +38,6 @@ extensions = [
     'sphinx.ext.extlinks',
     'sphinx.ext.napoleon',
     'sphinx.ext.autosummary',
-    'sphinx_gallery.gen_gallery',
     'sphinx_toggleprompt',
 ]
 
