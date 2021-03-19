@@ -5,8 +5,8 @@ set -x
 ###################
  
 apt-get update
-apt-get -y install git rsync python3-sphinx python3-sphinx-rtd-theme python3-sphinx-gallery python3-sphinx-toggleprompt
- 
+apt-get -y install git rsync python3-sphinx python3-sphinx-rtd-theme python3-sphinx-gallery
+pip3 install sphinx-toggleprompt
 #####################
 # DECLARE VARIABLES #
 #####################
@@ -21,8 +21,8 @@ export SOURCE_DATE_EPOCH=$(git log -1 --pretty=%ct)
  
 # build our documentation with sphinx (see docs/conf.py)
 # * https://www.sphinx-doc.org/en/master/usage/quickstart.html#running-the-build
-make -C docs/source clean
-make -C docs/source html
+make -C docs clean
+make -C docs html
  
 #######################
 # Update GitHub Pages #
