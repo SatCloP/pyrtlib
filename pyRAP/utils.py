@@ -1,34 +1,25 @@
 # -*- coding: utf-8 -*-
 """
-***************************************************************************
-    utils.py
-    ---------------------
-    Date            : March 2021
-    Copyright       : (C) 2021 by CNR-IMAA
-    Email           : 
-***************************************************************************
-*                                                                         *
-*   This program is free software; you can redistribute it and/or modify  *
-*   it under the terms of the GNU General Public License as published by  *
-*   the Free Software Foundation; either version 2 of the License, or     *
-*   (at your option) any later version.                                   *
-*                                                                         *
-***************************************************************************
+This module contains the utils functions.
 """
 
 __author__ = ''
 __date__ = 'March 2021'
 __copyright__ = '(C) 2021, CNR-IMAA'
 
-# This will get replaced with a git SHA1 when you do a git archive
-
-__revision__ = '$Format:%H$'
-
 from copy import copy
 import numpy as np
 
+from functools import wraps
 
 def function(f):
+    """
+    This is a simple decorator
+ 
+    Parameters:
+       f (method): The function method
+    """
+    @wraps(f)
     def helper(*args, **kwargs):
         helper.nargin = len(args)
         # helper.varargin = cellarray(args)
@@ -36,10 +27,10 @@ def function(f):
 
     return helper
 
-
 @function
 def constants(string=None, *args, **kwargs):
-    """This routine will provide values and units for all the
+    """
+    This routine will provide values and units for all the
     universal constants that I needed in my work.
 
     Nico, 2000
@@ -69,7 +60,7 @@ def constants(string=None, *args, **kwargs):
         str units: String specifying which units are used
 
     Reference (not for all):
-    ----------
+    ------------------------
     .. [1] P.J. Mohr, B.N. Taylor, and D.B. Newell (2015), "The 2014 CODATA Recommended
             Values of the Fundamental Physical Constants" (Web Version 7.0), http://physics.nist.gov/cuu/index.html
             Values as of 11/12/2015
@@ -125,7 +116,8 @@ def constants(string=None, *args, **kwargs):
 
 @function
 def gas_mass(gasid=None, *args, **kwargs):
-    """Returns the mass of the HITRAN gas ID gasid
+    """
+    Returns the mass of the HITRAN gas ID gasid
     DCT 3/2/1996
 
     Args:
@@ -225,7 +217,7 @@ def ppmv2gkg(ppmv=None, gasid=None, *args, **kwargs):
 
     See also
     --------
-    gass_mass
+    pyrap.utils.gass_mass
     """
 
     # convert to parts per volume

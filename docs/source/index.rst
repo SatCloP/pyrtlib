@@ -1,0 +1,20 @@
+.. radiometry-atm-profiling documentation master file, created by
+   sphinx-quickstart on Fri Mar 19 09:49:16 2021.
+   You can adapt this file completely to your liking, but it should at least
+   contain the root `toctree` directive.
+
+Welcome to radiometry-atm-profiling's documentation!
+====================================================
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Contents:
+
+   api
+
+Indices and tables
+==================
+
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`
