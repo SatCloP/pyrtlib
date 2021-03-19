@@ -42,16 +42,29 @@ def constants(string=None, *args, **kwargs):
 
     Args:
         string (str, optional): String specifying which constant is needed. Defaults to None.
-        Avalaible right now:
-              'avogadro'          Avogadro number [mol-1]
-              'boltzmann'         Boltzmann constant [J K-1]
-              'EarthRadius'       Earth radius [km]
-              'light'             Light speed [m s-1]
-              'Np2dB'             Neper to Decibel [dB/Np]
-              'planck'            Planck constant [J Hz-1]
-              'Rdry'              Gas constant of dry air [J kg-1 K-1]
-              'Rwatvap'           Gas constant of water vapor [J kg-1 K-1]
-              'Tcosmicbkg'        Cosmic Background Temperature [K]
+
+    +---------------+-------------------------------------------+
+    | string        | description                               |
+    +---------------+-------------------------------------------+
+    | 'avogadro'    |  Avogadro number [mol-1]                  |
+    +---------------+-------------------------------------------+
+    | 'boltzmann'   |  Boltzmann constant [J K-1]               |
+    +---------------+-------------------------------------------+
+    | 'EarthRadius' |  Earth radius [km]                        |
+    +---------------+-------------------------------------------+
+    | 'light'       |  Light speed [m s-1]                      |
+    +---------------+-------------------------------------------+
+    | 'Np2dB'       |  Neper to Decibel [dB/Np]                 |
+    +---------------+-------------------------------------------+
+    | 'planck'      |  Planck constant [J Hz-1]                 |
+    +---------------+-------------------------------------------+
+    | 'Rdry'        |  Gas constant of dry air [J kg-1 K-1]     |
+    +---------------+-------------------------------------------+
+    | 'Rwatvap'     |  Gas constant of water vapor [J kg-1 K-1] |
+    +---------------+-------------------------------------------+
+    | 'Tcosmicbkg'  |  Cosmic Background Temperature [K]        |
+    +---------------+-------------------------------------------+
+    
     Raises:
         ValueError: [description]
 
@@ -59,8 +72,8 @@ def constants(string=None, *args, **kwargs):
         float const: Numerical Value of the asked constant
         str units: String specifying which units are used
 
-    Reference (not for all):
-    ------------------------
+    References
+    ----------
     .. [1] P.J. Mohr, B.N. Taylor, and D.B. Newell (2015), "The 2014 CODATA Recommended
             Values of the Fundamental Physical Constants" (Web Version 7.0), http://physics.nist.gov/cuu/index.html
             Values as of 11/12/2015

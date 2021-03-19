@@ -57,17 +57,17 @@ for current_version in ${versions}; do
       echo "INFO: Building for ${current_language}"
  
       # HTML #
-      sphinx-build -b html docs/ docs/_build/html/${current_language}/${current_version} -D language="${current_language}"
+      sphinx-build -b html docs/source docs/_build/html/${current_language}/${current_version} -D language="${current_language}"
  
       # PDF #
-      sphinx-build -b rinoh docs/ docs/_build/rinoh -D language="${current_language}"
+      sphinx-build -b rinoh docs/source docs/_build/rinoh -D language="${current_language}"
       mkdir -p "${docroot}/${current_language}/${current_version}"
-      cp "docs/_build/rinoh/target.pdf" "${docroot}/${current_language}/${current_version}/helloWorld-docs_${current_language}_${current_version}.pdf"
+      cp "docs/_build/rinoh/target.pdf" "${docroot}/${current_language}/${current_version}/radiometry-atm-profiling-docs_${current_language}_${current_version}.pdf"
  
       # EPUB #
-      sphinx-build -b epub docs/ docs/_build/epub -D language="${current_language}"
+      sphinx-build -b epub docs/source docs/_build/epub -D language="${current_language}"
       mkdir -p "${docroot}/${current_language}/${current_version}"
-      cp "docs/_build/epub/target.epub" "${docroot}/${current_language}/${current_version}/helloWorld-docs_${current_language}_${current_version}.epub"
+      cp "docs/_build/epub/target.epub" "${docroot}/${current_language}/${current_version}/radiometry-atm-profiling-docs_${current_language}_${current_version}.epub"
  
       # copy the static assets produced by the above build into our docroot
       rsync -av "docs/_build/html/" "${docroot}/"
