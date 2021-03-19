@@ -5,7 +5,7 @@ set -x
 ###################
  
 apt-get update
-apt-get -y install git rsync python3-sphinx python3-sphinx-rtd-theme python3-sphinx-gallery
+apt-get -y install git rsync python3-pip python3-sphinx python3-sphinx-rtd-theme python3-sphinx-gallery
 pip3 install sphinx-toggleprompt
 #####################
 # DECLARE VARIABLES #
