@@ -64,7 +64,7 @@ def constants(string=None, *args, **kwargs):
     +---------------+-------------------------------------------+
     | 'Tcosmicbkg'  |  Cosmic Background Temperature [K]        |
     +---------------+-------------------------------------------+
-    
+
     Raises:
         ValueError: [description]
 
@@ -230,7 +230,7 @@ def ppmv2gkg(ppmv=None, gasid=None, *args, **kwargs):
 
     See also
     --------
-    pyrap.utils.gass_mass
+    :func:`~pyrap.utils.gass_mass` 
     """
 
     # convert to parts per volume
