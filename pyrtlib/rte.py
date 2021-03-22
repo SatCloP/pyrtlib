@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-This module contains the main Radiative Transfer Equation functions.
+This class contains the main Radiative Transfer Equation functions.
 """
 import warnings
 
@@ -514,44 +514,3 @@ class RTEquation:
             adry[i] = np.dot((np.dot(factor, (npp + ncpp))), db2np)
 
         return awet, adry
-
-    @staticmethod
-    def ab_liq(water=None, freq=None, temp=None, *args, **kwargs):
-        """Computes Absorption In Nepers/Km By Suspended Water Droplets.
-
-        Args:
-            water ([type], optional): water in g/m3. Defaults to None.
-            freq ([type], optional): frequency in GHz (Valid From 0 To 1000 Ghz). Defaults to None.
-            temp ([type], optional): temperature in K. Defaults to None.
-
-        Returns:
-            [type]: [description]
-
-        References
-        ----------
-        .. [1] Liebe, Hufford And Manabe, Int. J. Ir & Mm Waves V.12, Pp.659-675 (1991);  
-        .. [2] Liebe Et Al, Agard Conf. Proc. 542, May 1993.
-
-        .. note::
-            Revision history:
-
-            * Pwr 8/3/92   Original Version
-            * Pwr 12/14/98 Temp. Dependence Of Eps2 Eliminated To Agree With Mpm93 
-
-        .. warning:: conversion of complex() function is missing
-        """
-        if water <= 0:
-            abliq = 0
-            return abliq
-
-        theta1 = 1.0 - 300.0 / temp
-        eps0 = 77.66 - np.dot(103.3, theta1)
-        eps1 = np.dot(0.0671, eps0)
-        eps2 = 3.52
-        fp = np.dot((np.dot(316.0, theta1) + 146.4), theta1) + 20.2
-        fs = np.dot(39.8, fp)
-        eps = (eps0 - eps1) / complex(1.0, freq / fp) + (eps1 - eps2) / complex(1.0, freq / fs) + eps2
-        re = (eps - 1.0) / (eps + 2.0)
-        abliq = np.dot(np.dot(np.dot(- 0.06286, np.imag(re)), freq), water)
-
-        return abliq

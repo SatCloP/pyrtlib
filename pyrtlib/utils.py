@@ -562,3 +562,60 @@ def tk2b_mod(hvk=None, T=None, *args, **kwargs):
     Btilde = 1.0 / (np.exp(hvk / T) - 1.0)
 
     return Btilde
+
+
+def dilec12(f=None, tk=None, *args, **kwargs):
+    """Computes the complex dielectric constant for liquid water,
+    with a negative imaginary part representing dissipation.
+
+    Complex logarithm is used here. It should be defined with
+    imaginary part in the range -pi to +pi.
+
+    Copyright ? P.W. Rosenkranz  Apr. 15, 2014
+    Creative Commons license CC BY-SA
+
+    Args:
+        f ([type], optional): frequency in GHz. Defaults to None.
+        tk ([type], optional): Kelvin temperature. Defaults to None.
+
+    Returns:
+        kappa [type]: complex dielectric constant
+
+    References
+    ----------
+        .. [1] Static dielectric constant model from Patek et al. (J.Phys.Chem.Ref.Data. v.38(1), 21 (2009).
+        .. [2] Debye term from  W. Ellison, J. Phys. Chem. Ref. Data, 36, 1-18 (2007).
+        .. [3] B band from P.W. Rosenkranz, IEEE Trans. Geosci. & Remote Sens. v.53(3) pp.1387-93 (2015).
+
+
+    .. note:: validated for 20<f<220 GHz at 248<tk<273; 1<f<1000 GHz at 273<tk<330.
+    """
+
+    tc = tk - 273.15
+    z = complex(0.0, f)
+    theta = 300.0 / tk
+    # static dielectric constant model from
+    # Patek et al. (J.Phys.Chem.Ref.Data. v.38(1), 21 (2009).
+    kappa = np.dot(- 43.7527, theta ** 0.05) + np.dot(299.504, theta ** 1.47) - np.dot(399.364, theta ** 2.11) + np.dot(
+        221.327, theta ** 2.31)
+    # Debye term from
+    # W. Ellison, J. Phys. Chem. Ref. Data, 36, 1-18 (2007).
+    delta = np.dot(80.69715, np.exp(- tc / 226.45))
+    sd = np.dot(1164.023, exp(- 651.4728 / (tc + 133.07)))
+    kappa = kappa - np.dot(delta, z) / (sd + z)
+    # B band from
+    # P.W. Rosenkranz, IEEE Trans. Geosci. & Remote Sens. v.53(3) pp.1387-93 (2015).
+    delta = np.dot(4.008724, np.exp(- tc / 103.05))
+    hdelta = delta / 2.0
+    f1 = 10.46012 + np.dot(0.1454962, tc) + np.dot(0.063267156, tc ** 2) + np.dot(0.00093786645, tc ** 3)
+    # z1 = (-.75,1.) * f1;
+    # z2 = (-4500.,2000.)
+    z1 = np.dot(complex(- 0.75, 1.0), f1)
+    z2 = complex(- 4500.0, 2000.0)
+    cnorm = np.log(z2 / z1)
+    chip = np.dot(hdelta, np.log((z - z2) / (z - z1))) / cnorm
+    chij = np.dot(hdelta, np.log((z - np.conj(z2)) / (z - np.conj(z1)))) / np.conj(cnorm)
+    dchi = chip + chij - delta
+    kappa = kappa + dchi
+
+    return kappa

@@ -24,8 +24,8 @@ RTE function
     pyrtlib.rte
 
 
-Model function
-==============
+Absorption model function
+==========================
 
 .. autosummary::
     :toctree: generated/
@@ -33,6 +33,7 @@ Model function
     :recursive:
 
     pyrtlib.absmodel
+
 
 Utility function
 ================

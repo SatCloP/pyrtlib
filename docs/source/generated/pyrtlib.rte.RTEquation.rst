@@ -1,4 +1,4 @@
-pyrtlib.rte.RTEquation
+﻿pyrtlib.rte.RTEquation
 ======================
 
 .. currentmodule:: pyrtlib.rte
@@ -17,7 +17,6 @@ pyrtlib.rte.RTEquation
    .. autosummary::
    
       ~RTEquation.__init__
-      ~RTEquation.ab_liq
       ~RTEquation.bright_xxx
       ~RTEquation.cld_abs_xxx
       ~RTEquation.cld_int_xxx
