@@ -18,7 +18,7 @@
 # -- Project information -----------------------------------------------------
 
 project = 'radiometry-atm-profiling'
-copyright = '2021, Salvatore Larosa'
+copyright = '2021, CNR-IMAA'
 author = 'Salvatore Larosa'
 
 # The full version, including alpha/beta/rc tags
