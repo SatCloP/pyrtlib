@@ -1,16 +1,16 @@
 #############
 API reference
 #############
- 
-Utility function
-================
- 
+
+Atmospheric profiles
+====================
+
 .. autosummary::
     :toctree: generated/
     :template: custom-module-template.rst
     :recursive:
 
-    pyrap.utils
+    pyrap.atmp
 
 
 RTE function
@@ -33,3 +33,13 @@ Model function
     :recursive:
 
     pyrap.model
+
+Utility function
+================
+ 
+.. autosummary::
+    :toctree: generated/
+    :template: custom-module-template.rst
+    :recursive:
+
+    pyrap.utils

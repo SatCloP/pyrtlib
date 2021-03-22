@@ -10,11 +10,8 @@ from .utils import constants, tk2b_mod, arange
 
 
 class RTEquation:
-    """[summary]
+    """This class contains the main Radiative Transfer Equation functions.
     """
-
-    def __init__(self):
-        pass
 
     @staticmethod
     def vapor_xxx(tk=None, rh=None, ice=None, *args, **kwargs):

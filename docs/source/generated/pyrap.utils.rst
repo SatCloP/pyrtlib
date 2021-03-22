@@ -14,6 +14,7 @@
    .. autosummary::
       :toctree:                                          
    
+      arange
       constants
       e2mr
       esice_goffgratch
