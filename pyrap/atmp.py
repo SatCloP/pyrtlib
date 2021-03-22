@@ -76,25 +76,6 @@ class AtmosphericProfiles:
 
         .. note:: adapted from glatm.dat.  DCT 3/26/97
         """
-        # function [a,p,t,d,md,gasids]=glatm(atmos);
-
-        # 
-
-        # inputs:
-        #	options
-        #	1-6	returns the atmospheres listed below
-        #	7	returns the minor gas profiles (gas ID's 8-28)
-        #	8	returns the trace gas and xsection profiles (ID's 29-31,51-63)
-
-        # outputs:
-        #	a	altitudes (km) (50x1)
-        #	p	pressure (mbar) (50x1)
-        #	d	total density (cm-3) (50x1)
-        #	t	temperature (K) (50x1)
-        #	md	molecular densities (ppmv) (50x #gases)
-        #	gasids	HITRAN gas ID #'s (#gases x 1)
-
-        #	(for option = 7 or 8, a,p,t,and d are null)
 
         # MODEL 1.  TROPICAL
         if option == 1:
