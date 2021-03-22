@@ -7,10 +7,10 @@ __author__ = ''
 __date__ = 'March 2021'
 __copyright__ = '(C) 2021, CNR-IMAA'
 
-from copy import copy
+from functools import wraps
+
 import numpy as np
 
-from functools import wraps
 
 def function(f):
     """
@@ -19,6 +19,7 @@ def function(f):
     Parameters:
        f (method): The function method
     """
+
     @wraps(f)
     def helper(*args, **kwargs):
         helper.nargin = len(args)
@@ -26,6 +27,7 @@ def function(f):
         return f(*args, **kwargs)
 
     return helper
+
 
 @function
 def constants(string=None, *args, **kwargs):
@@ -82,47 +84,47 @@ def constants(string=None, *args, **kwargs):
     if string == 'avogadro':
         nA = 6.022140857e+23
         units = '[mol-1]'
-        out = copy(nA)
+        out = np.copy(nA)
     elif string == 'boltzmann':
         K = np.dot(1.380658, 1e-23)
         units = '[J K-1]'
-        out = copy(K)
+        out = np.copy(K)
     elif string == 'EarthRadius':
         R = 6370.949
         units = '[Km]'
-        out = copy(R)
+        out = np.copy(R)
     elif string == 'gravity':
         g = 9.80665
         units = '[m s-2]'
-        out = copy(g)
+        out = np.copy(g)
     elif string == 'light':
         c = 299792458
         units = '[m s-1]'
-        out = copy(c)
+        out = np.copy(c)
     elif string == 'Np2dB':
-        Np2dB = np.dot(10, log10(exp(1)))
+        Np2dB = np.dot(10, np.log10(np.exp(1)))
         units = '[dB/Np]'
-        out = copy(Np2dB)
+        out = np.copy(Np2dB)
     elif string == 'planck':
         h = np.dot(6.6260755, 1e-34)
         units = '[J Hz-1]'
-        out = copy(h)
+        out = np.copy(h)
     elif string == 'Rdry':
         Rd = 287.04
         units = '[J kg-1 K-1]'
-        out = copy(Rd)
+        out = np.copy(Rd)
     elif string == 'Rwatvap':
         Rv = 461.5
         units = '[J kg-1 K-1]'
-        out = copy(Rv)
+        out = np.copy(Rv)
     elif string == 'Tcosmicbkg':
         # Tcos = 2.736; # +/- 0.017 [K] Cosmic Background Temperature, 
         # from Janssen, Atmospheric Remote Sensing by Microwave Radiometry, pag.12
         Tcos = 2.728
         units = '[K]'
-        out = copy(Tcos)
+        out = np.copy(Tcos)
     else:
-        raise ValueError('No constant avalaible with this name: {} . Sorry...'.format(strng))
+        raise ValueError('No constant avalaible with this name: {} . Sorry...'.format(string))
 
     return out, units
 
@@ -228,9 +230,9 @@ def ppmv2gkg(ppmv=None, gasid=None, *args, **kwargs):
     Returns:
         [type]: [description]
 
-    See also
-    --------
-    :func:`~pyrap.utils.gass_mass` 
+    See also:
+        
+        :py:meth:`gas_mass` 
     """
 
     # convert to parts per volume
@@ -415,6 +417,8 @@ def satvap(T=None, Tconvert=None, *args, **kwargs):
 
     Returns:
         [type]: [description]
+
+    .. todo:: could the find() function be replaced with numpy.where() or np.nozero or np.flatnonzero????
     """
     nargin = satvap.nargin
 
@@ -424,6 +428,7 @@ def satvap(T=None, Tconvert=None, *args, **kwargs):
 
     # saturation pressure over ice if needed
     if nargin == 2:
+        # TODO: could the find() function be replaced with numpy.where()????
         ind = find(T <= Tconvert)
         # Goff Gratch formulation, over ice
         esat[ind] = esice_goffgratch(T(ind))
@@ -511,3 +516,27 @@ def esice_goffgratch(T=None, *args, **kwargs):
     svp = 10.0 ** tmp
 
     return svp
+
+
+def tk2b_mod(hvk=None, T=None, *args, **kwargs):
+    r"""[summary]
+
+    .. math::
+
+        \frac{\partial\mathcal{D}}{\partial t}=\nabla\times\mathcal{H}
+    .. math::
+
+        \frac{\partial\mathcal{B}}{\partial t}=-\nabla\times\mathcal{E}
+
+    Args:
+        hvk ([type], optional): [description]. Defaults to None.
+        T ([type], optional): [description]. Defaults to None.
+
+    Returns:
+        [type]: [description]
+
+    .. warning:: add docstring to function
+    """
+    Btilde = 1.0 / (np.exp(hvk / T) - 1.0)
+
+    return Btilde

@@ -39,6 +39,7 @@ extensions = [
     'sphinx.ext.napoleon',
     'sphinx.ext.autosummary',
     'sphinx_toggleprompt',
+    'sphinx.ext.todo',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -155,3 +156,9 @@ html_context['display_github'] = True
 html_context['github_user'] = 'slarosa'
 html_context['github_repo'] = 'radiometry-atm-profiling'
 html_context['github_version'] = 'main/docs/'
+
+# Napoleon stuff
+napoleon_use_admonition_for_examples = True
+
+#todo extension
+todo_include_todos = True

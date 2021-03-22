@@ -12,6 +12,7 @@ Utility function
 
     pyrap.utils
 
+
 RTE function
 =============
 
@@ -20,7 +21,7 @@ RTE function
     :template: custom-module-template.rst
     :recursive:
 
-    pyrap.rte
+    pyrap.rtequation
 
 
 Model function
