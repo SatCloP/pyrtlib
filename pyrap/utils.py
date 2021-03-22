@@ -29,6 +29,28 @@ def function(f):
     return helper
 
 
+def arange(start, stop, step=1, **kwargs):
+    """Comfortable function to increment array index
+    to make it usable as a matlab array.
+
+    .. todo:: must be moved to utils function
+
+    Args:
+        start ([type]): [description]
+        stop ([type]): [description]
+        step (int, optional): [description]. Defaults to 1.
+
+    Returns:
+        [type]: [description]
+    """
+    expand_value = 1 if step > 0 else -1
+
+    return np.arange(start,
+                     stop + expand_value,
+                     step,
+                     **kwargs).reshape(1, -1)
+
+
 @function
 def constants(string=None, *args, **kwargs):
     """
