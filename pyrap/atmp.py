@@ -821,7 +821,7 @@ class AtmosphericProfiles:
         g5 = g5.T.reshape(50, 1, order='F')
         g6 = g6.T.reshape(50, 1, order='F')
         g7 = g7.T.reshape(50, 1, order='F')
-        md = np.concatenate([g1, g2, g3, g4, g5, g6, g7])
+        md = np.concatenate([g1, g2, g3, g4, g5, g6, g7], axis=1)
 
         return a, p, d, t, md, gasids
 

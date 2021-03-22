@@ -262,7 +262,7 @@ def ppmv2gkg(ppmv=None, gasid=None, *args, **kwargs):
     # multiply by ratio of masses to get mass mixing ratio in g/g
     gg = np.dot(ppv, gas_mass(gasid)) / gas_mass(99)
     # multiply by 1000 to get g/kg
-    gkg = np.dot(gg, 1000)
+    gkg = np.dot(gg, 1000).reshape(gg.shape, order='F')
 
     return gkg
 
