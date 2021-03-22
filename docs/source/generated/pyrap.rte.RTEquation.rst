@@ -1,7 +1,7 @@
-﻿pyrap.rtequation.RTEquation
-===========================
+pyrap.rte.RTEquation
+====================
 
-.. currentmodule:: pyrap.rtequation
+.. currentmodule:: pyrap.rte
 
 .. autoclass:: RTEquation
    :members:                                    

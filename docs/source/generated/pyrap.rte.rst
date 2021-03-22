@@ -1,7 +1,7 @@
-﻿pyrap.rtequation
-================
+﻿pyrap.rte
+=========
 
-.. automodule:: pyrap.rtequation
+.. automodule:: pyrap.rte
   
    
    
