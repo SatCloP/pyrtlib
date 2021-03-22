@@ -1,7 +1,7 @@
-﻿pyrap.utils
-===========
+﻿pyrtlib.utils
+=============
 
-.. automodule:: pyrap.utils
+.. automodule:: pyrtlib.utils
   
    
    

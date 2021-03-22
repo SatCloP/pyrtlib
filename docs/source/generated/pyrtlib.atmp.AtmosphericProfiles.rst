@@ -1,7 +1,7 @@
-pyrap.atmp.AtmosphericProfiles
-==============================
+pyrtlib.atmp.AtmosphericProfiles
+================================
 
-.. currentmodule:: pyrap.atmp
+.. currentmodule:: pyrtlib.atmp
 
 .. autoclass:: AtmosphericProfiles
    :members:                                    

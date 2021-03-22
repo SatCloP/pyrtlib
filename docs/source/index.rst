@@ -9,11 +9,11 @@
 Welcome to radiometry-atm-profiling's documentation!
 ====================================================
 
-pyrap is a tool that provides a set of
+pyrtlib is a python tool that provides a set of
 functions and classes for simulating ........
 
-The source code for pyrap python package is hosted on `github
-<https://github.com/slarosa/radiometry-atm-profiling>`_.
+The source code for pyrtlib python package is hosted on `github
+<https://github.com/slarosa/pyrtlib>`_.
 
 .. toctree::
    :maxdepth: 1

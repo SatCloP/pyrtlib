@@ -1,7 +1,7 @@
-﻿pyrap.rte
-=========
+﻿pyrtlib.atmp
+============
 
-.. automodule:: pyrap.rte
+.. automodule:: pyrtlib.atmp
   
    
    
@@ -19,7 +19,7 @@
       :toctree:                                         
       :template: custom-class-template.rst               
    
-      RTEquation
+      AtmosphericProfiles
    
    
 

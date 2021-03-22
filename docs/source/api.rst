@@ -10,7 +10,7 @@ Atmospheric profiles
     :template: custom-module-template.rst
     :recursive:
 
-    pyrap.atmp
+    pyrtlib.atmp
 
 
 RTE function
@@ -21,7 +21,7 @@ RTE function
     :template: custom-module-template.rst
     :recursive:
 
-    pyrap.rte
+    pyrtlib.rte
 
 
 Model function
@@ -32,7 +32,7 @@ Model function
     :template: custom-module-template.rst
     :recursive:
 
-    pyrap.model
+    pyrtlib.absmodel
 
 Utility function
 ================
@@ -42,4 +42,4 @@ Utility function
     :template: custom-module-template.rst
     :recursive:
 
-    pyrap.utils
+    pyrtlib.utils

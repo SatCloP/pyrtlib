@@ -1,7 +1,7 @@
-pyrap.rte.RTEquation
-====================
+pyrtlib.rte.RTEquation
+======================
 
-.. currentmodule:: pyrap.rte
+.. currentmodule:: pyrtlib.rte
 
 .. autoclass:: RTEquation
    :members:                                    
