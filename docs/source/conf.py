@@ -17,7 +17,7 @@
 
 # -- Project information -----------------------------------------------------
 
-project = 'radiometry-atm-profiling'
+project = 'pyrtlib'
 copyright = '2021, CNR-IMAA'
 author = 'Salvatore Larosa'
 
