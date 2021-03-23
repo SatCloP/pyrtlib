@@ -6,6 +6,7 @@ import warnings
 
 import numpy as np
 
+from .absmodel import AbsModel
 from .utils import constants, tk2b_mod, arange
 
 
@@ -26,11 +27,10 @@ class RTEquation:
 
         Returns:
             (tuple):
-            
+
             * e [type]: vapor pressure (mb)
             * rho [type]: vapor density (g/m3)
 
-        .. todo:: could the find() function be replaced with numpy.where() or np.nozero or np.flatnonzero????
         """
 
         rvap = constants('Rwatvap')
@@ -58,7 +58,7 @@ class RTEquation:
                 10 ** (np.dot(-3.49149, (y - 1.0))) - 1.0)) + np.log10(1013.246)
         if ice == 1:
             # over ice if tk < 263.16
-            indx = find(tk < 263.16)
+            indx = np.nonzero(tk < 263.16)
             y = 273.16 / tk(indx)
             es[indx] = np.dot(-9.09718, (y - 1.0)) - np.dot(
                 3.56654, np.log10(y)) + np.dot(0.876793, (1.0 - (1.0 / y))) + np.log10(6.1071)
@@ -230,7 +230,7 @@ class RTEquation:
 
     @staticmethod
     def exp_int_xxx(zeroflg=None, x=None, ds=None, ibeg=None, iend=None, factor=None, *args, **kwargs):
-        """ EXPonential INTegration: Integrate the profile in array x over the layers defined in 
+        """ EXPonential INTegration: Integrate the profile in array x over the layers defined in
         array ds, saving the integrals over each layer.
 
         Args:
@@ -243,7 +243,7 @@ class RTEquation:
 
         Returns:
                 (tuple):
-                
+
                 * xds [type]: array containing integrals over each layer ds
                 * sxds [type]: integral of x*ds over levels ibeg to iend
         """
@@ -280,21 +280,21 @@ class RTEquation:
         profile levels ibase and itop, respectively.  The algorithm assumes that
         the input cloud is the lowest (or only) cloud layer observed.
         If absorption is not too big, compute tmr of lowest cloud layer (base
-        at level ibase, top at level itop). Otherwise, set error flag and return. 
-    
+        at level ibase, top at level itop). Otherwise, set error flag and return.
+
         Args:
             ibase ([type], optional): profile level at base of lowest cloud. Defaults to None.
             itop ([type], optional): profile level at top of lowest cloud. Defaults to None.
             hvk ([type], optional): (planck constant * frequency) / boltzmann constant. Defaults to None.
             tauprof ([type], optional): integral profile of absorption (np; i = integral (0,i)). Defaults to None.
             boftatm ([type], optional): integral profile of atmospheric planck radiance. Defaults to None.
-    
+
         Returns:
-            [type]: tmr of lowest cloud layer (k) 
-        
+            [type]: tmr of lowest cloud layer (k)
+
         .. note::
             This algorithm is not designed for multiple cloud layers
-    
+
         .. note::
             hvk, tauprof, and boftatm can be obtained from subroutine planck_xxx().
         """
@@ -366,7 +366,7 @@ class RTEquation:
 
         Returns:
             (tuple):
-                    
+
                 * hvk [type]: [planck constant * frequency] / boltzmann constant
                 * boft [type]: modified planck function for raob temperature profile
                 * bakgrnd [type]: background term of radiative transfer equation
@@ -389,6 +389,8 @@ class RTEquation:
         nl = len(tk)
         tauprof = np.zeros(taulay.shape)
         boftatm = np.zeros(taulay.shape)
+        boft = np.zeros(taulay.shape)
+        #TODO: check index of boft variable
         boft[1] = tk2b_mod(hvk, tk[1])
         for i in arange(2, nl).reshape(-1):
             boft[i] = tk2b_mod(hvk, tk[i])
@@ -427,7 +429,7 @@ class RTEquation:
 
         Returns:
             (tuple):
-                    
+
                 * aliq [type]: liquid absorption profile (np/km)
                 * aice [type]: ice absorption profile (np/km)
 
@@ -435,7 +437,7 @@ class RTEquation:
 
             :py:meth:`ab_liq`
 
-        .. warning:: 
+        .. warning::
             * ic light speed in cm s-1????
             * ab_liq function is missing!!!!!
         """
@@ -454,7 +456,7 @@ class RTEquation:
         for i in arange(1, nl).reshape(-1):
             # Compute liquid absorption np/km.
             if denl[i] > 0:
-                aliq[i] = RTEquation.ab_liq(denl[i], frq, tk[i])
+                aliq[i] = AbsModel.ab_liq(denl[i], frq, tk[i])
             # compute ice absorption (db/km); convert non-zero value to np/km.
             if deni[i] > 0:
                 aice[i] = np.dot(np.dot((8.18645 / wave), deni[i]), 0.000959553)
@@ -492,7 +494,7 @@ class RTEquation:
 
             :py:meth:`h2o_rosen03_xxx`, :py:meth:`o2n2_rosen03_xxx`
 
-        .. warning:: 
+        .. warning::
                 * h2o_rosen03_xxx and o2n2_rosen03_xxx functions are missing!!!!!
                 * rho, absmdl, absmdl.wvres and absmdl.wvcnt arguments are missing!!!!!!
         """
@@ -500,6 +502,8 @@ class RTEquation:
         nl = len(p)
         awet = np.zeros(p.shape)
         adry = np.zeros(p.shape)
+        aO2 = np.zeros(p.shape)
+        aN2 = np.zeros(p.shape)
         factor = np.dot(0.182, frq)
         db2np = np.dot(np.log(10.0), 0.1)
         for i in arange(1, nl).reshape(-1):
@@ -507,10 +511,23 @@ class RTEquation:
             v = 300.0 / tk[i]
             ekpa = e[i] / 10.0
             pdrykpa = p[i] / 10.0 - ekpa
-            # Compute H2O and O2 absorption (dB/km) and convert to np/km.
-            npp, ncpp = h2o_rosen03_xxx(pdrykpa, v, ekpa, frq, nargout=2)
-            awet[i] = np.dot((np.dot(factor, (npp + ncpp))), db2np)
-            npp, ncpp = o2n2_rosen03_xxx(pdrykpa, v, ekpa, frq, nargout=2)
-            adry[i] = np.dot((np.dot(factor, (npp + ncpp))), db2np)
+            if AbsModel.model == 'rose03':
+                # Compute H2O and O2 absorption (dB/km) and convert to np/km.
+                npp, ncpp = h2o_rosen03_xxx(pdrykpa, v, ekpa, frq, nargout=2)
+                awet[i] = np.dot((np.dot(factor, (npp + ncpp))), db2np)
+                npp, ncpp = o2n2_rosen03_xxx(pdrykpa, v, ekpa, frq, nargout=2)
+                adry[i] = np.dot((np.dot(factor, (npp + ncpp))), db2np)
 
+            elif AbsModel.model == 'rose19sd':
+                npp, ncpp = AbsModel.h2o_rosen19_sd(pdrykpa, v, ekpa, frq, nargout=2)
+                awet[i] = np.dot((np.dot(factor, (npp + ncpp))), db2np)
+                npp = AbsModel.o2abs_rosen18_xxx(pdrykpa, v, ekpa, frq)
+                aO2[i] = np.dot((np.dot(factor, npp)), db2np)
+                # C    add N2 term
+                aN2[i] = AbsModel.abs_N2(tk[i], np.dot(pdrykpa, 10), frq)
+                adry[i] = aO2[i] + aN2[i]
+
+            else:
+                raise ValueError('No model avalaible with this name: {} . Sorry...'.format(AbsModel.model))
+      
         return awet, adry

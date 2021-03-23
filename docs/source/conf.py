@@ -24,7 +24,6 @@ author = 'Salvatore Larosa'
 # The full version, including alpha/beta/rc tags
 release = '1.0.0'
 
-
 # -- General configuration ---------------------------------------------------
 
 # Add any Sphinx extension module names here, as strings. They can be
@@ -40,7 +39,10 @@ extensions = [
     'sphinx.ext.autosummary',
     'sphinx_toggleprompt',
     'sphinx.ext.todo',
+    # 'rst2pdf.pdfbuilder',
 ]
+
+# pdf_documents = [('index', u'rst2pdf', u'Sample pyrtlib doc', u'Salvatore Larosa'),]
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -98,6 +100,10 @@ sys.path.insert(0, os.path.abspath('../../'))
 ############################
 # SETUP THE RTD LOWER-LEFT #
 ############################
+
+# The master toctree document.
+master_doc = 'index'
+
 try:
    html_context
 except NameError:
@@ -152,13 +158,33 @@ versions = [branch.name for branch in repo.branches]
 for version in versions:
    html_context['versions'].append( (version, '/' +REPO_NAME+ '/'  +current_language+ '/' +version+ '/') )
 
+# settings for creating PDF with rinoh
+# rinoh_documents = [(
+#  master_doc,
+#  'target',
+#  project+ ' Documentation',
+#  '© ' +copyright,
+# )]
+today_fmt = "%B %d, %Y"
+ 
+# settings for EPUB
+epub_basename = 'target'
+ 
+html_context['downloads'] = list()
+html_context['downloads'].append( ('pdf', '/' +REPO_NAME+ '/' +current_language+ '/' +current_version+ '/' +project+ '-docs_' +current_language+ '_' +current_version+ '.pdf') )
+ 
+html_context['downloads'].append( ('epub', '/' +REPO_NAME+ '/' +current_language+ '/' +current_version+ '/' +project+ '-docs_' +current_language+ '_' +current_version+ '.epub') )
+
 html_context['display_github'] = True
 html_context['github_user'] = 'slarosa'
 html_context['github_repo'] = 'radiometry-atm-profiling'
 html_context['github_version'] = 'main/docs/'
 
 # Napoleon stuff
+#
 napoleon_use_admonition_for_examples = True
+# napoleon_use_rtype = False  # group rtype on same line together with return
+
 
 #todo extension
 todo_include_todos = True

@@ -440,7 +440,6 @@ def satvap(T=None, Tconvert=None, *args, **kwargs):
     Returns:
         [type]: [description]
 
-    .. todo:: could the find() function be replaced with numpy.where() or np.nozero or np.flatnonzero????
     """
     nargin = satvap.nargin
 
@@ -451,7 +450,7 @@ def satvap(T=None, Tconvert=None, *args, **kwargs):
     # saturation pressure over ice if needed
     if nargin == 2:
         # TODO: could the find() function be replaced with numpy.where()????
-        ind = find(T <= Tconvert)
+        ind = np.nonzero(T <= Tconvert)
         # Goff Gratch formulation, over ice
         esat[ind] = esice_goffgratch(T(ind))
 
@@ -601,7 +600,7 @@ def dilec12(f=None, tk=None, *args, **kwargs):
     # Debye term from
     # W. Ellison, J. Phys. Chem. Ref. Data, 36, 1-18 (2007).
     delta = np.dot(80.69715, np.exp(- tc / 226.45))
-    sd = np.dot(1164.023, exp(- 651.4728 / (tc + 133.07)))
+    sd = np.dot(1164.023, np.exp(- 651.4728 / (tc + 133.07)))
     kappa = kappa - np.dot(delta, z) / (sd + z)
     # B band from
     # P.W. Rosenkranz, IEEE Trans. Geosci. & Remote Sens. v.53(3) pp.1387-93 (2015).
@@ -619,3 +618,51 @@ def dilec12(f=None, tk=None, *args, **kwargs):
     kappa = kappa + dchi
 
     return kappa
+
+
+def dcerror(x, y, *args, **kwargs):
+    """Csixth-Order Approx To The Complex Error Function Of z=x+iy.
+    cerror = exp(-z^2)erfc(-iz)
+    This version is double precision and valid in all quadrants.
+
+    P. Rosenkranz  12/11/2018
+    2018/12/19 - Nico: first created from dcerror.f
+
+    Args:
+        x ([type], optional): [description]. Defaults to None.
+        y ([type], optional): [description]. Defaults to None.
+
+    Returns:
+        [type]: [description]
+
+    References
+    ----------
+    .. [1] Hui, Armstrong And Wray, Jqsrt V.19, P.509-516 (1978).
+    """
+
+    # IMPLICIT NONE
+    # DOUBLE PRECISION X,Y,a(0:6),b(0:6)
+    # DOUBLE COMPLEX ASUM,BSUM,ZH,w
+
+    a = np.asarray(
+        [122.607931777, 214.382388695, 181.928533092, 93.1555804581, 30.1801421962, 5.91262620977, 0.564189583563])
+    b = np.asarray(
+        [122.607931774, 352.730625111, 457.334478784, 348.703917719, 170.354001821, 53.9929069129, 10.4798571143])
+    # compute w in quadrants 1 or 2
+    # from eqs.(13), w(z) = [w(-z*)]*
+    # expansion in terms of ZH results in conjugation of w when X changes sign.
+    zh = complex(abs(y), - x)
+    asum = np.dot(
+        (np.dot((np.dot((np.dot((np.dot((np.dot(a[7], zh) + a[6]), zh) + a[5]), zh) + a[4]), zh) + a[3]), zh) + a[2]),
+        zh) + a[1]
+    bsum = np.dot((np.dot(
+        (np.dot((np.dot((np.dot((np.dot((zh + b[7]), zh) + b[6]), zh) + b[5]), zh) + b[4]), zh) + b[3]), zh) + b[2]),
+                  zh) + b[1]
+    w = asum / bsum
+    if y >= 0:
+        dcerror = np.copy(w)
+    else:
+        # from eqs.(13), w(z) = 2exp(-z^2)-[w(z*)]*
+        dcerror = np.dot(2.0, np.exp(- complex(x, y) ** 2)) - np.conj(w)
+
+    return dcerror

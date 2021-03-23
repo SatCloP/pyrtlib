@@ -19,6 +19,8 @@
       ~AbsModel.__init__
       ~AbsModel.ab_liq
       ~AbsModel.abs_N2
+      ~AbsModel.h2o_rosen19_sd
+      ~AbsModel.o2abs_rosen18_xxx
    
    
 

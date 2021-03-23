@@ -16,6 +16,7 @@
    
       arange
       constants
+      dcerror
       dilec12
       e2mr
       esice_goffgratch

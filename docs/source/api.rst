@@ -14,7 +14,7 @@ Atmospheric profiles
 
 
 RTE function
-=============
+============
 
 .. autosummary::
     :toctree: generated/
