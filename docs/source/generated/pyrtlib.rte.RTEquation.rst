@@ -32,4 +32,10 @@
 
    
    
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~RTEquation.from_sat
+   
    

@@ -39,6 +39,7 @@ class AtmosphericProfiles:
     This file was partly copied from FASCOD2 routine MLATMB 10/11/87
 
     """
+
     @staticmethod
     def gl_atm(option=1, *args, **kwargs):
         """Returns the Atmopshere profile
@@ -1319,7 +1320,7 @@ class AtmosphericProfiles:
             5.867e-05, 8.818e-06, 1.319e-06, 1.61e-07, 1.889e-08, 1.855e-09,
             7.032e-11, 2.87e-12, 2.174e-13, 3.025e-14, 3.257e-15, 2.634e-17,
             3.313e-20, 2.134e-23, 1.366e-25, 4.128e-28, 3.433e-30, 1.0 - 30,
-            1.0 - 30, 1.0 - 30
+                                                                   1.0 - 30, 1.0 - 30
         ])
         #  N2O5
         #   0 -120   Mark Allen/FASCODE

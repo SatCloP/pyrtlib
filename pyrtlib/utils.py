@@ -599,12 +599,12 @@ def dilec12(f=None, tk=None, *args, **kwargs):
         221.327, theta ** 2.31)
     # Debye term from
     # W. Ellison, J. Phys. Chem. Ref. Data, 36, 1-18 (2007).
-    delta = np.dot(80.69715, np.exp(- tc / 226.45))
-    sd = np.dot(1164.023, np.exp(- 651.4728 / (tc + 133.07)))
+    delta = np.dot(80.69715, np.exp(-tc / 226.45))
+    sd = np.dot(1164.023, np.exp(-651.4728 / (tc + 133.07)))
     kappa = kappa - np.dot(delta, z) / (sd + z)
     # B band from
     # P.W. Rosenkranz, IEEE Trans. Geosci. & Remote Sens. v.53(3) pp.1387-93 (2015).
-    delta = np.dot(4.008724, np.exp(- tc / 103.05))
+    delta = np.dot(4.008724, np.exp(-tc / 103.05))
     hdelta = delta / 2.0
     f1 = 10.46012 + np.dot(0.1454962, tc) + np.dot(0.063267156, tc ** 2) + np.dot(0.00093786645, tc ** 3)
     # z1 = (-.75,1.) * f1;
@@ -663,6 +663,6 @@ def dcerror(x, y, *args, **kwargs):
         dcerror = np.copy(w)
     else:
         # from eqs.(13), w(z) = 2exp(-z^2)-[w(z*)]*
-        dcerror = np.dot(2.0, np.exp(- complex(x, y) ** 2)) - np.conj(w)
+        dcerror = np.dot(2.0, np.exp(-complex(x, y) ** 2)) - np.conj(w)
 
     return dcerror

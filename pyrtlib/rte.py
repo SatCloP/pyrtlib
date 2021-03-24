@@ -5,7 +5,6 @@ This class contains the main Radiative Transfer Equation functions.
 import warnings
 
 import numpy as np
-
 from .absmodel import AbsModel
 from .utils import constants, tk2b_mod, arange
 
@@ -13,6 +12,8 @@ from .utils import constants, tk2b_mod, arange
 class RTEquation:
     """This class contains the main Radiative Transfer Equation functions.
     """
+
+    from_sat = False
 
     @staticmethod
     def vapor_xxx(tk=None, rh=None, ice=None, *args, **kwargs):
@@ -33,7 +34,7 @@ class RTEquation:
 
         """
 
-        rvap = constants('Rwatvap')
+        rvap = constants('Rwatvap')[0]
 
         rvap = np.dot(rvap, 1e-05)
 
@@ -114,11 +115,11 @@ class RTEquation:
         """
 
         nl = len(p)
-        wetn = []
-        dryn = []
-        refindx = []
+        wetn = np.zeros(p.shape)
+        dryn = np.zeros(p.shape)
+        refindx = np.zeros(p.shape)
 
-        for i in arange(1, nl).reshape(-1):
+        for i in arange(0, nl - 1).reshape(-1):
             # Calculate dry air pressure (pa) and celsius temperature (tc).
             pa = p[i] - e[i]
             tc = tk[i] - 273.16
@@ -131,10 +132,6 @@ class RTEquation:
             wetn[i] = np.dot((np.dot(64.79, (e[i] / tk[i])) + np.dot((377600.0), (e[i] / tk2))), rzw)
             dryn[i] = np.dot(np.dot(77.6036, (pa / tk[i])), rza)
             refindx[i] = 1.0 + np.dot((dryn[i] + wetn[i]), 1e-06)
-
-        wetn = np.asarray(dryn)
-        dryn = np.asarray(wetn)
-        refindx = np.asarray(refindx)
 
         return dryn, wetn, refindx
 
@@ -158,20 +155,20 @@ class RTEquation:
         """
 
         deg2rad = np.pi / 180
-        re = constants('EarthRadius')
-        ds = []
+        re = constants('EarthRadius')[0]
+        ds = np.zeros(z.shape)
 
         nl = len(z)
         # Check for refractive index values that will blow up calculations.
-        for i in arange(1, nl).reshape(-1):
+        for i in arange(0, nl - 1).reshape(-1):
             if refindx[i] < 1:
                 warnings.warn('RayTrac_xxx: Negative rafractive index')
                 return
 
         # If angle is close to 90 degrees, make ds a height difference profile.
-        if np.logical_or((angle >= np.logical_and(89, angle) <= 91), (angle >= np.logical_and(- 91, angle) <= - 89)):
+        if (angle >= 89 and angle <= 91) or (angle >= -91 and angle <= -89):
             ds[1] = 0.0
-            for i in arange(2, nl).reshape(-1):
+            for i in arange(1, nl - 1).reshape(-1):
                 ds[i] = z[i] - z[i - 1]
 
         # The rest of the subroutine applies only to angle other than 90 degrees.
@@ -204,7 +201,7 @@ class RTEquation:
             theta = np.dot(2.0, np.arcsin(sint))
             if (theta - np.dot(2.0, theta0)) <= 0.0:
                 dendth = np.dot(np.dot(2.0, (sint + sina)), np.cos(np.dot((theta + theta0), 0.25)))
-                sind4 = (np.dot(0.5, argdth) - np.dot(z(i), argth)) / dendth
+                sind4 = (np.dot(0.5, argdth) - np.dot(z[i], argth)) / dendth
                 dtheta = np.dot(4.0, np.arcsin(sind4))
                 theta = theta0 + dtheta
             else:
@@ -250,7 +247,8 @@ class RTEquation:
 
         sxds = 0.0
         xds = np.zeros(ds.shape)
-        for i in arange(ibeg + 1, iend).reshape(-1):
+        # TODO: check index
+        for i in arange(ibeg + 1, iend - 1).reshape(-1):
             # Check for negative x value. If found, output message and return.
             if np.logical_or((x[i - 1] < 0.0), (x[i] < 0.0)):
                 warnings.warn('Error encountered in ExpInt_xxx.m')
@@ -265,14 +263,15 @@ class RTEquation:
                     xlayer = np.dot((x[i] + x[i - 1]), 0.5)
             else:
                 # Find a layer value for x assuming exponential decay over the layer.
-                xlayer = (x(i) - x(i - 1)) / np.log(x(i) / x(i - 1))
+                xlayer = (x[i] - x[i - 1]) / np.log(x[i] / x[i - 1])
             # Integrate x over the layer and save the result in xds.
             xds[i] = np.dot(xlayer, ds[i])
             sxds = sxds + xds[i]
 
         sxds = np.dot(sxds, factor)
 
-        return sxds, xds
+        # TODO: reashape xds array
+        return sxds, xds.reshape(50)
 
     @staticmethod
     def cld_tmr_xxx(ibase=None, itop=None, hvk=None, tauprof=None, boftatm=None, *args, **kwargs):
@@ -313,7 +312,7 @@ class RTEquation:
         if taucld > expmax:
             boftcld = np.dot(batmcld, np.exp(tauprof[ibase]))
         else:
-            boftcld = np.dot(batmcld, np.exp(tauprof[ibase])) / (1.0 - np.exp(- taucld))
+            boftcld = np.dot(batmcld, np.exp(tauprof[ibase])) / (1.0 - np.exp(-taucld))
 
         # compute cloud mean radiating temperature (tmrcld)
         tmrcld = RTEquation.bright_xxx(hvk, boftcld)
@@ -338,7 +337,7 @@ class RTEquation:
         """
         ncld = len(lbase)
         scld = 0.0
-        for l in arange(1, ncld).reshape(-1):
+        for l in arange(0, ncld - 1).reshape(-1):
             for i in arange(lbase[l] + 1, ltop[l]).reshape(-1):
                 scld = scld + np.dot(ds[i], (np.dot(0.5, (dencld[i] + dencld[i - 1]))))
 
@@ -378,9 +377,9 @@ class RTEquation:
         .. warning:: nl arg is missing ??
         """
 
-        Tc = constants('Tcosmicbkg')
-        h = constants('planck')
-        k = constants('boltzmann')
+        Tc = constants('Tcosmicbkg')[0]
+        h = constants('planck')[0]
+        k = constants('boltzmann')[0]
         fHz = np.dot(frq, 1000000000.0)
 
         hvk = np.dot(fHz, h) / k
@@ -390,27 +389,56 @@ class RTEquation:
         tauprof = np.zeros(taulay.shape)
         boftatm = np.zeros(taulay.shape)
         boft = np.zeros(taulay.shape)
-        #TODO: check index of boft variable
-        boft[1] = tk2b_mod(hvk, tk[1])
-        for i in arange(2, nl).reshape(-1):
-            boft[i] = tk2b_mod(hvk, tk[i])
-            boftlay = (boft[i - 1] + np.dot(boft[i], np.exp(- taulay[i]))) / (1.0 + np.exp(- taulay[i]))
-            batmlay = np.dot(np.dot(boftlay, np.exp(- tauprof[i - 1])), (1.0 - np.exp(- taulay[i])))
-            boftatm[i] = boftatm[i - 1] + batmlay
-            tauprof[i] = tauprof[i - 1] + taulay[i]
 
-        # compute the cosmic background term of the rte; compute total planck
-        # radiance for atmosphere and cosmic background; if absorption too large
-        # to exponentiate, assume cosmic background was completely attenuated.
-        if tauprof[nl] < expmax:
-            boftbg = tk2b_mod(hvk, Tc)
-            bakgrnd = np.dot(boftbg, np.exp(- tauprof[nl]))
-            boftotl = bakgrnd + boftatm[nl]
-            boftmr = boftatm[nl] / (1.0 - np.exp(- tauprof[nl]))
+        if RTEquation.from_sat:
+            boftotl = 0.0
+            ###########################################################################
+            # Then compute upwelling radiance 
+            # Adapted from Planck_xxx.m, but from Satellite i-1 becomes i+1
+            ###########################################################################
+            Ts = tk[0]
+            Es = 1.0
+            boft[nl-1] = tk2b_mod(hvk, tk[nl-1])
+            for i in arange((nl-1) - 1, 0, - 1).reshape(-1):
+                boft[i] = tk2b_mod(hvk, tk[i])
+                boftlay = (boft[i + 1] + np.dot(boft[i], np.exp(-taulay[i]))) / (1.0 + np.exp(-taulay[i]))
+                batmlay = np.dot(np.dot(boftlay, np.exp(-tauprof[i + 1])), (1.0 - np.exp(-taulay[i])))
+                boftatm[i] = boftatm[i + 1] + batmlay
+                tauprof[i] = tauprof[i + 1] + taulay[i]
+
+            # The background is a combination of surface emission and downwelling 
+            # radiance (boftotl) reflected by the surface
+            if tauprof[0] < expmax:
+                boftbg = np.dot(Es, tk2b_mod(hvk, Ts)) + np.dot((1 - Es), boftotl)
+                # boftbg_sat  = Es * TK2B_mod(hvk,Ts); # SAT: eps * B(Tsrf) + (1-eps) B_dw
+                bakgrnd = np.dot(boftbg, np.exp(-tauprof[0]))
+                boftotl = bakgrnd + boftatm[0]
+                boftmr = boftatm[0] / (1.0 - np.exp(-tauprof[0]))
+            else:
+                bakgrnd = 0.0
+                boftotl = boftatm[0]
+                boftmr = boftatm[0]
         else:
-            bakgrnd = 0.0
-            boftotl = boftatm[nl]
-            boftmr = boftatm[nl]
+            # TODO: check index of boft variable
+            boft[0] = tk2b_mod(hvk, tk[0])
+            for i in arange(2, nl).reshape(-1):
+                boft[i] = tk2b_mod(hvk, tk[i])
+                boftlay = (boft[i - 1] + np.dot(boft[i], np.exp(-taulay[i]))) / (1.0 + np.exp(-taulay[i]))
+                batmlay = np.dot(np.dot(boftlay, np.exp(- tauprof[i - 1])), (1.0 - np.exp(-taulay[i])))
+                boftatm[i] = boftatm[i - 1] + batmlay
+                tauprof[i] = tauprof[i - 1] + taulay[i]
+            # compute the cosmic background term of the rte; compute total planck
+            # radiance for atmosphere and cosmic background; if absorption too large
+            # to exponentiate, assume cosmic background was completely attenuated.
+            if tauprof[nl] < expmax:
+                boftbg = tk2b_mod(hvk, Tc)
+                bakgrnd = np.dot(boftbg, np.exp(-tauprof[nl]))
+                boftotl = bakgrnd + boftatm[nl]
+                boftmr = boftatm[nl] / (1.0 - np.exp(-tauprof[nl]))
+            else:
+                bakgrnd = 0.0
+                boftotl = boftatm[nl]
+                boftmr = boftatm[nl]
 
         return boftotl, boftatm, boftmr, tauprof, hvk, boft, bakgrnd
 
@@ -443,8 +471,7 @@ class RTEquation:
         """
 
         nl = len(tk)
-        # c=29979245800.0
-        c = np.dot(constants('light'), 100)
+        c = np.dot(constants('light')[0], 100)
 
         ghz2hz = 1000000000.0
         db2np = np.dot(np.log(10.0), 0.1)
@@ -453,7 +480,7 @@ class RTEquation:
 
         aliq = np.zeros(denl.shape)
         aice = np.zeros(denl.shape)
-        for i in arange(1, nl).reshape(-1):
+        for i in arange(1 - 1, nl - 1).reshape(-1):
             # Compute liquid absorption np/km.
             if denl[i] > 0:
                 aliq[i] = AbsModel.ab_liq(denl[i], frq, tk[i])
@@ -506,7 +533,7 @@ class RTEquation:
         aN2 = np.zeros(p.shape)
         factor = np.dot(0.182, frq)
         db2np = np.dot(np.log(10.0), 0.1)
-        for i in arange(1, nl).reshape(-1):
+        for i in arange(0, nl - 1).reshape(-1):
             # Compute inverse temperature parameter; convert wet and dry p to kpa.
             v = 300.0 / tk[i]
             ekpa = e[i] / 10.0
@@ -521,7 +548,7 @@ class RTEquation:
             elif AbsModel.model == 'rose19sd':
                 npp, ncpp = AbsModel.h2o_rosen19_sd(pdrykpa, v, ekpa, frq, nargout=2)
                 awet[i] = np.dot((np.dot(factor, (npp + ncpp))), db2np)
-                npp = AbsModel.o2abs_rosen18_xxx(pdrykpa, v, ekpa, frq)
+                npp, _ = AbsModel.o2abs_rosen18_xxx(pdrykpa, v, ekpa, frq)
                 aO2[i] = np.dot((np.dot(factor, npp)), db2np)
                 # C    add N2 term
                 aN2[i] = AbsModel.abs_N2(tk[i], np.dot(pdrykpa, 10), frq)
@@ -529,5 +556,5 @@ class RTEquation:
 
             else:
                 raise ValueError('No model avalaible with this name: {} . Sorry...'.format(AbsModel.model))
-      
+
         return awet, adry

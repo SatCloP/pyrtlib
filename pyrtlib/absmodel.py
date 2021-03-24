@@ -171,7 +171,7 @@ class AbsModel:
 
         sum = 0.0
         df = np.zeros((2, 1))
-        for i in arange(1, nlines).reshape(-1):
+        for i in arange(1-1, nlines-1).reshape(-1):
             width0 = np.dot(np.dot(w0[i], pda), ti ** x[i]) + np.dot(np.dot(w0s[i], pvap), ti ** xs[i])
             width2 = np.dot(w2[i], pda) + np.dot(w2s[i], pvap)
             shiftf = np.dot(np.dot(np.dot(sh[i], pda), (1.0 - np.dot(aair[i], tiln))), ti ** xh[i])
@@ -180,11 +180,11 @@ class AbsModel:
             # nico: thus using the best-fit voigt (shift instead of shift0 and shift2)
             wsq = width0 ** 2
             s = np.dot(np.dot(s1[i], ti2), np.exp(np.dot(b2[i], (1.0 - ti))))
-            df[1] = f - fl(i) - shift
-            df[2] = f + fl(i) + shift
+            df[0] = f - fl[i] - shift
+            df[1] = f + fl[i] + shift
             base = width0 / (562500.0 + wsq)
             res = 0.0
-            for j in arange(1, 2).reshape(-1):
+            for j in arange(0, 1).reshape(-1):
                 # if(i.eq.1 .and. j.eq.1 .and. abs(df(j)).lt.10.*width0) then
                 # WIDTH2>0.0 & J==1 & abs(DF(J)) < 10*WIDTH0
                 # width2 > 0 and j == 1 and abs(df[j]) < np.dot(10, width0)
@@ -209,7 +209,7 @@ class AbsModel:
         ncpp = (con / db2np) / factor
         # cyh *************************************************************
 
-        return npp, ncpp, sum
+        return npp, ncpp
 
     @staticmethod
     def o2abs_rosen18_xxx(pdrykpa=None, vx=None, ekpa=None, frq=None, *args, **kwargs):
@@ -218,18 +218,16 @@ class AbsModel:
 
         History:
 
-            5/1/95  P. Rosenkranz
-            11/5/97  P. Rosenkranz - 1- line modification.
-            12/16/98 pwr - updated submm freq's and intensities from HITRAN96
-            8/21/02  pwr - revised width at 425
-            3/20/03  pwr - 1- line mixing and width revised
-            9/29/04  pwr - new widths and mixing, using HITRAN intensities
-                        for all lines
-            6/12/06  pwr - chg. T dependence of 1- line to 0.8
-            10/14/08 pwr - moved isotope abundance back into intensities,
-                        added selected O16O18 lines.
-            5/30/09  pwr - remove common block, add weak lines.
-            12/18/14 pwr - adjust line broadening due to water vapor.
+        * 5/1/95  P. Rosenkranz
+        * 11/5/97  P. Rosenkranz - 1- line modification.
+        * 12/16/98 pwr - updated submm freq's and intensities from HITRAN96
+        * 8/21/02  pwr - revised width at 425
+        * 3/20/03  pwr - 1- line mixing and width revised
+        * 9/29/04  pwr - new widths and mixing, using HITRAN intensities for all lines
+        * 6/12/06  pwr - chg. T dependence of 1- line to 0.8
+        * 10/14/08 pwr - moved isotope abundance back into intensities; added selected O16O18 lines.
+        * 5/30/09  pwr - remove common block, add weak lines.
+        * 12/18/14 pwr - adjust line broadening due to water vapor.
 
         Args:
             pdrykpa ([type], optional): [description]. Defaults to None.
@@ -246,22 +244,21 @@ class AbsModel:
         .. [3] G.Yu. Golubiatnikov & A.F. Krupnov, J. Mol. Spect. v.217, pp.282-287 (2003).
         .. [4] M.Yu. Tretyakov et al, J. Mol. Spect. v.223, pp.31-38 (2004).
         .. [5] M.Yu. Tretyakov et al, J. Mol. Spect. v.231, pp.1-14 (2005).
-        .. [6]B.J. Drouin, JQSRT v.105, pp.450-458 (2007).
-        .. [7]D.S. Makarov et al, J. Mol. Spect. v.252, pp.242-243 (2008).
+        .. [6] B.J. Drouin, JQSRT v.105, pp.450-458 (2007).
+        .. [7] D.S. Makarov et al, J. Mol. Spect. v.252, pp.242-243 (2008).
         .. [8] M.A. Koshelev et al, JQSRT, in press (2015). line intensities from HITRAN2004. non-resonant intensity from JPL catalog.
 
         .. note::
-            1. The mm line-width and mixing coefficients are from Tretyakov et al;
-                submm line-widths from Golubiatnikov & Krupnov (except
-                234 GHz from Drouin)
-            2. The same temperature dependence (X) is used for submillimeter
-                line widths as in the 60 GHz band: (1/T)**X
+            * The mm line-width and mixing coefficients are from Tretyakov et al submm line-widths from Golubiatnikov & Krupnov (except 234 GHz from Drouin)
+            * The same temperature dependence (X) is used for submillimeter line widths as in the 60 GHz band: (1/T)**X
+
         .. note::
             Nico: the only differences wrt to o2n2_rosen17_xxx are:
-            1) PRESWV = VAPDEN*TEMP/217. -> PRESWV = VAPDEN*TEMP/216.68 - this is now consistent with h2o
-            2) ABSN2_ros16(TEMP,PRES,FREQ) -> ABSN2_ros18(TEMP,PRESDA,FREQ) - since absn2.f takes in input P = DRY AIR PRESSURE (MB)
-            3) ABSN2 is now external
-            4) The continuum term is summed BEFORE O2ABS = max(O2ABS,0.)
+
+            * PRESWV = VAPDEN*TEMP/217. -> PRESWV = VAPDEN*TEMP/216.68 - this is now consistent with h2o
+            * ABSN2_ros16(TEMP,PRES,FREQ) -> ABSN2_ros18(TEMP,PRESDA,FREQ) - since absn2.f takes in input P = DRY AIR PRESSURE (MB)
+            * ABSN2 is now external
+            * The continuum term is summed BEFORE O2ABS = max(O2ABS,0.)
         """
 
         # Nico 2016/11/30 *********************************************************
@@ -303,17 +300,17 @@ class AbsModel:
              0.811, 0.811, 0.764, 0.764, 0.717, 0.717, 0.669, 0.669, 1.65, 1.64, 1.64, 1.64, 1.6, 1.6, 1.6, 1.6, 1.62,
              1.47, 1.47])
         # nico y(t_0) [unitless]
-        y300 = np.array(
+        y300 = np.append(
             [- 0.036, 0.2547, - 0.3655, 0.5495, - 0.5696, 0.6181, - 0.4252, 0.3517, - 0.1496, 0.043, 0.064, - 0.1605,
              0.2906, - 0.373, 0.4169, - 0.4819, 0.4963, - 0.5481, 0.5512, - 0.5931, 0.6212, - 0.6558, 0.692, - 0.7208,
              0.7312, - 0.755, 0.7555, - 0.7751, 0.7914, - 0.8073, 0.8307, - 0.8431, 0.8676, - 0.8761, 0.9046, - 0.9092,
-             0.9416, - 0.9423, np.tile(0.0, (1, 11))])
+             0.9416, - 0.9423], np.tile(0.0, (1, 11)))
         # nico v(t_0) [unitless]
-        v = np.array(
+        v = np.append(
             [0.0079, - 0.0978, 0.0844, - 0.1273, 0.0699, - 0.0776, 0.2309, - 0.2825, 0.0436, - 0.0584, 0.6056, - 0.6619,
              0.6451, - 0.6759, 0.6547, - 0.6675, 0.6135, - 0.6139, 0.2952, - 0.2895, 0.2654, - 0.259, 0.375, - 0.368,
              0.5085, - 0.5002, 0.6206, - 0.6091, 0.6526, - 0.6393, 0.664, - 0.6475, 0.6729, - 0.6545, 0.68, - 0.66,
-             0.685, - 0.665, np.tile(0.0, (1, 11))])
+             0.685, - 0.665], np.tile(0.0, (1, 11)))
         # nico 2016/11/30 *********************************************************
 
         # cyh*** add the following lines *************************
@@ -345,11 +342,11 @@ class AbsModel:
         # cyh **************************************************************
 
         nlines = len(f)
-        for k in arange(1, nlines).reshape(-1):
+        for k in arange(1-1, nlines-1).reshape(-1):
             df = np.dot(w300[k], den)
             fcen = f[k]
             y = np.dot(den, (y300[k] + np.dot(v[k], th1)))
-            strr = np.dot(s300[k], np.exp(np.dot(- be[k], th1)))
+            strr = np.dot(s300[k], np.exp(np.dot(-be[k], th1)))
             sf1 = (df + np.dot((freq - fcen), y)) / ((freq - fcen) ** 2 + np.dot(df, df))
             sf2 = (df - np.dot((freq + fcen), y)) / ((freq + fcen) ** 2 + np.dot(df, df))
             sum = sum + np.dot(np.dot(strr, (sf1 + sf2)), (freq / f[k]) ** 2)
