@@ -15,6 +15,8 @@ functions and classes for simulating ........
 The source code for pyrtlib python package is hosted on `github
 <https://github.com/slarosa/pyrtlib>`_.
 
+.. image:: ../../resources/spectrum.png
+
 .. toctree::
    :maxdepth: 1
    :caption: Contents:
