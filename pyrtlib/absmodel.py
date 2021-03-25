@@ -188,12 +188,12 @@ class AbsModel:
                 # if(i.eq.1 .and. j.eq.1 .and. abs(df(j)).lt.10.*width0) then
                 # WIDTH2>0.0 & J==1 & abs(DF(J)) < 10*WIDTH0
                 # width2 > 0 and j == 1 and abs(df[j]) < np.dot(10, width0)
-                if width2 > 0 and j == 1 and abs(df[j]) < np.dot(10, width0):
+                if width2 > 0 and j == 0 and abs(df[j]) < np.dot(10, width0):
                     # speed-dependent resonant shape factor
                     # double complex dcerror,xc,xrt,pxw,a
                     xc = complex((width0 - np.dot(1.5, width2)), df[j]) / width2
                     xrt = np.sqrt(xc)
-                    pxw = np.dot(np.dot(1.77245385091, xrt), dcerror(-np.imag(xrt), np.real(xrt)))
+                    pxw = np.dot(np.dot(1.77245385090551603, xrt), dcerror(-np.imag(xrt), np.real(xrt)))
                     sd = np.dot(2.0, (1.0 - pxw)) / width2
                     res = res + np.real(sd) - base
                 else:

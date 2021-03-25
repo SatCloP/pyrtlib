@@ -168,31 +168,31 @@ class RTEquation:
 
         # If angle is close to 90 degrees, make ds a height difference profile.
         if (angle >= 89 and angle <= 91) or (angle >= -91 and angle <= -89):
-            ds[1] = 0.0
+            ds[0] = 0.0
             for i in arange(1, nl - 1).reshape(-1):
                 ds[i] = z[i] - z[i - 1]
 
         # The rest of the subroutine applies only to angle other than 90 degrees.
         # Convert angle degrees to radians.  Initialize constant values.
         theta0 = np.dot(angle, deg2rad)
-        rs = re + z[1] + z0
+        rs = re + z[0] + z0
         costh0 = np.cos(theta0)
         sina = np.sin(np.dot(theta0, 0.5))
         a0 = np.dot(2.0, (sina ** 2))
         # Initialize lower boundary values for 1st layer.
-        ds[1] = 0.0
+        ds[0] = 0.0
         phil = 0.0
         taul = 0.0
-        rl = re + z[1] + z0
+        rl = re + z[0] + z0
         tanthl = np.tan(theta0)
         # Construct the slant path length profile.
-        for i in arange(2, nl).reshape(-1):
+        for i in arange(1, nl-1).reshape(-1):
             r = re + z[i] + z0
             if refindx[i] == refindx[i - 1] or refindx[i] == 1. or refindx[i - 1] == 1.:
                 refbar = np.dot((refindx[i] + refindx[i - 1]), 0.5)
             else:
                 refbar = 1.0 + (refindx[i - 1] - refindx[i]) / (np.log((refindx[i - 1] - 1.0) / (refindx[i] - 1.0)))
-            argdth = z[i] / rs - (np.dot((refindx[1] - refindx[i]), costh0) / refindx[i])
+            argdth = z[i] / rs - (np.dot((refindx[0] - refindx[i]), costh0) / refindx[i])
             argth = np.dot(0.5, (a0 + argdth)) / r
             if argth <= 0:
                 warnings.warn('RayTrac_xxx: Ducting at {} degrees'.format(angle))
@@ -422,7 +422,7 @@ class RTEquation:
         else:
             # TODO: check index of boft variable
             boft[0] = tk2b_mod(hvk, tk[0])
-            for i in arange(2, nl).reshape(-1):
+            for i in arange(1, nl-1).reshape(-1):
                 boft[i] = tk2b_mod(hvk, tk[i])
                 boftlay = (boft[i - 1] + np.dot(boft[i], np.exp(-taulay[i]))) / (1.0 + np.exp(-taulay[i]))
                 batmlay = np.dot(np.dot(boftlay, np.exp(- tauprof[i - 1])), (1.0 - np.exp(-taulay[i])))
@@ -431,15 +431,15 @@ class RTEquation:
             # compute the cosmic background term of the rte; compute total planck
             # radiance for atmosphere and cosmic background; if absorption too large
             # to exponentiate, assume cosmic background was completely attenuated.
-            if tauprof[nl] < expmax:
+            if tauprof[nl-1] < expmax:
                 boftbg = tk2b_mod(hvk, Tc)
-                bakgrnd = np.dot(boftbg, np.exp(-tauprof[nl]))
-                boftotl = bakgrnd + boftatm[nl]
-                boftmr = boftatm[nl] / (1.0 - np.exp(-tauprof[nl]))
+                bakgrnd = np.dot(boftbg, np.exp(-tauprof[nl-1]))
+                boftotl = bakgrnd + boftatm[nl-1]
+                boftmr = boftatm[nl-1] / (1.0 - np.exp(-tauprof[nl-1]))
             else:
                 bakgrnd = 0.0
-                boftotl = boftatm[nl]
-                boftmr = boftatm[nl]
+                boftotl = boftatm[nl-1]
+                boftmr = boftatm[nl-1]
 
         return boftotl, boftatm, boftmr, tauprof, hvk, boft, bakgrnd
 

@@ -51,7 +51,7 @@ def tb_cloud_rte(z=None, p=None, tk=None, rh=None, denliq=None, denice=None, cld
     # TODO: check if shape is correct
     beglev = np.zeros((1, nang))
     endlev = np.zeros((1, nang))
-    for l in arange(1-1, ncld-1).reshape(-1):
+    for l in arange(0, ncld-1).reshape(-1):
         for i in arange(1, nl).reshape(-1):
             if z[i] == cldh[0, l]: beglev[l] = i
             if z[i] == cldh[1, l]: endlev[l] = i
@@ -68,23 +68,23 @@ def tb_cloud_rte(z=None, p=None, tk=None, rh=None, denliq=None, denice=None, cld
             ds = np.concatenate([[0], [np.dot(np.diff(z), amass)]])
         # ds = [0; diff(z)]; # in alternative simple diff of z
         # ... Integrate over path (ds) ...
-        srho[k], _ = RTEquation.exp_int_xxx(1, rho, ds, 1, nl, 0.1)
-        swet[k], _ = RTEquation.exp_int_xxx(1, wetn, ds, 1, nl, 0.1)
-        sdry[k], _ = RTEquation.exp_int_xxx(1, dryn, ds, 1, nl, 0.1)
+        srho[k], _ = RTEquation.exp_int_xxx(1, rho, ds, 0, nl, 0.1)
+        swet[k], _ = RTEquation.exp_int_xxx(1, wetn, ds, 0, nl, 0.1)
+        sdry[k], _ = RTEquation.exp_int_xxx(1, dryn, ds, 0, nl, 0.1)
         if ncld > 0:
             sliq[k] = RTEquation.cld_int_xxx(denliq, ds, beglev, endlev)
             sice[k] = RTEquation.cld_int_xxx(denice, ds, beglev, endlev)
         # ... handle each frequency ...
         # this are based on NOAA RTE fortran routines
-        for j in arange(1-1, nf-1).reshape(-1):
+        for j in arange(0, nf-1).reshape(-1):
             # Rosenkranz, personal communication, 2019/02/12 (email)
             awet, adry = RTEquation.clr_abs_xxx(p, tk, e, frq[j])
             aliq, aice = RTEquation.cld_abs_xxx(tk, denliq, denice, frq[j])
 
-            SPtauwet[j, k], Ptauwet[j, k, :] = RTEquation.exp_int_xxx(1, awet, ds, 1, nl, 1)
-            SPtaudry[j, k], Ptaudry[j, k, :] = RTEquation.exp_int_xxx(1, adry, ds, 1, nl, 1)
-            SPtauliq[j, k], Ptauliq[j, k, :] = RTEquation.exp_int_xxx(0, aliq, ds, 1, nl, 1)
-            SPtauice[j, k], Ptauice[j, k, :] = RTEquation.exp_int_xxx(0, aice, ds, 1, nl, 1)
+            SPtauwet[j, k], Ptauwet[j, k, :] = RTEquation.exp_int_xxx(1, awet, ds, 0, nl, 1)
+            SPtaudry[j, k], Ptaudry[j, k, :] = RTEquation.exp_int_xxx(1, adry, ds, 0, nl, 1)
+            SPtauliq[j, k], Ptauliq[j, k, :] = RTEquation.exp_int_xxx(0, aliq, ds, 0, nl, 1)
+            SPtauice[j, k], Ptauice[j, k, :] = RTEquation.exp_int_xxx(0, aice, ds, 0, nl, 1)
             Ptaulay[j, k, :] = Ptauwet[j, k, :] + Ptaudry[j, k, :] + Ptauice[j, k, :] + Ptauliq[j, k, :]
             # [boftotl,boftatm,boftmr,PSPtauprof,hvk] = Planck_xxx(frq(j),tk,Ptaulay(j,k,:));
             boftotl, boftatm, boftmr, PSPtauprof, hvk, _, _ = RTEquation.planck_xxx(frq[j], tk, Ptaulay[j, k, :])

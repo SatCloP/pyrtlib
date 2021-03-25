@@ -644,20 +644,22 @@ def dcerror(x, y, *args, **kwargs):
     # DOUBLE PRECISION X,Y,a(0:6),b(0:6)
     # DOUBLE COMPLEX ASUM,BSUM,ZH,w
 
-    a = np.asarray(
-        [122.607931777, 214.382388695, 181.928533092, 93.1555804581, 30.1801421962, 5.91262620977, 0.564189583563])
-    b = np.asarray(
-        [122.607931774, 352.730625111, 457.334478784, 348.703917719, 170.354001821, 53.9929069129, 10.4798571143])
+    a = np.asarray([122.607931777104326, 214.382388694706425, 181.928533092181549, 93.155580458138441,
+         30.180142196210589, 5.912626209773153, 0.564189583562615])
+
+    b = np.asarray([122.607931773875350, 352.730625110963558, 457.334478783897737, 348.703917719495792,
+         170.354001821091472, 53.992906912940207, 10.479857114260399])
+
     # compute w in quadrants 1 or 2
     # from eqs.(13), w(z) = [w(-z*)]*
     # expansion in terms of ZH results in conjugation of w when X changes sign.
     zh = complex(abs(y), - x)
     asum = np.dot(
-        (np.dot((np.dot((np.dot((np.dot((np.dot(a[7], zh) + a[6]), zh) + a[5]), zh) + a[4]), zh) + a[3]), zh) + a[2]),
-        zh) + a[1]
+        (np.dot((np.dot((np.dot((np.dot((np.dot(a[6], zh) + a[5]), zh) + a[4]), zh) + a[3]), zh) + a[2]), zh) + a[1]),
+        zh) + a[0]
     bsum = np.dot((np.dot(
-        (np.dot((np.dot((np.dot((np.dot((zh + b[7]), zh) + b[6]), zh) + b[5]), zh) + b[4]), zh) + b[3]), zh) + b[2]),
-                  zh) + b[1]
+        (np.dot((np.dot((np.dot((np.dot((zh + b[6]), zh) + b[5]), zh) + b[4]), zh) + b[3]), zh) + b[2]), zh) + b[1]),
+                  zh) + b[0]
     w = asum / bsum
     if y >= 0:
         dcerror = np.copy(w)
