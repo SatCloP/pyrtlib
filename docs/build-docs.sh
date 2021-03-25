@@ -70,7 +70,14 @@ for current_version in ${versions}; do
     #   cp "docs/_build/epub/target.epub" "${docroot}/${current_language}/${current_version}/pyrtlib-docs_${current_language}_${current_version}.epub"
  
       # copy the static assets produced by the above build into our docroot
-      rsync -av "docs/_build/html/" "${docroot}/"
+      rsync -av "docs/_build/html/" "${docroot}/" 
+      if [ "$?" -eq "0" ]
+      then
+         echo "Done"
+      else
+         echo "Error while running rsync"
+         exit 1
+      fi
  
    done
  
