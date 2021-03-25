@@ -1,4 +1,4 @@
-﻿pyrtlib.rte.RTEquation
+pyrtlib.rte.RTEquation
 ======================
 
 .. currentmodule:: pyrtlib.rte

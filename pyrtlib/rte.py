@@ -5,6 +5,7 @@ This class contains the main Radiative Transfer Equation functions.
 import warnings
 
 import numpy as np
+
 from .absmodel import AbsModel
 from .utils import constants, tk2b_mod, arange
 
@@ -187,7 +188,7 @@ class RTEquation:
         # Construct the slant path length profile.
         for i in arange(2, nl).reshape(-1):
             r = re + z[i] + z0
-            if refindx[i] == np.logical_or(refindx[i - 1], refindx[i]) == np.logical_or(1.0, refindx[i - 1]) == 1.0:
+            if refindx[i] == refindx[i - 1] or refindx[i] == 1. or refindx[i - 1] == 1.:
                 refbar = np.dot((refindx[i] + refindx[i - 1]), 0.5)
             else:
                 refbar = 1.0 + (refindx[i - 1] - refindx[i]) / (np.log((refindx[i - 1] - 1.0) / (refindx[i] - 1.0)))
@@ -248,15 +249,15 @@ class RTEquation:
         sxds = 0.0
         xds = np.zeros(ds.shape)
         # TODO: check index
-        for i in arange(ibeg + 1, iend - 1).reshape(-1):
+        for i in arange(ibeg, iend - 1).reshape(-1):
             # Check for negative x value. If found, output message and return.
-            if np.logical_or((x[i - 1] < 0.0), (x[i] < 0.0)):
+            if x[i - 1] < 0.0 or x[i] < 0.0:
                 warnings.warn('Error encountered in ExpInt_xxx.m')
                 return sxds, xds
                 # Find a layer value for x in cases where integration algorithm fails.
             elif abs(x[i] - x[i - 1]) < 1e-09:
                 xlayer = x[i]
-            elif np.logical_or((x[i - 1] == 0.0), (x[i] == 0.0)):
+            elif x[i - 1] == 0.0 or x[i] == 0.0:
                 if zeroflg == 0:
                     xlayer = 0.0
                 else:
@@ -398,8 +399,8 @@ class RTEquation:
             ###########################################################################
             Ts = tk[0]
             Es = 1.0
-            boft[nl-1] = tk2b_mod(hvk, tk[nl-1])
-            for i in arange((nl-1) - 1, 0, - 1).reshape(-1):
+            boft[nl - 1] = tk2b_mod(hvk, tk[nl - 1])
+            for i in arange((nl - 1) - 1, 0, - 1).reshape(-1):
                 boft[i] = tk2b_mod(hvk, tk[i])
                 boftlay = (boft[i + 1] + np.dot(boft[i], np.exp(-taulay[i]))) / (1.0 + np.exp(-taulay[i]))
                 batmlay = np.dot(np.dot(boftlay, np.exp(-tauprof[i + 1])), (1.0 - np.exp(-taulay[i])))

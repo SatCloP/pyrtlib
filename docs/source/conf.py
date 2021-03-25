@@ -39,10 +39,10 @@ extensions = [
     'sphinx.ext.autosummary',
     'sphinx_toggleprompt',
     'sphinx.ext.todo',
-    # 'rst2pdf.pdfbuilder',
+    'rst2pdf.pdfbuilder',
 ]
 
-# pdf_documents = [('index', u'rst2pdf', u'Sample pyrtlib doc', u'Salvatore Larosa'),]
+# pdf_documents = [('index', u'rst2pdf', project + u'Documentation', u'Salvatore Larosa'),]
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -80,6 +80,37 @@ html_theme_options = {
 epub_exclude_files = ['search.html']
 
 autosummary_generate = True
+
+# -- Options for manual page output ---------------------------------------
+
+# One entry per manual page. List of tuples
+# (source start file, name, description, authors, manual section).
+man_pages = [
+    ('index', 'pyrtlib', 'pyrtlib Documentation',
+     ['Andrew Collette and contributors'], 1)
+]
+
+# If true, show URL addresses after external links.
+#man_show_urls = False
+
+# Grouping the document tree into LaTeX files. List of tuples
+# (source start file, target name, title,
+#  author, documentclass [howto, manual, or own class]).
+latex_documents = [
+  ('index', 'pyrtlib.tex', 'pyrtlib Documentation',
+   'Salvatore Larosa and contributors', 'manual'),
+]
+
+# -- Options for Texinfo output -------------------------------------------
+
+# Grouping the document tree into Texinfo files. List of tuples
+# (source start file, target name, title, author,
+#  dir menu entry, description, category)
+texinfo_documents = [
+  ('index', 'pyrtlib', 'pyrtlib Documentation',
+   'Salvatore Larosa and contributors', 'pyrtlib', 'One line description of project.',
+   'Miscellaneous'),
+]
 
 import sys, os
 # The theme to use for HTML and HTML Help pages.  See the documentation for
@@ -165,10 +196,10 @@ for version in versions:
 #  project+ ' Documentation',
 #  '© ' +copyright,
 # )]
-today_fmt = "%B %d, %Y"
+# today_fmt = "%B %d, %Y"
  
 # settings for EPUB
-epub_basename = 'target'
+epub_basename = project
  
 html_context['downloads'] = list()
 html_context['downloads'].append( ('pdf', '/' +REPO_NAME+ '/' +current_language+ '/' +current_version+ '/' +project+ '-docs_' +current_language+ '_' +current_version+ '.pdf') )
@@ -183,8 +214,8 @@ html_context['github_version'] = 'main/docs/'
 # Napoleon stuff
 #
 napoleon_use_admonition_for_examples = True
+napoleon_google_docstring = True
 # napoleon_use_rtype = False  # group rtype on same line together with return
-
 
 #todo extension
 todo_include_todos = True
