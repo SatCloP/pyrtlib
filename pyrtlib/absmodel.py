@@ -136,12 +136,12 @@ class AbsModel:
         # (which were missing in h2o_sdlist_r19)
 
         # cyh ***********************************************
-        db2np = np.dot(np.log(10.0), 0.1)
-        rvap = np.dot(0.01, 8.31451) / 18.01528
-        factor = np.dot(0.182, frq)
+        db2np = np.log(10.0) * 0.1
+        rvap = (0.01 * 8.31451) / 18.01528
+        factor = 0.182 * frq
         t = 300.0 / vx
-        p = np.dot((pdrykpa + ekpa), 10.0)
-        rho = np.dot(ekpa, 10.0) / (np.dot(rvap, t))
+        p = (pdrykpa + ekpa) * 10.0
+        rho = ekpa * 10.0 / (rvap * t)
         f = np.copy(frq)
         # cyh ***********************************************
 
@@ -152,34 +152,35 @@ class AbsModel:
 
             return
 
-        pvap = np.dot(rho, t) / 216.68
+        pvap = (rho * t) / 216.68
 
         pda = p - pvap
-        den = np.dot(3.344e+16, rho)
+        den = 3.344e+16 * rho
         # continuum terms
         ti = reftcon / t
         # xcf and xcs include 3 for conv. to density & stimulated emission
-        con = np.dot(
-            np.dot(np.dot((np.dot(np.dot(cf, pda), ti ** xcf) + np.dot(np.dot(cs, pvap), ti ** xcs)), pvap), f), f)
+
+        con = (cf * pda * ti ** xcf + cs * pvap * ti ** xcs) * pvap * f * f
 
         # nico 2019/03/18 *********************************************************
         # add resonances
         nlines = len(fl)
         ti = reftline / t
         tiln = np.log(ti)
-        ti2 = np.exp(np.dot(2.5, tiln))
+        ti2 = np.exp(2.5 * tiln)
 
         sum = 0.0
         df = np.zeros((2, 1))
-        for i in arange(1-1, nlines-1).reshape(-1):
-            width0 = np.dot(np.dot(w0[i], pda), ti ** x[i]) + np.dot(np.dot(w0s[i], pvap), ti ** xs[i])
-            width2 = np.dot(w2[i], pda) + np.dot(w2s[i], pvap)
-            shiftf = np.dot(np.dot(np.dot(sh[i], pda), (1.0 - np.dot(aair[i], tiln))), ti ** xh[i])
-            shifts = np.dot(np.dot(np.dot(shs[i], pvap), (1.0 - np.dot(aself[i], tiln))), ti ** xhs[i])
+        for i in arange(0, nlines - 1).reshape(-1):
+            width0 = w0[i] * pda * ti ** x[i] + w0s[i] * pvap * ti ** xs[i]
+            width2 = w2[i] * pda + w2s[i] * pvap
+
+            shiftf = sh[i] * pda * (1. - aair[i] * tiln) * ti ** xh[i]
+            shifts = shs[i] * pvap * (1. - aself[i] * tiln) * ti ** xhs[i]
             shift = shiftf + shifts
             # nico: thus using the best-fit voigt (shift instead of shift0 and shift2)
             wsq = width0 ** 2
-            s = np.dot(np.dot(s1[i], ti2), np.exp(np.dot(b2[i], (1.0 - ti))))
+            s = s1[i] * ti2 * np.exp(b2[i] * (1. - ti))
             df[0] = f - fl[i] - shift
             df[1] = f + fl[i] + shift
             base = width0 / (562500.0 + wsq)
@@ -193,19 +194,22 @@ class AbsModel:
                     # double complex dcerror,xc,xrt,pxw,a
                     xc = complex((width0 - np.dot(1.5, width2)), df[j]) / width2
                     xrt = np.sqrt(xc)
-                    pxw = np.dot(np.dot(1.77245385090551603, xrt), dcerror(-np.imag(xrt), np.real(xrt)))
-                    sd = np.dot(2.0, (1.0 - pxw)) / width2
+
+                    pxw = 1.77245385090551603 * xrt * dcerror(-np.imag(xrt), np.real(xrt))
+                    sd = 2.0 * (1.0 - pxw) / width2
                     res = res + np.real(sd) - base
                 else:
                     if abs(df[j]) < 750.0:
                         res = res + width0 / (df[j] ** 2 + wsq) - base
-            sum = sum + np.dot(np.dot(s, res), (f / fl[i]) ** 2)
+
+            sum = sum + s * res * (f / fl[i]) ** 2
         # nico 2019/03/18 *********************************************************
         # cyh **************************************************************
         # separate the following original equ. into line and continuum
         # terms, and change the units from np/km to ppm
         # abh2o = .3183e-4*den*sum + con
-        npp = (np.dot(np.dot(3.183e-05, den), sum) / db2np) / factor
+
+        npp = (3.183e-05 * den * sum / db2np) / factor
         ncpp = (con / db2np) / factor
         # cyh *************************************************************
 
@@ -314,42 +318,43 @@ class AbsModel:
         # nico 2016/11/30 *********************************************************
 
         # cyh*** add the following lines *************************
-        db2np = np.dot(np.log(10.0), 0.1)
-        rvap = np.dot(0.01, 8.31451) / 18.01528
-        factor = np.dot(0.182, frq)
+        db2np = np.log(10.0) * 0.1
+        rvap = (0.01 * 8.31451) / 18.01528
+        factor = 0.182 * frq
         temp = 300.0 / vx
-        pres = np.dot((pdrykpa + ekpa), 10.0)
+        pres = (pdrykpa + ekpa) * 10.0
 
-        vapden = np.dot(ekpa, 10.0) / (np.dot(rvap, temp))
+        vapden = ekpa * 10.0 / (rvap * temp)
         freq = np.copy(frq)
         # cyh*****************************************************
 
         th = 300.0 / temp
         th1 = th - 1.0
         b = th ** x
-        preswv = np.dot(vapden, temp) / 216.68
+        preswv = (vapden * temp) / 216.68
 
         presda = pres - preswv
 
-        den = np.dot(0.001, (np.dot(presda, b) + np.dot(np.dot(1.2, preswv), th)))
+        den = 0.001 * (presda * b + 1.2 * preswv * th)
 
-        dfnr = np.dot(wb300, den)
+        dfnr = wb300 * den
 
         # nico intensities of the non-resonant transitions for o16-o16 and o16-o18, from jpl's line compilation
         # 1.571e-17 (o16-o16) + 1.3e-19 (o16-o18) = 1.584e-17
-        sum = np.dot(np.dot(np.dot(1.584e-17, freq), freq), dfnr) / (
-            np.dot(th, (np.dot(freq, freq) + np.dot(dfnr, dfnr))))
+        # 1.584e-17*freq*freq*dfnr/(th*(freq*freq + dfnr*dfnr))
+        sum = 1.584e-17 * freq * freq * dfnr / (th * (freq * freq + dfnr * dfnr))
         # cyh **************************************************************
 
         nlines = len(f)
-        for k in arange(1-1, nlines-1).reshape(-1):
-            df = np.dot(w300[k], den)
+        for k in arange(0, nlines - 1).reshape(-1):
+            df = w300[k] * den
             fcen = f[k]
-            y = np.dot(den, (y300[k] + np.dot(v[k], th1)))
-            strr = np.dot(s300[k], np.exp(np.dot(-be[k], th1)))
-            sf1 = (df + np.dot((freq - fcen), y)) / ((freq - fcen) ** 2 + np.dot(df, df))
-            sf2 = (df - np.dot((freq + fcen), y)) / ((freq + fcen) ** 2 + np.dot(df, df))
-            sum = sum + np.dot(np.dot(strr, (sf1 + sf2)), (freq / f[k]) ** 2)
+
+            y = den * (y300[k] + v[k] * th1)
+            strr = s300[k] * np.exp(-be[k] * th1)
+            sf1 = (df + (freq - fcen) * y) / ((freq - fcen) ** 2 + df * df)
+            sf2 = (df - (freq + fcen) * y) / ((freq + fcen) ** 2 + df * df)
+            sum = sum + strr * (sf1 + sf2) * (freq / f[k]) ** 2
 
         # o2abs = .5034e12*sum*presda*th^3/3.14159;
         # .20946e-4/(3.14159*1.38065e-19*300) = 1.6097e11
@@ -360,7 +365,8 @@ class AbsModel:
         # nico pa2hpa=1e-2; hz2ghz=1e-9; m2cm=1e2; m2km=1e-3; pa2hpa^-1 * hz2ghz * m2cm^-2 * m2km^-1 = 1e-8
         # nico th^3 = th(from ideal gas law 2.13) * th(from the mw approx of stimulated emission 2.16 vs. 2.14) *
         # th(from the partition sum 2.20)
-        o2abs = np.dot(np.dot(np.dot(1.6097e+11, sum), presda), th ** 3)
+
+        o2abs = 1.6097e+11 * sum * presda * th ** 3
         o2abs = np.maximum(o2abs, 0.0)
         # cyh *** ********************************************************
         # separate the equ. into line and continuum
@@ -370,13 +376,14 @@ class AbsModel:
 
         # nico intensities of the non-resonant transitions for o16-o16 and o16-o18, from jpl's line compilation
         # 1.571e-17 (o16-o16) + 1.3e-19 (o16-o18) = 1.584e-17
-        ncpp = np.dot(np.dot(np.dot(1.584e-17, freq), freq), dfnr) / (
-            np.dot(th, (np.dot(freq, freq) + np.dot(dfnr, dfnr))))
+
+        ncpp = 1.584e-17 * freq * freq * dfnr / (th * (freq * freq + dfnr * dfnr))
         # 20946e-4/(3.14159*1.38065e-19*300) = 1.6097e11
         # nico a/(pi*k*t_0) = 0.20946/(3.14159*1.38065e-23*300) = 1.6097e19  - then it needs a factor 1e-8 to accont for units conversion (pa->hpa, hz->ghz)
         # nico pa2hpa=1e-2; hz2ghz=1e-9; m2cm=1e2; m2km=1e-3; pa2hpa^-1 * hz2ghz * m2cm^-2 * m2km^-1 = 1e-8
         # nico th^3 = th(from ideal gas law 2.13) * th(from the mw approx of stimulated emission 2.16 vs. 2.14) * th(from the partition sum 2.20)
-        ncpp = np.dot(np.dot(np.dot(1.6097e+11, ncpp), presda), th ** 3)
+        1.6097e+11 * ncpp * presda * th ** 3
+        ncpp = 1.6097e+11 * ncpp * presda * th ** 3
 
         # change the units from np/km to ppm
         npp = (npp / db2np) / factor

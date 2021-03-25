@@ -1,12 +1,12 @@
 .. image:: ../../resources/logo/logo_large.png
   :width: 600
 
-.. radiometry-atm-profiling documentation master file, created by
+.. pyrtlib documentation master file, created by
    sphinx-quickstart on Fri Mar 19 09:49:16 2021.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to radiometry-atm-profiling's documentation!
+Welcome to pyrtlib's documentation!
 ====================================================
 
 pyrtlib is a python tool that provides a set of

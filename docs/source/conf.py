@@ -208,7 +208,7 @@ html_context['downloads'].append( ('epub', '/' +REPO_NAME+ '/' +current_language
 
 html_context['display_github'] = True
 html_context['github_user'] = 'slarosa'
-html_context['github_repo'] = 'radiometry-atm-profiling'
+html_context['github_repo'] = 'pyrtlib'
 html_context['github_version'] = 'main/docs/'
 
 # Napoleon stuff

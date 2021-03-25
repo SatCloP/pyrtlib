@@ -272,7 +272,7 @@ class RTEquation:
         sxds = np.dot(sxds, factor)
 
         # TODO: reashape xds array
-        return sxds, xds.reshape(50)
+        return sxds, xds.reshape(iend)
 
     @staticmethod
     def cld_tmr_xxx(ibase=None, itop=None, hvk=None, tauprof=None, boftatm=None, *args, **kwargs):
