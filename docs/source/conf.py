@@ -39,7 +39,7 @@ extensions = [
     'sphinx.ext.autosummary',
     'sphinx_toggleprompt',
     'sphinx.ext.todo',
-    'rst2pdf.pdfbuilder',
+    # 'rst2pdf.pdfbuilder',
 ]
 
 # pdf_documents = [('index', u'rst2pdf', project + u'Documentation', u'Salvatore Larosa'),]
