@@ -13,8 +13,8 @@ Atmospheric profiles
     pyrtlib.atmp
 
 
-RTE function
-============
+Radiative Transfer Equation
+===========================
 
 .. autosummary::
     :toctree: generated/
