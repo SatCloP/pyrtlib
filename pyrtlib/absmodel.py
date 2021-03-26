@@ -10,7 +10,7 @@ from .utils import dilec12, arange, dcerror
 
 
 class AbstractAbsModel(object):
-    """This is an anstraction class to define the absorption model.
+    """This is an abstraction class to define the absorption model.
     """
 
     def __init__(self, model):
