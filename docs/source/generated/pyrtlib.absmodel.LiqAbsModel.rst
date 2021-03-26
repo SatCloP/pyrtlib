@@ -1,4 +1,4 @@
-pyrtlib.absmodel.LiqAbsModel
+﻿pyrtlib.absmodel.LiqAbsModel
 ============================
 
 .. currentmodule:: pyrtlib.absmodel
@@ -17,7 +17,7 @@ pyrtlib.absmodel.LiqAbsModel
    .. autosummary::
    
       ~LiqAbsModel.__init__
-      ~LiqAbsModel.ab_liq
+      ~LiqAbsModel.liquid_water_absorption
    
    
 

@@ -34,7 +34,7 @@ class LiqAbsModel(AbsModel):
     """
 
     @staticmethod
-    def ab_liq(water=None, freq=None, temp=None, *args, **kwargs):
+    def liquid_water_absorption(water=None, freq=None, temp=None, *args, **kwargs):
         """Computes Absorption In Nepers/Km By Suspended Water Droplets.
 
         Args:
@@ -86,7 +86,7 @@ class N2AbsModel(AbsModel):
     """
 
     @staticmethod
-    def abs_N2(t=None, p=None, f=None, *args, **kwargs):
+    def n2_absorption(t=None, p=None, f=None, *args, **kwargs):
         """Collision-Induced Power Absorption Coefficient (Neper/Km) in air
         with modification of 1.34 to account for O2-O2 and O2-N2 collisions, as calculated by [3]
 
@@ -248,7 +248,7 @@ class O2AbsModel(AbsModel):
     """
 
     @staticmethod
-    def o2abs_rosen18_xxx(pdrykpa=None, vx=None, ekpa=None, frq=None, *args, **kwargs):
+    def o2abs_rosen18(pdrykpa=None, vx=None, ekpa=None, frq=None, *args, **kwargs):
         """Returns power absorption coefficient due to oxygen in air,
         in nepers/km.  Multiply o2abs by 4.343 to convert to db/km.
 

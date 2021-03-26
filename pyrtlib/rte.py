@@ -17,7 +17,7 @@ class RTEquation:
     from_sat = False
 
     @staticmethod
-    def vapor_xxx(tk=None, rh=None, ice=None, *args, **kwargs):
+    def vapor(tk=None, rh=None, ice=None, *args, **kwargs):
         """Compute saturation vapor pressure (es,in mb) over water or ice at
         temperature tk (kelvins), using the Goff-Gratch formulation (List,1963).
 
@@ -76,7 +76,7 @@ class RTEquation:
         return e, rho
 
     @staticmethod
-    def bright_xxx(hvk=None, boft=None, *args, **kwargs):
+    def bright(hvk=None, boft=None, *args, **kwargs):
         """Function to compute temperature from the modified Planck
         radiance (Planck function without the constants 2h(v^3)/(c^2).
 
@@ -93,7 +93,7 @@ class RTEquation:
         return Tb
 
     @staticmethod
-    def refract_xxx(p=None, tk=None, e=None, *args, **kwargs):
+    def refractivity(p=None, tk=None, e=None, *args, **kwargs):
         """Computes profiles of wet refractivity, dry refractivity,
         refractive index.  Refractivity equations were taken from G.D.
         Thayer, 1974:  An improved equation for the radio refractive
@@ -137,7 +137,7 @@ class RTEquation:
         return dryn, wetn, refindx
 
     @staticmethod
-    def ray_trac_xxx(z=None, refindx=None, angle=None, z0=None, *args, **kwargs):
+    def ray_tracing(z=None, refindx=None, angle=None, z0=None, *args, **kwargs):
         """Ray-tracing algorithm of Dutton, Thayer, and Westwater, rewritten for
         readability & attempted documentation.  Based on the technique shown in
         Radio Meteorology by Bean and Dutton (Fig. 3.20 and surrounding text).
@@ -227,7 +227,7 @@ class RTEquation:
             return np.asarray(ds)
 
     @staticmethod
-    def exp_int_xxx(zeroflg=None, x=None, ds=None, ibeg=None, iend=None, factor=None, *args, **kwargs):
+    def exponential_integration(zeroflg=None, x=None, ds=None, ibeg=None, iend=None, factor=None, *args, **kwargs):
         """ EXPonential INTegration: Integrate the profile in array x over the layers defined in
         array ds, saving the integrals over each layer.
 
@@ -275,7 +275,7 @@ class RTEquation:
         return sxds, xds.reshape(iend)
 
     @staticmethod
-    def cld_tmr_xxx(ibase=None, itop=None, hvk=None, tauprof=None, boftatm=None, *args, **kwargs):
+    def cloud_radiating_temperature(ibase=None, itop=None, hvk=None, tauprof=None, boftatm=None, *args, **kwargs):
         """Computes the mean radiating temperature of a cloud with base and top at
         profile levels ibase and itop, respectively.  The algorithm assumes that
         the input cloud is the lowest (or only) cloud layer observed.
@@ -316,12 +316,12 @@ class RTEquation:
             boftcld = np.dot(batmcld, np.exp(tauprof[ibase])) / (1.0 - np.exp(-taucld))
 
         # compute cloud mean radiating temperature (tmrcld)
-        tmrcld = RTEquation.bright_xxx(hvk, boftcld)
+        tmrcld = RTEquation.bright(hvk, boftcld)
 
         return tmrcld
 
     @staticmethod
-    def cld_int_xxx(dencld=None, ds=None, lbase=None, ltop=None, *args, **kwargs):
+    def cloud_integrated_density(dencld=None, ds=None, lbase=None, ltop=None, *args, **kwargs):
         """Integrates cloud water density over path ds (linear algorithm).
 
         Args:
@@ -348,7 +348,7 @@ class RTEquation:
         return scld
 
     @staticmethod
-    def planck_xxx(frq=None, tk=None, taulay=None, *args, **kwargs):
+    def planck(frq=None, tk=None, taulay=None, *args, **kwargs):
         """  Computes the modified planck function (equation (4) in schroeder and
         westwater, 1992: guide to passive microwave weighting function
         calculations) for the cosmic background temperature, the mean radiating
@@ -444,7 +444,7 @@ class RTEquation:
         return boftotl, boftatm, boftmr, tauprof, hvk, boft, bakgrnd
 
     @staticmethod
-    def cld_abs_xxx(tk=None, denl=None, deni=None, frq=None, *args, **kwargs):
+    def cloudy_absorption(tk=None, denl=None, deni=None, frq=None, *args, **kwargs):
         """Multiplies cloud density profiles by a given fraction and computes the
         corresponding cloud liquid and ice absorption profiles, using Rosenkranz's
         cloud liquid absorption routine ABLIQ and ice absorption of Westwater
@@ -484,7 +484,7 @@ class RTEquation:
         for i in arange(1 - 1, nl - 1).reshape(-1):
             # Compute liquid absorption np/km.
             if denl[i] > 0:
-                aliq[i] = LiqAbsModel.ab_liq(denl[i], frq, tk[i])
+                aliq[i] = LiqAbsModel.liquid_water_absorption(denl[i], frq, tk[i])
             # compute ice absorption (db/km); convert non-zero value to np/km.
             if deni[i] > 0:
                 aice[i] = np.dot(np.dot((8.18645 / wave), deni[i]), 0.000959553)
@@ -493,7 +493,7 @@ class RTEquation:
         return aliq, aice
 
     @staticmethod
-    def clr_abs_xxx(p=None, tk=None, e=None, frq=None, *args, **kwargs):
+    def clearsky_absorption(p=None, tk=None, e=None, frq=None, *args, **kwargs):
         """  Computes profiles of water vapor and dry air absorption for
         a given set of frequencies.  Subroutines H2O_xxx and O2_xxx
         contain the absorption model of Leibe and Layton [1987:
@@ -550,11 +550,11 @@ class RTEquation:
                 npp, ncpp = H2OAbsModel.h2o_rosen19_sd(pdrykpa, v, ekpa, frq, nargout=2)
                 awet[i] = np.dot((np.dot(factor, (npp + ncpp))), db2np)
             if O2AbsModel.model == 'rose19sd':
-                npp, _ = O2AbsModel.o2abs_rosen18_xxx(pdrykpa, v, ekpa, frq)
+                npp, _ = O2AbsModel.o2abs_rosen18(pdrykpa, v, ekpa, frq)
                 aO2[i] = np.dot((np.dot(factor, npp)), db2np)
                 # C    add N2 term
             if N2AbsModel.model == 'rose19sd':
-                aN2[i] = N2AbsModel.abs_N2(tk[i], np.dot(pdrykpa, 10), frq)
+                aN2[i] = N2AbsModel.n2_absorption(tk[i], np.dot(pdrykpa, 10), frq)
 
             if not N2AbsModel.model:
                 raise ValueError('No model avalaible with this name: {} . Sorry...'.format('model'))

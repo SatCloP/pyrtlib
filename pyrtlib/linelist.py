@@ -33,7 +33,7 @@ blk = np.nan
 # Aself W2air W2self Refs. FL(i)     S1(i)    B2(i)   Wair  X(i)  Wself  Xs(i)   Sair  Xh(I)  Sself
 # Xhs(I) Aair Aself  W2   W2S (variable names in the code) Refs.
 
-mtx = np.vstack([[11, 22.23508, 1.335e-14, 2.172, 2.74, 0.76, 13.63, 1.2, -0.033, 2.6, 0.814, blk, blk, blk, blk, blk],
+mtx = np.vstack([[ 11, 22.23508, 1.335e-14, 2.172, 2.74, 0.76, 13.63, 1.2, -0.033, 2.6, 0.814, blk, blk, blk, blk, blk],
                  [ 11, 183.310087, 2.319e-12, 0.677, 3.028, 0.55, 15.01, 0.79, -0.073, 2.0, 0.112, 1.43, 0.0, 18.3, 0.406, 1.499 ],
                  [ 11, 321.22563, 7.657e-14, 6.262, 2.426, 0.73, 10.65, 0.54, -0.143, blk, 0.278, blk, blk, blk, blk, blk ],
                  [ 11, 325.152888, 2.721e-12, 1.561, 2.847, 0.64, 13.95, 0.74, -0.013, blk, 1.325, blk, blk, blk, blk, blk ],

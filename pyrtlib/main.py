@@ -67,7 +67,7 @@ def tb_cloud_rte(z, p, tk, rh, denliq, denice, cldh, frq, angles, absmdl, ray_tr
     z0 = z[0]
     z = z - z0
     # ... compute vapor pressure and vapor density ...
-    e, rho = RTEquation.vapor_xxx(tk, rh, ice)
+    e, rho = RTEquation.vapor(tk, rh, ice)
     # ... convert cloud base and cloud top to (km above antenna height) ...
     # ... compute (beglev) and (endlev) ...
     cldh = cldh - z0
@@ -80,43 +80,43 @@ def tb_cloud_rte(z, p, tk, rh, denliq, denice, cldh, frq, angles, absmdl, ray_tr
             if z[i] == cldh[1, l]: endlev[l] = i
 
     # ... compute refractivity ...
-    dryn, wetn, refindx = RTEquation.refract_xxx(p, tk, e)
+    dryn, wetn, refindx = RTEquation.refractivity(p, tk, e)
     for k in arange(0, nang-1).reshape(-1):
         # ... Compute distance between each level (ds) ...
         if ray_tracing:
-            ds = RTEquation.ray_trac_xxx(z, refindx, angles[k], z0)
+            ds = RTEquation.ray_tracing(z, refindx, angles[k], z0)
         else:
             amass = 1 / np.sin(np.dot(angles[k], np.pi) / 180)
             # TODO: check if array shape is correct
             ds = np.concatenate([[0], [np.dot(np.diff(z), amass)]])
         # ds = [0; diff(z)]; # in alternative simple diff of z
         # ... Integrate over path (ds) ...
-        srho[k], _ = RTEquation.exp_int_xxx(1, rho, ds, 0, nl, 0.1)
-        swet[k], _ = RTEquation.exp_int_xxx(1, wetn, ds, 0, nl, 0.1)
-        sdry[k], _ = RTEquation.exp_int_xxx(1, dryn, ds, 0, nl, 0.1)
+        srho[k], _ = RTEquation.exponential_integration(1, rho, ds, 0, nl, 0.1)
+        swet[k], _ = RTEquation.exponential_integration(1, wetn, ds, 0, nl, 0.1)
+        sdry[k], _ = RTEquation.exponential_integration(1, dryn, ds, 0, nl, 0.1)
         if ncld > 0:
-            sliq[k] = RTEquation.cld_int_xxx(denliq, ds, beglev, endlev)
-            sice[k] = RTEquation.cld_int_xxx(denice, ds, beglev, endlev)
+            sliq[k] = RTEquation.cloud_integrated_density(denliq, ds, beglev, endlev)
+            sice[k] = RTEquation.cloud_integrated_density(denice, ds, beglev, endlev)
         # ... handle each frequency ...
         # this are based on NOAA RTE fortran routines
         for j in arange(0, nf-1).reshape(-1):
             # Rosenkranz, personal communication, 2019/02/12 (email)
-            awet, adry = RTEquation.clr_abs_xxx(p, tk, e, frq[j])
-            aliq, aice = RTEquation.cld_abs_xxx(tk, denliq, denice, frq[j])
+            awet, adry = RTEquation.clearsky_absorption(p, tk, e, frq[j])
+            aliq, aice = RTEquation.cloudy_absorption(tk, denliq, denice, frq[j])
 
-            SPtauwet[j, k], Ptauwet[j, k, :] = RTEquation.exp_int_xxx(1, awet, ds, 0, nl, 1)
-            SPtaudry[j, k], Ptaudry[j, k, :] = RTEquation.exp_int_xxx(1, adry, ds, 0, nl, 1)
-            SPtauliq[j, k], Ptauliq[j, k, :] = RTEquation.exp_int_xxx(0, aliq, ds, 0, nl, 1)
-            SPtauice[j, k], Ptauice[j, k, :] = RTEquation.exp_int_xxx(0, aice, ds, 0, nl, 1)
+            SPtauwet[j, k], Ptauwet[j, k, :] = RTEquation.exponential_integration(1, awet, ds, 0, nl, 1)
+            SPtaudry[j, k], Ptaudry[j, k, :] = RTEquation.exponential_integration(1, adry, ds, 0, nl, 1)
+            SPtauliq[j, k], Ptauliq[j, k, :] = RTEquation.exponential_integration(0, aliq, ds, 0, nl, 1)
+            SPtauice[j, k], Ptauice[j, k, :] = RTEquation.exponential_integration(0, aice, ds, 0, nl, 1)
             Ptaulay[j, k, :] = Ptauwet[j, k, :] + Ptaudry[j, k, :] + Ptauice[j, k, :] + Ptauliq[j, k, :]
             # [boftotl,boftatm,boftmr,PSPtauprof,hvk] = Planck_xxx(frq(j),tk,Ptaulay(j,k,:));
-            boftotl, boftatm, boftmr, PSPtauprof, hvk, _, _ = RTEquation.planck_xxx(frq[j], tk, Ptaulay[j, k, :])
+            boftotl, boftatm, boftmr, PSPtauprof, hvk, _, _ = RTEquation.planck(frq[j], tk, Ptaulay[j, k, :])
             if ncld > 0:
-                tmrcld[j, k] = RTEquation.cld_tmr_xxx(beglev[0], endlev[0], hvk, PSPtauprof, boftatm)
+                tmrcld[j, k] = RTEquation.cloud_radiating_temperature(beglev[0], endlev[0], hvk, PSPtauprof, boftatm)
             # ... assign output values ...
-            tbtotal[j, k] = RTEquation.bright_xxx(hvk, boftotl)
-            tbatm[j, k] = RTEquation.bright_xxx(hvk, boftatm[nl-1])
-            tmr[j, k] = RTEquation.bright_xxx(hvk, boftmr)
+            tbtotal[j, k] = RTEquation.bright(hvk, boftotl)
+            tbatm[j, k] = RTEquation.bright(hvk, boftatm[nl - 1])
+            tmr[j, k] = RTEquation.bright(hvk, boftmr)
 
     df = pd.DataFrame({'tbtotal': tbtotal.T[0],
                        'tbatm': tbatm.T[0],
