@@ -3,21 +3,38 @@
 This class contains the absorption model used in pyrtlib.
 """
 
+from . import linelist as ll
 import numpy as np
 
-from .linelist import cf, xcf, cs, xcs, fl, reftline, w0, w0s, xs, w2s, w2, sh, aair, xh, shs, aself, xhs, s1, b2, \
-    reftcon, x
 from .utils import dilec12, arange, dcerror
 
 
-class AbsModel:
+class AbsModel(object):
+    """This is an abstraction class to define the absorption model.
+    """
+
+    def __init__(self, model):
+        self._model = model
+        """Model used to compute absorption"""
+
+    @property
+    def model(self):
+        return self._model
+
+    @model.setter
+    def model(self, model):
+        if model and isinstance(model, str):
+            self._model = model
+        else:
+            raise ValueError("Please enter a valid absorption model")
+
+
+class LiqAbsModel(AbsModel):
     """This class contains the absorption model used in pyrtlib.
     """
-    model = ''
-    """Model used to compute absorption"""
 
     @staticmethod
-    def ab_liq(water=None, freq=None, temp=None, *args, **kwargs):
+    def liquid_water_absorption(water=None, freq=None, temp=None, *args, **kwargs):
         """Computes Absorption In Nepers/Km By Suspended Water Droplets.
 
         Args:
@@ -45,7 +62,7 @@ class AbsModel:
             abliq = 0
             return abliq
 
-        if AbsModel.model == 'ros03':
+        if LiqAbsModel.model == 'ros03':
             theta1 = 1.0 - 300.0 / temp
             eps0 = 77.66 - np.dot(103.3, theta1)
             eps1 = np.dot(0.0671, eps0)
@@ -53,18 +70,23 @@ class AbsModel:
             fp = np.dot((np.dot(316.0, theta1) + 146.4), theta1) + 20.2
             fs = np.dot(39.8, fp)
             eps = (eps0 - eps1) / complex(1.0, freq / fp) + (eps1 - eps2) / complex(1.0, freq / fs) + eps2
-        elif AbsModel.model == 'ros16':
+        elif LiqAbsModel.model == 'ros16':
             eps = dilec12(freq, temp)
         else:
-            raise ValueError('No model avalaible with this name: {} . Sorry...'.format(AbsModel.model))
+            raise ValueError('[AbsLiq] No model available with this name: {} . Sorry...'.format(LiqAbsModel.model))
 
         re = (eps - 1.0) / (eps + 2.0)
         abliq = np.dot(np.dot(np.dot(- 0.06286, np.imag(re)), freq), water)
 
         return abliq
 
+
+class N2AbsModel(AbsModel):
+    """This class contains the absorption model used in pyrtlib.
+    """
+
     @staticmethod
-    def abs_N2(t=None, p=None, f=None, *args, **kwargs):
+    def n2_absorption(t=None, p=None, f=None, *args, **kwargs):
         """Collision-Induced Power Absorption Coefficient (Neper/Km) in air
         with modification of 1.34 to account for O2-O2 and O2-N2 collisions, as calculated by [3]
 
@@ -89,20 +111,25 @@ class AbsModel:
 
         th = 300.0 / t
         fdepen = 0.5 + 0.5 / (1.0 + (f / 450.0) ** 2)
-        if AbsModel.model in ['ros16', 'ros17', 'rose19sd']:
+        if N2AbsModel.model in ['ros16', 'ros17', 'rose19sd']:
             l, m, n = 6.5e-14, 3.6, 1.34
-        elif AbsModel.model == 'ros18':
+        elif N2AbsModel.model == 'ros18':
             l, m, n = 9.9e-14, 3.22, 1
-        elif AbsModel.model == 'ros03':
+        elif N2AbsModel.model == 'ros03':
             l, m, n = 6.5e-14, 3.6, 1.29
         else:
-            raise ValueError('No model avalaible with this name: {} . Sorry...'.format(AbsModel.model))
+            raise ValueError('[AbsN2] No model available with this name: {} . Sorry...'.format(N2AbsModel.model))
 
         bf = np.dot(np.dot(np.dot(np.dot(np.dot(np.dot(l, fdepen), p), p), f), f), th ** m)
 
         absN2 = np.dot(n, bf)
 
         return absN2
+
+
+class H2OAbsModel(AbsModel):
+    """This class contains the absorption model used in pyrtlib.
+    """
 
     @staticmethod
     def h2o_rosen19_sd(pdrykpa=None, vx=None, ekpa=None, frq=None, *args, **kwargs):
@@ -157,32 +184,32 @@ class AbsModel:
         pda = p - pvap
         den = 3.344e+16 * rho
         # continuum terms
-        ti = reftcon / t
+        ti = ll.reftcon / t
         # xcf and xcs include 3 for conv. to density & stimulated emission
 
-        con = (cf * pda * ti ** xcf + cs * pvap * ti ** xcs) * pvap * f * f
+        con = (ll.cf * pda * ti ** ll.xcf + ll.cs * pvap * ti ** ll.xcs) * pvap * f * f
 
         # nico 2019/03/18 *********************************************************
         # add resonances
-        nlines = len(fl)
-        ti = reftline / t
+        nlines = len(ll.fl)
+        ti = ll.reftline / t
         tiln = np.log(ti)
         ti2 = np.exp(2.5 * tiln)
 
         sum = 0.0
         df = np.zeros((2, 1))
         for i in arange(0, nlines - 1).reshape(-1):
-            width0 = w0[i] * pda * ti ** x[i] + w0s[i] * pvap * ti ** xs[i]
-            width2 = w2[i] * pda + w2s[i] * pvap
+            width0 = ll.w0[i] * pda * ti ** ll.x[i] + ll.w0s[i] * pvap * ti ** ll.xs[i]
+            width2 = ll.w2[i] * pda + ll.w2s[i] * pvap
 
-            shiftf = sh[i] * pda * (1. - aair[i] * tiln) * ti ** xh[i]
-            shifts = shs[i] * pvap * (1. - aself[i] * tiln) * ti ** xhs[i]
+            shiftf = ll.sh[i] * pda * (1. - ll.aair[i] * tiln) * ti ** ll.xh[i]
+            shifts = ll.shs[i] * pvap * (1. - ll.aself[i] * tiln) * ti ** ll.xhs[i]
             shift = shiftf + shifts
             # nico: thus using the best-fit voigt (shift instead of shift0 and shift2)
             wsq = width0 ** 2
-            s = s1[i] * ti2 * np.exp(b2[i] * (1. - ti))
-            df[0] = f - fl[i] - shift
-            df[1] = f + fl[i] + shift
+            s = ll.s1[i] * ti2 * np.exp(ll.b2[i] * (1. - ti))
+            df[0] = f - ll.fl[i] - shift
+            df[1] = f + ll.fl[i] + shift
             base = width0 / (562500.0 + wsq)
             res = 0.0
             for j in arange(0, 1).reshape(-1):
@@ -202,7 +229,7 @@ class AbsModel:
                     if abs(df[j]) < 750.0:
                         res = res + width0 / (df[j] ** 2 + wsq) - base
 
-            sum = sum + s * res * (f / fl[i]) ** 2
+            sum = sum + s * res * (f / ll.fl[i]) ** 2
         # nico 2019/03/18 *********************************************************
         # cyh **************************************************************
         # separate the following original equ. into line and continuum
@@ -215,8 +242,13 @@ class AbsModel:
 
         return npp, ncpp
 
+
+class O2AbsModel(AbsModel):
+    """This class contains the absorption model used in pyrtlib.
+    """
+
     @staticmethod
-    def o2abs_rosen18_xxx(pdrykpa=None, vx=None, ekpa=None, frq=None, *args, **kwargs):
+    def o2abs_rosen18(pdrykpa=None, vx=None, ekpa=None, frq=None, *args, **kwargs):
         """Returns power absorption coefficient due to oxygen in air,
         in nepers/km.  Multiply o2abs by 4.343 to convert to db/km.
 
@@ -379,9 +411,11 @@ class AbsModel:
 
         ncpp = 1.584e-17 * freq * freq * dfnr / (th * (freq * freq + dfnr * dfnr))
         # 20946e-4/(3.14159*1.38065e-19*300) = 1.6097e11
-        # nico a/(pi*k*t_0) = 0.20946/(3.14159*1.38065e-23*300) = 1.6097e19  - then it needs a factor 1e-8 to accont for units conversion (pa->hpa, hz->ghz)
+        # nico a/(pi*k*t_0) = 0.20946/(3.14159*1.38065e-23*300) = 1.6097e19  - then it needs a factor 1e-8 to accont
+        # for units conversion (pa->hpa, hz->ghz)
         # nico pa2hpa=1e-2; hz2ghz=1e-9; m2cm=1e2; m2km=1e-3; pa2hpa^-1 * hz2ghz * m2cm^-2 * m2km^-1 = 1e-8
-        # nico th^3 = th(from ideal gas law 2.13) * th(from the mw approx of stimulated emission 2.16 vs. 2.14) * th(from the partition sum 2.20)
+        # nico th^3 = th(from ideal gas law 2.13) * th(from the mw approx of stimulated emission 2.16 vs. 2.14)
+        # * th(from the partition sum 2.20)
         1.6097e+11 * ncpp * presda * th ** 3
         ncpp = 1.6097e+11 * ncpp * presda * th ** 3
 

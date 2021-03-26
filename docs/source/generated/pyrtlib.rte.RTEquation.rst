@@ -17,16 +17,16 @@ pyrtlib.rte.RTEquation
    .. autosummary::
    
       ~RTEquation.__init__
-      ~RTEquation.bright_xxx
-      ~RTEquation.cld_abs_xxx
-      ~RTEquation.cld_int_xxx
-      ~RTEquation.cld_tmr_xxx
-      ~RTEquation.clr_abs_xxx
-      ~RTEquation.exp_int_xxx
-      ~RTEquation.planck_xxx
-      ~RTEquation.ray_trac_xxx
-      ~RTEquation.refract_xxx
-      ~RTEquation.vapor_xxx
+      ~RTEquation.bright
+      ~RTEquation.clearsky_absorption
+      ~RTEquation.cloud_integrated_density
+      ~RTEquation.cloud_radiating_temperature
+      ~RTEquation.cloudy_absorption
+      ~RTEquation.exponential_integration
+      ~RTEquation.planck
+      ~RTEquation.ray_tracing
+      ~RTEquation.refractivity
+      ~RTEquation.vapor
    
    
 

@@ -1,9 +1,9 @@
-pyrtlib.absmodel.AbsModel
-=========================
+﻿pyrtlib.absmodel.LiqAbsModel
+============================
 
 .. currentmodule:: pyrtlib.absmodel
 
-.. autoclass:: AbsModel
+.. autoclass:: LiqAbsModel
    :members:                                    
    :show-inheritance:                           
    :inherited-members:                          
@@ -16,7 +16,8 @@ pyrtlib.absmodel.AbsModel
 
    .. autosummary::
    
-      ~AbsModel.__init__
+      ~LiqAbsModel.__init__
+      ~LiqAbsModel.liquid_water_absorption
    
    
 
@@ -26,6 +27,6 @@ pyrtlib.absmodel.AbsModel
 
    .. autosummary::
    
-      ~AbsModel.model
+      ~LiqAbsModel.model
    
    

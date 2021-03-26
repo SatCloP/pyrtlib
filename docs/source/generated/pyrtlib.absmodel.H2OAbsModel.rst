@@ -1,9 +1,9 @@
-pyrtlib.absmodel.AbsModel
-=========================
+pyrtlib.absmodel.H2OAbsModel
+============================
 
 .. currentmodule:: pyrtlib.absmodel
 
-.. autoclass:: AbsModel
+.. autoclass:: H2OAbsModel
    :members:                                    
    :show-inheritance:                           
    :inherited-members:                          
@@ -16,7 +16,8 @@ pyrtlib.absmodel.AbsModel
 
    .. autosummary::
    
-      ~AbsModel.__init__
+      ~H2OAbsModel.__init__
+      ~H2OAbsModel.h2o_rosen19_sd
    
    
 
@@ -26,6 +27,6 @@ pyrtlib.absmodel.AbsModel
 
    .. autosummary::
    
-      ~AbsModel.model
+      ~H2OAbsModel.model
    
    

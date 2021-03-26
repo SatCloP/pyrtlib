@@ -130,6 +130,6 @@ dmypy.json
 
 #PyCharm
 .idea/
-pyrtlib/*.profile
-pyrtlib/*.cprof
-pyrtlib/console.py
+*.profile
+*.cprof
+console.py

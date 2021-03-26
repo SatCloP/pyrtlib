@@ -2,6 +2,17 @@
 API reference
 #############
 
+Main script (??)
+====================
+
+.. autosummary::
+    :toctree: generated/
+    :template: custom-module-template.rst
+    :recursive:
+
+    pyrtlib.main
+    
+
 Atmospheric profiles
 ====================
 

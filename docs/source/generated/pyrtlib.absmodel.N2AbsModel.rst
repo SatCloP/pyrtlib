@@ -1,9 +1,9 @@
-pyrtlib.absmodel.AbsModel
-=========================
+﻿pyrtlib.absmodel.N2AbsModel
+===========================
 
 .. currentmodule:: pyrtlib.absmodel
 
-.. autoclass:: AbsModel
+.. autoclass:: N2AbsModel
    :members:                                    
    :show-inheritance:                           
    :inherited-members:                          
@@ -16,7 +16,8 @@ pyrtlib.absmodel.AbsModel
 
    .. autosummary::
    
-      ~AbsModel.__init__
+      ~N2AbsModel.__init__
+      ~N2AbsModel.n2_absorption
    
    
 
@@ -26,6 +27,6 @@ pyrtlib.absmodel.AbsModel
 
    .. autosummary::
    
-      ~AbsModel.model
+      ~N2AbsModel.model
    
    
