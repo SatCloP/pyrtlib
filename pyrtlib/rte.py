@@ -7,7 +7,7 @@ import warnings
 import numpy as np
 
 from .absmodel import O2AbsModel, H2OAbsModel, N2AbsModel, LiqAbsModel
-from .utils import constants, tk2b_mod, arange
+from .utils import constants, tk2b_mod
 
 
 class RTEquation:
@@ -120,7 +120,7 @@ class RTEquation:
         dryn = np.zeros(p.shape)
         refindx = np.zeros(p.shape)
 
-        for i in arange(0, nl - 1).reshape(-1):
+        for i in range(0, nl):
             # Calculate dry air pressure (pa) and celsius temperature (tc).
             pa = p[i] - e[i]
             tc = tk[i] - 273.16
@@ -161,7 +161,7 @@ class RTEquation:
 
         nl = len(z)
         # Check for refractive index values that will blow up calculations.
-        for i in arange(0, nl - 1).reshape(-1):
+        for i in range(0, nl):
             if refindx[i] < 1:
                 warnings.warn('RayTrac_xxx: Negative rafractive index')
                 return
@@ -169,7 +169,7 @@ class RTEquation:
         # If angle is close to 90 degrees, make ds a height difference profile.
         if (angle >= 89 and angle <= 91) or (angle >= -91 and angle <= -89):
             ds[0] = 0.0
-            for i in arange(1, nl - 1).reshape(-1):
+            for i in range(1, nl):
                 ds[i] = z[i] - z[i - 1]
 
         # The rest of the subroutine applies only to angle other than 90 degrees.
@@ -186,7 +186,7 @@ class RTEquation:
         rl = re + z[0] + z0
         tanthl = np.tan(theta0)
         # Construct the slant path length profile.
-        for i in arange(1, nl - 1).reshape(-1):
+        for i in range(1, nl):
             r = re + z[i] + z0
             if refindx[i] == refindx[i - 1] or refindx[i] == 1. or refindx[i - 1] == 1.:
                 refbar = np.dot((refindx[i] + refindx[i - 1]), 0.5)
@@ -249,7 +249,7 @@ class RTEquation:
         sxds = 0.0
         xds = np.zeros(ds.shape)
         # TODO: check index
-        for i in arange(ibeg, iend - 1).reshape(-1):
+        for i in range(ibeg, iend):
             # Check for negative x value. If found, output message and return.
             if x[i - 1] < 0.0 or x[i] < 0.0:
                 warnings.warn('Error encountered in ExpInt_xxx.m')
@@ -338,8 +338,8 @@ class RTEquation:
         """
         ncld = len(lbase)
         scld = 0.0
-        for l in arange(0, ncld - 1).reshape(-1):
-            for i in arange(lbase[l] + 1, ltop[l]).reshape(-1):
+        for l in range(0, ncld):
+            for i in range(lbase[l] + 1, ltop[l]):
                 scld = scld + np.dot(ds[i], (np.dot(0.5, (dencld[i] + dencld[i - 1]))))
 
         # convert the integrated value to cm.
@@ -400,7 +400,7 @@ class RTEquation:
             Ts = tk[0]
             Es = 1.0
             boft[nl - 1] = tk2b_mod(hvk, tk[nl - 1])
-            for i in arange((nl - 1) - 1, 0, - 1).reshape(-1):
+            for i in range(nl - 2, -1, -1):
                 boft[i] = tk2b_mod(hvk, tk[i])
                 boftlay = (boft[i + 1] + np.dot(boft[i], np.exp(-taulay[i]))) / (1.0 + np.exp(-taulay[i]))
                 batmlay = np.dot(np.dot(boftlay, np.exp(-tauprof[i + 1])), (1.0 - np.exp(-taulay[i])))
@@ -422,7 +422,7 @@ class RTEquation:
         else:
             # TODO: check index of boft variable
             boft[0] = tk2b_mod(hvk, tk[0])
-            for i in arange(1, nl - 1).reshape(-1):
+            for i in range(1, nl):
                 boft[i] = tk2b_mod(hvk, tk[i])
                 boftlay = (boft[i - 1] + np.dot(boft[i], np.exp(-taulay[i]))) / (1.0 + np.exp(-taulay[i]))
                 batmlay = np.dot(np.dot(boftlay, np.exp(- tauprof[i - 1])), (1.0 - np.exp(-taulay[i])))
@@ -481,7 +481,7 @@ class RTEquation:
 
         aliq = np.zeros(denl.shape)
         aice = np.zeros(denl.shape)
-        for i in arange(1 - 1, nl - 1).reshape(-1):
+        for i in range(0, nl):
             # Compute liquid absorption np/km.
             if denl[i] > 0:
                 aliq[i] = LiqAbsModel.liquid_water_absorption(denl[i], frq, tk[i])
@@ -534,7 +534,7 @@ class RTEquation:
         aN2 = np.zeros(p.shape)
         factor = np.dot(0.182, frq)
         db2np = np.dot(np.log(10.0), 0.1)
-        for i in arange(0, nl - 1).reshape(-1):
+        for i in range(0, nl):
             # Compute inverse temperature parameter; convert wet and dry p to kpa.
             v = 300.0 / tk[i]
             ekpa = e[i] / 10.0

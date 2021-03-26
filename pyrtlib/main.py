@@ -7,7 +7,6 @@ import numpy as np
 import pandas as pd
 from .absmodel import O2AbsModel, H2OAbsModel, N2AbsModel, LiqAbsModel
 from .rte import RTEquation
-from .utils import arange
 
 
 def tb_cloud_rte(z, p, tk, rh, denliq, denice, cldh, frq, angles, absmdl, ray_tracing=True, from_sat=True, *args, **kwargs):
@@ -74,14 +73,14 @@ def tb_cloud_rte(z, p, tk, rh, denliq, denice, cldh, frq, angles, absmdl, ray_tr
     # TODO: check if shape is correct
     beglev = np.zeros((1, nang))
     endlev = np.zeros((1, nang))
-    for l in arange(0, ncld-1).reshape(-1):
-        for i in arange(1, nl).reshape(-1):
+    for l in range(0, ncld):
+        for i in range(0, nl):
             if z[i] == cldh[0, l]: beglev[l] = i
             if z[i] == cldh[1, l]: endlev[l] = i
 
     # ... compute refractivity ...
     dryn, wetn, refindx = RTEquation.refractivity(p, tk, e)
-    for k in arange(0, nang-1).reshape(-1):
+    for k in range(0, nang):
         # ... Compute distance between each level (ds) ...
         if ray_tracing:
             ds = RTEquation.ray_tracing(z, refindx, angles[k], z0)
@@ -99,7 +98,7 @@ def tb_cloud_rte(z, p, tk, rh, denliq, denice, cldh, frq, angles, absmdl, ray_tr
             sice[k] = RTEquation.cloud_integrated_density(denice, ds, beglev, endlev)
         # ... handle each frequency ...
         # this are based on NOAA RTE fortran routines
-        for j in arange(0, nf-1).reshape(-1):
+        for j in range(0, nf):
             # Rosenkranz, personal communication, 2019/02/12 (email)
             awet, adry = RTEquation.clearsky_absorption(p, tk, e, frq[j])
             aliq, aice = RTEquation.cloudy_absorption(tk, denliq, denice, frq[j])

@@ -7,7 +7,7 @@ import numpy as np
 
 from .linelist import h2o_linelist as h20ll
 from .linelist import o2_linelist
-from .utils import dilec12, arange, dcerror
+from .utils import dilec12, dcerror
 
 
 class AbsModel(object):
@@ -124,7 +124,7 @@ class N2AbsModel(AbsModel):
 
         bf = l * fdepen * p * p * f * f * th ** m
 
-        absN2 = np.dot(n, bf)
+        absN2 = n * bf
 
         return absN2
 
@@ -200,7 +200,7 @@ class H2OAbsModel(AbsModel):
 
         sum = 0.0
         df = np.zeros((2, 1))
-        for i in arange(0, nlines - 1).reshape(-1):
+        for i in range(0, nlines):
             width0 = h20ll.w0[i] * pda * ti ** h20ll.x[i] + h20ll.w0s[i] * pvap * ti ** h20ll.xs[i]
             width2 = h20ll.w2[i] * pda + h20ll.w2s[i] * pvap
 
@@ -214,7 +214,7 @@ class H2OAbsModel(AbsModel):
             df[1] = f + h20ll.fl[i] + shift
             base = width0 / (562500.0 + wsq)
             res = 0.0
-            for j in arange(0, 1).reshape(-1):
+            for j in range(0, 1):
                 # if(i.eq.1 .and. j.eq.1 .and. abs(df(j)).lt.10.*width0) then
                 # WIDTH2>0.0 & J==1 & abs(DF(J)) < 10*WIDTH0
                 # width2 > 0 and j == 1 and abs(df[j]) < np.dot(10, width0)
@@ -316,11 +316,8 @@ class O2AbsModel(AbsModel):
         th1 = th - 1.0
         b = th ** o2ll.x
         preswv = (vapden * temp) / 216.68
-
         presda = pres - preswv
-
         den = 0.001 * (presda * b + 1.2 * preswv * th)
-
         dfnr = o2ll.wb300 * den
 
         # nico intensities of the non-resonant transitions for o16-o16 and o16-o18, from jpl's line compilation
@@ -330,7 +327,7 @@ class O2AbsModel(AbsModel):
         # cyh **************************************************************
 
         nlines = len(o2ll.f)
-        for k in arange(0, nlines - 1).reshape(-1):
+        for k in range(0, nlines):
             df = o2ll.w300[k] * den
             fcen = o2ll.f[k]
 
@@ -459,7 +456,7 @@ class O2AbsModel(AbsModel):
 
         sum = 1.584e-17 * freq * freq * dfnr / (th * (freq * freq + dfnr * dfnr))
         nlines = len(o2ll.f)
-        for k in arange(0, nlines - 1).reshape(-1):
+        for k in range(0, nlines):
             y = den * (o2ll.y0[k] + o2ll.y1[k] * th1)
             dnu = pe2 * (o2ll.dnu0[k] + o2ll.dnu1[k] * th1)
             gfac = 1. + pe2 * (o2ll.g0[k] + o2ll.g1[k] * th1)
