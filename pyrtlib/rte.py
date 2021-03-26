@@ -552,6 +552,9 @@ class RTEquation:
             if O2AbsModel.model == 'rose19sd':
                 npp, _ = O2AbsModel.o2abs_rosen18(pdrykpa, v, ekpa, frq)
                 aO2[i] = np.dot((np.dot(factor, npp)), db2np)
+            if O2AbsModel.model == 'rose19':
+                npp, _ = O2AbsModel.o2abs_rosen19(pdrykpa, v, ekpa, frq)
+                aO2[i] = np.dot((np.dot(factor, npp)), db2np)
                 # C    add N2 term
             if N2AbsModel.model == 'rose19sd':
                 aN2[i] = N2AbsModel.n2_absorption(tk[i], np.dot(pdrykpa, 10), frq)

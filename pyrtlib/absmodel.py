@@ -3,9 +3,10 @@
 This class contains the absorption model used in pyrtlib.
 """
 
-from . import linelist as ll
 import numpy as np
 
+from .linelist import h2o_linelist as h20ll
+from .linelist import o2_linelist
 from .utils import dilec12, arange, dcerror
 
 
@@ -76,7 +77,8 @@ class LiqAbsModel(AbsModel):
             raise ValueError('[AbsLiq] No model available with this name: {} . Sorry...'.format(LiqAbsModel.model))
 
         re = (eps - 1.0) / (eps + 2.0)
-        abliq = np.dot(np.dot(np.dot(- 0.06286, np.imag(re)), freq), water)
+
+        abliq = -0.06286 * np.imag(re) * freq * water
 
         return abliq
 
@@ -120,7 +122,7 @@ class N2AbsModel(AbsModel):
         else:
             raise ValueError('[AbsN2] No model available with this name: {} . Sorry...'.format(N2AbsModel.model))
 
-        bf = np.dot(np.dot(np.dot(np.dot(np.dot(np.dot(l, fdepen), p), p), f), f), th ** m)
+        bf = l * fdepen * p * p * f * f * th ** m
 
         absN2 = np.dot(n, bf)
 
@@ -184,32 +186,32 @@ class H2OAbsModel(AbsModel):
         pda = p - pvap
         den = 3.344e+16 * rho
         # continuum terms
-        ti = ll.reftcon / t
+        ti = h20ll.reftcon / t
         # xcf and xcs include 3 for conv. to density & stimulated emission
 
-        con = (ll.cf * pda * ti ** ll.xcf + ll.cs * pvap * ti ** ll.xcs) * pvap * f * f
+        con = (h20ll.cf * pda * ti ** h20ll.xcf + h20ll.cs * pvap * ti ** h20ll.xcs) * pvap * f * f
 
         # nico 2019/03/18 *********************************************************
         # add resonances
-        nlines = len(ll.fl)
-        ti = ll.reftline / t
+        nlines = len(h20ll.fl)
+        ti = h20ll.reftline / t
         tiln = np.log(ti)
         ti2 = np.exp(2.5 * tiln)
 
         sum = 0.0
         df = np.zeros((2, 1))
         for i in arange(0, nlines - 1).reshape(-1):
-            width0 = ll.w0[i] * pda * ti ** ll.x[i] + ll.w0s[i] * pvap * ti ** ll.xs[i]
-            width2 = ll.w2[i] * pda + ll.w2s[i] * pvap
+            width0 = h20ll.w0[i] * pda * ti ** h20ll.x[i] + h20ll.w0s[i] * pvap * ti ** h20ll.xs[i]
+            width2 = h20ll.w2[i] * pda + h20ll.w2s[i] * pvap
 
-            shiftf = ll.sh[i] * pda * (1. - ll.aair[i] * tiln) * ti ** ll.xh[i]
-            shifts = ll.shs[i] * pvap * (1. - ll.aself[i] * tiln) * ti ** ll.xhs[i]
+            shiftf = h20ll.sh[i] * pda * (1. - h20ll.aair[i] * tiln) * ti ** h20ll.xh[i]
+            shifts = h20ll.shs[i] * pvap * (1. - h20ll.aself[i] * tiln) * ti ** h20ll.xhs[i]
             shift = shiftf + shifts
             # nico: thus using the best-fit voigt (shift instead of shift0 and shift2)
             wsq = width0 ** 2
-            s = ll.s1[i] * ti2 * np.exp(ll.b2[i] * (1. - ti))
-            df[0] = f - ll.fl[i] - shift
-            df[1] = f + ll.fl[i] + shift
+            s = h20ll.s1[i] * ti2 * np.exp(h20ll.b2[i] * (1. - ti))
+            df[0] = f - h20ll.fl[i] - shift
+            df[1] = f + h20ll.fl[i] + shift
             base = width0 / (562500.0 + wsq)
             res = 0.0
             for j in arange(0, 1).reshape(-1):
@@ -229,7 +231,7 @@ class H2OAbsModel(AbsModel):
                     if abs(df[j]) < 750.0:
                         res = res + width0 / (df[j] ** 2 + wsq) - base
 
-            sum = sum + s * res * (f / ll.fl[i]) ** 2
+            sum = sum + s * res * (f / h20ll.fl[i]) ** 2
         # nico 2019/03/18 *********************************************************
         # cyh **************************************************************
         # separate the following original equ. into line and continuum
@@ -297,57 +299,7 @@ class O2AbsModel(AbsModel):
             * The continuum term is summed BEFORE O2ABS = max(O2ABS,0.)
         """
 
-        # Nico 2016/11/30 *********************************************************
-        # Here I imported the code I got from P. Rosenkranz on 2016/08/10, adapting
-        # to RTE.
-
-        # NB: NL=49
-        # LINES ARE ARRANGED 1-,1+,...33-,33+ IN SPIN-ROTATION SPECTRUM;
-        # BY FREQUENCY IN SUBMM SPECTRUM.
-        # Nico F[GHz]
-        f = np.array(
-            [118.7503, 56.2648, 62.4863, 58.4466, 60.3061, 59.591, 59.1642, 60.4348, 58.3239, 61.1506, 57.6125, 61.8002,
-             56.9682, 62.4112, 56.3634, 62.998, 55.7838, 63.5685, 55.2214, 64.1278, 54.6712, 64.6789, 54.13, 65.2241,
-             53.5958, 65.7648, 53.0669, 66.3021, 52.5424, 66.8368, 52.0214, 67.3696, 51.5034, 67.9009, 50.9877, 68.431,
-             50.4742, 68.9603, 233.9461, 368.4982, 401.7398, 424.763, 487.2493, 566.8956, 715.3929, 731.1866, 773.8395,
-             834.1455, 895.071])
-        # Nico S(T_0)[Hz*cm2]
-        s300 = np.array(
-            [2.906e-15, 7.957e-16, 2.444e-15, 2.194e-15, 3.301e-15, 3.243e-15, 3.664e-15, 3.834e-15, 3.588e-15,
-             3.947e-15, 3.179e-15, 3.661e-15, 2.59e-15, 3.111e-15, 1.954e-15, 2.443e-15, 1.373e-15, 1.784e-15,
-             9.013e-16, 1.217e-15, 5.545e-16, 7.766e-16, 3.201e-16, 4.651e-16, 1.738e-16, 2.619e-16, 8.88e-17,
-             1.387e-16, 4.272e-17, 6.923e-17, 1.939e-17, 3.255e-17, 8.301e-18, 1.445e-17, 3.356e-18, 6.049e-18,
-             1.28e-18, 2.394e-18, 3.287e-17, 6.463e-16, 1.334e-17, 7.049e-15, 3.011e-15, 1.797e-17, 1.826e-15,
-             2.193e-17, 1.153e-14, 3.974e-15, 2.512e-17])
-        # Nico (Elow+hf)/kT_0 [unitless]
-        be = np.array(
-            [0.01, 0.014, 0.083, 0.083, 0.207, 0.207, 0.387, 0.387, 0.621, 0.621, 0.91, 0.91, 1.255, 1.255, 1.654,
-             1.654, 2.109, 2.109, 2.618, 2.618, 3.182, 3.182, 3.8, 3.8, 4.474, 4.474, 5.201, 5.201, 5.983, 5.983, 6.819,
-             6.819, 7.709, 7.709, 8.653, 8.653, 9.651, 9.651, 0.019, 0.048, 0.045, 0.044, 0.049, 0.084, 0.145, 0.136,
-             0.141, 0.145, 0.201])
-
-        # Nico gamma(T_0) [MHZ/mb == GHz/bar]
-        wb300 = 0.56
-
-        x = 0.8
-        w300 = np.array(
-            [1.688, 1.703, 1.513, 1.491, 1.415, 1.408, 1.353, 1.339, 1.295, 1.292, 1.262, 1.263, 1.223, 1.217, 1.189,
-             1.174, 1.134, 1.134, 1.089, 1.088, 1.037, 1.038, 0.996, 0.996, 0.955, 0.955, 0.906, 0.906, 0.858, 0.858,
-             0.811, 0.811, 0.764, 0.764, 0.717, 0.717, 0.669, 0.669, 1.65, 1.64, 1.64, 1.64, 1.6, 1.6, 1.6, 1.6, 1.62,
-             1.47, 1.47])
-        # nico y(t_0) [unitless]
-        y300 = np.append(
-            [- 0.036, 0.2547, - 0.3655, 0.5495, - 0.5696, 0.6181, - 0.4252, 0.3517, - 0.1496, 0.043, 0.064, - 0.1605,
-             0.2906, - 0.373, 0.4169, - 0.4819, 0.4963, - 0.5481, 0.5512, - 0.5931, 0.6212, - 0.6558, 0.692, - 0.7208,
-             0.7312, - 0.755, 0.7555, - 0.7751, 0.7914, - 0.8073, 0.8307, - 0.8431, 0.8676, - 0.8761, 0.9046, - 0.9092,
-             0.9416, - 0.9423], np.tile(0.0, (1, 11)))
-        # nico v(t_0) [unitless]
-        v = np.append(
-            [0.0079, - 0.0978, 0.0844, - 0.1273, 0.0699, - 0.0776, 0.2309, - 0.2825, 0.0436, - 0.0584, 0.6056, - 0.6619,
-             0.6451, - 0.6759, 0.6547, - 0.6675, 0.6135, - 0.6139, 0.2952, - 0.2895, 0.2654, - 0.259, 0.375, - 0.368,
-             0.5085, - 0.5002, 0.6206, - 0.6091, 0.6526, - 0.6393, 0.664, - 0.6475, 0.6729, - 0.6545, 0.68, - 0.66,
-             0.685, - 0.665], np.tile(0.0, (1, 11)))
-        # nico 2016/11/30 *********************************************************
+        o2ll = o2_linelist(O2AbsModel.model)
 
         # cyh*** add the following lines *************************
         db2np = np.log(10.0) * 0.1
@@ -362,14 +314,14 @@ class O2AbsModel(AbsModel):
 
         th = 300.0 / temp
         th1 = th - 1.0
-        b = th ** x
+        b = th ** o2ll.x
         preswv = (vapden * temp) / 216.68
 
         presda = pres - preswv
 
         den = 0.001 * (presda * b + 1.2 * preswv * th)
 
-        dfnr = wb300 * den
+        dfnr = o2ll.wb300 * den
 
         # nico intensities of the non-resonant transitions for o16-o16 and o16-o18, from jpl's line compilation
         # 1.571e-17 (o16-o16) + 1.3e-19 (o16-o18) = 1.584e-17
@@ -377,16 +329,16 @@ class O2AbsModel(AbsModel):
         sum = 1.584e-17 * freq * freq * dfnr / (th * (freq * freq + dfnr * dfnr))
         # cyh **************************************************************
 
-        nlines = len(f)
+        nlines = len(o2ll.f)
         for k in arange(0, nlines - 1).reshape(-1):
-            df = w300[k] * den
-            fcen = f[k]
+            df = o2ll.w300[k] * den
+            fcen = o2ll.f[k]
 
-            y = den * (y300[k] + v[k] * th1)
-            strr = s300[k] * np.exp(-be[k] * th1)
+            y = den * (o2ll.y300[k] + o2ll.v[k] * th1)
+            strr = o2ll.s300[k] * np.exp(-o2ll.be[k] * th1)
             sf1 = (df + (freq - fcen) * y) / ((freq - fcen) ** 2 + df * df)
             sf2 = (df - (freq + fcen) * y) / ((freq + fcen) ** 2 + df * df)
-            sum = sum + strr * (sf1 + sf2) * (freq / f[k]) ** 2
+            sum = sum + strr * (sf1 + sf2) * (freq / o2ll.f[k]) ** 2
 
         # o2abs = .5034e12*sum*presda*th^3/3.14159;
         # .20946e-4/(3.14159*1.38065e-19*300) = 1.6097e11
@@ -416,7 +368,6 @@ class O2AbsModel(AbsModel):
         # nico pa2hpa=1e-2; hz2ghz=1e-9; m2cm=1e2; m2km=1e-3; pa2hpa^-1 * hz2ghz * m2cm^-2 * m2km^-1 = 1e-8
         # nico th^3 = th(from ideal gas law 2.13) * th(from the mw approx of stimulated emission 2.16 vs. 2.14)
         # * th(from the partition sum 2.20)
-        1.6097e+11 * ncpp * presda * th ** 3
         ncpp = 1.6097e+11 * ncpp * presda * th ** 3
 
         # change the units from np/km to ppm
@@ -424,5 +375,131 @@ class O2AbsModel(AbsModel):
 
         ncpp = (ncpp / db2np) / factor
         # cyh ************************************************************
+
+        return npp, ncpp
+
+    @staticmethod
+    def o2abs_rosen19(pdrykpa=None, vx=None, ekpa=None, frq=None, *args, **kwargs):
+        """Returns power absorption coefficient due to oxygen in air,
+        in nepers/km. multiply o2abs2 by 4.343 to convert to db/km.
+
+         History:
+
+        * 5/1/95  P. Rosenkranz
+        * 11/5/97  P. Rosenkranz - 1- line modification.
+        * 12/16/98 pwr - updated submm freq's and intensities from HITRAN96
+        * 8/21/02  pwr - revised width at 425
+        * 3/20/03  pwr - 1- line mixing and width revised
+        * 9/29/04  pwr - new widths and mixing, using HITRAN intensities for all lines
+        * 6/12/06  pwr - chg. T dependence of 1- line to 0.8
+        * 10/14/08 pwr - moved isotope abundance back into intensities, added selected O16O18 lines.
+        * 5/30/09  pwr - remove common block, add weak lines.
+        * 12/18/14 pwr - adjust line broadening due to water vapor.
+        * 9/29/18  pwr - 2nd-order line mixing
+        * 8/20/19  pwr - adjust intensities according to Koshelev meas.
+
+        Args:
+            pdrykpa ([type], optional): [description]. Defaults to None.
+            vx ([type], optional): [description]. Defaults to None.
+            ekpa ([type], optional): [description]. Defaults to None.
+            frq ([type], optional): [description]. Defaults to None.
+
+        Returns:
+            [type]: [description]
+
+        References
+        ----------
+        .. [1] P.W. Rosenkranz, CHAP. 2 and appendix, in ATMOSPHERIC REMOTE SENSING BY MICROWAVE RADIOMETRY (M.A. Janssen, ed., 1993)(http://hdl.handle.net/1721.1/68611).
+        .. [2] G.Yu. Golubiatnikov & A.F. Krupnov, J. Mol. Spect. v.217, pp.282-287 (2003).
+        .. [3] M.Yu. Tretyakov et al, J. Mol. Spect. v.223, pp.31-38 (2004).
+        .. [4] M.Yu. Tretyakov et al, J. Mol. Spect. v.231, pp.1-14 (2005).
+        .. [5] B.J. Drouin, JQSRT v.105, pp.450-458 (2007).
+        .. [6] D.S. Makarov et al, J. Mol. Spect. v.252, pp.242-243 (2008).
+        .. [7] D.S. Makarov et al, JQSRT v.112, pp.1420-1428 (2011).
+        .. [8] M.A. Koshelev et al, JQSRT, v.154, pp.24-27 (2015).
+        .. [9] M.A. Koshelev et al, JQSRT, v.169, pp.91-95 (2016).
+        .. [10] M.A. Koshelev et al, JQSRT, v.196, pp.78?86 (2017).
+        .. [11] D.S. Makarov et al, JQSRT v.243 (March 2020) doi:10.1016/j.jqsrt.2019.106798
+
+        Line intensities from HITRAN2004.
+        Non-resonant intensity from JPL catalog.
+
+        .. note::
+         1. The mm line-width coefficients are from Tretyakov et al 2005,
+            Makarov et al 2008, and Koshelev et al 2016;
+            submm line-widths from Golubiatnikov & Krupnov, except 234-GHz line width from Drouin.
+            Mixing coeff. from Makarov's 2018 revision.
+         2. The same temperature dependence (X) is used for submillimeter
+            line widths as in the 60 GHz band: (1/T)**X (Koshelev et al 2016)
+         3. The sign of DNU in the shape factor is corrected.
+        """
+
+        o2ll = o2_linelist(O2AbsModel.model)
+
+        # *** add the following lines *************************
+        db2np = np.log(10.0) * 0.1
+        rvap = (0.01 * 8.31451) / 18.01528
+        factor = 0.182 * frq
+        temp = 300.0 / vx
+        pres = (pdrykpa + ekpa) * 10.0
+        vapden = ekpa * 10.0 / (rvap * temp)
+        freq = np.copy(frq)
+        # *****************************************************
+
+        th = 300.0 / temp
+        th1 = th - 1.0
+        b = th ** o2ll.x
+        preswv = vapden * temp / 216.68
+        presda = pres - preswv
+        den = 0.001 * (presda * b + 1.2 * preswv * th)
+        dfnr = o2ll.wb300 * den
+        pe2 = den * den
+        # nico intensities of the non-resonant transitions for o16-o16 and o16-o18, from jpl's line compilation
+        # 1.571e-17 (o16-o16) + 1.3e-19 (o16-o18) = 1.584e-17
+
+        sum = 1.584e-17 * freq * freq * dfnr / (th * (freq * freq + dfnr * dfnr))
+        nlines = len(o2ll.f)
+        for k in arange(0, nlines - 1).reshape(-1):
+            y = den * (o2ll.y0[k] + o2ll.y1[k] * th1)
+            dnu = pe2 * (o2ll.dnu0[k] + o2ll.dnu1[k] * th1)
+            gfac = 1. + pe2 * (o2ll.g0[k] + o2ll.g1[k] * th1)
+            df = o2ll.w300[k] * den
+            strr = o2ll.s300[k] * np.exp(-o2ll.be[k] * th1)
+            del1 = freq - o2ll.f[k] - dnu
+            del2 = freq + o2ll.f[k] + dnu
+            d1 = del1 * del1 + df * df
+            d2 = del2 * del2 + df * df
+            sf1 = (df * gfac + del1 * y) / d1
+            sf2 = (df * gfac - del2 * y) / d2
+            sum = sum + strr * (sf1 + sf2) * (freq / o2ll.f[k]) ** 2
+
+        # .20946e-4/(3.14159*1.38065e-19*300) = 1.6097e11
+
+        o2abs = 1.6097e+11 * sum * presda * th ** 3
+        o2abs = 1.004 * np.maximum(o2abs, 0.0)
+
+        # *** ********************************************************
+        # separate the equ. into line and continuum
+        # terms, and change the units from np/km to ppm
+
+        npp = np.copy(o2abs)
+
+        # nico intensities of the non-resonant transitions for o16-o16 and o16-o18, from jpl's line compilation
+        # 1.571e-17 (o16-o16) + 1.3e-19 (o16-o18) = 1.584e-17
+
+        ncpp = 1.584e-17 * freq * freq * dfnr / (th * (freq * freq + dfnr * dfnr));
+        #  .20946e-4/(3.14159*1.38065e-19*300) = 1.6097e11
+        # nico a/(pi*k*t_0) = 0.20946/(3.14159*1.38065e-23*300) = 1.6097e19  - then it needs a factor 1e-8 to accont
+        # for units conversion (pa->hpa, hz->ghz)
+        # nico pa2hpa=1e-2; hz2ghz=1e-9; m2cm=1e2; m2km=1e-3; pa2hpa^-1 * hz2ghz * m2cm^-2 * m2km^-1 = 1e-8
+        # nico th^3 = th(from ideal gas law 2.13) * th(from the mw approx of stimulated emission 2.16 vs. 2.14) *
+        # th(from the partition sum 2.20)
+        ncpp = 1.6097e11 * ncpp * presda * th ** 3  # nico: n/pi*sum0
+
+        # change the units from np/km to ppm
+        npp = (npp / db2np) / factor
+
+        ncpp = (ncpp / db2np) / factor
+        # ************************************************************
 
         return npp, ncpp

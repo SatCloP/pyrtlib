@@ -18,6 +18,7 @@
    
       ~O2AbsModel.__init__
       ~O2AbsModel.o2abs_rosen18
+      ~O2AbsModel.o2abs_rosen19
    
    
 
