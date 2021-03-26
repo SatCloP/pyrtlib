@@ -1,5 +1,3 @@
 *.swp
 /_build
 /doctrees
-/generated
-/auto_examples

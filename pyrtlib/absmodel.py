@@ -3,7 +3,7 @@
 This class contains the absorption model used in pyrtlib.
 """
 
-import linelist as ll
+from . import linelist as ll
 import numpy as np
 
 from .utils import dilec12, arange, dcerror
