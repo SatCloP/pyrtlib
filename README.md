@@ -7,4 +7,4 @@
 # pyrtlib - Radiative Transfer library
 A python package to compute atmospheric radiative transfer model based on the radiative transfer equation (RTE)
 
-<img src="resources/spectrum.png" width="600">
+<img src="resources/spectrum.png" width="800">
