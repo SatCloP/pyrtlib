@@ -5,15 +5,20 @@ Main script !!!(right now only for testing)!!!.
 
 import numpy as np
 import pandas as pd
-from .absmodel import AbsModel
+from .absmodel import AbsO2Model, AbsH2OModel, AbsN2Model, AbsLiqModel
 from .rte import RTEquation
 from .utils import arange
 
 
 def tb_cloud_rte(z=None, p=None, tk=None, rh=None, denliq=None, denice=None, cldh=None, frq=None, angles=None,
                  absmdl=None, ray_tracing=None, es=None, *args, **kwargs):
-    AbsModel.model = absmdl
+
+    AbsO2Model.model = absmdl
+    AbsH2OModel.model = absmdl
+    AbsN2Model.model = absmdl
+    AbsLiqModel.model = absmdl
     RTEquation.from_sat = es
+
     # Settings
     nl = len(z)
     nf = len(frq)

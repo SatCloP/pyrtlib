@@ -6,7 +6,7 @@ import warnings
 
 import numpy as np
 
-from .absmodel import AbsModel
+from .absmodel import AbsO2Model, AbsH2OModel, AbsN2Model, AbsLiqModel
 from .utils import constants, tk2b_mod, arange
 
 
@@ -186,7 +186,7 @@ class RTEquation:
         rl = re + z[0] + z0
         tanthl = np.tan(theta0)
         # Construct the slant path length profile.
-        for i in arange(1, nl-1).reshape(-1):
+        for i in arange(1, nl - 1).reshape(-1):
             r = re + z[i] + z0
             if refindx[i] == refindx[i - 1] or refindx[i] == 1. or refindx[i - 1] == 1.:
                 refbar = np.dot((refindx[i] + refindx[i - 1]), 0.5)
@@ -422,7 +422,7 @@ class RTEquation:
         else:
             # TODO: check index of boft variable
             boft[0] = tk2b_mod(hvk, tk[0])
-            for i in arange(1, nl-1).reshape(-1):
+            for i in arange(1, nl - 1).reshape(-1):
                 boft[i] = tk2b_mod(hvk, tk[i])
                 boftlay = (boft[i - 1] + np.dot(boft[i], np.exp(-taulay[i]))) / (1.0 + np.exp(-taulay[i]))
                 batmlay = np.dot(np.dot(boftlay, np.exp(- tauprof[i - 1])), (1.0 - np.exp(-taulay[i])))
@@ -431,15 +431,15 @@ class RTEquation:
             # compute the cosmic background term of the rte; compute total planck
             # radiance for atmosphere and cosmic background; if absorption too large
             # to exponentiate, assume cosmic background was completely attenuated.
-            if tauprof[nl-1] < expmax:
+            if tauprof[nl - 1] < expmax:
                 boftbg = tk2b_mod(hvk, Tc)
-                bakgrnd = np.dot(boftbg, np.exp(-tauprof[nl-1]))
-                boftotl = bakgrnd + boftatm[nl-1]
-                boftmr = boftatm[nl-1] / (1.0 - np.exp(-tauprof[nl-1]))
+                bakgrnd = np.dot(boftbg, np.exp(-tauprof[nl - 1]))
+                boftotl = bakgrnd + boftatm[nl - 1]
+                boftmr = boftatm[nl - 1] / (1.0 - np.exp(-tauprof[nl - 1]))
             else:
                 bakgrnd = 0.0
-                boftotl = boftatm[nl-1]
-                boftmr = boftatm[nl-1]
+                boftotl = boftatm[nl - 1]
+                boftmr = boftatm[nl - 1]
 
         return boftotl, boftatm, boftmr, tauprof, hvk, boft, bakgrnd
 
@@ -464,7 +464,7 @@ class RTEquation:
 
         See also:
 
-            :py:meth:`ab_liq`
+            :py:meth:`absmodel.AbsModel.ab_liq`
 
         .. warning::
             * ic light speed in cm s-1????
@@ -484,7 +484,7 @@ class RTEquation:
         for i in arange(1 - 1, nl - 1).reshape(-1):
             # Compute liquid absorption np/km.
             if denl[i] > 0:
-                aliq[i] = AbsModel.ab_liq(denl[i], frq, tk[i])
+                aliq[i] = AbsLiqModel.ab_liq(denl[i], frq, tk[i])
             # compute ice absorption (db/km); convert non-zero value to np/km.
             if deni[i] > 0:
                 aice[i] = np.dot(np.dot((8.18645 / wave), deni[i]), 0.000959553)
@@ -539,23 +539,26 @@ class RTEquation:
             v = 300.0 / tk[i]
             ekpa = e[i] / 10.0
             pdrykpa = p[i] / 10.0 - ekpa
-            if AbsModel.model == 'rose03':
+            if AbsH2OModel.model == 'rose03':
                 # Compute H2O and O2 absorption (dB/km) and convert to np/km.
                 npp, ncpp = h2o_rosen03_xxx(pdrykpa, v, ekpa, frq, nargout=2)
                 awet[i] = np.dot((np.dot(factor, (npp + ncpp))), db2np)
                 npp, ncpp = o2n2_rosen03_xxx(pdrykpa, v, ekpa, frq, nargout=2)
                 adry[i] = np.dot((np.dot(factor, (npp + ncpp))), db2np)
 
-            elif AbsModel.model == 'rose19sd':
-                npp, ncpp = AbsModel.h2o_rosen19_sd(pdrykpa, v, ekpa, frq, nargout=2)
+            if AbsH2OModel.model == 'rose19sd':
+                npp, ncpp = AbsH2OModel.h2o_rosen19_sd(pdrykpa, v, ekpa, frq, nargout=2)
                 awet[i] = np.dot((np.dot(factor, (npp + ncpp))), db2np)
-                npp, _ = AbsModel.o2abs_rosen18_xxx(pdrykpa, v, ekpa, frq)
+            if AbsO2Model.model == 'rose19sd':
+                npp, _ = AbsO2Model.o2abs_rosen18_xxx(pdrykpa, v, ekpa, frq)
                 aO2[i] = np.dot((np.dot(factor, npp)), db2np)
                 # C    add N2 term
-                aN2[i] = AbsModel.abs_N2(tk[i], np.dot(pdrykpa, 10), frq)
-                adry[i] = aO2[i] + aN2[i]
+            if AbsN2Model.model == 'rose19sd':
+                aN2[i] = AbsN2Model.abs_N2(tk[i], np.dot(pdrykpa, 10), frq)
 
-            else:
-                raise ValueError('No model avalaible with this name: {} . Sorry...'.format(AbsModel.model))
+            if not AbsN2Model.model:
+                raise ValueError('No model avalaible with this name: {} . Sorry...'.format('model'))
+
+            adry[i] = aO2[i] + aN2[i]
 
         return awet, adry
