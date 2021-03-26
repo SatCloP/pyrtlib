@@ -19,11 +19,11 @@
       :toctree:                                         
       :template: custom-class-template.rst               
    
-      AbsH2OModel
-      AbsLiqModel
-      AbsN2Model
-      AbsO2Model
-      AbstractAbsModel
+      AbsModel
+      H2OAbsModel
+      LiqAbsModel
+      N2AbsModel
+      O2AbsModel
    
    
 

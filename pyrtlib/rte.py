@@ -6,7 +6,7 @@ import warnings
 
 import numpy as np
 
-from .absmodel import AbsO2Model, AbsH2OModel, AbsN2Model, AbsLiqModel
+from .absmodel import O2AbsModel, H2OAbsModel, N2AbsModel, LiqAbsModel
 from .utils import constants, tk2b_mod, arange
 
 
@@ -484,7 +484,7 @@ class RTEquation:
         for i in arange(1 - 1, nl - 1).reshape(-1):
             # Compute liquid absorption np/km.
             if denl[i] > 0:
-                aliq[i] = AbsLiqModel.ab_liq(denl[i], frq, tk[i])
+                aliq[i] = LiqAbsModel.ab_liq(denl[i], frq, tk[i])
             # compute ice absorption (db/km); convert non-zero value to np/km.
             if deni[i] > 0:
                 aice[i] = np.dot(np.dot((8.18645 / wave), deni[i]), 0.000959553)
@@ -539,24 +539,24 @@ class RTEquation:
             v = 300.0 / tk[i]
             ekpa = e[i] / 10.0
             pdrykpa = p[i] / 10.0 - ekpa
-            if AbsH2OModel.model == 'rose03':
+            if H2OAbsModel.model == 'rose03':
                 # Compute H2O and O2 absorption (dB/km) and convert to np/km.
                 npp, ncpp = h2o_rosen03_xxx(pdrykpa, v, ekpa, frq, nargout=2)
                 awet[i] = np.dot((np.dot(factor, (npp + ncpp))), db2np)
                 npp, ncpp = o2n2_rosen03_xxx(pdrykpa, v, ekpa, frq, nargout=2)
                 adry[i] = np.dot((np.dot(factor, (npp + ncpp))), db2np)
 
-            if AbsH2OModel.model == 'rose19sd':
-                npp, ncpp = AbsH2OModel.h2o_rosen19_sd(pdrykpa, v, ekpa, frq, nargout=2)
+            if H2OAbsModel.model == 'rose19sd':
+                npp, ncpp = H2OAbsModel.h2o_rosen19_sd(pdrykpa, v, ekpa, frq, nargout=2)
                 awet[i] = np.dot((np.dot(factor, (npp + ncpp))), db2np)
-            if AbsO2Model.model == 'rose19sd':
-                npp, _ = AbsO2Model.o2abs_rosen18_xxx(pdrykpa, v, ekpa, frq)
+            if O2AbsModel.model == 'rose19sd':
+                npp, _ = O2AbsModel.o2abs_rosen18_xxx(pdrykpa, v, ekpa, frq)
                 aO2[i] = np.dot((np.dot(factor, npp)), db2np)
                 # C    add N2 term
-            if AbsN2Model.model == 'rose19sd':
-                aN2[i] = AbsN2Model.abs_N2(tk[i], np.dot(pdrykpa, 10), frq)
+            if N2AbsModel.model == 'rose19sd':
+                aN2[i] = N2AbsModel.abs_N2(tk[i], np.dot(pdrykpa, 10), frq)
 
-            if not AbsN2Model.model:
+            if not N2AbsModel.model:
                 raise ValueError('No model avalaible with this name: {} . Sorry...'.format('model'))
 
             adry[i] = aO2[i] + aN2[i]

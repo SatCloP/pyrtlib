@@ -5,19 +5,37 @@ Main script !!!(right now only for testing)!!!.
 
 import numpy as np
 import pandas as pd
-from .absmodel import AbsO2Model, AbsH2OModel, AbsN2Model, AbsLiqModel
+from .absmodel import O2AbsModel, H2OAbsModel, N2AbsModel, LiqAbsModel
 from .rte import RTEquation
 from .utils import arange
 
 
-def tb_cloud_rte(z=None, p=None, tk=None, rh=None, denliq=None, denice=None, cldh=None, frq=None, angles=None,
-                 absmdl=None, ray_tracing=None, es=None, *args, **kwargs):
+def tb_cloud_rte(z, p, tk, rh, denliq, denice, cldh, frq, angles, absmdl, ray_tracing=True, from_sat=True, *args, **kwargs):
+    """[summary]
 
-    AbsO2Model.model = absmdl
-    AbsH2OModel.model = absmdl
-    AbsN2Model.model = absmdl
-    AbsLiqModel.model = absmdl
-    RTEquation.from_sat = es
+    Args:
+        z ([type]): [description]
+        p ([type]): [description]
+        tk ([type]): [description]
+        rh ([type]): [description]
+        denliq ([type]): [description]
+        denice ([type]): [description]
+        cldh ([type]): [description]
+        frq ([type]): [description]
+        angles ([type]): [description]
+        absmdl ([type]): [description]
+        ray_tracing (bool, optional): [description]. Defaults to True.
+        from_sat (bool, optional): [description]. Defaults to True.
+
+    Returns:
+        [type]: [description]
+    """
+
+    O2AbsModel.model = absmdl
+    H2OAbsModel.model = absmdl
+    N2AbsModel.model = absmdl
+    LiqAbsModel.model = absmdl
+    RTEquation.from_sat = from_sat
 
     # Settings
     nl = len(z)

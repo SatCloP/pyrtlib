@@ -9,7 +9,7 @@ import numpy as np
 from .utils import dilec12, arange, dcerror
 
 
-class AbstractAbsModel(object):
+class AbsModel(object):
     """This is an abstraction class to define the absorption model.
     """
 
@@ -29,7 +29,7 @@ class AbstractAbsModel(object):
             raise ValueError("Please enter a valid absorption model")
 
 
-class AbsLiqModel(AbstractAbsModel):
+class LiqAbsModel(AbsModel):
     """This class contains the absorption model used in pyrtlib.
     """
 
@@ -62,7 +62,7 @@ class AbsLiqModel(AbstractAbsModel):
             abliq = 0
             return abliq
 
-        if AbsLiqModel.model == 'ros03':
+        if LiqAbsModel.model == 'ros03':
             theta1 = 1.0 - 300.0 / temp
             eps0 = 77.66 - np.dot(103.3, theta1)
             eps1 = np.dot(0.0671, eps0)
@@ -70,10 +70,10 @@ class AbsLiqModel(AbstractAbsModel):
             fp = np.dot((np.dot(316.0, theta1) + 146.4), theta1) + 20.2
             fs = np.dot(39.8, fp)
             eps = (eps0 - eps1) / complex(1.0, freq / fp) + (eps1 - eps2) / complex(1.0, freq / fs) + eps2
-        elif AbsLiqModel.model == 'ros16':
+        elif LiqAbsModel.model == 'ros16':
             eps = dilec12(freq, temp)
         else:
-            raise ValueError('[AbsLiq] No model available with this name: {} . Sorry...'.format(AbsLiqModel.model))
+            raise ValueError('[AbsLiq] No model available with this name: {} . Sorry...'.format(LiqAbsModel.model))
 
         re = (eps - 1.0) / (eps + 2.0)
         abliq = np.dot(np.dot(np.dot(- 0.06286, np.imag(re)), freq), water)
@@ -81,7 +81,7 @@ class AbsLiqModel(AbstractAbsModel):
         return abliq
 
 
-class AbsN2Model(AbstractAbsModel):
+class N2AbsModel(AbsModel):
     """This class contains the absorption model used in pyrtlib.
     """
 
@@ -111,14 +111,14 @@ class AbsN2Model(AbstractAbsModel):
 
         th = 300.0 / t
         fdepen = 0.5 + 0.5 / (1.0 + (f / 450.0) ** 2)
-        if AbsN2Model.model in ['ros16', 'ros17', 'rose19sd']:
+        if N2AbsModel.model in ['ros16', 'ros17', 'rose19sd']:
             l, m, n = 6.5e-14, 3.6, 1.34
-        elif AbsN2Model.model == 'ros18':
+        elif N2AbsModel.model == 'ros18':
             l, m, n = 9.9e-14, 3.22, 1
-        elif AbsN2Model.model == 'ros03':
+        elif N2AbsModel.model == 'ros03':
             l, m, n = 6.5e-14, 3.6, 1.29
         else:
-            raise ValueError('[AbsN2] No model available with this name: {} . Sorry...'.format(AbsN2Model.model))
+            raise ValueError('[AbsN2] No model available with this name: {} . Sorry...'.format(N2AbsModel.model))
 
         bf = np.dot(np.dot(np.dot(np.dot(np.dot(np.dot(l, fdepen), p), p), f), f), th ** m)
 
@@ -127,7 +127,7 @@ class AbsN2Model(AbstractAbsModel):
         return absN2
 
 
-class AbsH2OModel(AbstractAbsModel):
+class H2OAbsModel(AbsModel):
     """This class contains the absorption model used in pyrtlib.
     """
 
@@ -243,7 +243,7 @@ class AbsH2OModel(AbstractAbsModel):
         return npp, ncpp
 
 
-class AbsO2Model(AbstractAbsModel):
+class O2AbsModel(AbsModel):
     """This class contains the absorption model used in pyrtlib.
     """
 
