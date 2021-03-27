@@ -298,8 +298,8 @@ class O2AbsModel(AbsModel):
             * ABSN2 is now external
             * The continuum term is summed BEFORE O2ABS = max(O2ABS,0.)
         """
-
-        o2ll = o2_linelist(O2AbsModel.model)
+        model = getattr(O2AbsModel, 'model')
+        o2ll = o2_linelist(model)
 
         # cyh*** add the following lines *************************
         db2np = np.log(10.0) * 0.1
@@ -430,8 +430,8 @@ class O2AbsModel(AbsModel):
             line widths as in the 60 GHz band: (1/T)**X (Koshelev et al 2016)
          3. The sign of DNU in the shape factor is corrected.
         """
-
-        o2ll = o2_linelist(O2AbsModel.model)
+        model = getattr(O2AbsModel, 'model')
+        o2ll = o2_linelist(model)
 
         # *** add the following lines *************************
         db2np = np.log(10.0) * 0.1

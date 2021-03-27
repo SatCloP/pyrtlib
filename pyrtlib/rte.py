@@ -88,7 +88,11 @@ class RTEquation:
             [type]: [description]
         """
 
-        Tb = hvk / np.log(1.0 + (1.0 / boft))
+        # fixes floa FloatingPointError: divide by zero encountered in double_scalars
+        if boft != 0:
+            Tb = hvk / np.log(1.0 + (1.0 / boft))
+        else:
+            Tb = np.nan
 
         return Tb
 
