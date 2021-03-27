@@ -214,11 +214,11 @@ class H2OAbsModel(AbsModel):
             df[1] = f + h20ll.fl[i] + shift
             base = width0 / (562500.0 + wsq)
             res = 0.0
-            for j in range(0, 1):
+            for j in range(0, 2):
                 # if(i.eq.1 .and. j.eq.1 .and. abs(df(j)).lt.10.*width0) then
                 # WIDTH2>0.0 & J==1 & abs(DF(J)) < 10*WIDTH0
                 # width2 > 0 and j == 1 and abs(df[j]) < np.dot(10, width0)
-                if width2 > 0 and j == 0 and abs(df[j]) < np.dot(10, width0):
+                if width2 > 0 and j == 0 and abs(df[j]) < (10 * width0):
                     # speed-dependent resonant shape factor
                     # double complex dcerror,xc,xrt,pxw,a
                     xc = complex((width0 - np.dot(1.5, width2)), df[j]) / width2
