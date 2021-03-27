@@ -491,7 +491,7 @@ class O2AbsModel(AbsModel):
         # nico intensities of the non-resonant transitions for o16-o16 and o16-o18, from jpl's line compilation
         # 1.571e-17 (o16-o16) + 1.3e-19 (o16-o18) = 1.584e-17
 
-        ncpp = 1.584e-17 * freq * freq * dfnr / (th * (freq * freq + dfnr * dfnr));
+        ncpp = 1.584e-17 * freq * freq * dfnr / (th * (freq * freq + dfnr * dfnr))
         #  .20946e-4/(3.14159*1.38065e-19*300) = 1.6097e11
         # nico a/(pi*k*t_0) = 0.20946/(3.14159*1.38065e-23*300) = 1.6097e19  - then it needs a factor 1e-8 to accont
         # for units conversion (pa->hpa, hz->ghz)
