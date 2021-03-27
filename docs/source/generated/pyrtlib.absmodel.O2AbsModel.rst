@@ -29,5 +29,6 @@
    .. autosummary::
    
       ~O2AbsModel.model
+      ~O2AbsModel.o2ll
    
    

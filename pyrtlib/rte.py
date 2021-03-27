@@ -551,16 +551,16 @@ class RTEquation:
                 adry[i] = np.dot((np.dot(factor, (npp + ncpp))), db2np)
 
             if H2OAbsModel.model == 'rose19sd':
-                npp, ncpp = H2OAbsModel.h2o_rosen19_sd(pdrykpa, v, ekpa, frq, nargout=2)
-                awet[i] = np.dot((np.dot(factor, (npp + ncpp))), db2np)
+                npp, ncpp = H2OAbsModel().h2o_rosen19_sd(pdrykpa, v, ekpa, frq, nargout=2)
+                awet[i] = factor * (npp + ncpp) * db2np
             if O2AbsModel.model == 'rose19sd':
-                npp, _ = O2AbsModel.o2abs_rosen18(pdrykpa, v, ekpa, frq)
-                aO2[i] = np.dot((np.dot(factor, npp)), db2np)
+                npp, _ = O2AbsModel().o2abs_rosen18(pdrykpa, v, ekpa, frq)
+                aO2[i] = factor * npp * db2np
             if O2AbsModel.model == 'rose19':
-                npp, _ = O2AbsModel.o2abs_rosen19(pdrykpa, v, ekpa, frq)
-                aO2[i] = np.dot((np.dot(factor, npp)), db2np)
-                # C    add N2 term
-            if N2AbsModel.model == 'rose19sd':
+                npp, _ = O2AbsModel().o2abs_rosen19(pdrykpa, v, ekpa, frq)
+                aO2[i] = factor * npp * db2np
+                # add N2 term
+            if N2AbsModel.model in ['rose19sd', 'rose19']:
                 aN2[i] = N2AbsModel.n2_absorption(tk[i], np.dot(pdrykpa, 10), frq)
 
             if not N2AbsModel.model:

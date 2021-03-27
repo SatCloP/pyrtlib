@@ -6,6 +6,7 @@ Main script !!!(right now only for testing)!!!.
 import numpy as np
 import pandas as pd
 from .absmodel import O2AbsModel, H2OAbsModel, N2AbsModel, LiqAbsModel
+from .linelist import o2_linelist, h2o_linelist
 from .rte import RTEquation
 
 
@@ -30,10 +31,17 @@ def tb_cloud_rte(z, p, tk, rh, denliq, denice, cldh, frq, angles, absmdl, ray_tr
         [type]: [description]
     """
 
+    # Defines models
     O2AbsModel.model = absmdl
+    O2AbsModel.o2ll = o2_linelist()
+    
     H2OAbsModel.model = absmdl
-    N2AbsModel.model = absmdl
+    H2OAbsModel.h2oll = h2o_linelist()
+    
+    N2AbsModel.model = 'rose19sd'
     LiqAbsModel.model = absmdl
+
+    # Set RTE
     RTEquation.from_sat = from_sat
 
     # Settings
@@ -62,6 +70,7 @@ def tb_cloud_rte(z, p, tk, rh, denliq, denice, cldh, frq, angles, absmdl, ray_tr
     sdry = np.zeros((1, nang))
     sliq = np.zeros((1, nang))
     sice = np.zeros((1, nang))
+
     # ... convert height profile to (km above antenna height) ...
     z0 = z[0]
     z = z - z0
@@ -89,6 +98,7 @@ def tb_cloud_rte(z, p, tk, rh, denliq, denice, cldh, frq, angles, absmdl, ray_tr
             # TODO: check if array shape is correct
             ds = np.concatenate([[0], [np.dot(np.diff(z), amass)]])
         # ds = [0; diff(z)]; # in alternative simple diff of z
+
         # ... Integrate over path (ds) ...
         srho[k], _ = RTEquation.exponential_integration(1, rho, ds, 0, nl, 0.1)
         swet[k], _ = RTEquation.exponential_integration(1, wetn, ds, 0, nl, 0.1)
@@ -96,6 +106,7 @@ def tb_cloud_rte(z, p, tk, rh, denliq, denice, cldh, frq, angles, absmdl, ray_tr
         if ncld > 0:
             sliq[k] = RTEquation.cloud_integrated_density(denliq, ds, beglev, endlev)
             sice[k] = RTEquation.cloud_integrated_density(denice, ds, beglev, endlev)
+
         # ... handle each frequency ...
         # this are based on NOAA RTE fortran routines
         for j in range(0, nf):

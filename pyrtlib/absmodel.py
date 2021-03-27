@@ -5,8 +5,6 @@ This class contains the absorption model used in pyrtlib.
 
 import numpy as np
 
-from .linelist import h2o_linelist as h20ll
-from .linelist import o2_linelist
 from .utils import dilec12, dcerror
 
 
@@ -14,9 +12,12 @@ class AbsModel(object):
     """This is an abstraction class to define the absorption model.
     """
 
-    def __init__(self, model):
-        self._model = model
+    def __init__(self):
+        self._model = ''
         """Model used to compute absorption"""
+
+        self._o2ll = None
+        self._h2oll = None
 
     @property
     def model(self):
@@ -115,7 +116,7 @@ class N2AbsModel(AbsModel):
         fdepen = 0.5 + 0.5 / (1.0 + (f / 450.0) ** 2)
         if N2AbsModel.model in ['ros16', 'ros17', 'rose19sd']:
             l, m, n = 6.5e-14, 3.6, 1.34
-        elif N2AbsModel.model == 'ros18':
+        elif N2AbsModel.model in ['ros18', 'rose19']:
             l, m, n = 9.9e-14, 3.22, 1
         elif N2AbsModel.model == 'ros03':
             l, m, n = 6.5e-14, 3.6, 1.29
@@ -133,8 +134,14 @@ class H2OAbsModel(AbsModel):
     """This class contains the absorption model used in pyrtlib.
     """
 
-    @staticmethod
-    def h2o_rosen19_sd(pdrykpa=None, vx=None, ekpa=None, frq=None, *args, **kwargs):
+    def __init__(self):
+        super(H2OAbsModel, self).__init__()
+
+    @property
+    def h2oll(self):
+        return self._h2oll
+
+    def h2o_rosen19_sd(self, pdrykpa=None, vx=None, ekpa=None, frq=None, *args, **kwargs):
         """Compute absorption coef in atmosphere due to water vapor
         this version should not be used with a line list older than june 2018,
         nor the new list with an older version of this subroutine.
@@ -180,32 +187,32 @@ class H2OAbsModel(AbsModel):
         pda = p - pvap
         den = 3.344e+16 * rho
         # continuum terms
-        ti = h20ll.reftcon / t
+        ti = self.h2oll.reftcon / t
         # xcf and xcs include 3 for conv. to density & stimulated emission
 
-        con = (h20ll.cf * pda * ti ** h20ll.xcf + h20ll.cs * pvap * ti ** h20ll.xcs) * pvap * f * f
+        con = (self.h2oll.cf * pda * ti ** self.h2oll.xcf + self.h2oll.cs * pvap * ti ** self.h2oll.xcs) * pvap * f * f
 
         # nico 2019/03/18 *********************************************************
         # add resonances
-        nlines = len(h20ll.fl)
-        ti = h20ll.reftline / t
+        nlines = len(self.h2oll.fl)
+        ti = self.h2oll.reftline / t
         tiln = np.log(ti)
         ti2 = np.exp(2.5 * tiln)
 
         summ = 0.0
         df = np.zeros((2, 1))
         for i in range(0, nlines):
-            width0 = h20ll.w0[i] * pda * ti ** h20ll.x[i] + h20ll.w0s[i] * pvap * ti ** h20ll.xs[i]
-            width2 = h20ll.w2[i] * pda + h20ll.w2s[i] * pvap
+            width0 = self.h2oll.w0[i] * pda * ti ** self.h2oll.x[i] + self.h2oll.w0s[i] * pvap * ti ** self.h2oll.xs[i]
+            width2 = self.h2oll.w2[i] * pda + self.h2oll.w2s[i] * pvap
 
-            shiftf = h20ll.sh[i] * pda * (1. - h20ll.aair[i] * tiln) * ti ** h20ll.xh[i]
-            shifts = h20ll.shs[i] * pvap * (1. - h20ll.aself[i] * tiln) * ti ** h20ll.xhs[i]
+            shiftf = self.h2oll.sh[i] * pda * (1. - self.h2oll.aair[i] * tiln) * ti ** self.h2oll.xh[i]
+            shifts = self.h2oll.shs[i] * pvap * (1. - self.h2oll.aself[i] * tiln) * ti ** self.h2oll.xhs[i]
             shift = shiftf + shifts
             # nico: thus using the best-fit voigt (shift instead of shift0 and shift2)
             wsq = width0 ** 2
-            s = h20ll.s1[i] * ti2 * np.exp(h20ll.b2[i] * (1. - ti))
-            df[0] = f - h20ll.fl[i] - shift
-            df[1] = f + h20ll.fl[i] + shift
+            s = self.h2oll.s1[i] * ti2 * np.exp(self.h2oll.b2[i] * (1. - ti))
+            df[0] = f - self.h2oll.fl[i] - shift
+            df[1] = f + self.h2oll.fl[i] + shift
             base = width0 / (562500.0 + wsq)
             res = 0.0
             for j in range(0, 2):
@@ -225,7 +232,7 @@ class H2OAbsModel(AbsModel):
                     if np.abs(df[j]) < 750.0:
                         res = res + width0 / (df[j] ** 2 + wsq) - base
 
-            summ = summ + s * res * (f / h20ll.fl[i]) ** 2
+            summ = summ + s * res * (f / self.h2oll.fl[i]) ** 2
         # nico 2019/03/18 *********************************************************
         # cyh **************************************************************
         # separate the following original equ. into line and continuum
@@ -243,8 +250,14 @@ class O2AbsModel(AbsModel):
     """This class contains the absorption model used in pyrtlib.
     """
 
-    @staticmethod
-    def o2abs_rosen18(pdrykpa=None, vx=None, ekpa=None, frq=None, *args, **kwargs):
+    def __init__(self):
+        super(O2AbsModel, self).__init__()
+
+    @property
+    def o2ll(self):
+        return self._o2ll
+
+    def o2abs_rosen18(self, pdrykpa=None, vx=None, ekpa=None, frq=None, *args, **kwargs):
         """Returns power absorption coefficient due to oxygen in air,
         in nepers/km.  Multiply o2abs by 4.343 to convert to db/km.
 
@@ -292,8 +305,9 @@ class O2AbsModel(AbsModel):
             * ABSN2 is now external
             * The continuum term is summed BEFORE O2ABS = max(O2ABS,0.)
         """
-        model = getattr(O2AbsModel, 'model')
-        o2ll = o2_linelist(model)
+        # model = getattr(O2AbsModel, 'model')
+        # o2ll = o2_linelist(model)
+        # o2ll = AbsModel(model).o2ll
 
         # cyh*** add the following lines *************************
         db2np = np.log(10.0) * 0.1
@@ -301,18 +315,17 @@ class O2AbsModel(AbsModel):
         factor = 0.182 * frq
         temp = 300.0 / vx
         pres = (pdrykpa + ekpa) * 10.0
-
         vapden = ekpa * 10.0 / (rvap * temp)
         freq = np.copy(frq)
         # cyh*****************************************************
 
         th = 300.0 / temp
         th1 = th - 1.0
-        b = th ** o2ll.x
+        b = th ** self.o2ll.x
         preswv = (vapden * temp) / 216.68
         presda = pres - preswv
         den = 0.001 * (presda * b + 1.2 * preswv * th)
-        dfnr = o2ll.wb300 * den
+        dfnr = self.o2ll.wb300 * den
 
         # nico intensities of the non-resonant transitions for o16-o16 and o16-o18, from jpl's line compilation
         # 1.571e-17 (o16-o16) + 1.3e-19 (o16-o18) = 1.584e-17
@@ -320,16 +333,16 @@ class O2AbsModel(AbsModel):
         summ = 1.584e-17 * freq * freq * dfnr / (th * (freq * freq + dfnr * dfnr))
         # cyh **************************************************************
 
-        nlines = len(o2ll.f)
+        nlines = len(self.o2ll.f)
         for k in range(0, nlines):
-            df = o2ll.w300[k] * den
-            fcen = o2ll.f[k]
+            df = self.o2ll.w300[k] * den
+            fcen = self.o2ll.f[k]
 
-            y = den * (o2ll.y300[k] + o2ll.v[k] * th1)
-            strr = o2ll.s300[k] * np.exp(-o2ll.be[k] * th1)
+            y = den * (self.o2ll.y300[k] + self.o2ll.v[k] * th1)
+            strr = self.o2ll.s300[k] * np.exp(-self.o2ll.be[k] * th1)
             sf1 = (df + (freq - fcen) * y) / ((freq - fcen) ** 2 + df * df)
             sf2 = (df - (freq + fcen) * y) / ((freq + fcen) ** 2 + df * df)
-            summ = summ + strr * (sf1 + sf2) * (freq / o2ll.f[k]) ** 2
+            summ = summ + strr * (sf1 + sf2) * (freq / self.o2ll.f[k]) ** 2
 
         # o2abs = .5034e12*sum*presda*th^3/3.14159;
         # .20946e-4/(3.14159*1.38065e-19*300) = 1.6097e11
@@ -369,8 +382,7 @@ class O2AbsModel(AbsModel):
 
         return npp, ncpp
 
-    @staticmethod
-    def o2abs_rosen19(pdrykpa=None, vx=None, ekpa=None, frq=None, *args, **kwargs):
+    def o2abs_rosen19(self, pdrykpa=None, vx=None, ekpa=None, frq=None, *args, **kwargs):
         """Returns power absorption coefficient due to oxygen in air,
         in nepers/km. multiply o2abs2 by 4.343 to convert to db/km.
 
@@ -424,8 +436,9 @@ class O2AbsModel(AbsModel):
             line widths as in the 60 GHz band: (1/T)**X (Koshelev et al 2016)
          3. The sign of DNU in the shape factor is corrected.
         """
-        model = getattr(O2AbsModel, 'model')
-        o2ll = o2_linelist(model)
+        # model = getattr(O2AbsModel, 'model')
+        # o2ll = o2_linelist(model)
+        # o2ll = AbsModel(model).o2ll
 
         # *** add the following lines *************************
         db2np = np.log(10.0) * 0.1
@@ -439,30 +452,30 @@ class O2AbsModel(AbsModel):
 
         th = 300.0 / temp
         th1 = th - 1.0
-        b = th ** o2ll.x
+        b = th ** self.o2ll.x
         preswv = vapden * temp / 216.68
         presda = pres - preswv
         den = 0.001 * (presda * b + 1.2 * preswv * th)
-        dfnr = o2ll.wb300 * den
+        dfnr = self.o2ll.wb300 * den
         pe2 = den * den
         # nico intensities of the non-resonant transitions for o16-o16 and o16-o18, from jpl's line compilation
         # 1.571e-17 (o16-o16) + 1.3e-19 (o16-o18) = 1.584e-17
 
         summ = 1.584e-17 * freq * freq * dfnr / (th * (freq * freq + dfnr * dfnr))
-        nlines = len(o2ll.f)
+        nlines = len(self.o2ll.f)
         for k in range(0, nlines):
-            y = den * (o2ll.y0[k] + o2ll.y1[k] * th1)
-            dnu = pe2 * (o2ll.dnu0[k] + o2ll.dnu1[k] * th1)
-            gfac = 1. + pe2 * (o2ll.g0[k] + o2ll.g1[k] * th1)
-            df = o2ll.w300[k] * den
-            strr = o2ll.s300[k] * np.exp(-o2ll.be[k] * th1)
-            del1 = freq - o2ll.f[k] - dnu
-            del2 = freq + o2ll.f[k] + dnu
+            y = den * (self.o2ll.y0[k] + self.o2ll.y1[k] * th1)
+            dnu = pe2 * (self.o2ll.dnu0[k] + self.o2ll.dnu1[k] * th1)
+            gfac = 1. + pe2 * (self.o2ll.g0[k] + self.o2ll.g1[k] * th1)
+            df = self.o2ll.w300[k] * den
+            strr = self.o2ll.s300[k] * np.exp(-self.o2ll.be[k] * th1)
+            del1 = freq - self.o2ll.f[k] - dnu
+            del2 = freq + self.o2ll.f[k] + dnu
             d1 = del1 * del1 + df * df
             d2 = del2 * del2 + df * df
             sf1 = (df * gfac + del1 * y) / d1
             sf2 = (df * gfac - del2 * y) / d2
-            summ = summ + strr * (sf1 + sf2) * (freq / o2ll.f[k]) ** 2
+            summ = summ + strr * (sf1 + sf2) * (freq / self.o2ll.f[k]) ** 2
 
         # .20946e-4/(3.14159*1.38065e-19*300) = 1.6097e11
 

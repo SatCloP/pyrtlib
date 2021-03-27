@@ -5,6 +5,8 @@ This file contains the line list used in absorption model.
 
 import numpy as np
 
+from .absmodel import O2AbsModel, H2OAbsModel
+
 
 class h2o_linelist:
     """This version correspond to 2018/07/23 package, where h2o_list.asc is dated July 16 2018
@@ -32,87 +34,98 @@ class h2o_linelist:
     Continuum re-adjusted for new line par. Mar. 20, 2019.
     """
 
-    # read the list of parameters
-    # h2o_sdlist_r19
-    # h2o_sdlist_r20
-    # this is the same as h2o_sdlist_r19 but the two coefficients w2air w2self at 22.2 ghz
-    # (which were missing in h2o_sdlist_r19)
+    def __init__(self):
+        """Initialize self. See help(type(self)) for accurate signature.
 
-    # 2019/03/18 - Nico: first created
-    # blk = -9999; # blank
-    blk = np.nan
+        Args:
+            model (str): The absorption model used
 
-    # molecule freq,GHz  S(296K)    B     W0air XWair W0self XWself  Dair  XDair  Dself XDself  Aair
-    # Aself W2air W2self Refs. FL(i)     S1(i)    B2(i)   Wair  X(i)  Wself  Xs(i)   Sair  Xh(I)  Sself
-    # Xhs(I) Aair Aself  W2   W2S (variable names in the code) Refs.
+        Raises:
+            ValueError: [description]
+        """
+        model = H2OAbsModel.model
 
-    mtx = np.vstack(
-        [[11, 22.23508, 1.335e-14, 2.172, 2.74, 0.76, 13.63, 1.2, -0.033, 2.6, 0.814, blk, blk, blk, blk, blk],
-         [11, 183.310087, 2.319e-12, 0.677, 3.028, 0.55, 15.01, 0.79, -0.073, 2.0, 0.112, 1.43, 0.0, 18.3, 0.406,
-          1.499],
-         [11, 321.22563, 7.657e-14, 6.262, 2.426, 0.73, 10.65, 0.54, -0.143, blk, 0.278, blk, blk, blk, blk, blk],
-         [11, 325.152888, 2.721e-12, 1.561, 2.847, 0.64, 13.95, 0.74, -0.013, blk, 1.325, blk, blk, blk, blk, blk],
-         [11, 380.197353, 2.477e-11, 1.062, 2.868, 0.54, 14.4, 0.89, -0.074, blk, 0.24, blk, blk, blk, blk, blk],
-         [11, 439.150807, 2.137e-12, 3.643, 2.055, 0.69, 9.06, 0.52, 0.051, blk, 0.165, blk, blk, blk, blk, blk],
-         [11, 443.018343, 4.44e-13, 5.116, 1.819, 0.7, 7.96, 0.5, 0.14, blk, -0.229, blk, blk, blk, blk, blk],
-         [11, 448.001085, 2.588e-11, 1.424, 2.612, 0.7, 13.01, 0.67, -0.116, blk, -0.615, blk, blk, blk, blk, blk],
-         [11, 470.888999, 8.196e-13, 3.645, 2.169, 0.73, 9.7, 0.65, 0.061, blk, -0.465, blk, blk, blk, blk, blk],
-         [11, 474.689092, 3.268e-12, 2.411, 2.366, 0.71, 11.24, 0.64, -0.027, blk, -0.72, blk, blk, blk, blk, blk],
-         [11, 488.490108, 6.628e-13, 2.89, 2.616, 0.75, 13.58, 0.72, -0.065, blk, -0.36, blk, blk, blk, blk, blk],
-         [11, 556.935985, 1.57e-09, 0.161, 3.115, 0.75, 14.24, 1.0, 0.187, blk, -1.693, blk, blk, blk, blk, blk],
-         [11, 620.700807, 1.7e-11, 2.423, 2.468, 0.79, 11.94, 0.75, 0.0, blk, 0.687, 0.92, blk, blk, blk, blk],
-         [11, 658.006072, 9.033e-13, 7.921, 3.154, 0.73, 13.84, 1.0, 0.176, blk, -1.496, blk, blk, blk, blk, blk],
-         [11, 752.033113, 1.035e-09, 0.402, 3.114, 0.77, 13.58, 0.84, 0.162, blk, -0.878, blk, blk, blk, blk, blk],
-         [11, 916.171582, 4.275e-11, 1.461, 2.695, 0.79, 13.55, 0.48, 0.0, blk, 0.521, 0.47, blk, blk, blk, blk]])
-    # continuum terms
-    ctr = np.array([300.0, 5.929e-10, 3.0, 1.42e-08, 7.5])
+        # read the list of parameters
+        # h2o_sdlist_r19
+        # h2o_sdlist_r20
+        # this is the same as h2o_sdlist_r19 but the two coefficients w2air w2self at 22.2 ghz
+        # (which were missing in h2o_sdlist_r19)
 
-    # below is from abh2o_sd.f
-    # read line parameters; units: ghz, hz*cm^2, mhz/mb
-    reftline = 296.0
-    fl = mtx[:, 1]
-    s1 = mtx[:, 2]
-    b2 = mtx[:, 3]
-    w0 = mtx[:, 4] / 1000.0
-    x = mtx[:, 5]
-    w0s = mtx[:, 6] / 1000.0
-    xs = mtx[:, 7]
-    sh = mtx[:, 8] / 1000.0
-    xh = mtx[:, 9]
-    shs = mtx[:, 10] / 1000.0
-    xhs = mtx[:, 11]
-    aair = mtx[:, 12]
-    aself = mtx[:, 13]
-    w2 = mtx[:, 14] / 1000.0
-    w2s = mtx[:, 15] / 1000.0
+        # 2019/03/18 - Nico: first created
+        # blk = -9999; # blank
+        blk = np.nan
 
-    # replace non-existing shifting parameters with broadening parameters
-    # indx = find(xh==blk); xh(indx) = x(indx);
-    # indx = find(xhs==blk); xhs(indx) = xs(indx);
-    indx = np.where(np.isnan(xh))
-    xh[indx] = x[indx]
-    indx = np.where(np.isnan(xhs))
-    xhs[indx] = xs[indx]
-    # replace non-existing aair aself parameters with zero (to be agreed with phil)
-    # indx = find(aair==blk); aair(indx) = 0;
-    # indx = find(aself==blk); aself(indx) = 0;
-    indx = np.where(np.isnan(aair))
-    aair[indx] = 0
-    indx = np.where(np.isnan(aself))
-    aself[indx] = 0
-    # also for w2 and w2s (to be agreed with phil)
-    # indx = find(w2==blk); w2(indx) = 0;
-    # indx = find(w2s==blk); w2s(indx) = 0;
-    indx = np.where(np.isnan(w2))
-    w2[indx] = 0
-    indx = np.where(np.isnan(w2s))
-    w2s[indx] = 0
-    # read continuum parameters; units: kelvin, 1/(km*mb^2*ghz^2)
-    reftcon = ctr[0]
-    cf = ctr[1]
-    xcf = ctr[2]
-    cs = ctr[3]
-    xcs = ctr[4]
+        # molecule freq,GHz  S(296K)    B     W0air XWair W0self XWself  Dair  XDair  Dself XDself  Aair
+        # Aself W2air W2self Refs. FL(i)     S1(i)    B2(i)   Wair  X(i)  Wself  Xs(i)   Sair  Xh(I)  Sself
+        # Xhs(I) Aair Aself  W2   W2S (variable names in the code) Refs.
+
+        self.mtx = np.vstack(
+            [[11, 22.23508, 1.335e-14, 2.172, 2.74, 0.76, 13.63, 1.2, -0.033, 2.6, 0.814, blk, blk, blk, blk, blk],
+             [11, 183.310087, 2.319e-12, 0.677, 3.028, 0.55, 15.01, 0.79, -0.073, 2.0, 0.112, 1.43, 0.0, 18.3, 0.406,
+              1.499],
+             [11, 321.22563, 7.657e-14, 6.262, 2.426, 0.73, 10.65, 0.54, -0.143, blk, 0.278, blk, blk, blk, blk, blk],
+             [11, 325.152888, 2.721e-12, 1.561, 2.847, 0.64, 13.95, 0.74, -0.013, blk, 1.325, blk, blk, blk, blk, blk],
+             [11, 380.197353, 2.477e-11, 1.062, 2.868, 0.54, 14.4, 0.89, -0.074, blk, 0.24, blk, blk, blk, blk, blk],
+             [11, 439.150807, 2.137e-12, 3.643, 2.055, 0.69, 9.06, 0.52, 0.051, blk, 0.165, blk, blk, blk, blk, blk],
+             [11, 443.018343, 4.44e-13, 5.116, 1.819, 0.7, 7.96, 0.5, 0.14, blk, -0.229, blk, blk, blk, blk, blk],
+             [11, 448.001085, 2.588e-11, 1.424, 2.612, 0.7, 13.01, 0.67, -0.116, blk, -0.615, blk, blk, blk, blk, blk],
+             [11, 470.888999, 8.196e-13, 3.645, 2.169, 0.73, 9.7, 0.65, 0.061, blk, -0.465, blk, blk, blk, blk, blk],
+             [11, 474.689092, 3.268e-12, 2.411, 2.366, 0.71, 11.24, 0.64, -0.027, blk, -0.72, blk, blk, blk, blk, blk],
+             [11, 488.490108, 6.628e-13, 2.89, 2.616, 0.75, 13.58, 0.72, -0.065, blk, -0.36, blk, blk, blk, blk, blk],
+             [11, 556.935985, 1.57e-09, 0.161, 3.115, 0.75, 14.24, 1.0, 0.187, blk, -1.693, blk, blk, blk, blk, blk],
+             [11, 620.700807, 1.7e-11, 2.423, 2.468, 0.79, 11.94, 0.75, 0.0, blk, 0.687, 0.92, blk, blk, blk, blk],
+             [11, 658.006072, 9.033e-13, 7.921, 3.154, 0.73, 13.84, 1.0, 0.176, blk, -1.496, blk, blk, blk, blk, blk],
+             [11, 752.033113, 1.035e-09, 0.402, 3.114, 0.77, 13.58, 0.84, 0.162, blk, -0.878, blk, blk, blk, blk, blk],
+             [11, 916.171582, 4.275e-11, 1.461, 2.695, 0.79, 13.55, 0.48, 0.0, blk, 0.521, 0.47, blk, blk, blk, blk]])
+        # continuum terms
+        self.ctr = np.array([300.0, 5.929e-10, 3.0, 1.42e-08, 7.5])
+
+        # below is from abh2o_sd.f
+        # read line parameters; units: ghz, hz*cm^2, mhz/mb
+        self.reftline = 296.0
+        self.fl = self.mtx[:, 1]
+        self.s1 = self.mtx[:, 2]
+        self.b2 = self.mtx[:, 3]
+        self.w0 = self.mtx[:, 4] / 1000.0
+        self.x = self.mtx[:, 5]
+        self.w0s = self.mtx[:, 6] / 1000.0
+        self.xs = self.mtx[:, 7]
+        self.sh = self.mtx[:, 8] / 1000.0
+        self.xh = self.mtx[:, 9]
+        self.shs = self.mtx[:, 10] / 1000.0
+        self.xhs = self.mtx[:, 11]
+        self.aair = self.mtx[:, 12]
+        self.aself = self.mtx[:, 13]
+        self.w2 = self.mtx[:, 14] / 1000.0
+        self.w2s = self.mtx[:, 15] / 1000.0
+
+        # replace non-existing shifting parameters with broadening parameters
+        # indx = find(xh==blk); xh(indx) = x(indx);
+        # indx = find(xhs==blk); xhs(indx) = xs(indx);
+        indx = np.where(np.isnan(self.xh))
+        self.xh[indx] = self.x[indx]
+        indx = np.where(np.isnan(self.xhs))
+        self.xhs[indx] = self.xs[indx]
+        # replace non-existing aair aself parameters with zero (to be agreed with phil)
+        # indx = find(aair==blk); aair(indx) = 0;
+        # indx = find(aself==blk); aself(indx) = 0;
+        indx = np.where(np.isnan(self.aair))
+        self.aair[indx] = 0
+        indx = np.where(np.isnan(self.aself))
+        self.aself[indx] = 0
+        # also for w2 and w2s (to be agreed with phil)
+        # indx = find(w2==blk); w2(indx) = 0;
+        # indx = find(w2s==blk); w2s(indx) = 0;
+        indx = np.where(np.isnan(self.w2))
+        self.w2[indx] = 0
+        indx = np.where(np.isnan(self.w2s))
+        self.w2s[indx] = 0
+        # read continuum parameters; units: kelvin, 1/(km*mb^2*ghz^2)
+        self.reftcon = self.ctr[0]
+        self.cf = self.ctr[1]
+        self.xcf = self.ctr[2]
+        self.cs = self.ctr[3]
+        self.xcs = self.ctr[4]
 
 
 class o2_linelist:
@@ -124,7 +137,7 @@ class o2_linelist:
     BY FREQUENCY IN SUBMM SPECTRUM.
     """
 
-    def __init__(self, model):
+    def __init__(self):
         """Initialize self. See help(type(self)) for accurate signature.
 
         Args:
@@ -133,7 +146,7 @@ class o2_linelist:
         Raises:
             ValueError: [description]
         """
-        self.model = model
+        model = O2AbsModel.model
 
         # Nico F[GHz]
         self.f = np.array(
@@ -157,14 +170,17 @@ class o2_linelist:
              6.819, 7.709, 7.709, 8.653, 8.653, 9.651, 9.651, 0.019, 0.048, 0.045, 0.044, 0.049, 0.084, 0.145, 0.136,
              0.141, 0.145, 0.201])
 
-        if self.model in ['rose18', 'rose19sd']:
+        if model in ['rose18', 'rose19sd']:
             # Nico gamma(T_0) [MHZ/mb == GHz/bar]
             self.wb300 = 0.56
             self.x = 0.8
             self.w300 = np.array(
-                [1.688, 1.703, 1.513, 1.491, 1.415, 1.408, 1.353, 1.339, 1.295, 1.292, 1.262, 1.263, 1.223, 1.217, 1.189,
-                 1.174, 1.134, 1.134, 1.089, 1.088, 1.037, 1.038, 0.996, 0.996, 0.955, 0.955, 0.906, 0.906, 0.858, 0.858,
-                 0.811, 0.811, 0.764, 0.764, 0.717, 0.717, 0.669, 0.669, 1.65, 1.64, 1.64, 1.64, 1.6, 1.6, 1.6, 1.6, 1.62,
+                [1.688, 1.703, 1.513, 1.491, 1.415, 1.408, 1.353, 1.339, 1.295, 1.292, 1.262, 1.263, 1.223, 1.217,
+                 1.189,
+                 1.174, 1.134, 1.134, 1.089, 1.088, 1.037, 1.038, 0.996, 0.996, 0.955, 0.955, 0.906, 0.906, 0.858,
+                 0.858,
+                 0.811, 0.811, 0.764, 0.764, 0.717, 0.717, 0.669, 0.669, 1.65, 1.64, 1.64, 1.64, 1.6, 1.6, 1.6, 1.6,
+                 1.62,
                  1.47, 1.47])
             # nico y(t_0) [unitless]
             self.y300 = np.append(
@@ -179,14 +195,17 @@ class o2_linelist:
                  0.5085, -0.5002, 0.6206, -0.6091, 0.6526, -0.6393, 0.664, -0.6475, 0.6729, -0.6545, 0.68, -0.66,
                  0.685, -0.665], np.tile(0.0, (1, 11)))
             # nico 2016/11/30 *********************************************************
-        elif self.model in ['rose19']:
+        elif model in ['rose19']:
             # nico gamma(t_0) [mhz/mb == ghz/bar]
             self.wb300 = 0.56
             self.x = 0.754
             self.w300 = np.array(
-                [1.685, 1.703, 1.513, 1.495, 1.433, 1.408, 1.353, 1.353, 1.303, 1.319, 1.262, 1.265, 1.238, 1.217, 1.207,
-                 1.207, 1.137, 1.137, 1.101, 1.101, 1.037, 1.038, 0.996, 0.996, 0.955, 0.955, 0.906, 0.906, 0.858, 0.858,
-                 0.811, 0.811, 0.764, 0.764, 0.717, 0.717, 0.669, 0.669, 1.65, 1.64, 1.64, 1.64, 1.6, 1.6, 1.6, 1.6, 1.62,
+                [1.685, 1.703, 1.513, 1.495, 1.433, 1.408, 1.353, 1.353, 1.303, 1.319, 1.262, 1.265, 1.238, 1.217,
+                 1.207,
+                 1.207, 1.137, 1.137, 1.101, 1.101, 1.037, 1.038, 0.996, 0.996, 0.955, 0.955, 0.906, 0.906, 0.858,
+                 0.858,
+                 0.811, 0.811, 0.764, 0.764, 0.717, 0.717, 0.669, 0.669, 1.65, 1.64, 1.64, 1.64, 1.6, 1.6, 1.6, 1.6,
+                 1.62,
                  1.47, 1.47])
 
             self.y0 = np.append(
@@ -221,4 +240,4 @@ class o2_linelist:
                  0.002, -0.002, 0.002, -0.002, 0.002, -0.002, 0.002, -0.002, 0.001, -0.001, 0.0004, -0.0004],
                 np.tile(0.0, (1, 11)))
         else:
-            raise ValueError('[Linelist] No model available with this name: {} . Sorry...'.format(self.model))
+            raise ValueError('[Linelist] No model available with this name: {} . Sorry...'.format(model))

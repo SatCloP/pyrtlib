@@ -653,17 +653,13 @@ def dcerror(x, y, *args, **kwargs):
     # from eqs.(13), w(z) = [w(-z*)]*
     # expansion in terms of ZH results in conjugation of w when X changes sign.
     zh = np.complex(np.abs(y), - x)
-    asum = np.dot(
-        (np.dot((np.dot((np.dot((np.dot((np.dot(a[6], zh) + a[5]), zh) + a[4]), zh) + a[3]), zh) + a[2]), zh) + a[1]),
-        zh) + a[0]
-    bsum = np.dot((np.dot(
-        (np.dot((np.dot((np.dot((np.dot((zh + b[6]), zh) + b[5]), zh) + b[4]), zh) + b[3]), zh) + b[2]), zh) + b[1]),
-                  zh) + b[0]
+    asum = (((((a[6]*zh + a[5])*zh + a[4])*zh + a[3])*zh + a[2])*zh + a[1])*zh + a[0]
+    bsum = ((((((zh+b[6]) * zh+b[5]) * zh+b[4]) * zh+b[3]) * zh+b[2])*zh+ b[1])*zh + b[0]
     w = asum / bsum
     if y >= 0:
-        dcerror = np.copy(w)
+        dcerror = w
     else:
         # from eqs.(13), w(z) = 2exp(-z^2)-[w(z*)]*
-        dcerror = 2.0 * np.exp(-np.complex(x, y) ** 2) - np.conj(w)
+        dcerror = 2.0 * np.exp(-np.complex(x, y) ** 2) - w
 
     return dcerror
