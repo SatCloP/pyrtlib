@@ -32,6 +32,12 @@ class h2o_linelist:
     Continuum re-adjusted for new line par. Mar. 20, 2019.
     """
 
+    # read the list of parameters
+    # h2o_sdlist_r19
+    # h2o_sdlist_r20
+    # this is the same as h2o_sdlist_r19 but the two coefficients w2air w2self at 22.2 ghz
+    # (which were missing in h2o_sdlist_r19)
+
     # 2019/03/18 - Nico: first created
     # blk = -9999; # blank
     blk = np.nan

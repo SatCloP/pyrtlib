@@ -158,12 +158,6 @@ class H2OAbsModel(AbsModel):
         # nico: the best-fit voigt are given in koshelev et al. 2018, table 2 (rad,
         # mhz/torr). these correspond to w3(1) and ws(1) in h2o_list_r18 (mhz/mb)
 
-        # read the list of parameters
-        # h2o_sdlist_r19
-        # h2o_sdlist_r20
-        # this is the same as h2o_sdlist_r19 but the two coefficients w2air w2self at 22.2 ghz
-        # (which were missing in h2o_sdlist_r19)
-
         # cyh ***********************************************
         db2np = np.log(10.0) * 0.1
         rvap = (0.01 * 8.31451) / 18.01528
@@ -171,7 +165,7 @@ class H2OAbsModel(AbsModel):
         t = 300.0 / vx
         p = (pdrykpa + ekpa) * 10.0
         rho = ekpa * 10.0 / (rvap * t)
-        f = np.copy(frq)
+        f = frq
         # cyh ***********************************************
 
         if rho <= 0.0:
@@ -198,7 +192,7 @@ class H2OAbsModel(AbsModel):
         tiln = np.log(ti)
         ti2 = np.exp(2.5 * tiln)
 
-        sum = 0.0
+        summ = 0.0
         df = np.zeros((2, 1))
         for i in range(0, nlines):
             width0 = h20ll.w0[i] * pda * ti ** h20ll.x[i] + h20ll.w0s[i] * pvap * ti ** h20ll.xs[i]
@@ -231,14 +225,14 @@ class H2OAbsModel(AbsModel):
                     if np.abs(df[j]) < 750.0:
                         res = res + width0 / (df[j] ** 2 + wsq) - base
 
-            sum = sum + s * res * (f / h20ll.fl[i]) ** 2
+            summ = summ + s * res * (f / h20ll.fl[i]) ** 2
         # nico 2019/03/18 *********************************************************
         # cyh **************************************************************
         # separate the following original equ. into line and continuum
         # terms, and change the units from np/km to ppm
         # abh2o = .3183e-4*den*sum + con
 
-        npp = (3.183e-05 * den * sum / db2np) / factor
+        npp = (3.183e-05 * den * summ / db2np) / factor
         ncpp = (con / db2np) / factor
         # cyh *************************************************************
 
@@ -323,7 +317,7 @@ class O2AbsModel(AbsModel):
         # nico intensities of the non-resonant transitions for o16-o16 and o16-o18, from jpl's line compilation
         # 1.571e-17 (o16-o16) + 1.3e-19 (o16-o18) = 1.584e-17
         # 1.584e-17*freq*freq*dfnr/(th*(freq*freq + dfnr*dfnr))
-        sum = 1.584e-17 * freq * freq * dfnr / (th * (freq * freq + dfnr * dfnr))
+        summ = 1.584e-17 * freq * freq * dfnr / (th * (freq * freq + dfnr * dfnr))
         # cyh **************************************************************
 
         nlines = len(o2ll.f)
@@ -335,7 +329,7 @@ class O2AbsModel(AbsModel):
             strr = o2ll.s300[k] * np.exp(-o2ll.be[k] * th1)
             sf1 = (df + (freq - fcen) * y) / ((freq - fcen) ** 2 + df * df)
             sf2 = (df - (freq + fcen) * y) / ((freq + fcen) ** 2 + df * df)
-            sum = sum + strr * (sf1 + sf2) * (freq / o2ll.f[k]) ** 2
+            summ = summ + strr * (sf1 + sf2) * (freq / o2ll.f[k]) ** 2
 
         # o2abs = .5034e12*sum*presda*th^3/3.14159;
         # .20946e-4/(3.14159*1.38065e-19*300) = 1.6097e11
@@ -347,7 +341,7 @@ class O2AbsModel(AbsModel):
         # nico th^3 = th(from ideal gas law 2.13) * th(from the mw approx of stimulated emission 2.16 vs. 2.14) *
         # th(from the partition sum 2.20)
 
-        o2abs = 1.6097e+11 * sum * presda * th ** 3
+        o2abs = 1.6097e+11 * summ * presda * th ** 3
         o2abs = np.maximum(o2abs, 0.0)
         # cyh *** ********************************************************
         # separate the equ. into line and continuum
@@ -454,7 +448,7 @@ class O2AbsModel(AbsModel):
         # nico intensities of the non-resonant transitions for o16-o16 and o16-o18, from jpl's line compilation
         # 1.571e-17 (o16-o16) + 1.3e-19 (o16-o18) = 1.584e-17
 
-        sum = 1.584e-17 * freq * freq * dfnr / (th * (freq * freq + dfnr * dfnr))
+        summ = 1.584e-17 * freq * freq * dfnr / (th * (freq * freq + dfnr * dfnr))
         nlines = len(o2ll.f)
         for k in range(0, nlines):
             y = den * (o2ll.y0[k] + o2ll.y1[k] * th1)
@@ -468,11 +462,11 @@ class O2AbsModel(AbsModel):
             d2 = del2 * del2 + df * df
             sf1 = (df * gfac + del1 * y) / d1
             sf2 = (df * gfac - del2 * y) / d2
-            sum = sum + strr * (sf1 + sf2) * (freq / o2ll.f[k]) ** 2
+            summ = summ + strr * (sf1 + sf2) * (freq / o2ll.f[k]) ** 2
 
         # .20946e-4/(3.14159*1.38065e-19*300) = 1.6097e11
 
-        o2abs = 1.6097e+11 * sum * presda * th ** 3
+        o2abs = 1.6097e+11 * summ * presda * th ** 3
         o2abs = 1.004 * np.maximum(o2abs, 0.0)
 
         # *** ********************************************************
