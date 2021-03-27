@@ -70,7 +70,7 @@ class LiqAbsModel(AbsModel):
             eps2 = 3.52
             fp = np.dot((np.dot(316.0, theta1) + 146.4), theta1) + 20.2
             fs = np.dot(39.8, fp)
-            eps = (eps0 - eps1) / complex(1.0, freq / fp) + (eps1 - eps2) / complex(1.0, freq / fs) + eps2
+            eps = (eps0 - eps1) / np.complex(1.0, freq / fp) + (eps1 - eps2) / complex(1.0, freq / fs) + eps2
         elif LiqAbsModel.model == 'ros16':
             eps = dilec12(freq, temp)
         else:
@@ -218,17 +218,17 @@ class H2OAbsModel(AbsModel):
                 # if(i.eq.1 .and. j.eq.1 .and. abs(df(j)).lt.10.*width0) then
                 # WIDTH2>0.0 & J==1 & abs(DF(J)) < 10*WIDTH0
                 # width2 > 0 and j == 1 and abs(df[j]) < np.dot(10, width0)
-                if width2 > 0 and j == 0 and abs(df[j]) < (10 * width0):
+                if width2 > 0 and j == 0 and np.abs(df[j]) < (10 * width0):
                     # speed-dependent resonant shape factor
                     # double complex dcerror,xc,xrt,pxw,a
-                    xc = complex((width0 - np.dot(1.5, width2)), df[j]) / width2
+                    xc = np.complex((width0 - np.dot(1.5, width2)), df[j]) / width2
                     xrt = np.sqrt(xc)
 
                     pxw = 1.77245385090551603 * xrt * dcerror(-np.imag(xrt), np.real(xrt))
                     sd = 2.0 * (1.0 - pxw) / width2
                     res = res + np.real(sd) - base
                 else:
-                    if abs(df[j]) < 750.0:
+                    if np.abs(df[j]) < 750.0:
                         res = res + width0 / (df[j] ** 2 + wsq) - base
 
             sum = sum + s * res * (f / h20ll.fl[i]) ** 2

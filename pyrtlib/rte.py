@@ -220,7 +220,7 @@ class RTEquation:
             ds[i] = np.sqrt(
                 (z[i] - z[i - 1]) ** 2 + np.dot(np.dot(np.dot(4.0, r), rl), ((np.sin(np.dot((phi - phil), 0.5))) ** 2)))
             if dtau != 0.0:
-                dtaua = abs(tau - taul)
+                dtaua = np.abs(tau - taul)
                 ds[i] = np.dot(ds[i], (dtaua / (np.dot(2.0, np.sin(np.dot(dtaua, 0.5))))))
             # Make upper boundary into lower boundary for next layer.
             phil = np.copy(phi)
@@ -259,7 +259,7 @@ class RTEquation:
                 warnings.warn('Error encountered in ExpInt_xxx.m')
                 return sxds, xds
                 # Find a layer value for x in cases where integration algorithm fails.
-            elif abs(x[i] - x[i - 1]) < 1e-09:
+            elif np.abs(x[i] - x[i - 1]) < 1e-09:
                 xlayer = x[i]
             elif x[i - 1] == 0.0 or x[i] == 0.0:
                 if zeroflg == 0:

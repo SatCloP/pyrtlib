@@ -591,7 +591,7 @@ def dilec12(f=None, tk=None, *args, **kwargs):
     """
 
     tc = tk - 273.15
-    z = complex(0.0, f)
+    z = np.complex(0.0, f)
     theta = 300.0 / tk
     # static dielectric constant model from
     # Patek et al. (J.Phys.Chem.Ref.Data. v.38(1), 21 (2009).
@@ -609,8 +609,8 @@ def dilec12(f=None, tk=None, *args, **kwargs):
     f1 = 10.46012 + np.dot(0.1454962, tc) + np.dot(0.063267156, tc ** 2) + np.dot(0.00093786645, tc ** 3)
     # z1 = (-.75,1.) * f1;
     # z2 = (-4500.,2000.)
-    z1 = np.dot(complex(- 0.75, 1.0), f1)
-    z2 = complex(- 4500.0, 2000.0)
+    z1 = np.complex(-0.75, 1.0) * f1
+    z2 = np.complex(-4500.0, 2000.0)
     cnorm = np.log(z2 / z1)
     chip = np.dot(hdelta, np.log((z - z2) / (z - z1))) / cnorm
     chij = np.dot(hdelta, np.log((z - np.conj(z2)) / (z - np.conj(z1)))) / np.conj(cnorm)
@@ -653,7 +653,7 @@ def dcerror(x, y, *args, **kwargs):
     # compute w in quadrants 1 or 2
     # from eqs.(13), w(z) = [w(-z*)]*
     # expansion in terms of ZH results in conjugation of w when X changes sign.
-    zh = complex(abs(y), - x)
+    zh = np.complex(np.abs(y), - x)
     asum = np.dot(
         (np.dot((np.dot((np.dot((np.dot((np.dot(a[6], zh) + a[5]), zh) + a[4]), zh) + a[3]), zh) + a[2]), zh) + a[1]),
         zh) + a[0]
@@ -665,6 +665,6 @@ def dcerror(x, y, *args, **kwargs):
         dcerror = np.copy(w)
     else:
         # from eqs.(13), w(z) = 2exp(-z^2)-[w(z*)]*
-        dcerror = np.dot(2.0, np.exp(-complex(x, y) ** 2)) - np.conj(w)
+        dcerror = 2.0 * np.exp(-np.complex(x, y) ** 2) - np.conj(w)
 
     return dcerror
