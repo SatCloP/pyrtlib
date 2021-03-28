@@ -222,14 +222,14 @@ def ppmv2gkg(ppmv: np.ndarray, gasid: int) -> np.ndarray:
     # convert to parts per volume
     ppv = ppmv / 1000000.0
     # multiply by ratio of masses to get mass mixing ratio in g/g
-    gg = np.dot(ppv, gas_mass(gasid-1)) / gas_mass(99)
+    gg = np.dot(ppv, gas_mass(gasid)) / gas_mass(99)
     # multiply by 1000 to get g/kg
     gkg = np.dot(gg, 1000)
 
     return gkg
 
 
-def mr2rh(p, t, w, Tconvert=None):
+def mr2rh(p: np.ndarray, t: np.ndarray, w: np.ndarray, Tconvert: np.ndarray = None) -> np.ndarray:
     """Determine relative humidity (#) given
     reference pressure (mbar), temperature (t,K), and
     water vapor mass mixing ratio (w,g/kg)
@@ -246,13 +246,13 @@ def mr2rh(p, t, w, Tconvert=None):
 
 
     Args:
-        p ([type], optional): [description]. Defaults to None.
-        t ([type], optional): [description]. Defaults to None.
-        w ([type], optional): [description]. Defaults to None.
-        Tconvert ([type], optional): [description]. Defaults to None.
+        p (np.ndarray): [description].
+        t (np.ndarray): [description].
+        w (np.ndarray): [description].
+        Tconvert (np.ndarray, optional): [description]. Defaults to None.
 
     Returns:
-        [type]: [description]
+        np.ndarray: Relative humidity
     """
     # saturation pressure
     esat = satvap(t)
