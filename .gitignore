@@ -132,4 +132,4 @@ dmypy.json
 .idea/
 *.profile
 *.cprof
-/test
+console*
