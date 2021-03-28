@@ -4,7 +4,7 @@ This class contains the absorption model used in pyrtlib.
 """
 
 import numpy as np
-
+import types
 from .utils import dilec12, dcerror
 
 
@@ -36,7 +36,7 @@ class LiqAbsModel(AbsModel):
     """
 
     @staticmethod
-    def liquid_water_absorption(water=None, freq=None, temp=None, *args, **kwargs):
+    def liquid_water_absorption(water=None, freq=None, temp=None):
         """Computes Absorption In Nepers/Km By Suspended Water Droplets.
 
         Args:
@@ -89,7 +89,7 @@ class N2AbsModel(AbsModel):
     """
 
     @staticmethod
-    def n2_absorption(t=None, p=None, f=None, *args, **kwargs):
+    def n2_absorption(t=None, p=None, f=None):
         """Collision-Induced Power Absorption Coefficient (Neper/Km) in air
         with modification of 1.34 to account for O2-O2 and O2-N2 collisions, as calculated by [3]
 
@@ -125,9 +125,9 @@ class N2AbsModel(AbsModel):
 
         bf = l * fdepen * p * p * f * f * th ** m
 
-        absN2 = n * bf
+        abs_n2 = n * bf
 
-        return absN2
+        return abs_n2
 
 
 class H2OAbsModel(AbsModel):
@@ -141,8 +141,15 @@ class H2OAbsModel(AbsModel):
     def h2oll(self):
         return self._h2oll
 
-    def h2o_rosen19_sd(self, pdrykpa=None, vx=None, ekpa=None, frq=None, *args, **kwargs):
-        """Compute absorption coef in atmosphere due to water vapor
+    @h2oll.setter
+    def h2oll(self, h2oll):
+        if h2oll and isinstance(h2oll, types.MethodType):
+            self._h2oll = h2oll
+        else:
+            raise ValueError("Please enter a valid absorption model")
+
+    def h2o_rosen19_sd(self, pdrykpa=None, vx=None, ekpa=None, frq=None) -> tuple:
+        """Compute absorption coefficients in atmosphere due to water vapor
         this version should not be used with a line list older than june 2018,
         nor the new list with an older version of this subroutine.
         Line parameters will be read from file h2o_list.asc; intensities
@@ -161,6 +168,7 @@ class H2OAbsModel(AbsModel):
         References
         ----------
         .. [1] Rosenkranz, P.W.: Line-By-Line Microwave Radiative Transfer (Non-Scattering), Remote Sens. Code Library, Doi:10.21982/M81013, 2017
+
         """
         # nico: the best-fit voigt are given in koshelev et al. 2018, table 2 (rad,
         # mhz/torr). these correspond to w3(1) and ws(1) in h2o_list_r18 (mhz/mb)
@@ -175,11 +183,10 @@ class H2OAbsModel(AbsModel):
         f = frq
         # cyh ***********************************************
 
-        if rho <= 0.0:
-            abh2o = 0.0
-            npp = 0
-            ncpp = 0
-
+        if rho.any() <= 0.0:
+            # abh2o = 0.0
+            # npp = 0
+            # ncpp = 0
             return
 
         pvap = (rho * t) / 216.68
@@ -232,7 +239,7 @@ class H2OAbsModel(AbsModel):
                     if np.abs(df[j]) < 750.0:
                         res = res + width0 / (df[j] ** 2 + wsq) - base
 
-            summ = summ + s * res * (f / self.h2oll.fl[i]) ** 2
+            summ += s * res * (f / self.h2oll.fl[i]) ** 2
         # nico 2019/03/18 *********************************************************
         # cyh **************************************************************
         # separate the following original equ. into line and continuum
@@ -257,7 +264,14 @@ class O2AbsModel(AbsModel):
     def o2ll(self):
         return self._o2ll
 
-    def o2abs_rosen18(self, pdrykpa=None, vx=None, ekpa=None, frq=None, *args, **kwargs):
+    @o2ll.setter
+    def o2ll(self, o2ll):
+        if o2ll and isinstance(o2ll, types.MethodType):
+            self._o2ll = o2ll
+        else:
+            raise ValueError("Please enter a valid absorption model")
+
+    def o2abs_rosen18(self, pdrykpa=None, vx=None, ekpa=None, frq=None):
         """Returns power absorption coefficient due to oxygen in air,
         in nepers/km.  Multiply o2abs by 4.343 to convert to db/km.
 
@@ -325,7 +339,7 @@ class O2AbsModel(AbsModel):
         preswv = (vapden * temp) / 216.68
         presda = pres - preswv
         den = 0.001 * (presda * b + 1.2 * preswv * th)
-        dfnr = self.o2ll.wb300 * den
+        dfnr = np.dot(self.o2ll.wb300, den)
 
         # nico intensities of the non-resonant transitions for o16-o16 and o16-o18, from jpl's line compilation
         # 1.571e-17 (o16-o16) + 1.3e-19 (o16-o18) = 1.584e-17
@@ -382,7 +396,7 @@ class O2AbsModel(AbsModel):
 
         return npp, ncpp
 
-    def o2abs_rosen19(self, pdrykpa=None, vx=None, ekpa=None, frq=None, *args, **kwargs):
+    def o2abs_rosen19(self, pdrykpa=None, vx=None, ekpa=None, frq=None):
         """Returns power absorption coefficient due to oxygen in air,
         in nepers/km. multiply o2abs2 by 4.343 to convert to db/km.
 

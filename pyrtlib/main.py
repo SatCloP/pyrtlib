@@ -10,7 +10,7 @@ from .linelist import o2_linelist, h2o_linelist
 from .rte import RTEquation
 
 
-def tb_cloud_rte(z, p, tk, rh, denliq, denice, cldh, frq, angles, absmdl, ray_tracing=True, from_sat=True, *args, **kwargs):
+def tb_cloud_rte(z, p, tk, rh, denliq, denice, cldh, frq, angles, absmdl, ray_tracing=True, from_sat=True):
     """[summary]
 
     Args:
@@ -34,10 +34,10 @@ def tb_cloud_rte(z, p, tk, rh, denliq, denice, cldh, frq, angles, absmdl, ray_tr
     # Defines models
     O2AbsModel.model = absmdl
     O2AbsModel.o2ll = o2_linelist()
-    
+
     H2OAbsModel.model = absmdl
     H2OAbsModel.h2oll = h2o_linelist()
-    
+
     N2AbsModel.model = 'rose19sd'
     LiqAbsModel.model = absmdl
 
@@ -82,10 +82,10 @@ def tb_cloud_rte(z, p, tk, rh, denliq, denice, cldh, frq, angles, absmdl, ray_tr
     # TODO: check if shape is correct
     beglev = np.zeros((1, nang))
     endlev = np.zeros((1, nang))
-    for l in range(0, ncld):
+    for j in range(0, ncld):
         for i in range(0, nl):
-            if z[i] == cldh[0, l]: beglev[l] = i
-            if z[i] == cldh[1, l]: endlev[l] = i
+            if z[i] == cldh[0, j]: beglev[j] = i
+            if z[i] == cldh[1, j]: endlev[j] = i
 
     # ... compute refractivity ...
     dryn, wetn, refindx = RTEquation.refractivity(p, tk, e)

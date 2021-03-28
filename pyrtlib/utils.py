@@ -51,8 +51,7 @@ def arange(start, stop, step=1, **kwargs):
                      **kwargs).reshape(1, -1)
 
 
-@function
-def constants(string=None, *args, **kwargs):
+def constants(string: str) -> tuple:
     """
     This routine will provide values and units for all the
     universal constants that I needed in my work.
@@ -65,7 +64,7 @@ def constants(string=None, *args, **kwargs):
     2021/03/09 - Added 'avogadro', 'gravity'
 
     Args:
-        string (str, optional): String specifying which constant is needed. Defaults to None.
+        string (str): String specifying which constant is needed. Defaults to None.
 
     +---------------+-------------------------------------------+
     | string        | description                               |
@@ -93,8 +92,7 @@ def constants(string=None, *args, **kwargs):
         ValueError: [description]
 
     Returns:
-        float const: Numerical Value of the asked constant
-        str units: String specifying which units are used
+        (tuple) : Numerical Value of the asked constant and string specifying which units are used
 
     References
     ----------
@@ -151,8 +149,7 @@ def constants(string=None, *args, **kwargs):
     return out, units
 
 
-@function
-def gas_mass(gasid=None, *args, **kwargs):
+def gas_mass(gasid: int) -> float:
     """
     Returns the mass of the HITRAN gas ID gasid
     DCT 3/2/1996
@@ -166,40 +163,6 @@ def gas_mass(gasid=None, *args, **kwargs):
     .. note::
         Results are not accurate because amu values need more significant figures
     """
-
-    # if gasid ==  1; H20
-    # if gasid ==  2; CO2
-    # if gasid ==  3; 03
-    # if gasid ==  4; N2O
-    # if gasid ==  5; CO
-    # if gasid ==  6; CH4
-    # if gasid ==  7; O2
-    # if gasid ==  8; NO
-    # if gasid ==  9; SO2
-    # if gasid == 10; NO2
-    # if gasid == 11; NH3
-    # if gasid == 12; HNO3
-    # if gasid == 13; OH
-    # if gasid == 14; HF
-    # if gasid == 15; HCL
-    # if gasid == 16; HBR
-    # if gasid == 17; HI
-    # if gasid == 18; CLO
-    # if gasid == 19; OCS
-    # if gasid == 20; H2CO
-    # if gasid == 21; HOCL
-    # if gasid == 22; N2
-    # if gasid == 23; HCN
-    # if gasid == 24; CH3CL
-    # if gasid == 25; H2O2
-    # if gasid == 26; C2H2
-    # if gasid == 27; C2H6
-    # if gasid == 28; PH3
-    # if gasid == 29; COF2
-    # if gasid == 30; SF6
-    # if gasid == 31; H2S
-    # if gasid == 32; HCOOH
-    # if gasid == 99; AIR
 
     if gasid == 1: amus = np.dot(2, 1) + 16
     if gasid == 2: amus = 12 + np.dot(2, 16)
@@ -241,16 +204,15 @@ def gas_mass(gasid=None, *args, **kwargs):
     return mass_molecule
 
 
-@function
-def ppmv2gkg(ppmv=None, gasid=None, *args, **kwargs):
+def ppmv2gkg(ppmv: np.ndarray, gasid: int) -> np.ndarray:
     """Convert volume mixing ratio in ppmv to mass mixing ratio in g/kg.
 
     Args:
-        ppmv ([type], optional): mass mixing ratio (g/kg). Defaults to None.
-        gasid ([type], optional): HITRAN gas id. Defaults to None.
+        ppmv (np.ndarray): mass mixing ratio (g/kg).
+        gasid (int): HITRAN gas id.
     
     Returns:
-        [type]: [description]
+        np.ndarray: Mass mixing ratio in g/kg
 
     See also:
         
@@ -267,8 +229,7 @@ def ppmv2gkg(ppmv=None, gasid=None, *args, **kwargs):
     return gkg
 
 
-@function
-def mr2rh(p=None, t=None, w=None, Tconvert=None, *args, **kwargs):
+def mr2rh(p, t, w, Tconvert=None):
     """Determine relative humidity (#) given
     reference pressure (mbar), temperature (t,K), and
     water vapor mass mixing ratio (w,g/kg)
@@ -293,13 +254,10 @@ def mr2rh(p=None, t=None, w=None, Tconvert=None, *args, **kwargs):
     Returns:
         [type]: [description]
     """
-    nargin = mr2rh.nargin
-
     # saturation pressure
-    if nargin == 3:
-        esat = satvap(t)
-        wsat = satmix(p, t)
-    if nargin == 4:
+    esat = satvap(t)
+    wsat = satmix(p, t)
+    if Tconvert:
         esat = satvap(t, Tconvert)
         wsat = satmix(p, t, Tconvert)
 
@@ -313,7 +271,6 @@ def mr2rh(p=None, t=None, w=None, Tconvert=None, *args, **kwargs):
     return rh1, rh2
 
 
-@function
 def mr2rho(mr=None, tk=None, p=None, *args, **kwargs):
     """Determine water vapor density (g/m3) given
     reference pressure (mbar), temperature (t,K), and
@@ -346,7 +303,6 @@ def mr2rho(mr=None, tk=None, p=None, *args, **kwargs):
     return rho
 
 
-@function
 def mr2e(p=None, mr=None, *args, **kwargs):
     """Compute H2O partial pressure (e,mbar) given
     pressure (p,mbar) and H2O mass mixing ratio (mr,g/kg)
@@ -368,7 +324,6 @@ def mr2e(p=None, mr=None, *args, **kwargs):
     return e
 
 
-@function
 def e2mr(p=None, e=None, *args, **kwargs):
     """Compute H2O mass mixing ratio (mr,g/kg) given
     pressure (p,mbar) and H2O partial pressure (e,mbar)
@@ -390,8 +345,7 @@ def e2mr(p=None, e=None, *args, **kwargs):
     return mr
 
 
-@function
-def satmix(p=None, T=None, Tconvert=None, *args, **kwargs):
+def satmix(p, T, Tconvert=None, *args, **kwargs):
     """Compute saturation mixing ratio [g/kg] given reference pressure, 
     p [mbar] and temperature, T [K].  If Tconvert input, the calculation uses 
     the saturation vapor pressure over ice (opposed to over water) 
@@ -407,15 +361,11 @@ def satmix(p=None, T=None, Tconvert=None, *args, **kwargs):
     Returns:
         [type]: [description]
     """
-
-    nargin = satmix.nargin
-
     # warning('off')
 
     # saturation pressure
-    if nargin == 2:
-        esat = satvap(T)
-    if nargin == 3:
+    esat = satvap(T)
+    if Tconvert:
         esat = satvap(T, Tconvert)
 
     # saturation mixing ratio
@@ -424,8 +374,7 @@ def satmix(p=None, T=None, Tconvert=None, *args, **kwargs):
     return wsat
 
 
-@function
-def satvap(T=None, Tconvert=None, *args, **kwargs):
+def satvap(T, Tconvert=None):
     """compute saturation vapor pressure [mbar] given temperature, T [K].
     If Tconvert is input, the calculation uses the saturation vapor 
     pressure over ice (opposed to over water) for temperatures less than 
@@ -441,14 +390,12 @@ def satvap(T=None, Tconvert=None, *args, **kwargs):
         [type]: [description]
 
     """
-    nargin = satvap.nargin
-
     # saturation pressure over water
     # Goff Gratch formulation, over water
     esat = eswat_goffgratch(T)
 
     # saturation pressure over ice if needed
-    if nargin == 2:
+    if Tconvert:
         # TODO: could the find() function be replaced with numpy.where()????
         ind = np.nonzero(T <= Tconvert)
         # Goff Gratch formulation, over ice
@@ -457,7 +404,6 @@ def satvap(T=None, Tconvert=None, *args, **kwargs):
     return esat
 
 
-@function
 def eswat_goffgratch(T=None, *args, **kwargs):
     """Compute water vapor saturation pressure over water
     using Goff-Gratch formulation.  Adopted from PvD's 
@@ -492,16 +438,18 @@ def eswat_goffgratch(T=None, *args, **kwargs):
     c4 = 11.344
     c5 = 0.0081328
     c6 = 3.49149
-    tmp = (np.dot(np.dot(-1.0, c1), (t_ratio - 1.0))) + (np.dot(c2, np.log10(t_ratio))) - (
-        np.dot(c3, (10.0 ** (np.dot(c4, (1.0 - rt_ratio))) - 1.0))) + (np.dot(
-        c5, (10.0 ** (np.dot(np.dot(-1.0, c6),
-                             (t_ratio - 1.0))) - 1.0))) + np.log10(sl_pressure)
+
+    tmp = (-1.0 * c1 * (t_ratio - 1.0)) + \
+          (c2 * np.log10(t_ratio)) - \
+          (c3 * (10.0 ** (c4 * (1.0 - rt_ratio)) - 1.0)) + \
+          (c5 * (10.0 ** (-1.0 * c6 * (t_ratio - 1.0)) - 1.0)) + \
+          np.log10(sl_pressure)
+
     svp = 10.0 ** tmp
 
     return svp
 
 
-@function
 def esice_goffgratch(T=None, *args, **kwargs):
     """Compute water vapor saturation pressure over ice
     using Goff-Gratch formulation.  Adopted from PvD's 
@@ -644,17 +592,17 @@ def dcerror(x, y, *args, **kwargs):
     # DOUBLE COMPLEX ASUM,BSUM,ZH,w
 
     a = np.asarray([122.607931777104326, 214.382388694706425, 181.928533092181549, 93.155580458138441,
-         30.180142196210589, 5.912626209773153, 0.564189583562615])
+                    30.180142196210589, 5.912626209773153, 0.564189583562615])
 
     b = np.asarray([122.607931773875350, 352.730625110963558, 457.334478783897737, 348.703917719495792,
-         170.354001821091472, 53.992906912940207, 10.479857114260399])
+                    170.354001821091472, 53.992906912940207, 10.479857114260399])
 
     # compute w in quadrants 1 or 2
     # from eqs.(13), w(z) = [w(-z*)]*
     # expansion in terms of ZH results in conjugation of w when X changes sign.
     zh = np.complex(np.abs(y), - x)
-    asum = (((((a[6]*zh + a[5])*zh + a[4])*zh + a[3])*zh + a[2])*zh + a[1])*zh + a[0]
-    bsum = ((((((zh+b[6]) * zh+b[5]) * zh+b[4]) * zh+b[3]) * zh+b[2])*zh+ b[1])*zh + b[0]
+    asum = (((((a[6] * zh + a[5]) * zh + a[4]) * zh + a[3]) * zh + a[2]) * zh + a[1]) * zh + a[0]
+    bsum = ((((((zh + b[6]) * zh + b[5]) * zh + b[4]) * zh + b[3]) * zh + b[2]) * zh + b[1]) * zh + b[0]
     w = asum / bsum
     if y >= 0:
         dcerror = w

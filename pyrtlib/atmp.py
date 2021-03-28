@@ -5,24 +5,46 @@ This calss contains the AFGL Atmospheric Constituent Profiles (0-120km).
 
 import numpy as np
 
-from .utils import arange
-
 
 class AtmosphericProfiles:
     """AFGL Atmospheric Constituent Profiles (0-120km)
 
     Each of these profile contains data at 50 atmospheric levels:
-    Altitude (km), Pressure (mb), Density (cm-3),
-    Molec. densities (ppmv):
-    1(H2O), 2(CO2), 3(O3), 4(N2O), 5(CO), 6(CH4), 7(O2)
+    Altitude (km), Pressure (mb), Density (cm-3), Molec. densities (ppmv):
+
+    * 1 (H2O),
+    * 2 (CO2),
+    * 3 (O3),
+    * 4 (N2O),
+    * 5 (CO),
+    * 6 (CH4),
+    * 7 (O2)
     Plus suplimental profiles where available.
 
     The last set of data sets are constituent profiles of molecular
     densities (ppmv) for the minor absorbing atmospheric gases:
 
-    8(NO), 9(SO4), 10(NO2), 11(NH3), 12(HNO3), 13(OH), 14(HF),
-    15(HCl), 16(HBr), 17(HI), 18(ClO), 19(OCS), 20(H2CO), 21(HOCl),
-    22(N2), 23(HCN), 24(CH3Cl), 25(H2O2), 26(C2H2), 27C2H6), 28(PH3)
+    * 8(NO),
+    * 9(SO4),
+    * 10(NO2),
+    * 11(NH3),
+    * 12(HNO3),
+    * 13(OH),
+    * 14(HF),
+    * 15(HCl),
+    * 16(HBr),
+    * 17(HI),
+    * 18(ClO),
+    * 19(OCS),
+    * 20(H2CO),
+    * 21(HOCl),
+    * 22(N2),
+    * 23(HCN),
+    * 24(CH3Cl),
+    * 25(H2O2),
+    * 26(C2H2),
+    * 27C2H6),
+    * 28(PH3)
     Plus suplimental profiles where available.
 
     Keywords for reading:
@@ -40,8 +62,49 @@ class AtmosphericProfiles:
 
     """
 
+    TROPICAL = 1
+    MIDLATITUDE_SUMMER = 2
+    MIDLATITUDE_WINTER = 3
+    SUBARCTIC_SUMMER = 4
+    SUBARCTIC_WINTER = 5
+    US_STANDARD = 6
+
+    H20 = 1
+    CO2 = 2
+    O3 = 3
+    N2O = 4
+    CO = 5
+    CH4 = 6
+    O2 = 7
+    NO = 8
+    SO2 = 9
+    NO2 = 10
+    NH3 = 11
+    HNO3 = 12
+    OH = 13
+    HF = 14
+    HCL = 15
+    HBR = 16
+    HI = 17
+    CLO = 18
+    OCS = 19
+    H2CO = 20
+    HOCL = 21
+    N2 = 22
+    HCN = 23
+    CH3CL = 24
+    H2O2 = 25
+    C2H2 = 26
+    C2H6 = 27
+    PH3 = 28
+    COF2 = 29
+    SF6 = 30
+    H2S = 31
+    HCOOH = 32
+    AIR = 99
+
     @staticmethod
-    def gl_atm(option=1, *args, **kwargs):
+    def gl_atm(option=1):
         """Returns the Atmopshere profile
         This method contains 6 model profiles:
         
@@ -810,24 +873,24 @@ class AtmosphericProfiles:
                 94000.0, 72500.0
             ])
 
-        gasids = (arange(1, 7)).T
-        a = a.T.reshape(50, 1, order='F')
-        p = p.T.reshape(50, 1, order='F')
-        t = t.T.reshape(50, 1, order='F')
-        d = d.T.reshape(50, 1, order='F')
-        g1 = g1.T.reshape(50, 1, order='F')
-        g2 = g2.T.reshape(50, 1, order='F')
-        g3 = g3.T.reshape(50, 1, order='F')
-        g4 = g4.T.reshape(50, 1, order='F')
-        g5 = g5.T.reshape(50, 1, order='F')
-        g6 = g6.T.reshape(50, 1, order='F')
-        g7 = g7.T.reshape(50, 1, order='F')
-        md = np.concatenate([g1, g2, g3, g4, g5, g6, g7], axis=1)
+        # gasids = np.arange(1, 8)
+        # a = a.T.reshape(50, 1, order='F')
+        # p = p.T.reshape(50, 1, order='F')
+        # t = t.T.reshape(50, 1, order='F')
+        # d = d.T.reshape(50, 1, order='F')
+        # g1 = g1.T.reshape(50, 1, order='F')
+        # g2 = g2.T.reshape(50, 1, order='F')
+        # g3 = g3.T.reshape(50, 1, order='F')
+        # g4 = g4.T.reshape(50, 1, order='F')
+        # g5 = g5.T.reshape(50, 1, order='F')
+        # g6 = g6.T.reshape(50, 1, order='F')
+        # g7 = g7.T.reshape(50, 1, order='F')
+        md = np.column_stack((g1, g2, g3, g4, g5, g6, g7))
 
-        return a, p, d, t, md, gasids
+        return a, p, d, t, md
 
     @staticmethod
-    def gl_atm_minor(*args, **kwargs):
+    def gl_atm_minor():
         """Returns the minor gas profiles (gas ID's 8-28)
 
         Returns:
@@ -1088,37 +1151,37 @@ class AtmosphericProfiles:
             1e-14, 1e-14, 1e-14, 1e-14, 1e-14
         ])
 
-        gasids = (arange(8, 28)).T
-        g8 = g8.T.reshape(50, 1, order='F')
-        g9 = g9.T.reshape(50, 1, order='F')
-        g10 = g10.T.reshape(50, 1, order='F')
-        g11 = g11.T.reshape(50, 1, order='F')
-        g12 = g12.T.reshape(50, 1, order='F')
-        g13 = g13.T.reshape(50, 1, order='F')
-        g14 = g14.T.reshape(50, 1, order='F')
-        g15 = g15.T.reshape(50, 1, order='F')
-        g16 = g16.T.reshape(50, 1, order='F')
-        g17 = g17.T.reshape(50, 1, order='F')
-        g18 = g18.T.reshape(50, 1, order='F')
-        g19 = g19.T.reshape(50, 1, order='F')
-        g20 = g20.T.reshape(50, 1, order='F')
-        g21 = g21.T.reshape(50, 1, order='F')
-        g22 = g22.T.reshape(50, 1, order='F')
-        g23 = g23.T.reshape(50, 1, order='F')
-        g24 = g24.T.reshape(50, 1, order='F')
-        g25 = g25.T.reshape(50, 1, order='F')
-        g26 = g26.T.reshape(50, 1, order='F')
-        g27 = g27.T.reshape(50, 1, order='F')
-        g28 = g28.T.reshape(50, 1, order='F')
-        md = np.concatenate([
+        # gasids = (arange(8, 28)).T
+        # g8 = g8.T.reshape(50, 1, order='F')
+        # g9 = g9.T.reshape(50, 1, order='F')
+        # g10 = g10.T.reshape(50, 1, order='F')
+        # g11 = g11.T.reshape(50, 1, order='F')
+        # g12 = g12.T.reshape(50, 1, order='F')
+        # g13 = g13.T.reshape(50, 1, order='F')
+        # g14 = g14.T.reshape(50, 1, order='F')
+        # g15 = g15.T.reshape(50, 1, order='F')
+        # g16 = g16.T.reshape(50, 1, order='F')
+        # g17 = g17.T.reshape(50, 1, order='F')
+        # g18 = g18.T.reshape(50, 1, order='F')
+        # g19 = g19.T.reshape(50, 1, order='F')
+        # g20 = g20.T.reshape(50, 1, order='F')
+        # g21 = g21.T.reshape(50, 1, order='F')
+        # g22 = g22.T.reshape(50, 1, order='F')
+        # g23 = g23.T.reshape(50, 1, order='F')
+        # g24 = g24.T.reshape(50, 1, order='F')
+        # g25 = g25.T.reshape(50, 1, order='F')
+        # g26 = g26.T.reshape(50, 1, order='F')
+        # g27 = g27.T.reshape(50, 1, order='F')
+        # g28 = g28.T.reshape(50, 1, order='F')
+        md = np.column_stack([
             g8, g9, g10, g11, g12, g13, g14, g15, g16, g17, g18, g19, g20, g21,
             g22, g23, g24, g25, g26, g27, g28
         ])
 
-        return md, gasids
+        return md
 
     @staticmethod
-    def gl_atm_trace(*args, **kwargs):
+    def gl_atm_trace():
         """Returns the trace gas and xsection profiles (ID's 29-31,51-63)
 
         Returns:
@@ -1349,26 +1412,26 @@ class AtmosphericProfiles:
             1.605e-29, 2.026e-30
         ])
 
-        gasids = np.concatenate([[(arange(29, 31)).T], [(arange(51, 63)).T]])
-        g29 = g29.T.reshape(50, 1, order='F')
-        g30 = g30.T.reshape(50, 1, order='F')
-        g31 = g31.T.reshape(50, 1, order='F')
-        g51 = g51.T.reshape(50, 1, order='F')
-        g52 = g52.T.reshape(50, 1, order='F')
-        g53 = g53.T.reshape(50, 1, order='F')
-        g54 = g54.T.reshape(50, 1, order='F')
-        g55 = g55.T.reshape(50, 1, order='F')
-        g56 = g56.T.reshape(50, 1, order='F')
-        g57 = g57.T.reshape(50, 1, order='F')
-        g58 = g58.T.reshape(50, 1, order='F')
-        g59 = g59.T.reshape(50, 1, order='F')
-        g60 = g60.T.reshape(50, 1, order='F')
-        g61 = g61.T.reshape(50, 1, order='F')
-        g62 = g62.T.reshape(50, 1, order='F')
-        g63 = g63.T.reshape(50, 1, order='F')
-        md = np.concatenate([
+        # gasids = np.arange([[(29, 31)).T], [((51, 63)).T]])
+        # g29 = g29.T.reshape(50, 1, order='F')
+        # g30 = g30.T.reshape(50, 1, order='F')
+        # g31 = g31.T.reshape(50, 1, order='F')
+        # g51 = g51.T.reshape(50, 1, order='F')
+        # g52 = g52.T.reshape(50, 1, order='F')
+        # g53 = g53.T.reshape(50, 1, order='F')
+        # g54 = g54.T.reshape(50, 1, order='F')
+        # g55 = g55.T.reshape(50, 1, order='F')
+        # g56 = g56.T.reshape(50, 1, order='F')
+        # g57 = g57.T.reshape(50, 1, order='F')
+        # g58 = g58.T.reshape(50, 1, order='F')
+        # g59 = g59.T.reshape(50, 1, order='F')
+        # g60 = g60.T.reshape(50, 1, order='F')
+        # g61 = g61.T.reshape(50, 1, order='F')
+        # g62 = g62.T.reshape(50, 1, order='F')
+        # g63 = g63.T.reshape(50, 1, order='F')
+        md = np.column_stack([
             g29, g30, g31, g51, g52, g53, g54, g55, g56, g57, g58, g59, g60,
             g61, g62, g63
         ])
 
-        return md, gasids
+        return md

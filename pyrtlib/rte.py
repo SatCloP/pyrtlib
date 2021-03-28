@@ -342,9 +342,9 @@ class RTEquation:
         """
         ncld = len(lbase)
         scld = 0.0
-        for l in range(0, ncld):
-            for i in range(lbase[l] + 1, ltop[l]):
-                scld = scld + np.dot(ds[i], (np.dot(0.5, (dencld[i] + dencld[i - 1]))))
+        for i in range(0, ncld):
+            for j in range(lbase[i] + 1, ltop[i]):
+                scld = scld + np.dot(ds[j], (np.dot(0.5, (dencld[j] + dencld[j - 1]))))
 
         # convert the integrated value to cm.
         scld = np.dot(scld, 0.1)
@@ -551,7 +551,7 @@ class RTEquation:
                 adry[i] = np.dot((np.dot(factor, (npp + ncpp))), db2np)
 
             if H2OAbsModel.model == 'rose19sd':
-                npp, ncpp = H2OAbsModel().h2o_rosen19_sd(pdrykpa, v, ekpa, frq, nargout=2)
+                npp, ncpp = H2OAbsModel().h2o_rosen19_sd(pdrykpa, v, ekpa, frq)
                 awet[i] = factor * (npp + ncpp) * db2np
             if O2AbsModel.model == 'rose19sd':
                 npp, _ = O2AbsModel().o2abs_rosen18(pdrykpa, v, ekpa, frq)
