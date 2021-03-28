@@ -30,7 +30,7 @@ The source code for pyrtlib python package is hosted on `github
    z, p, d, tk, md = atmp.gl_atm(atmp.TROPICAL)
    frq = np.arange(20, 201, 1)
    ice = 0
-   gkg = ppmv2gkg(md[:, atmp.H20-1], atmp.H20)
+   gkg = ppmv2gkg(md[:, atmp.H20], atmp.H20)
    rh = mr2rh(p, tk, gkg)[0] / 100
 
    e, rho = RTEquation.vapor(tk, rh, ice)

@@ -222,7 +222,7 @@ def ppmv2gkg(ppmv: np.ndarray, gasid: int) -> np.ndarray:
     # convert to parts per volume
     ppv = ppmv / 1000000.0
     # multiply by ratio of masses to get mass mixing ratio in g/g
-    gg = np.dot(ppv, gas_mass(gasid)) / gas_mass(99)
+    gg = np.dot(ppv, gas_mass(gasid-1)) / gas_mass(99)
     # multiply by 1000 to get g/kg
     gkg = np.dot(gg, 1000)
 
