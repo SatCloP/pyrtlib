@@ -1,4 +1,4 @@
-name: Run Python Tests
+name: run-python-tests
 on:
   push:
     branches:
