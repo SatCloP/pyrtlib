@@ -12,39 +12,43 @@ class AtmosphericProfiles:
     Each of these profile contains data at 50 atmospheric levels:
     Altitude (km), Pressure (mb), Density (cm-3), Molec. densities (ppmv):
 
-    * 1 (H2O),
-    * 2 (CO2),
-    * 3 (O3),
-    * 4 (N2O),
-    * 5 (CO),
-    * 6 (CH4),
-    * 7 (O2)
+    * 0 (H2O),
+    * 1 (CO2),
+    * 2 (O3),
+    * 3 (N2O),
+    * 4 (CO),
+    * 5 (CH4),
+    * 6 (O2)
     Plus suplimental profiles where available.
 
     The last set of data sets are constituent profiles of molecular
     densities (ppmv) for the minor absorbing atmospheric gases:
 
-    * 8(NO),
-    * 9(SO4),
-    * 10(NO2),
-    * 11(NH3),
-    * 12(HNO3),
-    * 13(OH),
-    * 14(HF),
-    * 15(HCl),
-    * 16(HBr),
-    * 17(HI),
-    * 18(ClO),
-    * 19(OCS),
-    * 20(H2CO),
-    * 21(HOCl),
-    * 22(N2),
-    * 23(HCN),
-    * 24(CH3Cl),
-    * 25(H2O2),
-    * 26(C2H2),
-    * 27C2H6),
-    * 28(PH3)
+    * 7 (NO),
+    * 8 (SO4),
+    * 9 (NO2),
+    * 10 (NH3),
+    * 11 (HNO3),
+    * 12 (OH),
+    * 13 (HF),
+    * 14 (HCl),
+    * 15 (HBr),
+    * 16 (HI),
+    * 17 (ClO),
+    * 18 (OCS),
+    * 19 (H2CO),
+    * 20 (HOCl),
+    * 21 (N2),
+    * 22 (HCN),
+    * 23 (CH3Cl),
+    * 24 (H2O2),
+    * 25 (C2H2),
+    * 26 C2H6),
+    * 27 (PH3),
+    * 28 (COF2),
+    * 29 (SF6),
+    * 30 (H2S),
+    * 31 (HCOOH)
     Plus suplimental profiles where available.
 
     Keywords for reading:
@@ -69,38 +73,38 @@ class AtmosphericProfiles:
     SUBARCTIC_WINTER = 5
     US_STANDARD = 6
 
-    H20 = 1
-    CO2 = 2
-    O3 = 3
-    N2O = 4
-    CO = 5
-    CH4 = 6
-    O2 = 7
-    NO = 8
-    SO2 = 9
-    NO2 = 10
-    NH3 = 11
-    HNO3 = 12
-    OH = 13
-    HF = 14
-    HCL = 15
-    HBR = 16
-    HI = 17
-    CLO = 18
-    OCS = 19
-    H2CO = 20
-    HOCL = 21
-    N2 = 22
-    HCN = 23
-    CH3CL = 24
-    H2O2 = 25
-    C2H2 = 26
-    C2H6 = 27
-    PH3 = 28
-    COF2 = 29
-    SF6 = 30
-    H2S = 31
-    HCOOH = 32
+    H20 = 0
+    CO2 = 1
+    O3 = 2
+    N2O = 3
+    CO = 4
+    CH4 = 5
+    O2 = 6
+    NO = 7
+    SO2 = 8
+    NO2 = 9
+    NH3 = 10
+    HNO3 = 11
+    OH = 12
+    HF = 13
+    HCL = 14
+    HBR = 15
+    HI = 16
+    CLO = 17
+    OCS = 18
+    H2CO = 19
+    HOCL = 20
+    N2 = 21
+    HCN = 22
+    CH3CL = 23
+    H2O2 = 24
+    C2H2 = 25
+    C2H6 = 26
+    PH3 = 27
+    COF2 = 28
+    SF6 = 29
+    H2S = 30
+    HCOOH = 31
     AIR = 99
 
     @staticmethod

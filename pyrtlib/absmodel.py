@@ -356,7 +356,7 @@ class O2AbsModel(AbsModel):
             strr = self.o2ll.s300[k] * np.exp(-self.o2ll.be[k] * th1)
             sf1 = (df + (freq - fcen) * y) / ((freq - fcen) ** 2 + df * df)
             sf2 = (df - (freq + fcen) * y) / ((freq + fcen) ** 2 + df * df)
-            summ = summ + strr * (sf1 + sf2) * (freq / self.o2ll.f[k]) ** 2
+            summ += strr * (sf1 + sf2) * (freq / self.o2ll.f[k]) ** 2
 
         # o2abs = .5034e12*sum*presda*th^3/3.14159;
         # .20946e-4/(3.14159*1.38065e-19*300) = 1.6097e11
@@ -489,7 +489,7 @@ class O2AbsModel(AbsModel):
             d2 = del2 * del2 + df * df
             sf1 = (df * gfac + del1 * y) / d1
             sf2 = (df * gfac - del2 * y) / d2
-            summ = summ + strr * (sf1 + sf2) * (freq / self.o2ll.f[k]) ** 2
+            summ += strr * (sf1 + sf2) * (freq / self.o2ll.f[k]) ** 2
 
         # .20946e-4/(3.14159*1.38065e-19*300) = 1.6097e11
 

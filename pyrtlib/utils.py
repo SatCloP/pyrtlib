@@ -151,51 +151,52 @@ def constants(string: str) -> tuple:
 
 def gas_mass(gasid: int) -> float:
     """
-    Returns the mass of the HITRAN gas ID gasid
+    Returns the mass of the HITRAN gas ID
     DCT 3/2/1996
 
     Args:
-        gasid ([type], optional): [description]. Defaults to None.
+        gasid (int): The gas ID defined in :py:class:`~pyrtlib.atmp.AtmosphericProfiles`
     
     Returns:
-        [type]: [description]
+        float: The mass of the HITRAN gas ID
 
     .. note::
-        Results are not accurate because amu values need more significant figures
+        Results are not accurate because amu values need more significant figures.
+
     """
 
-    if gasid == 1: amus = np.dot(2, 1) + 16
-    if gasid == 2: amus = 12 + np.dot(2, 16)
-    if gasid == 3: amus = np.dot(3, 16)
-    if gasid == 4: amus = np.dot(2, 14) + 16
-    if gasid == 5: amus = 12 + 16
-    if gasid == 6: amus = 12 + np.dot(4, 1)
-    if gasid == 7: amus = np.dot(2, 16)
-    if gasid == 8: amus = 14 + 16
-    if gasid == 9: amus = 32 + np.dot(2, 16)
-    if gasid == 10: amus = 14 + np.dot(2, 16)
-    if gasid == 11: amus = 14 + np.dot(3, 1)
-    if gasid == 12: amus = 1 + 14 + np.dot(3, 16)
-    if gasid == 13: amus = 16 + 1
-    if gasid == 14: amus = 1 + 19
-    if gasid == 15: amus = 1 + 35
-    if gasid == 16: amus = 1 + 80
-    if gasid == 17: amus = 1 + 127
-    if gasid == 18: amus = 35 + 16
-    if gasid == 19: amus = 16 + 12 + 32
-    if gasid == 20: amus = np.dot(2, 1) + 12 + 16
-    if gasid == 21: amus = 1 + 16 + 35
-    if gasid == 22: amus = np.dot(2, 14)
-    if gasid == 23: amus = 1 + 12 + 14
-    if gasid == 24: amus = 12 + np.dot(3, 1) + 35
-    if gasid == 25: amus = np.dot(2, 1) + np.dot(2, 16)
-    if gasid == 26: amus = np.dot(2, 12) + np.dot(2, 1)
-    if gasid == 27: amus = np.dot(2, 12) + np.dot(6, 1)
-    if gasid == 28: amus = 31 + np.dot(3, 1)
-    if gasid == 29: amus = 12 + 16 + np.dot(2, 19)
-    if gasid == 30: amus = 32 + np.dot(6, 19)
-    if gasid == 31: amus = np.dot(2, 1) + 32
-    if gasid == 32: amus = 1 + 12 + np.dot(2, 16) + 1
+    if gasid == 0: amus = np.dot(2, 1) + 16
+    if gasid == 1: amus = 12 + np.dot(2, 16)
+    if gasid == 2: amus = np.dot(3, 16)
+    if gasid == 3: amus = np.dot(2, 14) + 16
+    if gasid == 4: amus = 12 + 16
+    if gasid == 5: amus = 12 + np.dot(4, 1)
+    if gasid == 6: amus = np.dot(2, 16)
+    if gasid == 7: amus = 14 + 16
+    if gasid == 8: amus = 32 + np.dot(2, 16)
+    if gasid == 9: amus = 14 + np.dot(2, 16)
+    if gasid == 10: amus = 14 + np.dot(3, 1)
+    if gasid == 11: amus = 1 + 14 + np.dot(3, 16)
+    if gasid == 12: amus = 16 + 1
+    if gasid == 13: amus = 1 + 19
+    if gasid == 14: amus = 1 + 35
+    if gasid == 15: amus = 1 + 80
+    if gasid == 16: amus = 1 + 127
+    if gasid == 17: amus = 35 + 16
+    if gasid == 18: amus = 16 + 12 + 32
+    if gasid == 19: amus = np.dot(2, 1) + 12 + 16
+    if gasid == 20: amus = 1 + 16 + 35
+    if gasid == 21: amus = np.dot(2, 14)
+    if gasid == 22: amus = 1 + 12 + 14
+    if gasid == 23: amus = 12 + np.dot(3, 1) + 35
+    if gasid == 24: amus = np.dot(2, 1) + np.dot(2, 16)
+    if gasid == 25: amus = np.dot(2, 12) + np.dot(2, 1)
+    if gasid == 26: amus = np.dot(2, 12) + np.dot(6, 1)
+    if gasid == 27: amus = 31 + np.dot(3, 1)
+    if gasid == 28: amus = 12 + 16 + np.dot(2, 19)
+    if gasid == 29: amus = 32 + np.dot(6, 19)
+    if gasid == 30: amus = np.dot(2, 1) + 32
+    if gasid == 31: amus = 1 + 12 + np.dot(2, 16) + 1
     if gasid == 99: amus = 28.9402753669
 
     mass_proton = 1.6726485e-27
