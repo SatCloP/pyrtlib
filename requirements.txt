@@ -1,3 +1,5 @@
 numpy
 pandas
 setuptools
+pytest
+pytest-datafiles>=2.0

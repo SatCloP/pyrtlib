@@ -6,11 +6,11 @@ Main script !!!(right now only for testing)!!!.
 import numpy as np
 import pandas as pd
 from .absmodel import O2AbsModel, H2OAbsModel, N2AbsModel, LiqAbsModel
+from .linelist import o2_linelist, h2o_linelist
 from .rte import RTEquation
-from .utils import arange
 
 
-def tb_cloud_rte(z, p, tk, rh, denliq, denice, cldh, frq, angles, absmdl, ray_tracing=True, from_sat=True, *args, **kwargs):
+def tb_cloud_rte(z, p, tk, rh, denliq, denice, cldh, frq, angles, absmdl, ray_tracing=True, from_sat=True):
     """[summary]
 
     Args:
@@ -31,10 +31,17 @@ def tb_cloud_rte(z, p, tk, rh, denliq, denice, cldh, frq, angles, absmdl, ray_tr
         [type]: [description]
     """
 
+    # Defines models
     O2AbsModel.model = absmdl
+    O2AbsModel.o2ll = o2_linelist()
+
     H2OAbsModel.model = absmdl
-    N2AbsModel.model = absmdl
+    H2OAbsModel.h2oll = h2o_linelist()
+
+    N2AbsModel.model = 'rose19sd'
     LiqAbsModel.model = absmdl
+
+    # Set RTE
     RTEquation.from_sat = from_sat
 
     # Settings
@@ -63,6 +70,7 @@ def tb_cloud_rte(z, p, tk, rh, denliq, denice, cldh, frq, angles, absmdl, ray_tr
     sdry = np.zeros((1, nang))
     sliq = np.zeros((1, nang))
     sice = np.zeros((1, nang))
+
     # ... convert height profile to (km above antenna height) ...
     z0 = z[0]
     z = z - z0
@@ -74,14 +82,14 @@ def tb_cloud_rte(z, p, tk, rh, denliq, denice, cldh, frq, angles, absmdl, ray_tr
     # TODO: check if shape is correct
     beglev = np.zeros((1, nang))
     endlev = np.zeros((1, nang))
-    for l in arange(0, ncld-1).reshape(-1):
-        for i in arange(1, nl).reshape(-1):
-            if z[i] == cldh[0, l]: beglev[l] = i
-            if z[i] == cldh[1, l]: endlev[l] = i
+    for j in range(0, ncld):
+        for i in range(0, nl):
+            if z[i] == cldh[0, j]: beglev[j] = i
+            if z[i] == cldh[1, j]: endlev[j] = i
 
     # ... compute refractivity ...
     dryn, wetn, refindx = RTEquation.refractivity(p, tk, e)
-    for k in arange(0, nang-1).reshape(-1):
+    for k in range(0, nang):
         # ... Compute distance between each level (ds) ...
         if ray_tracing:
             ds = RTEquation.ray_tracing(z, refindx, angles[k], z0)
@@ -90,6 +98,7 @@ def tb_cloud_rte(z, p, tk, rh, denliq, denice, cldh, frq, angles, absmdl, ray_tr
             # TODO: check if array shape is correct
             ds = np.concatenate([[0], [np.dot(np.diff(z), amass)]])
         # ds = [0; diff(z)]; # in alternative simple diff of z
+
         # ... Integrate over path (ds) ...
         srho[k], _ = RTEquation.exponential_integration(1, rho, ds, 0, nl, 0.1)
         swet[k], _ = RTEquation.exponential_integration(1, wetn, ds, 0, nl, 0.1)
@@ -97,9 +106,10 @@ def tb_cloud_rte(z, p, tk, rh, denliq, denice, cldh, frq, angles, absmdl, ray_tr
         if ncld > 0:
             sliq[k] = RTEquation.cloud_integrated_density(denliq, ds, beglev, endlev)
             sice[k] = RTEquation.cloud_integrated_density(denice, ds, beglev, endlev)
+
         # ... handle each frequency ...
         # this are based on NOAA RTE fortran routines
-        for j in arange(0, nf-1).reshape(-1):
+        for j in range(0, nf):
             # Rosenkranz, personal communication, 2019/02/12 (email)
             awet, adry = RTEquation.clearsky_absorption(p, tk, e, frq[j])
             aliq, aice = RTEquation.cloudy_absorption(tk, denliq, denice, frq[j])

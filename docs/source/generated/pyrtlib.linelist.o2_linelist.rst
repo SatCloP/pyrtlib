@@ -1,9 +1,9 @@
-﻿pyrtlib.absmodel.AbsModel
-=========================
+﻿pyrtlib.linelist.o2\_linelist
+=============================
 
-.. currentmodule:: pyrtlib.absmodel
+.. currentmodule:: pyrtlib.linelist
 
-.. autoclass:: AbsModel
+.. autoclass:: o2_linelist
    :members:                                    
    :show-inheritance:                           
    :inherited-members:                          
@@ -16,16 +16,10 @@
 
    .. autosummary::
    
-      ~AbsModel.__init__
+      ~o2_linelist.__init__
    
    
 
    
-   
-   .. rubric:: Attributes
-
-   .. autosummary::
-   
-      ~AbsModel.model
    
    

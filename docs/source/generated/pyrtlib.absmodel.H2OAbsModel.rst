@@ -1,4 +1,4 @@
-pyrtlib.absmodel.H2OAbsModel
+﻿pyrtlib.absmodel.H2OAbsModel
 ============================
 
 .. currentmodule:: pyrtlib.absmodel
@@ -27,6 +27,7 @@ pyrtlib.absmodel.H2OAbsModel
 
    .. autosummary::
    
+      ~H2OAbsModel.h2oll
       ~H2OAbsModel.model
    
    

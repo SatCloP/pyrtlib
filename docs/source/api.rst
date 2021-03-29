@@ -11,7 +11,7 @@ Main script (??)
     :recursive:
 
     pyrtlib.main
-    
+
 
 Atmospheric profiles
 ====================
@@ -55,3 +55,14 @@ Utility function
     :recursive:
 
     pyrtlib.utils
+
+
+Line shape list
+===============
+
+.. autosummary::
+    :toctree: generated/
+    :template: custom-module-template.rst
+    :recursive:
+
+    pyrtlib.linelist

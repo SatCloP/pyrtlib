@@ -7,7 +7,7 @@ import warnings
 import numpy as np
 
 from .absmodel import O2AbsModel, H2OAbsModel, N2AbsModel, LiqAbsModel
-from .utils import constants, tk2b_mod, arange
+from .utils import constants, tk2b_mod
 
 
 class RTEquation:
@@ -88,7 +88,11 @@ class RTEquation:
             [type]: [description]
         """
 
-        Tb = hvk / np.log(1.0 + (1.0 / boft))
+        # fixes floa FloatingPointError: divide by zero encountered in double_scalars
+        if boft != 0:
+            Tb = hvk / np.log(1.0 + (1.0 / boft))
+        else:
+            Tb = np.nan
 
         return Tb
 
@@ -120,7 +124,7 @@ class RTEquation:
         dryn = np.zeros(p.shape)
         refindx = np.zeros(p.shape)
 
-        for i in arange(0, nl - 1).reshape(-1):
+        for i in range(0, nl):
             # Calculate dry air pressure (pa) and celsius temperature (tc).
             pa = p[i] - e[i]
             tc = tk[i] - 273.16
@@ -161,7 +165,7 @@ class RTEquation:
 
         nl = len(z)
         # Check for refractive index values that will blow up calculations.
-        for i in arange(0, nl - 1).reshape(-1):
+        for i in range(0, nl):
             if refindx[i] < 1:
                 warnings.warn('RayTrac_xxx: Negative rafractive index')
                 return
@@ -169,7 +173,7 @@ class RTEquation:
         # If angle is close to 90 degrees, make ds a height difference profile.
         if (angle >= 89 and angle <= 91) or (angle >= -91 and angle <= -89):
             ds[0] = 0.0
-            for i in arange(1, nl - 1).reshape(-1):
+            for i in range(1, nl):
                 ds[i] = z[i] - z[i - 1]
 
         # The rest of the subroutine applies only to angle other than 90 degrees.
@@ -186,7 +190,7 @@ class RTEquation:
         rl = re + z[0] + z0
         tanthl = np.tan(theta0)
         # Construct the slant path length profile.
-        for i in arange(1, nl - 1).reshape(-1):
+        for i in range(1, nl):
             r = re + z[i] + z0
             if refindx[i] == refindx[i - 1] or refindx[i] == 1. or refindx[i - 1] == 1.:
                 refbar = np.dot((refindx[i] + refindx[i - 1]), 0.5)
@@ -216,7 +220,7 @@ class RTEquation:
             ds[i] = np.sqrt(
                 (z[i] - z[i - 1]) ** 2 + np.dot(np.dot(np.dot(4.0, r), rl), ((np.sin(np.dot((phi - phil), 0.5))) ** 2)))
             if dtau != 0.0:
-                dtaua = abs(tau - taul)
+                dtaua = np.abs(tau - taul)
                 ds[i] = np.dot(ds[i], (dtaua / (np.dot(2.0, np.sin(np.dot(dtaua, 0.5))))))
             # Make upper boundary into lower boundary for next layer.
             phil = np.copy(phi)
@@ -249,13 +253,13 @@ class RTEquation:
         sxds = 0.0
         xds = np.zeros(ds.shape)
         # TODO: check index
-        for i in arange(ibeg, iend - 1).reshape(-1):
+        for i in range(ibeg, iend):
             # Check for negative x value. If found, output message and return.
             if x[i - 1] < 0.0 or x[i] < 0.0:
                 warnings.warn('Error encountered in ExpInt_xxx.m')
                 return sxds, xds
                 # Find a layer value for x in cases where integration algorithm fails.
-            elif abs(x[i] - x[i - 1]) < 1e-09:
+            elif np.abs(x[i] - x[i - 1]) < 1e-09:
                 xlayer = x[i]
             elif x[i - 1] == 0.0 or x[i] == 0.0:
                 if zeroflg == 0:
@@ -338,9 +342,9 @@ class RTEquation:
         """
         ncld = len(lbase)
         scld = 0.0
-        for l in arange(0, ncld - 1).reshape(-1):
-            for i in arange(lbase[l] + 1, ltop[l]).reshape(-1):
-                scld = scld + np.dot(ds[i], (np.dot(0.5, (dencld[i] + dencld[i - 1]))))
+        for i in range(0, ncld):
+            for j in range(lbase[i] + 1, ltop[i]):
+                scld = scld + np.dot(ds[j], (np.dot(0.5, (dencld[j] + dencld[j - 1]))))
 
         # convert the integrated value to cm.
         scld = np.dot(scld, 0.1)
@@ -400,7 +404,7 @@ class RTEquation:
             Ts = tk[0]
             Es = 1.0
             boft[nl - 1] = tk2b_mod(hvk, tk[nl - 1])
-            for i in arange((nl - 1) - 1, 0, - 1).reshape(-1):
+            for i in range(nl - 2, -1, -1):
                 boft[i] = tk2b_mod(hvk, tk[i])
                 boftlay = (boft[i + 1] + np.dot(boft[i], np.exp(-taulay[i]))) / (1.0 + np.exp(-taulay[i]))
                 batmlay = np.dot(np.dot(boftlay, np.exp(-tauprof[i + 1])), (1.0 - np.exp(-taulay[i])))
@@ -422,7 +426,7 @@ class RTEquation:
         else:
             # TODO: check index of boft variable
             boft[0] = tk2b_mod(hvk, tk[0])
-            for i in arange(1, nl - 1).reshape(-1):
+            for i in range(1, nl):
                 boft[i] = tk2b_mod(hvk, tk[i])
                 boftlay = (boft[i - 1] + np.dot(boft[i], np.exp(-taulay[i]))) / (1.0 + np.exp(-taulay[i]))
                 batmlay = np.dot(np.dot(boftlay, np.exp(- tauprof[i - 1])), (1.0 - np.exp(-taulay[i])))
@@ -481,7 +485,7 @@ class RTEquation:
 
         aliq = np.zeros(denl.shape)
         aice = np.zeros(denl.shape)
-        for i in arange(1 - 1, nl - 1).reshape(-1):
+        for i in range(0, nl):
             # Compute liquid absorption np/km.
             if denl[i] > 0:
                 aliq[i] = LiqAbsModel.liquid_water_absorption(denl[i], frq, tk[i])
@@ -534,7 +538,7 @@ class RTEquation:
         aN2 = np.zeros(p.shape)
         factor = np.dot(0.182, frq)
         db2np = np.dot(np.log(10.0), 0.1)
-        for i in arange(0, nl - 1).reshape(-1):
+        for i in range(0, nl):
             # Compute inverse temperature parameter; convert wet and dry p to kpa.
             v = 300.0 / tk[i]
             ekpa = e[i] / 10.0
@@ -547,13 +551,16 @@ class RTEquation:
                 adry[i] = np.dot((np.dot(factor, (npp + ncpp))), db2np)
 
             if H2OAbsModel.model == 'rose19sd':
-                npp, ncpp = H2OAbsModel.h2o_rosen19_sd(pdrykpa, v, ekpa, frq, nargout=2)
-                awet[i] = np.dot((np.dot(factor, (npp + ncpp))), db2np)
+                npp, ncpp = H2OAbsModel().h2o_rosen19_sd(pdrykpa, v, ekpa, frq)
+                awet[i] = factor * (npp + ncpp) * db2np
             if O2AbsModel.model == 'rose19sd':
-                npp, _ = O2AbsModel.o2abs_rosen18(pdrykpa, v, ekpa, frq)
-                aO2[i] = np.dot((np.dot(factor, npp)), db2np)
-                # C    add N2 term
-            if N2AbsModel.model == 'rose19sd':
+                npp, _ = O2AbsModel().o2abs_rosen18(pdrykpa, v, ekpa, frq)
+                aO2[i] = factor * npp * db2np
+            if O2AbsModel.model == 'rose19':
+                npp, _ = O2AbsModel().o2abs_rosen19(pdrykpa, v, ekpa, frq)
+                aO2[i] = factor * npp * db2np
+                # add N2 term
+            if N2AbsModel.model in ['rose19sd', 'rose19']:
                 aN2[i] = N2AbsModel.n2_absorption(tk[i], np.dot(pdrykpa, 10), frq)
 
             if not N2AbsModel.model:

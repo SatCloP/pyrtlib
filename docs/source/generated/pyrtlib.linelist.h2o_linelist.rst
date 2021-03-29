@@ -1,9 +1,9 @@
-﻿pyrtlib.absmodel.AbsModel
-=========================
+﻿pyrtlib.linelist.h2o\_linelist
+==============================
 
-.. currentmodule:: pyrtlib.absmodel
+.. currentmodule:: pyrtlib.linelist
 
-.. autoclass:: AbsModel
+.. autoclass:: h2o_linelist
    :members:                                    
    :show-inheritance:                           
    :inherited-members:                          
@@ -16,16 +16,10 @@
 
    .. autosummary::
    
-      ~AbsModel.__init__
+      ~h2o_linelist.__init__
    
    
 
    
-   
-   .. rubric:: Attributes
-
-   .. autosummary::
-   
-      ~AbsModel.model
    
    
