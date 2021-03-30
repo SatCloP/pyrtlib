@@ -5,9 +5,10 @@ Main script !!!(right now only for testing)!!!.
 
 import numpy as np
 import pandas as pd
+
 from .absmodel import O2AbsModel, H2OAbsModel, N2AbsModel, LiqAbsModel
-from .linelist import o2_linelist, h2o_linelist
 from .rte import RTEquation
+from .utils import import_lineshape
 
 
 def tb_cloud_rte(z, p, tk, rh, denliq, denice, cldh, frq, angles, absmdl, ray_tracing=True, from_sat=True):
@@ -33,12 +34,12 @@ def tb_cloud_rte(z, p, tk, rh, denliq, denice, cldh, frq, angles, absmdl, ray_tr
 
     # Defines models
     O2AbsModel.model = absmdl
-    O2AbsModel.o2ll = o2_linelist()
+    O2AbsModel.o2ll = import_lineshape('pyrtlib.lineshape', 'o2ll_{}'.format(absmdl))
 
     H2OAbsModel.model = absmdl
-    H2OAbsModel.h2oll = h2o_linelist()
+    H2OAbsModel.h2oll = import_lineshape('pyrtlib.lineshape', 'h2oll_{}'.format(absmdl))
 
-    N2AbsModel.model = 'rose19sd'
+    N2AbsModel.model = absmdl
     LiqAbsModel.model = absmdl
 
     # Set RTE

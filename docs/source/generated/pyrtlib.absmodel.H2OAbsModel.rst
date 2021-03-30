@@ -1,4 +1,4 @@
-﻿pyrtlib.absmodel.H2OAbsModel
+pyrtlib.absmodel.H2OAbsModel
 ============================
 
 .. currentmodule:: pyrtlib.absmodel

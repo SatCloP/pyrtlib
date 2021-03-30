@@ -1,4 +1,4 @@
-﻿pyrtlib.atmp.AtmosphericProfiles
+pyrtlib.atmp.AtmosphericProfiles
 ================================
 
 .. currentmodule:: pyrtlib.atmp

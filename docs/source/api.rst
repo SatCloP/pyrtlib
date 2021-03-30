@@ -65,4 +65,4 @@ Line shape list
     :template: custom-module-template.rst
     :recursive:
 
-    pyrtlib.linelist
+    pyrtlib.lineshape

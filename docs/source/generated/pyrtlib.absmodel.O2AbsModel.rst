@@ -1,4 +1,4 @@
-﻿pyrtlib.absmodel.O2AbsModel
+pyrtlib.absmodel.O2AbsModel
 ===========================
 
 .. currentmodule:: pyrtlib.absmodel
