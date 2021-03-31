@@ -73,7 +73,7 @@ class AtmosphericProfiles:
     SUBARCTIC_WINTER = 5
     US_STANDARD = 6
 
-    H20 = 0
+    H2O = 0
     CO2 = 1
     O3 = 2
     N2O = 3

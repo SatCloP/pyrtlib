@@ -1,0 +1,355 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>pyrtlib.lineshape &mdash; pyrtlib 1.0.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/toggleprompt.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="API reference" href="../api.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> pyrtlib
+          
+
+          
+            
+            <img src="../_static/logo_white_large.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                dev
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../api.html">API reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../api.html#main-script">Main script (??)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#atmospheric-profiles">Atmospheric profiles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#radiative-transfer-equation">Radiative Transfer Equation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#absorption-model-function">Absorption model function</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#utility-function">Utility function</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../api.html#line-shape-list">Line shape list</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">pyrtlib.lineshape</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">pyrtlib</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../api.html">API reference</a> &raquo;</li>
+        
+      <li>pyrtlib.lineshape</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            
+              <a href="https://github.com/slarosa/pyrtlib/blob/main/docs/generated/pyrtlib.lineshape.rst" class="fa fa-github"> Edit on GitHub</a>
+            
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-pyrtlib.lineshape">
+<span id="pyrtlib-lineshape"></span><h1>pyrtlib.lineshape<a class="headerlink" href="#module-pyrtlib.lineshape" title="Permalink to this headline">¶</a></h1>
+<p>This version correspond to 2018/07/23 package, where h2o_list.asc is dated July 16 2018</p>
+<p>REFERENCES FOR MEASUREMENTS (freq, W0,D in GHZ/bar, XW, XD, A, W2) updated Feb. 20, 2019
+REFERENCES FOR MEASUREMENTS (freq, W0air, W0self, Dair, Dself in GHZ/bar, Xair, Xself, XDair, XDself, W2)</p>
+<p class="rubric">References</p>
+<dl class="footnote brackets">
+<dt class="label" id="id1"><span class="brackets">1</span></dt>
+<dd><ol class="upperalpha simple" start="13">
+<li><p>Koshelev et al., JQSRT v.205, pp. 51-58 (2018)</p></li>
+</ol>
+</dd>
+<dt class="label" id="id2"><span class="brackets">2</span></dt>
+<dd><ol class="upperalpha simple" start="13">
+<li><p>Koshelev (private comm., 2019)</p></li>
+</ol>
+</dd>
+<dt class="label" id="id3"><span class="brackets">3</span></dt>
+<dd><ol class="upperalpha simple" start="7">
+<li><p>Golubiatnikov, J. MOLEC. SPEC. vol. 230, pp.196-198 (2005)</p></li>
+</ol>
+</dd>
+<dt class="label" id="id4"><span class="brackets">4</span></dt>
+<dd><ol class="upperalpha simple" start="13">
+<li><p>Koshelev et al., J. Molec. Spec. v.241, pp.101-108 (2007)</p></li>
+</ol>
+</dd>
+<dt class="label" id="id5"><span class="brackets">5</span></dt>
+<dd><p>J.-M. Colmont et al.,J. Molec. Spec. v.193, pp.233-243 (1999)</p>
+</dd>
+<dt class="label" id="id6"><span class="brackets">6</span></dt>
+<dd><ol class="upperalpha simple" start="13">
+<li><p>Tretyakov et al, JQSRT v.114 pp.109-121 (2013)</p></li>
+</ol>
+</dd>
+<dt class="label" id="id7"><span class="brackets">7</span></dt>
+<dd><ol class="upperalpha simple" start="7">
+<li><p>Golubiatnikov et al., JQSRT v.109, pp.1828-1833 (2008)</p></li>
+</ol>
+</dd>
+<dt class="label" id="id8"><span class="brackets">8</span></dt>
+<dd><ol class="upperalpha simple" start="22">
+<li><p>Podobedov et al., JQSRT v.87, pp. 377-385 (2004)</p></li>
+</ol>
+</dd>
+<dt class="label" id="id9"><span class="brackets">9</span></dt>
+<dd><ol class="upperalpha simple" start="13">
+<li><p>Koshelev, JQSRT v.112, pp.550-552 (2011)</p></li>
+</ol>
+</dd>
+<dt class="label" id="id10"><span class="brackets">10</span></dt>
+<dd><ol class="upperalpha simple" start="13">
+<li><p>Tretyakov, JQSRT v.328, pp.7-26 (2016)</p></li>
+</ol>
+</dd>
+<dt class="label" id="id11"><span class="brackets">11</span></dt>
+<dd><ol class="upperalpha simple" start="22">
+<li><p>Payne et al.,IEEE Trans. Geosci. Rem. Sens. v.46, pp.3601-3617 (2008)</p></li>
+</ol>
+</dd>
+<dt class="label" id="id12"><span class="brackets">12</span></dt>
+<dd><ol class="upperalpha simple" start="4">
+<li><p>Turner et al., IEEE Trans. Geosci. Rem. Sens. v.47 pp.3326-37 (2009)</p></li>
+</ol>
+</dd>
+</dl>
+<p>Other parameters from HITRAN2016.
+Continuum re-adjusted for new line par. Mar. 20, 2019.</p>
+<p class="rubric">Modules</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+</tbody>
+</table>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="../api.html" class="btn btn-neutral float-left" title="API reference" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, CNR-IMAA.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+<div aria-label="versions" class="rst-versions" data-toggle="rst-versions" role="note">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      <span class="fa fa-book"> Read the Docs</span>
+      v: dev
+      <span class="fa fa-caret-down"></span>
+    </span>
+    <div class="rst-other-versions">
+        
+        <dl>
+            <dt>Languages</dt>
+            
+             <strong> 
+            <dd><a href="//en/dev/">en</a></dd>
+             </strong> 
+            
+        </dl>
+        
+        
+        <dl>
+            <dt>Versions</dt>
+            
+             <strong> 
+            <dd><a href="//en/dev/">dev</a></dd>
+             </strong> 
+            
+            
+            <dd><a href="//en/main/">main</a></dd>
+            
+            
+        </dl>
+        
+        
+        <dl>
+            <dt>Downloads</dt>
+            
+            <dd><a href="//en/dev/pyrtlib-docs_en_dev.pdf">pdf</a></dd>
+            
+            <dd><a href="//en/dev/pyrtlib-docs_en_dev.epub">epub</a></dd>
+            
+        </dl>
+        
+        
+        <hr/>
+        Free document hosting provided by <a href="http://www.readthedocs.org">Read the Docs</a>.
+
+    </div>
+</div>
+
+ 
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

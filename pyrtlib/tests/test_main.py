@@ -17,7 +17,7 @@ DATA_DIR = os.path.join(TEST_DIR, 'data')
 def test_tb_cloud_with_rose19sd(datafiles):
     z, p, _, t, md = atmp.gl_atm(atmp.TROPICAL)
 
-    gkg = ppmv2gkg(md[:, atmp.H20], atmp.H20)
+    gkg = ppmv2gkg(md[:, atmp.H2O], atmp.H2O)
     rh = mr2rh(p, t, gkg)[0] / 100
 
     ang = np.array([90.])
@@ -40,7 +40,7 @@ def test_tb_cloud_with_rose19sd(datafiles):
 def test_tb_cloud_with_rose19(datafiles):
     z, p, _, t, md = atmp.gl_atm(atmp.TROPICAL)
 
-    gkg = ppmv2gkg(md[:, atmp.H20], atmp.H20)
+    gkg = ppmv2gkg(md[:, atmp.H2O], atmp.H2O)
     rh = mr2rh(p, t, gkg)[0] / 100
 
     ang = np.array([90.])
@@ -62,7 +62,7 @@ def test_tb_cloud_with_rose19(datafiles):
 def test_tb_cloud_with_rose16(datafiles):
     z, p, _, t, md = atmp.gl_atm(atmp.TROPICAL)
 
-    gkg = ppmv2gkg(md[:, atmp.H20], atmp.H20)
+    gkg = ppmv2gkg(md[:, atmp.H2O], atmp.H2O)
     rh = mr2rh(p, t, gkg)[0] / 100
 
     ang = np.array([90.])
@@ -85,7 +85,7 @@ def test_tb_cloud_with_rose16(datafiles):
 def test_tb_cloud_with_rose03(datafiles):
     z, p, _, t, md = atmp.gl_atm(atmp.TROPICAL)
 
-    gkg = ppmv2gkg(md[:, atmp.H20], atmp.H20)
+    gkg = ppmv2gkg(md[:, atmp.H2O], atmp.H2O)
     rh = mr2rh(p, t, gkg)[0] / 100
 
     ang = np.array([90.])

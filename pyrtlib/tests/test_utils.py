@@ -21,7 +21,7 @@ class Test(TestCase):
         assert_allclose(co2, mass_molecule, atol=0.001)
 
     def test_mr2rh(self):
-        gkg = ppmv2gkg(md[:, atmp.H20], atmp.H20)
+        gkg = ppmv2gkg(md[:, atmp.H2O], atmp.H2O)
         rh, rh_wmo = mr2rh(p, tk, gkg)
         rh_ex = np.array([7.37904947e-01, 7.15135305e-01, 7.35076661e-01, 4.79160577e-01,
                           3.48167127e-01, 3.76644483e-01, 3.48042202e-01, 3.20269720e-01,
@@ -53,7 +53,7 @@ class Test(TestCase):
         assert_allclose(rh_wmo / 100, rh_wmo_ex, atol=0.001)
 
     def test_ppmv2gkg(self):
-        gkg = ppmv2gkg(md[:, atmp.H20], atmp.H20)
+        gkg = ppmv2gkg(md[:, atmp.H2O], atmp.H2O)
         gkg_ex = np.array([1.61276973e+01, 1.21222067e+01, 9.54102877e+00, 5.34894703e+00,
                            2.76217137e+00, 2.08111358e+00, 1.30676020e+00, 8.01720084e-01,
                            4.74998936e-01, 2.54883546e-01, 1.18920776e-01, 4.54411709e-02,

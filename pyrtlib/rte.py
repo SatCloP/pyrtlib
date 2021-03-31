@@ -523,8 +523,7 @@ class RTEquation:
                 * adry [type]: dry air absorption profile (np/km)
 
         See also:
-
-            :py:meth:`h2o_rosen03_xxx`, :py:meth:`o2n2_rosen03_xxx`
+            :py:meth:`absmodel.H2OAbsModel().h2o_rosen03_xxx`, :py:meth:`o2n2_rosen03_xxx`
 
         .. warning::
                 * h2o_rosen03_xxx and o2n2_rosen03_xxx functions are missing!!!!!

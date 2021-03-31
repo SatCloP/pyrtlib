@@ -4,6 +4,7 @@ This class contains the absorption model used in pyrtlib.
 """
 
 import types
+from typing import Tuple, Union
 
 import numpy as np
 
@@ -22,11 +23,11 @@ class AbsModel(object):
         self._h2oll = None
 
     @property
-    def model(self):
+    def model(self) -> str:
         return self._model
 
     @model.setter
-    def model(self, model):
+    def model(self, model: str) -> None:
         if model and isinstance(model, str):
             self._model = model
         else:
@@ -38,16 +39,16 @@ class LiqAbsModel(AbsModel):
     """
 
     @staticmethod
-    def liquid_water_absorption(water=None, freq=None, temp=None):
+    def liquid_water_absorption(water: np.ndarray, freq: np.ndarray, temp: np.ndarray) -> np.ndarray:
         """Computes Absorption In Nepers/Km By Suspended Water Droplets.
 
         Args:
-            water ([type], optional): water in g/m3. Defaults to None.
-            freq ([type], optional): frequency in GHz (Valid From 0 To 1000 Ghz). Defaults to None.
-            temp ([type], optional): temperature in K. Defaults to None.
+            water (np.ndarray): water in g/m3. Defaults to None.
+            freq (np.ndarray): frequency in GHz (Valid From 0 To 1000 Ghz). Defaults to None.
+            temp (np.ndarray): temperature in K. Defaults to None.
 
         Returns:
-            [type]: [description]
+            np.ndarray: [description]
 
         References
         ----------
@@ -91,7 +92,7 @@ class N2AbsModel(AbsModel):
     """
 
     @staticmethod
-    def n2_absorption(t=None, p=None, f=None):
+    def n2_absorption(t: np.ndarray, p: np.ndarray, f: np.ndarray) -> np.ndarray:
         """Collision-Induced Power Absorption Coefficient (Neper/Km) in air
         with modification of 1.34 to account for O2-O2 and O2-N2 collisions, as calculated by [3]
 
@@ -123,7 +124,7 @@ class N2AbsModel(AbsModel):
         elif N2AbsModel.model == 'rose03':
             l, m, n = 6.5e-14, 3.6, 1.29
         else:
-            raise ValueError('[AbsN2] No model available with this name: {} . Sorry...'.format(N2AbsModel.model))
+            raise ValueError('[AbsN2] No model available with this name: {} . Sorry...'.format(AbsModel.model))
 
         bf = l * fdepen * p * p * f * f * th ** m
 
@@ -134,23 +135,52 @@ class N2AbsModel(AbsModel):
 
 class H2OAbsModel(AbsModel):
     """This class contains the absorption model used in pyrtlib.
+    
+    Example
+    -------
+
+    .. code-block:: python
+
+        import numpy as np
+        from pyrtlib.rte import RTEquation
+        from pyrtlib.absmodel import H2OAbsModel, O2AbsModel, AbsModel
+        from pyrtlib.atmp import AtmosphericProfiles as atmp
+        from pyrtlib.utils import ppmv2gkg, mr2rh, import_lineshape
+
+        z, p, d, tk, md = atmp.gl_atm(atmp.TROPICAL)
+        frq = np.arange(20, 201, 1)
+        ice = 0
+        gkg = ppmv2gkg(md[:, atmp.H2O], atmp.H2O)
+        rh = mr2rh(p, tk, gkg)[0] / 100
+
+        e, rho = RTEquation.vapor(tk, rh, ice)
+
+        AbsModel.model = 'rose16'
+        H2OAbsModel.h2oll = import_lineshape('pyrtlib.lineshape', 'h2oll_{}'.format('rose16'))
+        for i in range(0, len(z)):
+            v = 300.0 / tk[i]
+            ekpa = e[i] / 10.0
+            pdrykpa = p[i] / 10.0 - ekpa
+            for j in range(0, len(frq)):
+                _, _ = H2OAbsModel().h2o_rosen19_sd(pdrykpa, v, ekpa, frq[j])
+
     """
 
     def __init__(self):
         super(H2OAbsModel, self).__init__()
 
     @property
-    def h2oll(self):
+    def h2oll(self) -> types.MethodType:
         return self._h2oll
 
     @h2oll.setter
-    def h2oll(self, h2oll):
+    def h2oll(self, h2oll) -> None:
         if h2oll and isinstance(h2oll, types.MethodType):
             self._h2oll = h2oll
         else:
             raise ValueError("Please enter a valid absorption model")
 
-    def h2o_rosen19_sd(self, pdrykpa, vx, ekpa, frq) -> tuple:
+    def h2o_rosen19_sd(self, pdrykpa: float, vx: float, ekpa: float, frq: float) -> Tuple[np.ndarray, np.ndarray]:
         """Compute absorption coefficients in atmosphere due to water vapor
         this version should not be used with a line list older than june 2018,
         nor the new list with an older version of this subroutine.
@@ -309,17 +339,17 @@ class O2AbsModel(AbsModel):
         super(O2AbsModel, self).__init__()
 
     @property
-    def o2ll(self):
+    def o2ll(self) -> types.MethodType:
         return self._o2ll
 
     @o2ll.setter
-    def o2ll(self, o2ll):
+    def o2ll(self, o2ll) -> None:
         if o2ll and isinstance(o2ll, types.MethodType):
             self._o2ll = o2ll
         else:
             raise ValueError("Please enter a valid absorption model")
     
-    def o2abs_rosen18(self, pdrykpa, vx, ekpa, frq) -> tuple:
+    def o2abs_rosen18(self, pdrykpa: float, vx: float, ekpa: float, frq: float) -> Tuple[np.ndarray, np.ndarray]:
         """Returns power absorption coefficient due to oxygen in air,
         in nepers/km.  Multiply o2abs by 4.343 to convert to db/km.
 
@@ -343,7 +373,8 @@ class O2AbsModel(AbsModel):
             frq ([type], optional): [description]. Defaults to None.
 
         Returns:
-            [type]: [description]
+            np.ndarray: [description]
+            np.ndarray: [description]
 
         References
         ----------
@@ -438,7 +469,7 @@ class O2AbsModel(AbsModel):
 
         return npp, ncpp
 
-    def o2abs_rosen19(self, pdrykpa, vx, ekpa, frq) -> tuple:
+    def o2abs_rosen19(self, pdrykpa: float, vx: float, ekpa: float, frq: float) -> Tuple[np.ndarray, np.ndarray]:
         """Returns power absorption coefficient due to oxygen in air,
         in nepers/km. multiply o2abs2 by 4.343 to convert to db/km.
 
