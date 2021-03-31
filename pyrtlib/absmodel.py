@@ -150,7 +150,7 @@ class H2OAbsModel(AbsModel):
         else:
             raise ValueError("Please enter a valid absorption model")
 
-    def h2o_rosen19_sd(self, pdrykpa=None, vx=None, ekpa=None, frq=None) -> tuple:
+    def h2o_rosen19_sd(self, pdrykpa, vx, ekpa, frq) -> tuple:
         """Compute absorption coefficients in atmosphere due to water vapor
         this version should not be used with a line list older than june 2018,
         nor the new list with an older version of this subroutine.
@@ -192,17 +192,17 @@ class H2OAbsModel(AbsModel):
             return
 
         pvap = (rho * t) / 216.68
-        if H2OAbsModel.model == 'rose16':
+        if H2OAbsModel.model in ['rose03', 'rose16']:
             pvap = (rho * t) / 217.0
         pda = p - pvap
         den = 3.344e+16 * rho
         # continuum terms
         ti = self.h2oll.reftcon / t
         # xcf and xcs include 3 for conv. to density & stimulated emission
-        con = (self.h2oll.cf * pda * ti ** self.h2oll.xcf + self.h2oll.cs * pvap * ti ** self.h2oll.xcs) * pvap * f * f
         if H2OAbsModel.model == 'rose03':
             con = (5.43e-10 * pda * ti ** 3 + 1.8e-08 * pvap * ti ** 7.5) * pvap * f * f
-
+        else:
+            con = (self.h2oll.cf * pda * ti ** self.h2oll.xcf + self.h2oll.cs * pvap * ti ** self.h2oll.xcs) * pvap * f * f
         # nico 2019/03/18 *********************************************************
         # add resonances
         nlines = len(self.h2oll.fl)
@@ -254,7 +254,7 @@ class H2OAbsModel(AbsModel):
                 widthf = self.h2oll.w0[i] * pda * ti ** self.h2oll.x[i]
                 widths = self.h2oll.w0s[i] * pvap * ti ** self.h2oll.xs[i]
                 width = widthf + widths
-                shift = self.h2oll.sr[i] * widthf
+                shift = self.h2oll.sr[i] * (width if H2OAbsModel.model == 'rose03' else widthf)
                 wsq = width ** 2
                 s = self.h2oll.s1[i] * ti2 * np.exp(self.h2oll.b2[i] * (1. - ti))
                 df[0] = f - self.h2oll.fl[i] - shift
@@ -319,7 +319,7 @@ class O2AbsModel(AbsModel):
         else:
             raise ValueError("Please enter a valid absorption model")
 
-    def o2abs_rosen18(self, pdrykpa=None, vx=None, ekpa=None, frq=None):
+    def o2abs_rosen18(self, pdrykpa, vx, ekpa, frq) -> tuple:
         """Returns power absorption coefficient due to oxygen in air,
         in nepers/km.  Multiply o2abs by 4.343 to convert to db/km.
 
@@ -367,9 +367,6 @@ class O2AbsModel(AbsModel):
             * ABSN2 is now external
             * The continuum term is summed BEFORE O2ABS = max(O2ABS,0.)
         """
-        # model = getattr(O2AbsModel, 'model')
-        # o2ll = o2_linelist(model)
-        # o2ll = AbsModel(model).o2ll
 
         # cyh*** add the following lines *************************
         db2np = np.log(10.0) * 0.1
@@ -441,7 +438,7 @@ class O2AbsModel(AbsModel):
 
         return npp, ncpp
 
-    def o2abs_rosen19(self, pdrykpa=None, vx=None, ekpa=None, frq=None):
+    def o2abs_rosen19(self, pdrykpa, vx, ekpa, frq) -> tuple:
         """Returns power absorption coefficient due to oxygen in air,
         in nepers/km. multiply o2abs2 by 4.343 to convert to db/km.
 
@@ -495,17 +492,14 @@ class O2AbsModel(AbsModel):
             line widths as in the 60 GHz band: (1/T)**X (Koshelev et al 2016)
          3. The sign of DNU in the shape factor is corrected.
         """
-        # model = getattr(O2AbsModel, 'model')
-        # o2ll = o2_linelist(model)
-        # o2ll = AbsModel(model).o2ll
 
         # *** add the following lines *************************
         db2np = np.log(10.0) * 0.1
-        rvap = (0.01 * 8.31451) / 18.01528
+        rvap = (0.01 * 8.314510) / 18.01528
         factor = 0.182 * frq
         temp = 300.0 / vx
         pres = (pdrykpa + ekpa) * 10.0
-        vapden = ekpa * 10.0 / (rvap * temp)
+        vapden = (ekpa * 10.0) / (rvap * temp)
         freq = frq
         # *****************************************************
 
@@ -517,12 +511,13 @@ class O2AbsModel(AbsModel):
             preswv = vapden * temp / 217.
         presda = pres - preswv
         den = 0.001 * (presda * b + 1.2 * preswv * th)
-        if O2AbsModel.model == 'rose16':
+        if O2AbsModel.model in ['rose03', 'rose16']:
             den = 0.001 * (presda * b + 1.1 * preswv * th)
         if O2AbsModel.model == 'rose03':
-            dens = 0.001 * presda * th ** 0.9 + (1.1 * preswv * th)
+            dens = 0.001 * (presda * th ** 0.9 + 1.1 * preswv * th)
         dfnr = self.o2ll.wb300 * den
         pe2 = den * den
+        
         # nico intensities of the non-resonant transitions for o16-o16 and o16-o18, from jpl's line compilation
         # 1.571e-17 (o16-o16) + 1.3e-19 (o16-o18) = 1.584e-17
         summ = 1.584e-17 * freq * freq * dfnr / (th * (freq * freq + dfnr * dfnr))
@@ -531,8 +526,8 @@ class O2AbsModel(AbsModel):
         nlines = len(self.o2ll.f)
         if O2AbsModel.model == 'rose03':
             for k in range(0, nlines):
-                if k == 1:
-                    df = self.o2ll.w300[1] * dens
+                if k == 0:
+                    df = self.o2ll.w300[0] * dens
                 else:
                     df = self.o2ll.w300[k] * den
                 fcen = self.o2ll.f[k]
@@ -558,7 +553,7 @@ class O2AbsModel(AbsModel):
 
         o2abs = 1.6097e+11 * summ * presda * th ** 3
         if O2AbsModel.model == 'rose03':
-            o2abs = (5.034e+11 * summ * presda * th ** 3) / 3.14159
+            o2abs = 5.034e+11 * summ * presda * th ** 3 / 3.14159
         # o2abs = 1.004 * np.maximum(o2abs, 0.0)
         o2abs = np.maximum(o2abs, 0.0)
 
@@ -577,7 +572,8 @@ class O2AbsModel(AbsModel):
         # nico th^3 = th(from ideal gas law 2.13) * th(from the mw approx of stimulated emission 2.16 vs. 2.14) *
         # th(from the partition sum 2.20)
         if O2AbsModel.model == 'rose03':
-            ncpp = (5.034e+11 * ncpp * presda * th ** 3) / 3.14159
+            ncpp = 1.6e-17 * freq * freq * dfnr / (th * (freq * freq + dfnr * dfnr))
+            ncpp = 5.034e+11 * ncpp * presda * th ** 3 / 3.14159
         else:
             ncpp *= 1.6097e11 * presda * th ** 3  # nico: n/pi*sum0
         if O2AbsModel.model in ['rose03', 'rose16']:
