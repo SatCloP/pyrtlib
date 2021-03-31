@@ -318,7 +318,7 @@ class O2AbsModel(AbsModel):
             self._o2ll = o2ll
         else:
             raise ValueError("Please enter a valid absorption model")
-
+    
     def o2abs_rosen18(self, pdrykpa, vx, ekpa, frq) -> tuple:
         """Returns power absorption coefficient due to oxygen in air,
         in nepers/km.  Multiply o2abs by 4.343 to convert to db/km.
