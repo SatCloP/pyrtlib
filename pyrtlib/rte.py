@@ -426,12 +426,11 @@ class RTEquation:
                 boftotl = boftatm[0]
                 boftmr = boftatm[0]
         else:
-            # TODO: check index of boft variable
             boft[0] = tk2b_mod(hvk, tk[0])
             for i in range(1, nl):
                 boft[i] = tk2b_mod(hvk, tk[i])
-                boftlay = (boft[i - 1] + np.dot(boft[i], np.exp(-taulay[i]))) / (1.0 + np.exp(-taulay[i]))
-                batmlay = np.dot(np.dot(boftlay, np.exp(- tauprof[i - 1])), (1.0 - np.exp(-taulay[i])))
+                boftlay = (boft[i - 1] + boft[i] * np.exp(-taulay[i])) / (1.0 + np.exp(-taulay[i]))
+                batmlay = boftlay * np.exp(- tauprof[i - 1]) * (1.0 - np.exp(-taulay[i]))
                 boftatm[i] = boftatm[i - 1] + batmlay
                 tauprof[i] = tauprof[i - 1] + taulay[i]
             # compute the cosmic background term of the rte; compute total planck
@@ -439,7 +438,7 @@ class RTEquation:
             # to exponentiate, assume cosmic background was completely attenuated.
             if tauprof[nl - 1] < expmax:
                 boftbg = tk2b_mod(hvk, Tc)
-                bakgrnd = np.dot(boftbg, np.exp(-tauprof[nl - 1]))
+                bakgrnd = boftbg * np.exp(-tauprof[nl - 1])
                 boftotl = bakgrnd + boftatm[nl - 1]
                 boftmr = boftatm[nl - 1] / (1.0 - np.exp(-tauprof[nl - 1]))
             else:
