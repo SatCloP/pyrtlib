@@ -1,0 +1,332 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Installation Instructions &mdash; pyrtlib 1.0.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/toggleprompt.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="API reference" href="api.html" />
+    <link rel="prev" title="Welcome to pyrtlib’s documentation!" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> pyrtlib
+          
+
+          
+            
+            <img src="_static/logo_white_large.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                dev
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Installation Instructions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#python-installation-ubuntu">Python Installation (ubuntu)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#python-installation-macos">Python Installation (macos)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#virtual-environment">Virtual Environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#installing-from-source">Installing from source</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API reference</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">pyrtlib</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Installation Instructions</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            
+              <a href="https://github.com/slarosa/pyrtlib/blob/main/docs/installation.rst" class="fa fa-github"> Edit on GitHub</a>
+            
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="installation-instructions">
+<h1>Installation Instructions<a class="headerlink" href="#installation-instructions" title="Permalink to this headline">¶</a></h1>
+<p>pyrtlib can be installed on any computer supporting Python 3.6 (or higher).
+The actual installation procedure depends on the operating system. The
+instructions below are for Ubuntu.</p>
+<div class="section" id="python-installation-ubuntu">
+<h2>Python Installation (ubuntu)<a class="headerlink" href="#python-installation-ubuntu" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> sudo apt update <span class="o">&amp;&amp;</span> sudo apt upgrade
+<span class="gp">$</span> sudo apt install python3 python3-venv python3-pip python3-tk
+</pre></div>
+</div>
+</div>
+<div class="section" id="python-installation-macos">
+<h2>Python Installation (macos)<a class="headerlink" href="#python-installation-macos" title="Permalink to this headline">¶</a></h2>
+<p>Python3 installation via Homebrew</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> brew install python3
+</pre></div>
+</div>
+</div>
+<div class="section" id="virtual-environment">
+<h2>Virtual Environment<a class="headerlink" href="#virtual-environment" title="Permalink to this headline">¶</a></h2>
+<p>To install virtualenv via pip run:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> pip3 install virtualenv
+</pre></div>
+</div>
+<p>Create a new virtual environment and activate it:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> virtualenv -p python3 &lt;desired-path&gt;
+</pre></div>
+</div>
+<p>Activate the virtualenv:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> <span class="nb">source</span> &lt;desired-path&gt;/bin/activate
+</pre></div>
+</div>
+<p>Deactivate the virtualenv:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> deactivate
+</pre></div>
+</div>
+<p>Create a new virtual environment and activate it:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> python3 -m venv venv
+<span class="gp">$</span> <span class="nb">source</span> venv/bin/activate
+</pre></div>
+</div>
+</div>
+<div class="section" id="installing-from-source">
+<h2>Installing from source<a class="headerlink" href="#installing-from-source" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> tar zxvf pyrtlib.tar.gz
+<span class="gp">$</span> <span class="nb">cd</span> pyrtlib
+<span class="gp">$</span> python setup.py install --user
+</pre></div>
+</div>
+<p>pyrtlib is now ready for use from that virtual environment.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Codebase is rapidly developing and the PyPI package does not
+necessarily contain all the latest features and modifications. To get an up-to-date
+version of pyrtlib, download it directly from <a class="reference external" href="https://github.com/slarosa/pyrtlib">GitHub</a>.</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="api.html" class="btn btn-neutral float-right" title="API reference" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="index.html" class="btn btn-neutral float-left" title="Welcome to pyrtlib’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, CNR-IMAA.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+<div aria-label="versions" class="rst-versions" data-toggle="rst-versions" role="note">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      <span class="fa fa-book"> Read the Docs</span>
+      v: dev
+      <span class="fa fa-caret-down"></span>
+    </span>
+    <div class="rst-other-versions">
+        
+        <dl>
+            <dt>Languages</dt>
+            
+             <strong> 
+            <dd><a href="//en/dev/">en</a></dd>
+             </strong> 
+            
+        </dl>
+        
+        
+        <dl>
+            <dt>Versions</dt>
+            
+             <strong> 
+            <dd><a href="//en/dev/">dev</a></dd>
+             </strong> 
+            
+            
+            <dd><a href="//en/main/">main</a></dd>
+            
+            
+        </dl>
+        
+        
+        <dl>
+            <dt>Downloads</dt>
+            
+            <dd><a href="//en/dev/pyrtlib-docs_en_dev.pdf">pdf</a></dd>
+            
+            <dd><a href="//en/dev/pyrtlib-docs_en_dev.epub">epub</a></dd>
+            
+        </dl>
+        
+        
+        <hr/>
+        Free document hosting provided by <a href="http://www.readthedocs.org">Read the Docs</a>.
+
+    </div>
+</div>
+
+ 
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
