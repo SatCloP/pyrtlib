@@ -130,6 +130,10 @@ dmypy.json
 
 #PyCharm
 .idea/
+
 *.profile
 *.cprof
 console*
+
+#VScode
+.vscode/

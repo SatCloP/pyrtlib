@@ -265,7 +265,6 @@ napoleon_google_docstring = True
 # todo extension
 todo_include_todos = True
 
-
 # def make_github_url(pagename):
 #     """
 #     Generate the appropriate GH link for a given docs page.  This function
