@@ -66,12 +66,12 @@ class AtmosphericProfiles:
 
     """
 
-    TROPICAL = 1
-    MIDLATITUDE_SUMMER = 2
-    MIDLATITUDE_WINTER = 3
-    SUBARCTIC_SUMMER = 4
-    SUBARCTIC_WINTER = 5
-    US_STANDARD = 6
+    TROPICAL = 0
+    MIDLATITUDE_SUMMER = 1
+    MIDLATITUDE_WINTER = 2
+    SUBARCTIC_SUMMER = 3
+    SUBARCTIC_WINTER = 4
+    US_STANDARD = 5
 
     H2O = 0
     CO2 = 1
@@ -108,7 +108,7 @@ class AtmosphericProfiles:
     AIR = 99
 
     @staticmethod
-    def gl_atm(option=1):
+    def gl_atm(atm):
         """Returns the Atmopshere profile
         This method contains 6 model profiles:
         
@@ -144,7 +144,7 @@ class AtmosphericProfiles:
 
         .. note:: adapted from glatm.dat.  DCT 3/26/97
         """
-
+        option = atm + 1
         # MODEL 1.  TROPICAL
         if option == 1:
             #
