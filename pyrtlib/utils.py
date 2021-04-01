@@ -13,11 +13,11 @@ from typing import Tuple, Optional
 import numpy as np
 
 
-def import_lineshape(modulename, name):
+def import_lineshape(name):
     """ Import a named object from a module in the context of this function.
     """
     try:
-        module = __import__(modulename, globals(), locals(), [name])
+        module = __import__('pyrtlib.lineshape', globals(), locals(), [name])
     except ImportError:
         return None
     return vars(module)[name]

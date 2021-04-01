@@ -34,10 +34,10 @@ def tb_cloud_rte(z, p, tk, rh, denliq, denice, cldh, frq, angles, absmdl, ray_tr
 
     # Defines models
     O2AbsModel.model = absmdl
-    O2AbsModel.o2ll = import_lineshape('pyrtlib.lineshape', 'o2ll_{}'.format(absmdl))
+    O2AbsModel.o2ll = import_lineshape('o2ll_{}'.format(absmdl))
 
     H2OAbsModel.model = absmdl
-    H2OAbsModel.h2oll = import_lineshape('pyrtlib.lineshape', 'h2oll_{}'.format(absmdl))
+    H2OAbsModel.h2oll = import_lineshape('h2oll_{}'.format(absmdl))
 
     N2AbsModel.model = absmdl
     LiqAbsModel.model = absmdl

@@ -13,7 +13,7 @@
 # import os
 # import sys
 # sys.path.insert(0, os.path.abspath('.'))
-
+import warnings
 
 # -- Project information -----------------------------------------------------
 
@@ -40,6 +40,7 @@ extensions = [
     'sphinx_toggleprompt',
     'sphinx.ext.todo',
     'sphinx.ext.githubpages',
+    'sphinx_gallery.gen_gallery',
     # 'rst2pdf.pdfbuilder',
 ]
 
@@ -71,6 +72,7 @@ html_theme = 'sphinx_rtd_theme'
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
+
 html_logo = "../../resources/logo/logo_white_large.png"
 html_theme_options = {
     'logo_only': False,
@@ -112,6 +114,41 @@ texinfo_documents = [
      'Salvatore Larosa and contributors', 'pyrtlib', 'One line description of project.',
      'Miscellaneous'),
 ]
+
+# # == Disable search functionality for html
+# def on_builder_inited(app):
+#     if app.builder.name == 'html':
+#         app.builder.search = False
+
+# # Register custom CSS files.
+# def setup(app):
+#    app.add_css_file("custom.css")
+#    # == disable search functionality for html
+#    app.connect('builder-inited', on_builder_inited)
+
+# suppress "WARNING: Footnote [1] is not referenced." messages
+# https://github.com/pvlib/pvlib-python/issues/837
+suppress_warnings = ['ref.footnote']
+
+# settings for sphinx-gallery
+sphinx_gallery_conf = {
+    'examples_dirs': ['../examples'],  # location of gallery scripts
+    'gallery_dirs': ['auto_examples'],  # location of generated output
+    # sphinx-gallery only shows plots from plot_*.py files by default:
+    # 'filename_pattern': '*.py',
+
+    # directory where function/class granular galleries are stored
+    'backreferences_dir': 'generated/gallery_backreferences',
+
+    # Modules for which function/class level galleries are created. In
+    # this case only pvlib, could include others though.  must be tuple of str
+    'doc_module': ('pyrtlib',),
+}
+# supress warnings in gallery output
+# https://sphinx-gallery.github.io/stable/configuration.html
+warnings.filterwarnings("ignore", category=UserWarning,
+                        message='Matplotlib is currently using agg, which is a'
+                                ' non-GUI backend, so cannot show the figure.')
 
 import os
 import sys
@@ -227,3 +264,50 @@ napoleon_google_docstring = True
 
 # todo extension
 todo_include_todos = True
+
+
+# def make_github_url(pagename):
+#     """
+#     Generate the appropriate GH link for a given docs page.  This function
+#     is intended for use in sphinx template files.
+#     The target URL is built differently based on the type of page.  Sphinx
+#     provides templates with a built-in `pagename` variable that is the path
+#     at the end of the URL, without the extension.  For instance,
+#     https://pvlib-python.rtfd.org/en/stable/auto_examples/plot_singlediode.html
+#     will have pagename = "auto_examples/plot_singlediode".
+#     """
+
+#     URL_BASE = "https://github.com/pyrtlib/pyrtlib/blob/main/"
+
+#     # is it a gallery page?
+#     if any(d in pagename for d in sphinx_gallery_conf['gallery_dirs']):
+#         if pagename.split("/")[-1] == "index":
+#             example_file = "README.rst"
+#         else:
+#             example_file = pagename.split("/")[-1] + ".py"
+#         target_url = URL_BASE + "docs/examples/" + example_file
+
+#     # is it an API autogen page?
+#     elif "generated" in pagename:
+#         # pagename looks like "generated/pvlib.location.Location"
+#         qualname = pagename.split("/")[-1]
+#         obj, module = get_obj_module(qualname)
+#         path = module.__name__.replace(".", "/") + ".py"
+#         target_url = URL_BASE + path
+#         # add line numbers if possible:
+#         start, end = get_linenos(obj)
+#         if start and end:
+#             target_url += f'#L{start}-L{end}'
+
+#     # Just a normal source RST page
+#     else:
+#         target_url = URL_BASE + "docs/sphinx/source/" + pagename + ".rst"
+
+#     return target_url
+
+
+# # variables to pass into the HTML templating engine; these are accessible from
+# # _templates/breadcrumbs.html
+# html_context = {
+#     'make_github_url': make_github_url,
+# }

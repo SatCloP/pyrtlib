@@ -1,4 +1,4 @@
-pyrtlib.absmodel.LiqAbsModel
+﻿pyrtlib.absmodel.LiqAbsModel
 ============================
 
 .. currentmodule:: pyrtlib.absmodel
@@ -27,6 +27,8 @@ pyrtlib.absmodel.LiqAbsModel
 
    .. autosummary::
    
+      ~LiqAbsModel.h2oll
       ~LiqAbsModel.model
+      ~LiqAbsModel.o2ll
    
    

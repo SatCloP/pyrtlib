@@ -1,7 +1,7 @@
-pyrtlib.lineshape.o2ll\_rose19
+pyrtlib.lineshape.o2ll\_rose17
 ==============================
 
-.. automodule:: pyrtlib.lineshape.o2ll_rose19
+.. automodule:: pyrtlib.lineshape.o2ll_rose17
   
    
    

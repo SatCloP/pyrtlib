@@ -3,6 +3,7 @@
 This class contains the main Radiative Transfer Equation functions.
 """
 import warnings
+from typing import Tuple
 
 import numpy as np
 
@@ -352,7 +353,8 @@ class RTEquation:
         return scld
 
     @staticmethod
-    def planck(frq=None, tk=None, taulay=None, *args, **kwargs):
+    def planck(frq: np.ndarray, tk: np.ndarray, taulay: np.ndarray) -> Tuple[
+        np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
         """  Computes the modified planck function (equation (4) in schroeder and
         westwater, 1992: guide to passive microwave weighting function
         calculations) for the cosmic background temperature, the mean radiating
@@ -385,7 +387,7 @@ class RTEquation:
         Tc = constants('Tcosmicbkg')[0]
         h = constants('planck')[0]
         k = constants('boltzmann')[0]
-        fHz = np.dot(frq, 1000000000.0)
+        fHz = np.dot(frq, 1e9)
 
         hvk = np.dot(fHz, h) / k
         # maximum absolute value for exponential function argument
@@ -549,11 +551,11 @@ class RTEquation:
             if O2AbsModel.model in ['rose19sd', 'rose19']:
                 npp, ncpp = O2AbsModel().o2abs_rosen18(pdrykpa, v, ekpa, frq)
                 aO2[i] = factor * npp * db2np
-            if O2AbsModel.model in ['rose03', 'rose16']:
+            if O2AbsModel.model in ['rose03', 'rose16', 'rose17']:
                 npp, ncpp = O2AbsModel().o2abs_rosen19(pdrykpa, v, ekpa, frq)
                 aO2[i] = factor * (npp + ncpp) * db2np
             # add N2 term
-            if N2AbsModel.model not in ['rose03', 'rose16']:
+            if N2AbsModel.model not in ['rose03', 'rose16', 'rose17']:
                 aN2[i] = N2AbsModel.n2_absorption(tk[i], np.dot(pdrykpa, 10), frq)
 
             if not N2AbsModel.model:
