@@ -72,7 +72,7 @@ Installing from source
 
     $ tar zxvf pyrtlib.tar.gz
     $ cd pyrtlib
-    $ python setup.py install --user
+    $ python3 setup.py install --user
 
 pyrtlib is now ready for use from that virtual environment.
 
