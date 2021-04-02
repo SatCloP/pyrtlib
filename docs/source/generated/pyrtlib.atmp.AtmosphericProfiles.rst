@@ -38,8 +38,8 @@
       ~AtmosphericProfiles.CO
       ~AtmosphericProfiles.CO2
       ~AtmosphericProfiles.COF2
-      ~AtmosphericProfiles.H20
       ~AtmosphericProfiles.H2CO
+      ~AtmosphericProfiles.H2O
       ~AtmosphericProfiles.H2O2
       ~AtmosphericProfiles.H2S
       ~AtmosphericProfiles.HBR

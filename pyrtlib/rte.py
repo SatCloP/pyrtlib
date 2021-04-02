@@ -3,6 +3,7 @@
 This class contains the main Radiative Transfer Equation functions.
 """
 import warnings
+from typing import Tuple
 
 import numpy as np
 
@@ -352,7 +353,8 @@ class RTEquation:
         return scld
 
     @staticmethod
-    def planck(frq=None, tk=None, taulay=None, *args, **kwargs):
+    def planck(frq: np.ndarray, tk: np.ndarray, taulay: np.ndarray) -> Tuple[
+        np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
         """  Computes the modified planck function (equation (4) in schroeder and
         westwater, 1992: guide to passive microwave weighting function
         calculations) for the cosmic background temperature, the mean radiating
@@ -385,7 +387,7 @@ class RTEquation:
         Tc = constants('Tcosmicbkg')[0]
         h = constants('planck')[0]
         k = constants('boltzmann')[0]
-        fHz = np.dot(frq, 1000000000.0)
+        fHz = np.dot(frq, 1e9)
 
         hvk = np.dot(fHz, h) / k
         # maximum absolute value for exponential function argument
@@ -424,12 +426,11 @@ class RTEquation:
                 boftotl = boftatm[0]
                 boftmr = boftatm[0]
         else:
-            # TODO: check index of boft variable
             boft[0] = tk2b_mod(hvk, tk[0])
             for i in range(1, nl):
                 boft[i] = tk2b_mod(hvk, tk[i])
-                boftlay = (boft[i - 1] + np.dot(boft[i], np.exp(-taulay[i]))) / (1.0 + np.exp(-taulay[i]))
-                batmlay = np.dot(np.dot(boftlay, np.exp(- tauprof[i - 1])), (1.0 - np.exp(-taulay[i])))
+                boftlay = (boft[i - 1] + boft[i] * np.exp(-taulay[i])) / (1.0 + np.exp(-taulay[i]))
+                batmlay = boftlay * np.exp(- tauprof[i - 1]) * (1.0 - np.exp(-taulay[i]))
                 boftatm[i] = boftatm[i - 1] + batmlay
                 tauprof[i] = tauprof[i - 1] + taulay[i]
             # compute the cosmic background term of the rte; compute total planck
@@ -437,7 +438,7 @@ class RTEquation:
             # to exponentiate, assume cosmic background was completely attenuated.
             if tauprof[nl - 1] < expmax:
                 boftbg = tk2b_mod(hvk, Tc)
-                bakgrnd = np.dot(boftbg, np.exp(-tauprof[nl - 1]))
+                bakgrnd = boftbg * np.exp(-tauprof[nl - 1])
                 boftotl = bakgrnd + boftatm[nl - 1]
                 boftmr = boftatm[nl - 1] / (1.0 - np.exp(-tauprof[nl - 1]))
             else:
@@ -523,8 +524,7 @@ class RTEquation:
                 * adry [type]: dry air absorption profile (np/km)
 
         See also:
-
-            :py:meth:`h2o_rosen03_xxx`, :py:meth:`o2n2_rosen03_xxx`
+            :py:meth:`absmodel.H2OAbsModel().h2o_rosen03_xxx`, :py:meth:`o2n2_rosen03_xxx`
 
         .. warning::
                 * h2o_rosen03_xxx and o2n2_rosen03_xxx functions are missing!!!!!
@@ -543,24 +543,18 @@ class RTEquation:
             v = 300.0 / tk[i]
             ekpa = e[i] / 10.0
             pdrykpa = p[i] / 10.0 - ekpa
-            if H2OAbsModel.model == 'rose03':
-                # Compute H2O and O2 absorption (dB/km) and convert to np/km.
-                npp, ncpp = h2o_rosen03_xxx(pdrykpa, v, ekpa, frq, nargout=2)
-                awet[i] = np.dot((np.dot(factor, (npp + ncpp))), db2np)
-                npp, ncpp = o2n2_rosen03_xxx(pdrykpa, v, ekpa, frq, nargout=2)
-                adry[i] = np.dot((np.dot(factor, (npp + ncpp))), db2np)
 
-            if H2OAbsModel.model == 'rose19sd':
-                npp, ncpp = H2OAbsModel().h2o_rosen19_sd(pdrykpa, v, ekpa, frq)
-                awet[i] = factor * (npp + ncpp) * db2np
-            if O2AbsModel.model == 'rose19sd':
-                npp, _ = O2AbsModel().o2abs_rosen18(pdrykpa, v, ekpa, frq)
+            # if H2OAbsModel.model == 'rose19sd':
+            npp, ncpp = H2OAbsModel().h2o_rosen19_sd(pdrykpa, v, ekpa, frq)
+            awet[i] = factor * (npp + ncpp) * db2np
+            if O2AbsModel.model in ['rose19sd', 'rose19']:
+                npp, ncpp = O2AbsModel().o2abs_rosen18(pdrykpa, v, ekpa, frq)
                 aO2[i] = factor * npp * db2np
-            if O2AbsModel.model == 'rose19':
-                npp, _ = O2AbsModel().o2abs_rosen19(pdrykpa, v, ekpa, frq)
-                aO2[i] = factor * npp * db2np
-                # add N2 term
-            if N2AbsModel.model in ['rose19sd', 'rose19']:
+            if O2AbsModel.model in ['rose03', 'rose16', 'rose17']:
+                npp, ncpp = O2AbsModel().o2abs_rosen19(pdrykpa, v, ekpa, frq)
+                aO2[i] = factor * (npp + ncpp) * db2np
+            # add N2 term
+            if N2AbsModel.model not in ['rose03', 'rose16', 'rose17']:
                 aN2[i] = N2AbsModel.n2_absorption(tk[i], np.dot(pdrykpa, 10), frq)
 
             if not N2AbsModel.model:

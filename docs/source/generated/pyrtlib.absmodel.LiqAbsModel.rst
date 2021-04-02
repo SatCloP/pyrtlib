@@ -27,6 +27,8 @@
 
    .. autosummary::
    
+      ~LiqAbsModel.h2oll
       ~LiqAbsModel.model
+      ~LiqAbsModel.o2ll
    
    

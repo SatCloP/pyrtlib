@@ -1,4 +1,4 @@
 *.swp
 /_build
 /doctrees
-/source/generated
+/source/_build

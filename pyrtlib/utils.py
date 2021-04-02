@@ -8,8 +8,19 @@ __date__ = 'March 2021'
 __copyright__ = '(C) 2021, CNR-IMAA'
 
 from functools import wraps
+from typing import Tuple, Optional
 
 import numpy as np
+
+
+def import_lineshape(name):
+    """ Import a named object from a module in the context of this function.
+    """
+    try:
+        module = __import__('pyrtlib.lineshape', globals(), locals(), [name])
+    except ImportError:
+        return None
+    return vars(module)[name]
 
 
 def function(f):
@@ -51,7 +62,7 @@ def arange(start, stop, step=1, **kwargs):
                      **kwargs).reshape(1, -1)
 
 
-def constants(string: str) -> tuple:
+def constants(string: str) -> Tuple[float, str]:
     """
     This routine will provide values and units for all the
     universal constants that I needed in my work.
@@ -272,7 +283,7 @@ def mr2rh(p: np.ndarray, t: np.ndarray, w: np.ndarray, Tconvert: np.ndarray = No
     return rh1, rh2
 
 
-def mr2rho(mr=None, tk=None, p=None, *args, **kwargs):
+def mr2rho(mr: np.ndarray, tk: np.ndarray, p: np.ndarray) -> np.ndarray:
     """Determine water vapor density (g/m3) given
     reference pressure (mbar), temperature (t,K), and
     water vapor mass mixing ratio (g/kg)
@@ -304,7 +315,7 @@ def mr2rho(mr=None, tk=None, p=None, *args, **kwargs):
     return rho
 
 
-def mr2e(p=None, mr=None, *args, **kwargs):
+def mr2e(p: np.ndarray, mr: np.ndarray) -> np.ndarray:
     """Compute H2O partial pressure (e,mbar) given
     pressure (p,mbar) and H2O mass mixing ratio (mr,g/kg)
 
@@ -325,7 +336,7 @@ def mr2e(p=None, mr=None, *args, **kwargs):
     return e
 
 
-def e2mr(p=None, e=None, *args, **kwargs):
+def e2mr(p: np.ndarray, e: np.ndarray) -> np.ndarray:
     """Compute H2O mass mixing ratio (mr,g/kg) given
     pressure (p,mbar) and H2O partial pressure (e,mbar)
         
@@ -346,7 +357,7 @@ def e2mr(p=None, e=None, *args, **kwargs):
     return mr
 
 
-def satmix(p, T, Tconvert=None, *args, **kwargs):
+def satmix(p: np.ndarray, T: np.ndarray, Tconvert: Optional[np.ndarray] = None) -> np.ndarray:
     """Compute saturation mixing ratio [g/kg] given reference pressure, 
     p [mbar] and temperature, T [K].  If Tconvert input, the calculation uses 
     the saturation vapor pressure over ice (opposed to over water) 
@@ -375,7 +386,7 @@ def satmix(p, T, Tconvert=None, *args, **kwargs):
     return wsat
 
 
-def satvap(T, Tconvert=None):
+def satvap(T, Tconvert: Optional[np.ndarray] = None) -> np.ndarray:
     """compute saturation vapor pressure [mbar] given temperature, T [K].
     If Tconvert is input, the calculation uses the saturation vapor 
     pressure over ice (opposed to over water) for temperatures less than 
@@ -397,7 +408,6 @@ def satvap(T, Tconvert=None):
 
     # saturation pressure over ice if needed
     if Tconvert:
-        # TODO: could the find() function be replaced with numpy.where()????
         ind = np.nonzero(T <= Tconvert)
         # Goff Gratch formulation, over ice
         esat[ind] = esice_goffgratch(T(ind))
@@ -405,7 +415,7 @@ def satvap(T, Tconvert=None):
     return esat
 
 
-def eswat_goffgratch(T=None, *args, **kwargs):
+def eswat_goffgratch(T: np.ndarray) -> np.ndarray:
     """Compute water vapor saturation pressure over water
     using Goff-Gratch formulation.  Adopted from PvD's 
     svp_water.pro.
@@ -451,7 +461,7 @@ def eswat_goffgratch(T=None, *args, **kwargs):
     return svp
 
 
-def esice_goffgratch(T=None, *args, **kwargs):
+def esice_goffgratch(T: np.ndarray) -> np.ndarray:
     """Compute water vapor saturation pressure over ice
     using Goff-Gratch formulation.  Adopted from PvD's 
     svp_ice.pro.
@@ -488,7 +498,7 @@ def esice_goffgratch(T=None, *args, **kwargs):
     return svp
 
 
-def tk2b_mod(hvk=None, T=None, *args, **kwargs):
+def tk2b_mod(hvk: np.ndarray, T: np.ndarray) -> np.ndarray:
     r"""[summary]
 
     .. math::
@@ -512,7 +522,7 @@ def tk2b_mod(hvk=None, T=None, *args, **kwargs):
     return Btilde
 
 
-def dilec12(f=None, tk=None, *args, **kwargs):
+def dilec12(f: np.ndarray, tk: np.ndarray) -> np.ndarray:
     """Computes the complex dielectric constant for liquid water,
     with a negative imaginary part representing dissipation.
 
@@ -568,7 +578,7 @@ def dilec12(f=None, tk=None, *args, **kwargs):
     return kappa
 
 
-def dcerror(x, y, *args, **kwargs):
+def dcerror(x: np.ndarray, y: np.ndarray) -> np.ndarray:
     """Csixth-Order Approx To The Complex Error Function Of z=x+iy.
     cerror = exp(-z^2)erfc(-iz)
     This version is double precision and valid in all quadrants.

@@ -26,6 +26,8 @@
 
    .. autosummary::
    
+      ~AbsModel.h2oll
       ~AbsModel.model
+      ~AbsModel.o2ll
    
    

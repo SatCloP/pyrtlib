@@ -3,8 +3,11 @@
 This class contains the absorption model used in pyrtlib.
 """
 
-import numpy as np
 import types
+from typing import Tuple
+
+import numpy as np
+
 from .utils import dilec12, dcerror
 
 
@@ -20,13 +23,35 @@ class AbsModel(object):
         self._h2oll = None
 
     @property
-    def model(self):
+    def model(self) -> str:
         return self._model
 
     @model.setter
-    def model(self, model):
+    def model(self, model: str) -> None:
         if model and isinstance(model, str):
             self._model = model
+        else:
+            raise ValueError("Please enter a valid absorption model")
+
+    @property
+    def h2oll(self) -> types.MethodType:
+        return self._h2oll
+
+    @h2oll.setter
+    def h2oll(self, h2oll) -> None:
+        if h2oll and isinstance(h2oll, types.MethodType):
+            self._h2oll = h2oll
+        else:
+            raise ValueError("Please enter a valid absorption model")
+
+    @property
+    def o2ll(self) -> types.MethodType:
+        return self._o2ll
+
+    @o2ll.setter
+    def o2ll(self, o2ll) -> None:
+        if o2ll and isinstance(o2ll, types.MethodType):
+            self._o2ll = o2ll
         else:
             raise ValueError("Please enter a valid absorption model")
 
@@ -36,16 +61,16 @@ class LiqAbsModel(AbsModel):
     """
 
     @staticmethod
-    def liquid_water_absorption(water=None, freq=None, temp=None):
+    def liquid_water_absorption(water: np.ndarray, freq: np.ndarray, temp: np.ndarray) -> np.ndarray:
         """Computes Absorption In Nepers/Km By Suspended Water Droplets.
 
         Args:
-            water ([type], optional): water in g/m3. Defaults to None.
-            freq ([type], optional): frequency in GHz (Valid From 0 To 1000 Ghz). Defaults to None.
-            temp ([type], optional): temperature in K. Defaults to None.
+            water (np.ndarray): water in g/m3. Defaults to None.
+            freq (np.ndarray): frequency in GHz (Valid From 0 To 1000 Ghz). Defaults to None.
+            temp (np.ndarray): temperature in K. Defaults to None.
 
         Returns:
-            [type]: [description]
+            np.ndarray: [description]
 
         References
         ----------
@@ -64,7 +89,7 @@ class LiqAbsModel(AbsModel):
             abliq = 0
             return abliq
 
-        if LiqAbsModel.model == 'ros03':
+        if LiqAbsModel.model == 'rose03':
             theta1 = 1.0 - 300.0 / temp
             eps0 = 77.66 - np.dot(103.3, theta1)
             eps1 = np.dot(0.0671, eps0)
@@ -72,7 +97,7 @@ class LiqAbsModel(AbsModel):
             fp = np.dot((np.dot(316.0, theta1) + 146.4), theta1) + 20.2
             fs = np.dot(39.8, fp)
             eps = (eps0 - eps1) / np.complex(1.0, freq / fp) + (eps1 - eps2) / complex(1.0, freq / fs) + eps2
-        elif LiqAbsModel.model == 'ros16':
+        elif LiqAbsModel.model in ['rose17', 'rose16', 'rose19', 'rose19sd']:
             eps = dilec12(freq, temp)
         else:
             raise ValueError('[AbsLiq] No model available with this name: {} . Sorry...'.format(LiqAbsModel.model))
@@ -89,7 +114,7 @@ class N2AbsModel(AbsModel):
     """
 
     @staticmethod
-    def n2_absorption(t=None, p=None, f=None):
+    def n2_absorption(t: np.ndarray, p: np.ndarray, f: np.ndarray) -> np.ndarray:
         """Collision-Induced Power Absorption Coefficient (Neper/Km) in air
         with modification of 1.34 to account for O2-O2 and O2-N2 collisions, as calculated by [3]
 
@@ -114,14 +139,14 @@ class N2AbsModel(AbsModel):
 
         th = 300.0 / t
         fdepen = 0.5 + 0.5 / (1.0 + (f / 450.0) ** 2)
-        if N2AbsModel.model in ['ros16', 'ros17', 'rose19sd']:
+        if N2AbsModel.model in ['rose16', 'rose17', 'rose19', 'rose19sd']:
             l, m, n = 6.5e-14, 3.6, 1.34
-        elif N2AbsModel.model in ['ros18', 'rose19']:
+        elif N2AbsModel.model in ['rose18']:
             l, m, n = 9.9e-14, 3.22, 1
-        elif N2AbsModel.model == 'ros03':
+        elif N2AbsModel.model == 'rose03':
             l, m, n = 6.5e-14, 3.6, 1.29
         else:
-            raise ValueError('[AbsN2] No model available with this name: {} . Sorry...'.format(N2AbsModel.model))
+            raise ValueError('[AbsN2] No model available with this name: {} . Sorry...'.format(AbsModel.model))
 
         bf = l * fdepen * p * p * f * f * th ** m
 
@@ -137,18 +162,7 @@ class H2OAbsModel(AbsModel):
     def __init__(self):
         super(H2OAbsModel, self).__init__()
 
-    @property
-    def h2oll(self):
-        return self._h2oll
-
-    @h2oll.setter
-    def h2oll(self, h2oll):
-        if h2oll and isinstance(h2oll, types.MethodType):
-            self._h2oll = h2oll
-        else:
-            raise ValueError("Please enter a valid absorption model")
-
-    def h2o_rosen19_sd(self, pdrykpa=None, vx=None, ekpa=None, frq=None) -> tuple:
+    def h2o_rosen19_sd(self, pdrykpa: float, vx: float, ekpa: float, frq: float) -> Tuple[np.ndarray, np.ndarray]:
         """Compute absorption coefficients in atmosphere due to water vapor
         this version should not be used with a line list older than june 2018,
         nor the new list with an older version of this subroutine.
@@ -168,6 +182,34 @@ class H2OAbsModel(AbsModel):
         References
         ----------
         .. [1] Rosenkranz, P.W.: Line-By-Line Microwave Radiative Transfer (Non-Scattering), Remote Sens. Code Library, Doi:10.21982/M81013, 2017
+
+        Example
+        -------
+
+        .. code-block:: python
+
+            import numpy as np
+            from pyrtlib.rte import RTEquation
+            from pyrtlib.absmodel import H2OAbsModel, AbsModel
+            from pyrtlib.atmp import AtmosphericProfiles as atmp
+            from pyrtlib.utils import ppmv2gkg, mr2rh, import_lineshape
+
+            z, p, d, tk, md = atmp.gl_atm(atmp.TROPICAL)
+            frq = np.arange(20, 201, 1)
+            ice = 0
+            gkg = ppmv2gkg(md[:, atmp.H2O], atmp.H2O)
+            rh = mr2rh(p, tk, gkg)[0] / 100
+
+            e, rho = RTEquation.vapor(tk, rh, ice)
+
+            AbsModel.model = 'rose16'
+            H2OAbsModel.h2oll = import_lineshape('pyrtlib.lineshape', 'h2oll_{}'.format('rose16'))
+            for i in range(0, len(z)):
+                v = 300.0 / tk[i]
+                ekpa = e[i] / 10.0
+                pdrykpa = p[i] / 10.0 - ekpa
+                for j in range(0, len(frq)):
+                    _, _ = H2OAbsModel().h2o_rosen19_sd(pdrykpa, v, ekpa, frq[j])
 
         """
         # nico: the best-fit voigt are given in koshelev et al. 2018, table 2 (rad,
@@ -190,56 +232,104 @@ class H2OAbsModel(AbsModel):
             return
 
         pvap = (rho * t) / 216.68
-
+        if H2OAbsModel.model in ['rose03', 'rose16', 'rose17']:
+            pvap = (rho * t) / 217.0
         pda = p - pvap
-        den = 3.344e+16 * rho
+        if H2OAbsModel.model in ['rose03', 'rose16']:
+            den = 3.335e+16 * rho
+        else:
+            den = 3.344e+16 * rho
         # continuum terms
         ti = self.h2oll.reftcon / t
         # xcf and xcs include 3 for conv. to density & stimulated emission
-
-        con = (self.h2oll.cf * pda * ti ** self.h2oll.xcf + self.h2oll.cs * pvap * ti ** self.h2oll.xcs) * pvap * f * f
-
+        if H2OAbsModel.model == 'rose03':
+            con = (5.43e-10 * pda * ti ** 3 + 1.8e-08 * pvap * ti ** 7.5) * pvap * f * f
+        else:
+            con = (self.h2oll.cf * pda * ti ** self.h2oll.xcf + self.h2oll.cs * pvap * ti ** self.h2oll.xcs) * pvap * f * f
         # nico 2019/03/18 *********************************************************
         # add resonances
         nlines = len(self.h2oll.fl)
         ti = self.h2oll.reftline / t
-        tiln = np.log(ti)
-        ti2 = np.exp(2.5 * tiln)
-
-        summ = 0.0
         df = np.zeros((2, 1))
-        for i in range(0, nlines):
-            width0 = self.h2oll.w0[i] * pda * ti ** self.h2oll.x[i] + self.h2oll.w0s[i] * pvap * ti ** self.h2oll.xs[i]
-            width2 = self.h2oll.w2[i] * pda + self.h2oll.w2s[i] * pvap
 
-            shiftf = self.h2oll.sh[i] * pda * (1. - self.h2oll.aair[i] * tiln) * ti ** self.h2oll.xh[i]
-            shifts = self.h2oll.shs[i] * pvap * (1. - self.h2oll.aself[i] * tiln) * ti ** self.h2oll.xhs[i]
-            shift = shiftf + shifts
-            # nico: thus using the best-fit voigt (shift instead of shift0 and shift2)
-            wsq = width0 ** 2
-            s = self.h2oll.s1[i] * ti2 * np.exp(self.h2oll.b2[i] * (1. - ti))
-            df[0] = f - self.h2oll.fl[i] - shift
-            df[1] = f + self.h2oll.fl[i] + shift
-            base = width0 / (562500.0 + wsq)
-            res = 0.0
-            for j in range(0, 2):
-                # if(i.eq.1 .and. j.eq.1 .and. abs(df(j)).lt.10.*width0) then
-                # WIDTH2>0.0 & J==1 & abs(DF(J)) < 10*WIDTH0
-                # width2 > 0 and j == 1 and abs(df[j]) < np.dot(10, width0)
-                if width2 > 0 and j == 0 and np.abs(df[j]) < (10 * width0):
-                    # speed-dependent resonant shape factor
-                    # double complex dcerror,xc,xrt,pxw,a
-                    xc = np.complex((width0 - np.dot(1.5, width2)), df[j]) / width2
-                    xrt = np.sqrt(xc)
+        if H2OAbsModel.model == 'rose19sd':
+            tiln = np.log(ti)
+            ti2 = np.exp(2.5 * tiln)
+            summ = 0.0
+            for i in range(0, nlines):
+                width0 = self.h2oll.w0[i] * pda * ti ** self.h2oll.x[i] + self.h2oll.w0s[i] * pvap * ti ** \
+                         self.h2oll.xs[i]
+                width2 = self.h2oll.w2[i] * pda + self.h2oll.w2s[i] * pvap
 
-                    pxw = 1.77245385090551603 * xrt * dcerror(-np.imag(xrt), np.real(xrt))
-                    sd = 2.0 * (1.0 - pxw) / width2
-                    res = res + np.real(sd) - base
-                else:
+                shiftf = self.h2oll.sh[i] * pda * (1. - self.h2oll.aair[i] * tiln) * ti ** self.h2oll.xh[i]
+                shifts = self.h2oll.shs[i] * pvap * (1. - self.h2oll.aself[i] * tiln) * ti ** self.h2oll.xhs[i]
+                shift = shiftf + shifts
+                # nico: thus using the best-fit voigt (shift instead of shift0 and shift2)
+                wsq = width0 ** 2
+                s = self.h2oll.s1[i] * ti2 * np.exp(self.h2oll.b2[i] * (1. - ti))
+                df[0] = f - self.h2oll.fl[i] - shift
+                df[1] = f + self.h2oll.fl[i] + shift
+                base = width0 / (562500.0 + wsq)
+                res = 0.0
+                for j in range(0, 2):
+                    # if(i.eq.1 .and. j.eq.1 .and. abs(df(j)).lt.10.*width0) then
+                    # WIDTH2>0.0 & J==1 & abs(DF(J)) < 10*WIDTH0
+                    # width2 > 0 and j == 1 and abs(df[j]) < np.dot(10, width0)
+                    if width2 > 0 and j == 0 and np.abs(df[j]) < (10 * width0):
+                        # speed-dependent resonant shape factor
+                        # double complex dcerror,xc,xrt,pxw,a
+                        xc = np.complex((width0 - np.dot(1.5, width2)), df[j]) / width2
+                        xrt = np.sqrt(xc)
+
+                        pxw = 1.77245385090551603 * xrt * dcerror(-np.imag(xrt), np.real(xrt))
+                        sd = 2.0 * (1.0 - pxw) / width2
+                        res += np.real(sd) - base
+                    else:
+                        if np.abs(df[j]) < 750.0:
+                            res += width0 / (df[j] ** 2 + wsq) - base
+
+                summ += s * res * (f / self.h2oll.fl[i]) ** 2
+        elif H2OAbsModel.model in ['rose16', 'rose03', 'rose17']:
+            ti2 = ti ** 2.5
+            summ = 0.0
+            for i in range(0, nlines):
+                widthf = self.h2oll.w0[i] * pda * ti ** self.h2oll.x[i]
+                widths = self.h2oll.w0s[i] * pvap * ti ** self.h2oll.xs[i]
+                width = widthf + widths
+                shift = self.h2oll.sr[i] * (width if H2OAbsModel.model == 'rose03' else widthf)
+                wsq = width ** 2
+                s = self.h2oll.s1[i] * ti2 * np.exp(self.h2oll.b2[i] * (1. - ti))
+                df[0] = f - self.h2oll.fl[i] - shift
+                df[1] = f + self.h2oll.fl[i] + shift
+                # use clough's definition of local line contribution
+                base = width / (562500.0 + wsq)
+                # do for positive and negative resonances
+                res = 0.0
+                for j in range(0, 2):
                     if np.abs(df[j]) < 750.0:
-                        res = res + width0 / (df[j] ** 2 + wsq) - base
-
-            summ += s * res * (f / self.h2oll.fl[i]) ** 2
+                        res += width / (df[j] ** 2 + wsq) - base
+                summ += s * res * (f / self.h2oll.fl[i]) ** 2
+        elif H2OAbsModel.model == 'rose19':
+            tiln = np.log(ti)
+            ti2 = np.exp(2.5 * tiln)
+            summ = 0.0
+            for i in range(0, nlines):
+                widthf = self.h2oll.w0[i] * pda * ti ** self.h2oll.x[i]
+                widths = self.h2oll.w0s[i] * pvap * ti ** self.h2oll.xs[i]
+                width = widthf + widths
+                shiftf = self.h2oll.sh[i] * pda * (1. - self.h2oll.aair[i] * tiln) * ti ** self.h2oll.xh[i]
+                shifts = self.h2oll.shs[i] * pvap * (1. - self.h2oll.aself[i] * tiln) * ti ** self.h2oll.xhs[i]
+                shift = shiftf + shifts
+                wsq = width ** 2
+                s = self.h2oll.s1[i] * ti2 * np.exp(self.h2oll.b2[i] * (1. - ti))
+                df[0] = f - self.h2oll.fl[i] - shift
+                df[1] = f + self.h2oll.fl[i] + shift
+                base = width / (562500.0 + wsq)
+                res = 0.0
+                for j in range(0, 2):
+                    if np.abs(df[j]) < 750.0:
+                        res += width / (df[j] ** 2 + wsq) - base
+                summ += s * res * (f / self.h2oll.fl[i]) ** 2
         # nico 2019/03/18 *********************************************************
         # cyh **************************************************************
         # separate the following original equ. into line and continuum
@@ -260,18 +350,7 @@ class O2AbsModel(AbsModel):
     def __init__(self):
         super(O2AbsModel, self).__init__()
 
-    @property
-    def o2ll(self):
-        return self._o2ll
-
-    @o2ll.setter
-    def o2ll(self, o2ll):
-        if o2ll and isinstance(o2ll, types.MethodType):
-            self._o2ll = o2ll
-        else:
-            raise ValueError("Please enter a valid absorption model")
-
-    def o2abs_rosen18(self, pdrykpa=None, vx=None, ekpa=None, frq=None):
+    def o2abs_rosen18(self, pdrykpa: float, vx: float, ekpa: float, frq: float) -> Tuple[np.ndarray, np.ndarray]:
         """Returns power absorption coefficient due to oxygen in air,
         in nepers/km.  Multiply o2abs by 4.343 to convert to db/km.
 
@@ -295,7 +374,8 @@ class O2AbsModel(AbsModel):
             frq ([type], optional): [description]. Defaults to None.
 
         Returns:
-            [type]: [description]
+            np.ndarray: [description]
+            np.ndarray: [description]
 
         References
         ----------
@@ -319,9 +399,6 @@ class O2AbsModel(AbsModel):
             * ABSN2 is now external
             * The continuum term is summed BEFORE O2ABS = max(O2ABS,0.)
         """
-        # model = getattr(O2AbsModel, 'model')
-        # o2ll = o2_linelist(model)
-        # o2ll = AbsModel(model).o2ll
 
         # cyh*** add the following lines *************************
         db2np = np.log(10.0) * 0.1
@@ -330,7 +407,7 @@ class O2AbsModel(AbsModel):
         temp = 300.0 / vx
         pres = (pdrykpa + ekpa) * 10.0
         vapden = ekpa * 10.0 / (rvap * temp)
-        freq = np.copy(frq)
+        freq = frq
         # cyh*****************************************************
 
         th = 300.0 / temp
@@ -339,7 +416,7 @@ class O2AbsModel(AbsModel):
         preswv = (vapden * temp) / 216.68
         presda = pres - preswv
         den = 0.001 * (presda * b + 1.2 * preswv * th)
-        dfnr = np.dot(self.o2ll.wb300, den)
+        dfnr = self.o2ll.wb300 * den
 
         # nico intensities of the non-resonant transitions for o16-o16 and o16-o18, from jpl's line compilation
         # 1.571e-17 (o16-o16) + 1.3e-19 (o16-o18) = 1.584e-17
@@ -351,7 +428,6 @@ class O2AbsModel(AbsModel):
         for k in range(0, nlines):
             df = self.o2ll.w300[k] * den
             fcen = self.o2ll.f[k]
-
             y = den * (self.o2ll.y300[k] + self.o2ll.v[k] * th1)
             strr = self.o2ll.s300[k] * np.exp(-self.o2ll.be[k] * th1)
             sf1 = (df + (freq - fcen) * y) / ((freq - fcen) ** 2 + df * df)
@@ -374,8 +450,6 @@ class O2AbsModel(AbsModel):
         # separate the equ. into line and continuum
         # terms, and change the units from np/km to ppm
 
-        npp = np.copy(o2abs)
-
         # nico intensities of the non-resonant transitions for o16-o16 and o16-o18, from jpl's line compilation
         # 1.571e-17 (o16-o16) + 1.3e-19 (o16-o18) = 1.584e-17
 
@@ -389,14 +463,14 @@ class O2AbsModel(AbsModel):
         ncpp = 1.6097e+11 * ncpp * presda * th ** 3
 
         # change the units from np/km to ppm
-        npp = (npp / db2np) / factor
+        npp = (o2abs / db2np) / factor
 
         ncpp = (ncpp / db2np) / factor
         # cyh ************************************************************
 
         return npp, ncpp
 
-    def o2abs_rosen19(self, pdrykpa=None, vx=None, ekpa=None, frq=None):
+    def o2abs_rosen19(self, pdrykpa: float, vx: float, ekpa: float, frq: float) -> Tuple[np.ndarray, np.ndarray]:
         """Returns power absorption coefficient due to oxygen in air,
         in nepers/km. multiply o2abs2 by 4.343 to convert to db/km.
 
@@ -450,57 +524,83 @@ class O2AbsModel(AbsModel):
             line widths as in the 60 GHz band: (1/T)**X (Koshelev et al 2016)
          3. The sign of DNU in the shape factor is corrected.
         """
-        # model = getattr(O2AbsModel, 'model')
-        # o2ll = o2_linelist(model)
-        # o2ll = AbsModel(model).o2ll
 
         # *** add the following lines *************************
         db2np = np.log(10.0) * 0.1
-        rvap = (0.01 * 8.31451) / 18.01528
+        rvap = (0.01 * 8.314510) / 18.01528
         factor = 0.182 * frq
         temp = 300.0 / vx
         pres = (pdrykpa + ekpa) * 10.0
-        vapden = ekpa * 10.0 / (rvap * temp)
-        freq = np.copy(frq)
+        vapden = (ekpa * 10.0) / (rvap * temp)
+        freq = frq
         # *****************************************************
 
         th = 300.0 / temp
         th1 = th - 1.0
         b = th ** self.o2ll.x
         preswv = vapden * temp / 216.68
+        if O2AbsModel.model in ['rose03', 'rose16', 'rose17']:
+            preswv = vapden * temp / 217.0
         presda = pres - preswv
         den = 0.001 * (presda * b + 1.2 * preswv * th)
+        if O2AbsModel.model in ['rose03', 'rose16']:
+            den = 0.001 * (presda * b + 1.1 * preswv * th)
+        if O2AbsModel.model == 'rose03':
+            dens = 0.001 * (presda * th ** 0.9 + 1.1 * preswv * th)
         dfnr = self.o2ll.wb300 * den
         pe2 = den * den
+
         # nico intensities of the non-resonant transitions for o16-o16 and o16-o18, from jpl's line compilation
         # 1.571e-17 (o16-o16) + 1.3e-19 (o16-o18) = 1.584e-17
-
         summ = 1.584e-17 * freq * freq * dfnr / (th * (freq * freq + dfnr * dfnr))
+        if O2AbsModel.model in ['rose03', 'rose16', 'rose17']:
+            summ = 0.0
         nlines = len(self.o2ll.f)
-        for k in range(0, nlines):
-            y = den * (self.o2ll.y0[k] + self.o2ll.y1[k] * th1)
-            dnu = pe2 * (self.o2ll.dnu0[k] + self.o2ll.dnu1[k] * th1)
-            gfac = 1. + pe2 * (self.o2ll.g0[k] + self.o2ll.g1[k] * th1)
-            df = self.o2ll.w300[k] * den
-            strr = self.o2ll.s300[k] * np.exp(-self.o2ll.be[k] * th1)
-            del1 = freq - self.o2ll.f[k] - dnu
-            del2 = freq + self.o2ll.f[k] + dnu
-            d1 = del1 * del1 + df * df
-            d2 = del2 * del2 + df * df
-            sf1 = (df * gfac + del1 * y) / d1
-            sf2 = (df * gfac - del2 * y) / d2
-            summ += strr * (sf1 + sf2) * (freq / self.o2ll.f[k]) ** 2
-
-        # .20946e-4/(3.14159*1.38065e-19*300) = 1.6097e11
+        if O2AbsModel.model == 'rose03':
+            for k in range(0, nlines):
+                if k == 0:
+                    df = self.o2ll.w300[0] * dens
+                else:
+                    df = self.o2ll.w300[k] * den
+                fcen = self.o2ll.f[k]
+                y = 0.001 * pres * b * (self.o2ll.y300[k] + self.o2ll.v[k] * th1)
+                strr = self.o2ll.s300[k] * np.exp(-self.o2ll.be[k] * th1)
+                sf1 = (df + (freq - fcen) * y) / ((freq - self.o2ll.f[k]) ** 2 + df * df)
+                sf2 = (df - (freq + fcen) * y) / ((freq + self.o2ll.f[k]) ** 2 + df * df)
+                summ += strr * (sf1 + sf2) * (freq / self.o2ll.f[k]) ** 2
+        elif O2AbsModel.model == 'rose17':
+            for k in range(0, nlines):
+                df = self.o2ll.w300[k] * den
+                fcen = self.o2ll.f[k]
+                y = den * (self.o2ll.y300[k] + self.o2ll.v[k] * th1)
+                strr = self.o2ll.s300[k] * np.exp(-self.o2ll.be[k] * th1)
+                sf1 = (df + (freq - fcen) * y) / ((freq - self.o2ll.f[k]) ** 2 + df * df)
+                sf2 = (df - (freq + fcen) * y) / ((freq + self.o2ll.f[k]) ** 2 + df * df)
+                summ += strr * (sf1 + sf2) * (freq / self.o2ll.f[k]) ** 2
+        else:
+            for k in range(0, nlines):
+                df = self.o2ll.w300[k] * den
+                y = den * (self.o2ll.y0[k] + self.o2ll.y1[k] * th1)
+                dnu = pe2 * (self.o2ll.dnu0[k] + self.o2ll.dnu1[k] * th1)
+                strr = self.o2ll.s300[k] * np.exp(-self.o2ll.be[k] * th1)
+                del1 = freq - self.o2ll.f[k] - dnu
+                del2 = freq + self.o2ll.f[k] + dnu
+                gfac = 1. + pe2 * (self.o2ll.g0[k] + self.o2ll.g1[k] * th1)
+                d1 = del1 * del1 + df * df
+                d2 = del2 * del2 + df * df
+                sf1 = (df * gfac + del1 * y) / d1
+                sf2 = (df * gfac - del2 * y) / d2
+                summ += strr * (sf1 + sf2) * (freq / self.o2ll.f[k]) ** 2
 
         o2abs = 1.6097e+11 * summ * presda * th ** 3
-        o2abs = 1.004 * np.maximum(o2abs, 0.0)
+        if O2AbsModel.model == 'rose03':
+            o2abs = 5.034e+11 * summ * presda * th ** 3 / 3.14159
+        # o2abs = 1.004 * np.maximum(o2abs, 0.0)
+        o2abs = np.maximum(o2abs, 0.0)
 
         # *** ********************************************************
         # separate the equ. into line and continuum
         # terms, and change the units from np/km to ppm
-
-        npp = np.copy(o2abs)
 
         # nico intensities of the non-resonant transitions for o16-o16 and o16-o18, from jpl's line compilation
         # 1.571e-17 (o16-o16) + 1.3e-19 (o16-o18) = 1.584e-17
@@ -512,11 +612,15 @@ class O2AbsModel(AbsModel):
         # nico pa2hpa=1e-2; hz2ghz=1e-9; m2cm=1e2; m2km=1e-3; pa2hpa^-1 * hz2ghz * m2cm^-2 * m2km^-1 = 1e-8
         # nico th^3 = th(from ideal gas law 2.13) * th(from the mw approx of stimulated emission 2.16 vs. 2.14) *
         # th(from the partition sum 2.20)
-        ncpp = 1.6097e11 * ncpp * presda * th ** 3  # nico: n/pi*sum0
-
+        if O2AbsModel.model == 'rose03':
+            ncpp = 1.6e-17 * freq * freq * dfnr / (th * (freq * freq + dfnr * dfnr))
+            ncpp = 5.034e+11 * ncpp * presda * th ** 3 / 3.14159
+        else:
+            ncpp *= 1.6097e11 * presda * th ** 3  # nico: n/pi*sum0
+        if O2AbsModel.model in ['rose03', 'rose16', 'rose17']:
+            ncpp += N2AbsModel.n2_absorption(temp, pres, freq)
         # change the units from np/km to ppm
-        npp = (npp / db2np) / factor
-
+        npp = (o2abs / db2np) / factor
         ncpp = (ncpp / db2np) / factor
         # ************************************************************
 
