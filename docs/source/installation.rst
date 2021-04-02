@@ -4,7 +4,7 @@ Installation Instructions
 
 pyrtlib can be installed on any computer supporting Python 3.6 (or higher).
 The actual installation procedure depends on the operating system. The
-instructions below are for Ubuntu.
+instructions below are for Ubuntu and MacOS.
 
 Python Installation (ubuntu)
 ----------------------------
