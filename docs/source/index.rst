@@ -64,7 +64,7 @@ Example:
    Name: tbtotal, Length: 181, dtype: float64
 
 .. toctree::
-   :maxdepth: 4
+   :maxdepth: 3
    :caption: Contents:
 
    installation
