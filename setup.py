@@ -6,7 +6,6 @@ with open('requirements.txt') as f:
 setup(
     name='pyrtlib',
     version='1.0.0',
-    packages=find_packages(),
     include_package_data=True,
     python_requires='>=3.6',
     install_requires=required,
@@ -14,5 +13,6 @@ setup(
     license='MIT License',
     author='slarosa',
     author_email='salvatore.larosa@imaa.cnr.it',
-    description='pyrtlib - Radiative Transfer library'
+    description='pyrtlib - Radiative Transfer library',
+    ackages=find_packages()
 )
