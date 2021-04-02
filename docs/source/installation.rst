@@ -58,13 +58,6 @@ Deactivate the virtualenv:
    $ deactivate
 
 
-Create a new virtual environment and activate it:
-
-.. code-block:: console
-      
-   $ python3 -m venv venv
-   $ source venv/bin/activate
-
 Installing from source
 ----------------------
 
