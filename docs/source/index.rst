@@ -69,6 +69,7 @@ Example:
 
    installation
    api
+   tutorial
 
 Indices and tables
 ==================

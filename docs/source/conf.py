@@ -40,6 +40,7 @@ extensions = [
     'sphinx_toggleprompt',
     'sphinx.ext.todo',
     'sphinx.ext.githubpages',
+    'nbsphinx',
     # 'sphinx_gallery.gen_gallery',
     # 'rst2pdf.pdfbuilder',
 ]
