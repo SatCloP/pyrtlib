@@ -24,6 +24,8 @@ Python3 installation via Homebrew
 
    $ brew install python3
 
+Python3 can also be installed by downloading the installer from `Python Releases for Mac OS X <https://www.python.org/downloads/mac-osx/>`_.
+
 
 Virtual Environment
 -------------------
@@ -76,7 +78,5 @@ pyrtlib is now ready for use from that virtual environment.
 
 .. note::
 
-    Codebase is rapidly developing and the PyPI package does not
-    necessarily contain all the latest features and modifications. To get an up-to-date
-    version of pyrtlib, download it directly from `GitHub
-    <https://github.com/slarosa/pyrtlib>`_.
+    To get an up-to-date
+    version of pyrtlib, download it directly from `GitHub <https://github.com/slarosa/pyrtlib>`_.
