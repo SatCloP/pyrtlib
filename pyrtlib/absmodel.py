@@ -19,9 +19,6 @@ class AbsModel(object):
         self._model = ''
         """Model used to compute absorption"""
 
-        self._o2ll = None
-        self._h2oll = None
-
     @property
     def model(self) -> str:
         return self._model
@@ -33,27 +30,6 @@ class AbsModel(object):
         else:
             raise ValueError("Please enter a valid absorption model")
 
-    @property
-    def h2oll(self) -> types.MethodType:
-        return self._h2oll
-
-    @h2oll.setter
-    def h2oll(self, h2oll) -> None:
-        if h2oll and isinstance(h2oll, types.MethodType):
-            self._h2oll = h2oll
-        else:
-            raise ValueError("Please enter a valid absorption model")
-
-    @property
-    def o2ll(self) -> types.MethodType:
-        return self._o2ll
-
-    @o2ll.setter
-    def o2ll(self, o2ll) -> None:
-        if o2ll and isinstance(o2ll, types.MethodType):
-            self._o2ll = o2ll
-        else:
-            raise ValueError("Please enter a valid absorption model")
 
 
 class LiqAbsModel(AbsModel):
@@ -162,6 +138,17 @@ class H2OAbsModel(AbsModel):
     def __init__(self):
         super(H2OAbsModel, self).__init__()
 
+    @property
+    def h2oll(self) -> types.MethodType:
+        return self._h2oll
+
+    @h2oll.setter
+    def h2oll(self, h2oll) -> None:
+        if h2oll and isinstance(h2oll, types.MethodType):
+            self._h2oll = h2oll
+        else:
+            raise ValueError("Please enter a valid absorption model")
+
     def h2o_rosen19_sd(self, pdrykpa: float, vx: float, ekpa: float, frq: float) -> Tuple[np.ndarray, np.ndarray]:
         """Compute absorption coefficients in atmosphere due to water vapor
         this version should not be used with a line list older than june 2018,
@@ -203,7 +190,7 @@ class H2OAbsModel(AbsModel):
             e, rho = RTEquation.vapor(tk, rh, ice)
 
             AbsModel.model = 'rose16'
-            H2OAbsModel.h2oll = import_lineshape('pyrtlib.lineshape', 'h2oll_{}'.format('rose16'))
+            H2OAbsModel.h2oll = import_lineshape('h2oll_{}'.format('rose16'))
             for i in range(0, len(z)):
                 v = 300.0 / tk[i]
                 ekpa = e[i] / 10.0
@@ -349,6 +336,17 @@ class O2AbsModel(AbsModel):
 
     def __init__(self):
         super(O2AbsModel, self).__init__()
+
+    @property
+    def o2ll(self) -> types.MethodType:
+        return self._o2ll
+
+    @o2ll.setter
+    def o2ll(self, o2ll) -> None:
+        if o2ll and isinstance(o2ll, types.MethodType):
+            self._o2ll = o2ll
+        else:
+            raise ValueError("Please enter a valid absorption model")
 
     def o2abs_rosen18(self, pdrykpa: float, vx: float, ekpa: float, frq: float) -> Tuple[np.ndarray, np.ndarray]:
         """Returns power absorption coefficient due to oxygen in air,
