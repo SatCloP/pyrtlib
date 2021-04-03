@@ -65,10 +65,20 @@ Example:
 
 .. toctree::
    :maxdepth: 3
-   :caption: Contents:
+   :caption: Installation:
 
    installation
+
+.. toctree::
+   :maxdepth: 3
+   :caption: API References:
+   
    api
+
+.. toctree::
+   :maxdepth: 3
+   :caption: Tutorial:
+   
    tutorial
 
 Indices and tables
