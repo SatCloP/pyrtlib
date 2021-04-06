@@ -7,7 +7,7 @@ set -x
 apt-get update
 apt-get -y install git rsync python3-sphinx python3-sphinx-rtd-theme python3-git python3-pip python3-virtualenv python3-setuptools pandoc
 python3 -m pip install --upgrade rinohtype pygments
-pip3 install sphinx-toggleprompt nbconvert==5.6.1 nbsphinx sphinx-gallery pandas
+pip3 install sphinx-toggleprompt nbconvert==5.6.1 nbsphinx sphinx-gallery pandas matplotlib
 
 #####################
 # DECLARE VARIABLES #
