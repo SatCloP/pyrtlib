@@ -4,7 +4,7 @@ This class contains the absorption model used in pyrtlib.
 """
 
 import types
-from typing import Tuple
+from typing import Tuple, Union
 
 import numpy as np
 
@@ -29,7 +29,6 @@ class AbsModel(object):
             self._model = model
         else:
             raise ValueError("Please enter a valid absorption model")
-
 
 
 class LiqAbsModel(AbsModel):
@@ -149,7 +148,8 @@ class H2OAbsModel(AbsModel):
         else:
             raise ValueError("Please enter a valid absorption model")
 
-    def h2o_rosen19_sd(self, pdrykpa: float, vx: float, ekpa: float, frq: float) -> Tuple[np.ndarray, np.ndarray]:
+    def h2o_rosen19_sd(self, pdrykpa: np.ndarray, vx: np.ndarray, ekpa: np.ndarray, frq: np.ndarray) -> Union[
+        Tuple[np.ndarray, np.ndarray], None]:
         """Compute absorption coefficients in atmosphere due to water vapor
         this version should not be used with a line list older than june 2018,
         nor the new list with an older version of this subroutine.
@@ -232,7 +232,8 @@ class H2OAbsModel(AbsModel):
         if H2OAbsModel.model == 'rose03':
             con = (5.43e-10 * pda * ti ** 3 + 1.8e-08 * pvap * ti ** 7.5) * pvap * f * f
         else:
-            con = (self.h2oll.cf * pda * ti ** self.h2oll.xcf + self.h2oll.cs * pvap * ti ** self.h2oll.xcs) * pvap * f * f
+            con = (
+                          self.h2oll.cf * pda * ti ** self.h2oll.xcf + self.h2oll.cs * pvap * ti ** self.h2oll.xcs) * pvap * f * f
         # nico 2019/03/18 *********************************************************
         # add resonances
         nlines = len(self.h2oll.fl)
@@ -472,7 +473,7 @@ class O2AbsModel(AbsModel):
         """Returns power absorption coefficient due to oxygen in air,
         in nepers/km. multiply o2abs2 by 4.343 to convert to db/km.
 
-         History:
+        History:
 
         * 5/1/95  P. Rosenkranz
         * 11/5/97  P. Rosenkranz - 1- line modification.

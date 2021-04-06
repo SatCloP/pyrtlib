@@ -622,3 +622,49 @@ def dcerror(x: np.ndarray, y: np.ndarray) -> np.ndarray:
         dcerror = 2.0 * np.exp(-np.complex(x, y) ** 2) - w
 
     return dcerror
+
+
+def pressure_to_height(pressure: np.float) -> np.float:
+    r"""Convert pressure data to height using the U.S. standard atmosphere [NOAA1976]_.
+    The implementation uses the formula outlined in [Hobbs1977]_ pg.60-61.
+
+    .. math:: Z = \frac{T_0}{\Gamma}[1-\frac{p}{p_0}^\frac{R\Gamma}{g}]
+
+    Args:
+        pressure (float): The pressure value in mbar
+
+    Returns:
+        float: The height to the provided pressure
+    """
+    t0 = 288.0
+    p0 = 1013.25
+    gamma = -0.0065
+    g = 9.80665
+    R = 8.314462618
+    Md = 28.96546e-3
+    Rd = R / Md
+
+    return (t0 / gamma) * (1 - (pressure / p0) ** (Rd * gamma / g))
+
+
+def height_to_pressure(height: np.float) -> np.float:
+    r"""Convert height data to pressures using the U.S. standard atmosphere [NOAA1976]_.
+    The implementation inverts the formula outlined in [Hobbs1977]_ pg.60-61.
+
+    .. math:: p = p_0 e^{\frac{g}{R \Gamma} \text{ln}(1-\frac{Z \Gamma}{T_0})}
+
+    Args:
+        pressure (float): The pressure value in mbar
+
+    Returns:
+        float: The height to the provided pressure
+    """
+    t0 = 288.0
+    p0 = 1013.25
+    gamma = -0.0065
+    g = 9.80665
+    R = 8.314462618
+    Md = 28.96546e-3
+    Rd = R / Md
+
+    return p0 * np.exp((g / (Rd * gamma)) * np.log(1 - ((height * gamma) / t0)))

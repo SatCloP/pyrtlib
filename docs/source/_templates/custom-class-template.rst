@@ -30,3 +30,5 @@
    {%- endfor %}
    {% endif %}
    {% endblock %}
+
+.. include:: gallery_backreferences/{{fullname}}.examples

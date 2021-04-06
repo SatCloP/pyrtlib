@@ -7,6 +7,7 @@ setup(
     name='pyrtlib',
     version='1.0.0',
     include_package_data=True,
+    package_dir={'': 'pyrtlib'},
     python_requires='>=3.6',
     install_requires=required,
     url='',
