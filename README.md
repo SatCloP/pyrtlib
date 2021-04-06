@@ -1,6 +1,6 @@
 <img align="" src="resources/logo/logo_large.png" width="300">
 
-# **pyrtlib** - Radiative Transfer python library
+# A Radiative Transfer python library
 
 [![build-docs-action](https://github.com/slarosa/pyrtlib/workflows/build-docs-action/badge.svg)](https://github.com/slarosa/pyrtlib/actions/workflows/build_docs.yml)
 [![run-python-tests](https://github.com/slarosa/pyrtlib/workflows/run-python-tests/badge.svg)](https://github.com/slarosa/pyrtlib/actions/workflows/ci.yml)
