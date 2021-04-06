@@ -15,7 +15,7 @@ A python package to compute atmospheric radiative transfer model based on the ra
 
 # Example
 
-For some example of usage of the pyrtlib see the [examples gallery](docs/examples). Code can be downloaded both a python script or notebook file.
+For examples of how to use pyrtlib see the [examples gallery](docs/examples). Code can be downloaded both as python script or notebook file.
 
 ## Performing calculation of brigthness temperature for a model.
 Atmospheric profile definition:
