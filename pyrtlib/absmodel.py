@@ -4,7 +4,7 @@ This class contains the absorption model used in pyrtlib.
 """
 
 import types
-from typing import Tuple
+from typing import Tuple, Union
 
 import numpy as np
 
@@ -19,9 +19,6 @@ class AbsModel(object):
         self._model = ''
         """Model used to compute absorption"""
 
-        self._o2ll = None
-        self._h2oll = None
-
     @property
     def model(self) -> str:
         return self._model
@@ -30,28 +27,6 @@ class AbsModel(object):
     def model(self, model: str) -> None:
         if model and isinstance(model, str):
             self._model = model
-        else:
-            raise ValueError("Please enter a valid absorption model")
-
-    @property
-    def h2oll(self) -> types.MethodType:
-        return self._h2oll
-
-    @h2oll.setter
-    def h2oll(self, h2oll) -> None:
-        if h2oll and isinstance(h2oll, types.MethodType):
-            self._h2oll = h2oll
-        else:
-            raise ValueError("Please enter a valid absorption model")
-
-    @property
-    def o2ll(self) -> types.MethodType:
-        return self._o2ll
-
-    @o2ll.setter
-    def o2ll(self, o2ll) -> None:
-        if o2ll and isinstance(o2ll, types.MethodType):
-            self._o2ll = o2ll
         else:
             raise ValueError("Please enter a valid absorption model")
 
@@ -162,7 +137,19 @@ class H2OAbsModel(AbsModel):
     def __init__(self):
         super(H2OAbsModel, self).__init__()
 
-    def h2o_rosen19_sd(self, pdrykpa: float, vx: float, ekpa: float, frq: float) -> Tuple[np.ndarray, np.ndarray]:
+    @property
+    def h2oll(self) -> types.MethodType:
+        return self._h2oll
+
+    @h2oll.setter
+    def h2oll(self, h2oll) -> None:
+        if h2oll and isinstance(h2oll, types.MethodType):
+            self._h2oll = h2oll
+        else:
+            raise ValueError("Please enter a valid absorption model")
+
+    def h2o_rosen19_sd(self, pdrykpa: np.ndarray, vx: np.ndarray, ekpa: np.ndarray, frq: np.ndarray) -> Union[
+        Tuple[np.ndarray, np.ndarray], None]:
         """Compute absorption coefficients in atmosphere due to water vapor
         this version should not be used with a line list older than june 2018,
         nor the new list with an older version of this subroutine.
@@ -203,7 +190,7 @@ class H2OAbsModel(AbsModel):
             e, rho = RTEquation.vapor(tk, rh, ice)
 
             AbsModel.model = 'rose16'
-            H2OAbsModel.h2oll = import_lineshape('pyrtlib.lineshape', 'h2oll_{}'.format('rose16'))
+            H2OAbsModel.h2oll = import_lineshape('h2oll_{}'.format('rose16'))
             for i in range(0, len(z)):
                 v = 300.0 / tk[i]
                 ekpa = e[i] / 10.0
@@ -245,7 +232,8 @@ class H2OAbsModel(AbsModel):
         if H2OAbsModel.model == 'rose03':
             con = (5.43e-10 * pda * ti ** 3 + 1.8e-08 * pvap * ti ** 7.5) * pvap * f * f
         else:
-            con = (self.h2oll.cf * pda * ti ** self.h2oll.xcf + self.h2oll.cs * pvap * ti ** self.h2oll.xcs) * pvap * f * f
+            con = (
+                          self.h2oll.cf * pda * ti ** self.h2oll.xcf + self.h2oll.cs * pvap * ti ** self.h2oll.xcs) * pvap * f * f
         # nico 2019/03/18 *********************************************************
         # add resonances
         nlines = len(self.h2oll.fl)
@@ -349,6 +337,17 @@ class O2AbsModel(AbsModel):
 
     def __init__(self):
         super(O2AbsModel, self).__init__()
+
+    @property
+    def o2ll(self) -> types.MethodType:
+        return self._o2ll
+
+    @o2ll.setter
+    def o2ll(self, o2ll) -> None:
+        if o2ll and isinstance(o2ll, types.MethodType):
+            self._o2ll = o2ll
+        else:
+            raise ValueError("Please enter a valid absorption model")
 
     def o2abs_rosen18(self, pdrykpa: float, vx: float, ekpa: float, frq: float) -> Tuple[np.ndarray, np.ndarray]:
         """Returns power absorption coefficient due to oxygen in air,
@@ -474,7 +473,7 @@ class O2AbsModel(AbsModel):
         """Returns power absorption coefficient due to oxygen in air,
         in nepers/km. multiply o2abs2 by 4.343 to convert to db/km.
 
-         History:
+        History:
 
         * 5/1/95  P. Rosenkranz
         * 11/5/97  P. Rosenkranz - 1- line modification.

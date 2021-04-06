@@ -1,27 +1,24 @@
-#############
-API reference
-#############
+##############
+API references
+##############
 
 Main script (??)
 ====================
 
 .. autosummary::
     :toctree: generated/
-    :template: custom-module-template.rst
-    :recursive:
+    :template: custom-module-template.rst  
 
     pyrtlib.main
 
 
-Atmospheric profiles
+Atmospheric Profiles
 ====================
 
 .. autosummary::
     :toctree: generated/
-    :template: custom-module-template.rst
-    :recursive:
 
-    pyrtlib.atmp
+    pyrtlib.atmp.AtmosphericProfiles
 
 
 Radiative Transfer Equation
@@ -29,40 +26,37 @@ Radiative Transfer Equation
 
 .. autosummary::
     :toctree: generated/
-    :template: custom-module-template.rst
-    :recursive:
 
-    pyrtlib.rte
+    pyrtlib.rte.RTEquation
 
 
-Absorption model function
-==========================
+Absorption Models
+=================
 
 .. autosummary::
     :toctree: generated/
-    :template: custom-module-template.rst
-    :recursive:
 
-    pyrtlib.absmodel
+    pyrtlib.absmodel.AbsModel
+    pyrtlib.absmodel.H2OAbsModel
+    pyrtlib.absmodel.O2AbsModel
+    pyrtlib.absmodel.N2AbsModel
+    pyrtlib.absmodel.LiqAbsModel
 
 
-Utility function
+Utility Function
 ================
  
 .. autosummary::
     :toctree: generated/
-    :template: custom-module-template.rst
-    :recursive:
+    :template: custom-module-template.rst   
 
     pyrtlib.utils
 
 
-Line shape list
-===============
+Line Shape
+===========
 
 .. autosummary::
     :toctree: generated/
-    :template: custom-module-template.rst
-    :recursive:
 
     pyrtlib.lineshape

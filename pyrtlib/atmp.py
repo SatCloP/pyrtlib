@@ -140,7 +140,6 @@ class AtmosphericProfiles:
             * d [type]: total density (cm-3) (50x1)
             * t [type]: temperature (K) (50x1)
             * md [type]: molecular densities (ppmv) (50x #gases)
-            * gasids [type]: HITRAN gas ID #'s (#gases x 1)
 
         .. note:: adapted from glatm.dat.  DCT 3/26/97
         """

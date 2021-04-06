@@ -116,8 +116,6 @@ class RTEquation:
             * dryn [type]: dry refractivity profile
             * wetn [type]: wet refractivity profile
             * refindx [type]: refractive index profile
-
-        .. todo:: check if slice works properly @Donatello
         """
 
         nl = len(p)
@@ -301,7 +299,7 @@ class RTEquation:
             This algorithm is not designed for multiple cloud layers
 
         .. note::
-            hvk, tauprof, and boftatm can be obtained from subroutine planck_xxx().
+            hvk, tauprof, and boftatm can be obtained from subroutine :py:meth:`planck`.
         """
 
         # maximum absolute value for exponential function argument
@@ -468,8 +466,7 @@ class RTEquation:
                 * aice [type]: ice absorption profile (np/km)
 
         See also:
-
-            :py:meth:`absmodel.AbsModel.ab_liq`
+            :py:func:`~pyrtlib.absmodel.LiqAbsModel.liquid_water_absorption`
 
         .. warning::
             * ic light speed in cm s-1????
@@ -524,7 +521,8 @@ class RTEquation:
                 * adry [type]: dry air absorption profile (np/km)
 
         See also:
-            :py:meth:`absmodel.H2OAbsModel().h2o_rosen03_xxx`, :py:meth:`o2n2_rosen03_xxx`
+            :py:class:`~pyrtlib.absmodel.H2OAbsModel`
+            :py:class:`~pyrtlib.absmodel.O2AbsModel`
 
         .. warning::
                 * h2o_rosen03_xxx and o2n2_rosen03_xxx functions are missing!!!!!
