@@ -2,7 +2,7 @@
   :width: 600
 
 .. pyrtlib documentation master file, created by sphinx-quickstart on Fri Mar 19 09:49:16 2021.
-You can adapt this file completely to your liking, but it should at least contain the root `toctree` directive.
+   You can adapt this file completely to your liking, but it should at least contain the root `toctree` directive.
 
 
 
@@ -94,3 +94,18 @@ Indices and tables
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
+
+.. |build-docs-action| image:: https://github.com/slarosa/pyrtlib/workflows/build-docs-action/badge.svg
+   :target: https://github.com/slarosa/pyrtlib/actions/workflows/build_docs.yml
+
+.. |run-python-tests| image:: https://github.com/slarosa/pyrtlib/workflows/run-python-tests/badge.svg
+   :target: https://github.com/slarosa/pyrtlib/actions/workflows/ci.yml
+
+.. |license| image:: https://img.shields.io/github/license/slarosa/pyrtlib.svg
+   :target: https://github.com/slarosa/pyrtlib/blob/main/LICENSE.md
+
+.. |GitHub commit| image:: https://img.shields.io/github/last-commit/slarosa/pyrtlib
+   :target: https://github.com/slarosa/pyrtlib/commits/main
+
+.. |codecov| image:: https://codecov.io/gh/slarosa/pyrtlib/branch/main/graph/badge.svg?token=7DV4B4U1OZ
+   :target: https://codecov.io/gh/slarosa/pyrtlib
