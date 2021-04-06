@@ -312,3 +312,4 @@ todo_include_todos = True
 # html_context = {
 #     'make_github_url': make_github_url,
 # }
+html_last_updated_fmt = '%d/%m/%Y'
