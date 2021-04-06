@@ -29,7 +29,7 @@ rh = mr2rh(p, tk, gkg)[0] / 100
 
 e, rho = RTEquation.vapor(tk, rh, ice)
 
-mdl = 'rose16'
+mdl = 'rose19sd'
 AbsModel.model = mdl
 H2OAbsModel.h2oll = import_lineshape('h2oll_{}'.format(mdl))
 O2AbsModel.o2ll = import_lineshape('o2ll_{}'.format(mdl))
@@ -44,9 +44,9 @@ fig, ax = plt.subplots(1, 2, figsize=(12, 12))
 axis_lim = [0, 7]
 
 
-def tick_function_pressure(X):
-    V = height_to_pressure(X * 1000)
-    return ["%.2f" % z for z in V]
+def tick_function_pressure(x):
+    v= height_to_pressure(x * 1000)
+    return ["%.2f" % z for z in v]
 
 
 ax[1].yaxis.set_label_position("right")
@@ -54,12 +54,13 @@ ax[1].yaxis.tick_right()
 ax[1].yaxis.set_major_formatter(ScalarFormatter())
 ax[1].yaxis.set_major_formatter(ticker.FuncFormatter(lambda y, _: '{:g}'.format(y)))
 
-freq = np.where((frq == 60) | (frq == 118) | (frq == 180))
+mask = np.isin(frq, [22, 60, 118, 180])
+freq = np.nonzero(mask)
 for i in freq[0]:
     ax[0].plot(awet[i, :], z, label='{} GHz - {}'.format(frq[i], mdl))
     ax[1].plot(adry[i, :], z, label='{} GHz - {}'.format(frq[i], mdl))
 
-ax[0].plot(rho, z, label='Vapor density [g/m3]')
+ax[0].plot(rho, z, label='Vapor density [g/m3]', linestyle='--')
 
 ax[0].set_xlabel("WV [np/km]")
 ax[1].set_xlabel("DryAir [np/km]")

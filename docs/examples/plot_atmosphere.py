@@ -19,14 +19,14 @@ from pyrtlib.atmp import AtmosphericProfiles as atmp
 from pyrtlib.utils import ppmv2gkg, mr2rh, height_to_pressure
 
 
-def tick_function(X):
-    V = X - 273.15
-    return ["%.1f" % z for z in V]
+def tick_function(x):
+    v = x - 273.15
+    return ["%.1f" % z for z in v]
 
 
-def tick_function_pressure(X):
-    V = height_to_pressure(X * 1000)
-    return ["%.1f" % z for z in V]
+def tick_function_pressure(x):
+    v = height_to_pressure(x * 1000)
+    return ["%.1f" % z for z in v]
 
 
 z, p, d, t, md = atmp.gl_atm(atmp.TROPICAL)
