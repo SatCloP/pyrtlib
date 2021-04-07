@@ -3,7 +3,7 @@
 This class contains the main Radiative Transfer Equation functions.
 """
 import warnings
-from typing import Tuple
+from typing import Tuple, Optional
 
 import numpy as np
 
@@ -351,7 +351,7 @@ class RTEquation:
         return scld
 
     @staticmethod
-    def planck(frq: np.ndarray, tk: np.ndarray, taulay: np.ndarray) -> Tuple[
+    def planck(frq: np.ndarray, tk: np.ndarray, taulay: np.ndarray, es: Optional[np.float] = 1.0) -> Tuple[
         np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
         """  Computes the modified planck function (equation (4) in schroeder and
         westwater, 1992: guide to passive microwave weighting function
@@ -363,21 +363,22 @@ class RTEquation:
         Also returns the cosmic background term for the rte.
 
         Args:
-            frq ([type], optional): channel frequency (GHz). Defaults to None.
-            nl ([type], optional): number of profile levels
-            tk ([type], optional): temperature profile (K). Defaults to None.
-            taulay ([type], optional): profile of absorption integrated over each layer (np). Defaults to None.
+            frq (np.ndarray): channel frequency (GHz).
+            nl (np.ndarray): number of profile levels.
+            tk (np.ndarray): temperature profile (K).
+            taulay (np.ndarray): profile of absorption integrated over each layer (np).
+            es (np.float, optional): profile of absorption integrated over each layer (np). Defaults to 1.0.
 
         Returns:
             (tuple):
 
-                * hvk [type]: [planck constant * frequency] / boltzmann constant
-                * boft [type]: modified planck function for raob temperature profile
-                * bakgrnd [type]: background term of radiative transfer equation
-                * boftatm [type]: array of atmospheric planck radiance integrated (0,i)
-                * boftotl [type]: total planck radiance from the atmosphere plus bakgrnd
-                * boftmr  [type]: modified planck function for mean radiating temperature
-                * tauprof [type]: array of integrated absorption (np; 0,i)
+                * hvk np.ndarray: [planck constant * frequency] / boltzmann constant
+                * boft np.ndarray: modified planck function for raob temperature profile
+                * bakgrnd np.ndarray: background term of radiative transfer equation
+                * boftatm np.ndarray: array of atmospheric planck radiance integrated (0,i)
+                * boftotl np.ndarray: total planck radiance from the atmosphere plus bakgrnd
+                * boftmr  np.ndarray: modified planck function for mean radiating temperature
+                * tauprof np.ndarray: array of integrated absorption (np; 0,i)
 
         .. warning:: nl arg is missing ??
         """
@@ -402,7 +403,6 @@ class RTEquation:
             # Adapted from Planck_xxx.m, but from Satellite i-1 becomes i+1
             ###########################################################################
             Ts = tk[0]
-            Es = 1.0
             boft[nl - 1] = tk2b_mod(hvk, tk[nl - 1])
             for i in range(nl - 2, -1, -1):
                 boft[i] = tk2b_mod(hvk, tk[i])
@@ -414,8 +414,8 @@ class RTEquation:
             # The background is a combination of surface emission and downwelling 
             # radiance (boftotl) reflected by the surface
             if tauprof[0] < expmax:
-                boftbg = np.dot(Es, tk2b_mod(hvk, Ts)) + np.dot((1 - Es), boftotl)
-                # boftbg_sat  = Es * TK2B_mod(hvk,Ts); # SAT: eps * B(Tsrf) + (1-eps) B_dw
+                boftbg = np.dot(es, tk2b_mod(hvk, Ts)) + np.dot((1 - es), boftotl)
+                # boftbg_sat  = es * TK2B_mod(hvk,Ts); # SAT: eps * B(Tsrf) + (1-eps) B_dw
                 bakgrnd = np.dot(boftbg, np.exp(-tauprof[0]))
                 boftotl = bakgrnd + boftatm[0]
                 boftmr = boftatm[0] / (1.0 - np.exp(-tauprof[0]))

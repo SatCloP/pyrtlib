@@ -1,9 +1,9 @@
 from unittest import TestCase
 
 import numpy as np
-from numpy.testing import assert_allclose
+from numpy.testing import assert_allclose, assert_almost_equal
 from pyrtlib.atmp import AtmosphericProfiles as atmp
-from pyrtlib.utils import ppmv2gkg, mr2rh, gas_mass
+from pyrtlib.utils import ppmv2gkg, mr2rh, gas_mass, height_to_pressure, pressure_to_height
 
 z, p, d, tk, md = atmp.gl_atm(atmp.TROPICAL)
 
@@ -68,3 +68,12 @@ class Test(TestCase):
                            3.35864116e-04, 2.48788234e-04, 2.11469999e-04, 1.74151764e-04,
                            1.49272940e-04, 1.24394117e-04])
         assert_allclose(gkg, gkg, atol=0)
+
+
+    def test_pressure_to_height(self):
+        h = pressure_to_height(850)
+        assert_almost_equal(h, 1506.02, decimal=2)
+
+    def test_height_to_pressure(self):
+        p = height_to_pressure(5000)
+        assert_almost_equal(p, 577.63, decimal=2)
