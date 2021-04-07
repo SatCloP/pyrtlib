@@ -116,8 +116,8 @@ class N2AbsModel(AbsModel):
         fdepen = 0.5 + 0.5 / (1.0 + (f / 450.0) ** 2)
         if N2AbsModel.model in ['rose16', 'rose17', 'rose19', 'rose19sd']:
             l, m, n = 6.5e-14, 3.6, 1.34
-        elif N2AbsModel.model in ['rose18']:
-            l, m, n = 9.9e-14, 3.22, 1
+        elif N2AbsModel.model in ['rose18', 'rose20']:
+            l, m, n = 9.95e-14, 3.22, 1
         elif N2AbsModel.model == 'rose03':
             l, m, n = 6.5e-14, 3.6, 1.29
         else:
@@ -596,6 +596,8 @@ class O2AbsModel(AbsModel):
             o2abs = 5.034e+11 * summ * presda * th ** 3 / 3.14159
         # o2abs = 1.004 * np.maximum(o2abs, 0.0)
         o2abs = np.maximum(o2abs, 0.0)
+        if O2AbsModel.model == 'rose20':
+            o2abs = 1.004 * np.maximum(o2abs, 0.0)
 
         # *** ********************************************************
         # separate the equ. into line and continuum
