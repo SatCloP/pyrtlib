@@ -476,7 +476,7 @@ class RTEquation:
         nl = len(tk)
         c = np.dot(constants('light')[0], 100)
 
-        ghz2hz = 1000000000.0
+        ghz2hz = 1e9
         db2np = np.dot(np.log(10.0), 0.1)
 
         wave = c / (np.dot(frq, ghz2hz))
@@ -545,7 +545,7 @@ class RTEquation:
             # if H2OAbsModel.model == 'rose19sd':
             npp, ncpp = H2OAbsModel().h2o_rosen19_sd(pdrykpa, v, ekpa, frq)
             awet[i] = factor * (npp + ncpp) * db2np
-            if O2AbsModel.model in ['rose19sd', 'rose19']:
+            if O2AbsModel.model in ['rose19sd', 'rose19', 'rose20']:
                 npp, ncpp = O2AbsModel().o2abs_rosen18(pdrykpa, v, ekpa, frq)
                 aO2[i] = factor * npp * db2np
             if O2AbsModel.model in ['rose03', 'rose16', 'rose17']:

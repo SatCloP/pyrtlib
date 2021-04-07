@@ -297,7 +297,7 @@ class H2OAbsModel(AbsModel):
                     if np.abs(df[j]) < 750.0:
                         res += width / (df[j] ** 2 + wsq) - base
                 summ += s * res * (f / self.h2oll.fl[i]) ** 2
-        elif H2OAbsModel.model == 'rose19':
+        elif H2OAbsModel.model in ['rose19', 'rose20']:
             tiln = np.log(ti)
             ti2 = np.exp(2.5 * tiln)
             summ = 0.0
