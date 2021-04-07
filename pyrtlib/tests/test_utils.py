@@ -69,7 +69,6 @@ class Test(TestCase):
                            1.49272940e-04, 1.24394117e-04])
         assert_allclose(gkg, gkg, atol=0)
 
-
     def test_pressure_to_height(self):
         h = pressure_to_height(850)
         assert_almost_equal(h, 1506.02, decimal=2)

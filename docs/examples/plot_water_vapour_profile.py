@@ -45,7 +45,7 @@ axis_lim = [0, 7]
 
 
 def tick_function_pressure(x):
-    v= height_to_pressure(x * 1000)
+    v = height_to_pressure(x * 1000)
     return ["%.2f" % z for z in v]
 
 

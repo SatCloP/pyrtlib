@@ -2,7 +2,7 @@
   :width: 600
 
 .. pyrtlib documentation master file, created by sphinx-quickstart on Fri Mar 19 09:49:16 2021.
-   You can adapt this file completely to your liking, but it should at least contain the root `toctree` directive.
+You can adapt this file completely to your liking, but it should at least contain the root `toctree` directive.
 
 
 
