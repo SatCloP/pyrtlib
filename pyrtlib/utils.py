@@ -634,7 +634,7 @@ def pressure_to_height(pressure: np.float) -> np.float:
         pressure (float): The pressure value in mbar
 
     Returns:
-        float: The height to the provided pressure
+        float: The height in meters to the provided pressure
     """
     t0 = 288.0
     p0 = 1013.25
@@ -654,10 +654,10 @@ def height_to_pressure(height: np.float) -> np.float:
     .. math:: p = p_0 e^{\frac{g}{R \Gamma} \text{ln}(1-\frac{Z \Gamma}{T_0})}
 
     Args:
-        pressure (float): The pressure value in mbar
+        height (float): The height value in meters
 
     Returns:
-        float: The height to the provided pressure
+        float: The pressure to the provided height
     """
     t0 = 288.0
     p0 = 1013.25

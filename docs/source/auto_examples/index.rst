@@ -12,6 +12,27 @@ This gallery shows examples of pyrtlib functionality.  Community contributions a
 
 .. raw:: html
 
+    <div class="sphx-glr-thumbcontainer" tooltip="Performing Brigthness Temperature calculation">
+
+.. only:: html
+
+ .. figure:: /auto_examples/images/thumb/sphx_glr_plot_brigthness_temperature_thumb.png
+     :alt: Performing Brigthness Temperature calculation
+
+     :ref:`sphx_glr_auto_examples_plot_brigthness_temperature.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/plot_brigthness_temperature
+
+.. raw:: html
+
     <div class="sphx-glr-thumbcontainer" tooltip="Water Vapour Absorption Profiles">
 
 .. only:: html
