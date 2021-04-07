@@ -137,6 +137,3 @@ console*
 
 # VScode
 .vscode/
-
-# Matlab
-matlab-source/
