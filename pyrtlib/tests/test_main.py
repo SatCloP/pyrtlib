@@ -35,7 +35,7 @@ class Test(TestCase):
                           ray_tracing=True,
                           from_sat=True)
         df = df.set_index(frq)
-        df_expected = pd.read_csv(os.path.join(THIS_DIR, "data", "tb_tot_ros.03_16_17_19_19sd_20_20sd.csv"))
+        df_expected = pd.read_csv(os.path.join(THIS_DIR, "data", "tb_tot_ros03_16_17_18_19_19sd_20_20sd.csv"))
         assert_allclose(df.tbtotal, df_expected.ros19sd, atol=0)
 
     # @pytest.mark.datafiles(DATA_DIR)
@@ -56,7 +56,7 @@ class Test(TestCase):
                           absmdl='rose19',
                           ray_tracing=True,
                           from_sat=True)
-        df_expected = pd.read_csv(os.path.join(THIS_DIR, "data", "tb_tot_ros.03_16_17_19_19sd_20_20sd.csv"))
+        df_expected = pd.read_csv(os.path.join(THIS_DIR, "data", "tb_tot_ros03_16_17_18_19_19sd_20_20sd.csv"))
         assert_allclose(df.tbtotal, df_expected.ros19, atol=0)
 
     # @pytest.mark.datafiles(DATA_DIR)
@@ -77,7 +77,7 @@ class Test(TestCase):
                           absmdl='rose16',
                           ray_tracing=True,
                           from_sat=True)
-        df_expected = pd.read_csv(os.path.join(THIS_DIR, "data", "tb_tot_ros.03_16_17_19_19sd_20_20sd.csv"))
+        df_expected = pd.read_csv(os.path.join(THIS_DIR, "data", "tb_tot_ros03_16_17_18_19_19sd_20_20sd.csv"))
         assert_allclose(df.tbtotal, df_expected.ros16, atol=0)
 
     # @pytest.mark.datafiles(DATA_DIR)
@@ -99,7 +99,7 @@ class Test(TestCase):
                           absmdl='rose03',
                           ray_tracing=True,
                           from_sat=True)
-        df_expected = pd.read_csv(os.path.join(THIS_DIR, "data", "tb_tot_ros.03_16_17_19_19sd_20_20sd.csv"))
+        df_expected = pd.read_csv(os.path.join(THIS_DIR, "data", "tb_tot_ros03_16_17_18_19_19sd_20_20sd.csv"))
         assert_allclose(df.tbtotal, df_expected.ros03, atol=0)
 
     # @pytest.mark.datafiles(DATA_DIR)
@@ -120,7 +120,7 @@ class Test(TestCase):
                           absmdl='rose17',
                           ray_tracing=True,
                           from_sat=True)
-        df_expected = pd.read_csv(os.path.join(THIS_DIR, "data", "tb_tot_ros.03_16_17_19_19sd_20_20sd.csv"))
+        df_expected = pd.read_csv(os.path.join(THIS_DIR, "data", "tb_tot_ros03_16_17_18_19_19sd_20_20sd.csv"))
         assert_allclose(df.tbtotal, df_expected.ros17, atol=0)
 
     # @pytest.mark.datafiles(DATA_DIR)
@@ -141,10 +141,10 @@ class Test(TestCase):
                           absmdl='rose20',
                           ray_tracing=True,
                           from_sat=True)
-        df_expected = pd.read_csv(os.path.join(THIS_DIR, "data", "tb_tot_ros.03_16_17_19_19sd_20_20sd.csv"))
+        df_expected = pd.read_csv(os.path.join(THIS_DIR, "data", "tb_tot_ros03_16_17_18_19_19sd_20_20sd.csv"))
         assert_allclose(df.tbtotal, df_expected.ros20, atol=0)
 
-        # @pytest.mark.datafiles(DATA_DIR)
+    # @pytest.mark.datafiles(DATA_DIR)
     def test_tb_cloud_with_rose20sd(self):
         z, p, _, t, md = atmp.gl_atm(atmp.TROPICAL)
 
@@ -162,5 +162,26 @@ class Test(TestCase):
                           absmdl='rose20sd',
                           ray_tracing=True,
                           from_sat=True)
-        df_expected = pd.read_csv(os.path.join(THIS_DIR, "data", "tb_tot_ros.03_16_17_19_19sd_20_20sd.csv"))
+        df_expected = pd.read_csv(os.path.join(THIS_DIR, "data", "tb_tot_ros03_16_17_18_19_19sd_20_20sd.csv"))
         assert_allclose(df.tbtotal, df_expected.ros20sd, atol=0)
+
+    # @pytest.mark.datafiles(DATA_DIR)
+    def test_tb_cloud_with_rose18(self):
+        z, p, _, t, md = atmp.gl_atm(atmp.TROPICAL)
+
+        gkg = ppmv2gkg(md[:, atmp.H2O], atmp.H2O)
+        rh = mr2rh(p, t, gkg)[0] / 100
+
+        ang = np.array([90.])
+        frq = np.arange(20, 201, 1)
+
+        denliq = np.zeros(z.shape)
+        denice = np.zeros(z.shape)
+        cldh = np.zeros((2, 0))
+
+        df = tb_cloud_rte(z, p, t, rh, denliq, denice, cldh, frq, ang,
+                          absmdl='rose18',
+                          ray_tracing=True,
+                          from_sat=True)
+        df_expected = pd.read_csv(os.path.join(THIS_DIR, "data", "tb_tot_ros03_16_17_18_19_19sd_20_20sd.csv"))
+        assert_allclose(df.tbtotal, df_expected.ros18, atol=0)

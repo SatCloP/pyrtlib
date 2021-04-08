@@ -114,9 +114,9 @@ class N2AbsModel(AbsModel):
 
         th = 300.0 / t
         fdepen = 0.5 + 0.5 / (1.0 + (f / 450.0) ** 2)
-        if N2AbsModel.model in ['rose16', 'rose17', 'rose19', 'rose19sd']:
+        if N2AbsModel.model in ['rose16', 'rose17', 'rose18', 'rose19', 'rose19sd']:
             l, m, n = 6.5e-14, 3.6, 1.34
-        elif N2AbsModel.model in ['rose18', 'rose20', 'rose20sd']:
+        elif N2AbsModel.model in ['rose20', 'rose20sd']:
             l, m, n = 9.95e-14, 3.22, 1
         elif N2AbsModel.model == 'rose03':
             l, m, n = 6.5e-14, 3.6, 1.29
@@ -314,6 +314,26 @@ class H2OAbsModel(AbsModel):
                 width = widthf + widths
                 shiftf = self.h2oll.sh[i] * pda * (1. - self.h2oll.aair[i] * tiln) * ti ** self.h2oll.xh[i]
                 shifts = self.h2oll.shs[i] * pvap * (1. - self.h2oll.aself[i] * tiln) * ti ** self.h2oll.xhs[i]
+                shift = shiftf + shifts
+                wsq = width ** 2
+                s = self.h2oll.s1[i] * ti2 * np.exp(self.h2oll.b2[i] * (1. - ti))
+                df[0] = f - self.h2oll.fl[i] - shift
+                df[1] = f + self.h2oll.fl[i] + shift
+                base = width / (562500.0 + wsq)
+                res = 0.0
+                for j in range(0, 2):
+                    if np.abs(df[j]) < 750.0:
+                        res += width / (df[j] ** 2 + wsq) - base
+                summ += s * res * (f / self.h2oll.fl[i]) ** 2
+        elif H2OAbsModel.model == 'rose18':
+            ti2 = ti ** 2.5
+            summ = 0.0
+            for i in range(0, nlines):
+                widthf = self.h2oll.w0[i] * pda * ti ** self.h2oll.x[i]
+                widths = self.h2oll.w0s[i] * pvap * ti ** self.h2oll.xs[i]
+                width = widthf + widths
+                shiftf = self.h2oll.sh[i] * pda * ti ** self.h2oll.xh[i]
+                shifts = self.h2oll.shs[i] * pvap * ti ** self.h2oll.xhs[i]
                 shift = shiftf + shifts
                 wsq = width ** 2
                 s = self.h2oll.s1[i] * ti2 * np.exp(self.h2oll.b2[i] * (1. - ti))
@@ -545,7 +565,7 @@ class O2AbsModel(AbsModel):
         th1 = th - 1.0
         b = th ** self.o2ll.x
         preswv = vapden * temp / 216.68
-        if O2AbsModel.model in ['rose03', 'rose16', 'rose17']:
+        if O2AbsModel.model in ['rose03', 'rose16', 'rose17', 'rose18']:
             preswv = vapden * temp / 217.0
         presda = pres - preswv
         den = 0.001 * (presda * b + 1.2 * preswv * th)
@@ -559,7 +579,7 @@ class O2AbsModel(AbsModel):
         # nico intensities of the non-resonant transitions for o16-o16 and o16-o18, from jpl's line compilation
         # 1.571e-17 (o16-o16) + 1.3e-19 (o16-o18) = 1.584e-17
         summ = 1.584e-17 * freq * freq * dfnr / (th * (freq * freq + dfnr * dfnr))
-        if O2AbsModel.model in ['rose03', 'rose16', 'rose17']:
+        if O2AbsModel.model in ['rose03', 'rose16', 'rose17', 'rose18']:
             summ = 0.0
         nlines = len(self.o2ll.f)
         if O2AbsModel.model == 'rose03':
@@ -574,7 +594,7 @@ class O2AbsModel(AbsModel):
                 sf1 = (df + (freq - fcen) * y) / ((freq - self.o2ll.f[k]) ** 2 + df * df)
                 sf2 = (df - (freq + fcen) * y) / ((freq + self.o2ll.f[k]) ** 2 + df * df)
                 summ += strr * (sf1 + sf2) * (freq / self.o2ll.f[k]) ** 2
-        elif O2AbsModel.model == 'rose17':
+        elif O2AbsModel.model in ['rose17', 'rose18']:
             for k in range(0, nlines):
                 df = self.o2ll.w300[k] * den
                 fcen = self.o2ll.f[k]
@@ -625,7 +645,7 @@ class O2AbsModel(AbsModel):
             ncpp = 5.034e+11 * ncpp * presda * th ** 3 / 3.14159
         else:
             ncpp *= 1.6097e11 * presda * th ** 3  # nico: n/pi*sum0
-        if O2AbsModel.model in ['rose03', 'rose16', 'rose17']:
+        if O2AbsModel.model in ['rose03', 'rose16', 'rose17', 'rose18']:
             ncpp += N2AbsModel.n2_absorption(temp, pres, freq)
         # change the units from np/km to ppm
         npp = (o2abs / db2np) / factor
