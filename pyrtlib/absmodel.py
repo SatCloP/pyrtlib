@@ -116,7 +116,7 @@ class N2AbsModel(AbsModel):
         fdepen = 0.5 + 0.5 / (1.0 + (f / 450.0) ** 2)
         if N2AbsModel.model in ['rose16', 'rose17', 'rose19', 'rose19sd']:
             l, m, n = 6.5e-14, 3.6, 1.34
-        elif N2AbsModel.model in ['rose18', 'rose20']:
+        elif N2AbsModel.model in ['rose18', 'rose20', 'rose20sd']:
             l, m, n = 9.95e-14, 3.22, 1
         elif N2AbsModel.model == 'rose03':
             l, m, n = 6.5e-14, 3.6, 1.29
@@ -240,7 +240,7 @@ class H2OAbsModel(AbsModel):
         ti = self.h2oll.reftline / t
         df = np.zeros((2, 1))
 
-        if H2OAbsModel.model == 'rose19sd':
+        if H2OAbsModel.model.startswith(('rose19sd', 'rose20sd')):
             tiln = np.log(ti)
             ti2 = np.exp(2.5 * tiln)
             summ = 0.0
@@ -267,10 +267,17 @@ class H2OAbsModel(AbsModel):
                         # speed-dependent resonant shape factor
                         # double complex dcerror,xc,xrt,pxw,a
                         xc = np.complex((width0 - np.dot(1.5, width2)), df[j]) / width2
+                        if H2OAbsModel.model == 'rose20sd':
+                            if i == 1:
+                                delta2 = (self.h2oll.d2air * pda) + (self.h2oll.d2self * pvap)
+                            else:
+                                delta2 = 0.0
+                            xc = np.complex((width0 - np.dot(1.5, width2)), df[j] + np.dot(1.5, delta2)) / np.complex(width2, -delta2)
+                        
                         xrt = np.sqrt(xc)
 
                         pxw = 1.77245385090551603 * xrt * dcerror(-np.imag(xrt), np.real(xrt))
-                        sd = 2.0 * (1.0 - pxw) / width2
+                        sd = 2.0 * (1.0 - pxw) / (width2 if H2OAbsModel.model != 'rose20sd' else np.complex(width2, -delta2))
                         res += np.real(sd) - base
                     else:
                         if np.abs(df[j]) < 750.0:
@@ -596,7 +603,7 @@ class O2AbsModel(AbsModel):
             o2abs = 5.034e+11 * summ * presda * th ** 3 / 3.14159
         # o2abs = 1.004 * np.maximum(o2abs, 0.0)
         o2abs = np.maximum(o2abs, 0.0)
-        if O2AbsModel.model == 'rose20':
+        if O2AbsModel.model in ['rose20', 'rose20sd']:
             o2abs = 1.004 * np.maximum(o2abs, 0.0)
 
         # *** ********************************************************
