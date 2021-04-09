@@ -304,6 +304,8 @@ class RTEquation:
 
         # maximum absolute value for exponential function argument
         expmax = 125.0
+        ibase = int(ibase)
+        itop = int(itop)
         # ... check if absorption too large to exponentiate...
         if tauprof[ibase] > expmax:
             warnings.warn('from CldTmr_xxx: absorption too large to exponentiate for tmr of lowest cloud layer')
@@ -316,7 +318,7 @@ class RTEquation:
         if taucld > expmax:
             boftcld = np.dot(batmcld, np.exp(tauprof[ibase]))
         else:
-            boftcld = np.dot(batmcld, np.exp(tauprof[ibase])) / (1.0 - np.exp(-taucld))
+            boftcld = (batmcld * np.exp(tauprof[ibase])) / (1.0 - np.exp(-taucld))
 
         # compute cloud mean radiating temperature (tmrcld)
         tmrcld = RTEquation.bright(hvk, boftcld)
@@ -342,7 +344,7 @@ class RTEquation:
         ncld = len(lbase)
         scld = 0.0
         for i in range(0, ncld):
-            for j in range(lbase[i] + 1, ltop[i]):
+            for j in range(int(lbase[i]) + 1, int(ltop[i])):
                 scld = scld + np.dot(ds[j], (np.dot(0.5, (dencld[j] + dencld[j - 1]))))
 
         # convert the integrated value to cm.

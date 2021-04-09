@@ -33,6 +33,27 @@ This gallery shows examples of pyrtlib functionality.  Community contributions a
 
 .. raw:: html
 
+    <div class="sphx-glr-thumbcontainer" tooltip="Performing Brightness Temperature calculation in cloudy condition">
+
+.. only:: html
+
+ .. figure:: /auto_examples/images/thumb/sphx_glr_plot_model_cloudy_thumb.png
+     :alt: Performing Brightness Temperature calculation in cloudy condition
+
+     :ref:`sphx_glr_auto_examples_plot_model_cloudy.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/plot_model_cloudy
+
+.. raw:: html
+
     <div class="sphx-glr-thumbcontainer" tooltip="Water Vapour Absorption Profiles">
 
 .. only:: html

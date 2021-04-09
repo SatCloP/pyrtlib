@@ -11,7 +11,7 @@ from .rte import RTEquation
 from .utils import import_lineshape
 
 
-def tb_cloud_rte(z, p, tk, rh, denliq, denice, cldh, frq, angles, absmdl, ray_tracing=True, from_sat=True):
+def tb_cloud_rte(z, p, tk, rh, denliq, denice, cldh, frq, angles, absmdl, ray_tracing=True, from_sat=True, cloudy=False):
     """[summary]
 
     Args:
@@ -49,7 +49,7 @@ def tb_cloud_rte(z, p, tk, rh, denliq, denice, cldh, frq, angles, absmdl, ray_tr
     nl = len(z)
     nf = len(frq)
     nang = len(angles)
-    ncld = len(cldh[1, :])
+    ncld = len(cldh[0, :])
     ice = 0
 
     # Allocation
@@ -80,13 +80,12 @@ def tb_cloud_rte(z, p, tk, rh, denliq, denice, cldh, frq, angles, absmdl, ray_tr
     # ... convert cloud base and cloud top to (km above antenna height) ...
     # ... compute (beglev) and (endlev) ...
     cldh = cldh - z0
-    # TODO: check if shape is correct
-    beglev = np.zeros((1, nang))
-    endlev = np.zeros((1, nang))
+    beglev = np.zeros((2,))
+    endlev = np.zeros((2,))
     for j in range(0, ncld):
         for i in range(0, nl):
-            if z[i] == cldh[0, j]: beglev[j] = i
-            if z[i] == cldh[1, j]: endlev[j] = i
+            if z[i] == cldh[j, 0]: beglev[j] = i
+            if z[i] == cldh[j, 1]: endlev[j] = i
 
     # ... compute refractivity ...
     dryn, wetn, refindx = RTEquation.refractivity(p, tk, e)
@@ -104,7 +103,7 @@ def tb_cloud_rte(z, p, tk, rh, denliq, denice, cldh, frq, angles, absmdl, ray_tr
         srho[k], _ = RTEquation.exponential_integration(1, rho, ds, 0, nl, 0.1)
         swet[k], _ = RTEquation.exponential_integration(1, wetn, ds, 0, nl, 0.1)
         sdry[k], _ = RTEquation.exponential_integration(1, dryn, ds, 0, nl, 0.1)
-        if ncld > 0:
+        if cloudy:
             sliq[k] = RTEquation.cloud_integrated_density(denliq, ds, beglev, endlev)
             sice[k] = RTEquation.cloud_integrated_density(denice, ds, beglev, endlev)
 
@@ -113,16 +112,19 @@ def tb_cloud_rte(z, p, tk, rh, denliq, denice, cldh, frq, angles, absmdl, ray_tr
         for j in range(0, nf):
             # Rosenkranz, personal communication, 2019/02/12 (email)
             awet, adry = RTEquation.clearsky_absorption(p, tk, e, frq[j])
-            aliq, aice = RTEquation.cloudy_absorption(tk, denliq, denice, frq[j])
 
             SPtauwet[j, k], Ptauwet[j, k, :] = RTEquation.exponential_integration(1, awet, ds, 0, nl, 1)
             SPtaudry[j, k], Ptaudry[j, k, :] = RTEquation.exponential_integration(1, adry, ds, 0, nl, 1)
-            SPtauliq[j, k], Ptauliq[j, k, :] = RTEquation.exponential_integration(0, aliq, ds, 0, nl, 1)
-            SPtauice[j, k], Ptauice[j, k, :] = RTEquation.exponential_integration(0, aice, ds, 0, nl, 1)
+
+            if cloudy:
+                aliq, aice = RTEquation.cloudy_absorption(tk, denliq, denice, frq[j])
+                SPtauliq[j, k], Ptauliq[j, k, :] = RTEquation.exponential_integration(0, aliq, ds, 0, nl, 1)
+                SPtauice[j, k], Ptauice[j, k, :] = RTEquation.exponential_integration(0, aice, ds, 0, nl, 1)
+
             Ptaulay[j, k, :] = Ptauwet[j, k, :] + Ptaudry[j, k, :] + Ptauice[j, k, :] + Ptauliq[j, k, :]
             # [boftotl,boftatm,boftmr,PSPtauprof,hvk] = Planck_xxx(frq(j),tk,Ptaulay(j,k,:));
             boftotl, boftatm, boftmr, PSPtauprof, hvk, _, _ = RTEquation.planck(frq[j], tk, Ptaulay[j, k, :])
-            if ncld > 0:
+            if cloudy:
                 tmrcld[j, k] = RTEquation.cloud_radiating_temperature(beglev[0], endlev[0], hvk, PSPtauprof, boftatm)
             # ... assign output values ...
             tbtotal[j, k] = RTEquation.bright(hvk, boftotl)
