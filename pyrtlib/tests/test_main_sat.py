@@ -206,3 +206,35 @@ class Test(TestCase):
                           from_sat=True)
         df_expected = pd.read_csv(os.path.join(THIS_DIR, "data", "tb_tot_ros03_16_17_18_19_19sd_20_20sd_98.csv"))
         assert_allclose(df.tbtotal, df_expected.ros98, atol=0)
+
+    # @pytest.mark.datafiles(DATA_DIR)
+    def test_tb_cloud_with_rose98_cloudy(self):
+        z, p, _, t, md = atmp.gl_atm(atmp.TROPICAL)
+
+        gkg = ppmv2gkg(md[:, atmp.H2O], atmp.H2O)
+        rh = mr2rh(p, t, gkg)[0] / 100
+
+        ang = np.array([90.])
+        frq = np.arange(20, 201, 1)
+
+        denliq = np.zeros(z.shape)
+        denice = np.zeros(z.shape)
+        cldh = np.zeros((2, 2))
+        # build a cloud
+        ib = 1
+        it = 3
+        denliq[ib:it + 1] = 10 * np.ones((it - ib + 1))
+        cldh[:, 0] = np.array([z[ib], z[it]])
+        ib = 29
+        it = 31
+        denice[ib:it + 1] = 0.1 * np.ones((it - ib + 1))
+        cldh[:, 1] = np.array([z[ib], z[it]])
+
+        df = tb_cloud_rte(z, p, t, rh, denliq, denice, cldh, frq, ang,
+                          absmdl='rose98',
+                          ray_tracing=True,
+                          from_sat=True,
+                          cloudy=True)
+        df_expected = pd.read_csv(os.path.join(THIS_DIR, "data", "cloudy_tb_tot_ros98.csv"))
+        assert_allclose(df.tbtotal, df_expected.ros98, atol=0)
+        

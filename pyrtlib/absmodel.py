@@ -64,7 +64,7 @@ class LiqAbsModel(AbsModel):
             abliq = 0
             return abliq
 
-        if LiqAbsModel.model == 'rose03':
+        if LiqAbsModel.model in ['rose03', 'rose98']:
             theta1 = 1.0 - 300.0 / temp
             eps0 = 77.66 - np.dot(103.3, theta1)
             eps1 = np.dot(0.0671, eps0)
