@@ -503,10 +503,7 @@ def tk2b_mod(hvk: np.ndarray, T: np.ndarray) -> np.ndarray:
 
     .. math::
 
-        \frac{\partial\mathcal{D}}{\partial t}=\nabla\times\mathcal{H}
-    .. math::
-
-        \frac{\partial\mathcal{B}}{\partial t}=-\nabla\times\mathcal{E}
+        Btilde=\frac{1}{e^\frac{hvk}{T}-1}
 
     Args:
         hvk ([type], optional): [description]. Defaults to None.

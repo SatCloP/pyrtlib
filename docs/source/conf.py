@@ -14,6 +14,8 @@
 # import sys
 # sys.path.insert(0, os.path.abspath('.'))
 import warnings
+from sphinx_gallery.sorting import FileNameSortKey
+
 
 # -- Project information -----------------------------------------------------
 
@@ -138,13 +140,14 @@ sphinx_gallery_conf = {
     'gallery_dirs': ['auto_examples'],  # location of generated output
     # sphinx-gallery only shows plots from plot_*.py files by default:
     # 'filename_pattern': '*.py',
+    'within_subsection_order': FileNameSortKey,
 
     # directory where function/class granular galleries are stored
     'backreferences_dir': 'generated/gallery_backreferences',
 
     # Modules for which function/class level galleries are created. In
     # this case only pyrtlib, could include others though.  must be tuple of str
-    'doc_module': ('pyrtlib',),
+    'doc_module': ('pyrtlib','numpy'),
 }
 # supress warnings in gallery output
 # https://sphinx-gallery.github.io/stable/configuration.html
@@ -313,3 +316,15 @@ todo_include_todos = True
 #     'make_github_url': make_github_url,
 # }
 html_last_updated_fmt = '%d/%m/%Y'
+
+# configuration for intersphinx: refer to the Python standard library.
+intersphinx_mapping = {
+    'python': ('https://docs.python.org/{.major}'.format(sys.version_info), None),
+    'matplotlib': ('https://matplotlib.org/', None),
+    'pandas': ('http://pandas.pydata.org/pandas-docs/stable/', None),
+    'numpy': ('http://docs.scipy.org/doc/numpy', None),
+}
+
+# The name of the Pygments (syntax highlighting) style to use.
+pygments_style = 'default'
+highlight_language = 'python3'

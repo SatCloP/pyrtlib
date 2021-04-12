@@ -5,7 +5,7 @@ Performing Brightness Temperature calculation in cloudy condition
 
 # %%
 # This example shows how to use the
-# :py:meth:`pyrtlib.main.tb_cloud_rte` method to calculate brightness temperature from Satellite in cloudy condition
+# :py:class:`pyrtlib.main.BTCloudRTE` method to calculate brightness temperature from Satellite in cloudy condition
 
 import matplotlib.pyplot as plt
 from matplotlib.ticker import FixedLocator, FormatStrFormatter
@@ -14,7 +14,7 @@ import numpy as np
 np.seterr('raise')
 
 from pyrtlib.atmp import AtmosphericProfiles as atmp
-from pyrtlib.main import tb_cloud_rte
+from pyrtlib.main import BTCloudRTE
 from pyrtlib.utils import ppmv2gkg, mr2rh
 
 atm = ['Tropical',
@@ -58,13 +58,15 @@ for i in [0, 1]:
     ax.set_xlabel('Frequency (GHz)')
     ax.set_ylabel('BT (K)')
 
-    df = tb_cloud_rte(z, p, t, rh, denliq, denice, cldh, frq, ang,
-                      absmdl=mdl,
-                      ray_tracing=True,
-                      from_sat=True,
-                      cloudy=i)
+    rte = BTCloudRTE(z, p, t, rh, frq, ang)
+    rte.cloudy = i
+    rte.init_cloudy(cldh, denice, denliq)
+    rte.init_absmdl(mdl)
+    df = rte.execute()
+
     df = df.set_index(frq)
-    df.tbtotal.plot(x=frq, ax=ax, linewidth=1, label='{} - {} ({})'.format(atm[atmp.MIDLATITUDE_SUMMER], mdl, text_plot))
+    df.tbtotal.plot(x=frq, ax=ax, linewidth=1,
+                    label='{} - {} ({})'.format(atm[atmp.MIDLATITUDE_SUMMER], mdl, text_plot))
 
 ax.legend()
 plt.show()

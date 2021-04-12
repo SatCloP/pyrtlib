@@ -2,8 +2,13 @@
 """
 This class contains the main Radiative Transfer Equation functions.
 """
+
+__author__ = ''
+__date__ = 'March 2021'
+__copyright__ = '(C) 2021, CNR-IMAA'
+
 import warnings
-from typing import Tuple, Optional
+from typing import Tuple, Optional, Union
 
 import numpy as np
 
@@ -16,17 +21,18 @@ class RTEquation:
     """
 
     from_sat = False
+    emissivity = 1.0
 
     @staticmethod
-    def vapor(tk=None, rh=None, ice=None, *args, **kwargs):
+    def vapor(tk: np.ndarray, rh: np.ndarray, ice: bool):
         """Compute saturation vapor pressure (es,in mb) over water or ice at
         temperature tk (kelvins), using the Goff-Gratch formulation (List,1963).
 
         Args:
-            tk ([type], optional): temperature (K). Defaults to None.
-            rh ([type], optional): relative humidity (fraction). Defaults to None.
-            ice ([type], optional): switch to calculate saturation vapor pressure over
-            water only (0) or water and ice, depending on tk (1). Defaults to None.
+            tk (numpy.ndarray): temperature (K).
+            rh (numpy.ndarray): relative humidity (fraction).
+            ice (bool): switch to calculate saturation vapor pressure over
+                        water only (0) or water and ice, depending on tk (1). Defaults to False.
 
         Returns:
             (tuple):
@@ -59,7 +65,7 @@ class RTEquation:
         es = np.dot(-7.90298, (y - 1.0)) + np.dot(5.02808, np.log10(y)) - np.dot(1.3816e-07, (
                 10 ** (np.dot(11.344, (1.0 - (1.0 / y)))) - 1.0)) + np.dot(0.0081328, (
                 10 ** (np.dot(-3.49149, (y - 1.0))) - 1.0)) + np.log10(1013.246)
-        if ice == 1:
+        if ice:
             # over ice if tk < 263.16
             indx = np.nonzero(tk < 263.16)
             y = 273.16 / tk(indx)
@@ -77,7 +83,7 @@ class RTEquation:
         return e, rho
 
     @staticmethod
-    def bright(hvk=None, boft=None, *args, **kwargs):
+    def bright(hvk: np.ndarray, boft: np.ndarray) -> Union[np.ndarray, None]:
         """Function to compute temperature from the modified Planck
         radiance (Planck function without the constants 2h(v^3)/(c^2).
 
@@ -89,16 +95,15 @@ class RTEquation:
             [type]: [description]
         """
 
-        # fixes floa FloatingPointError: divide by zero encountered in double_scalars
         if boft != 0:
             Tb = hvk / np.log(1.0 + (1.0 / boft))
         else:
-            Tb = np.nan
+            Tb = 0
 
         return Tb
 
     @staticmethod
-    def refractivity(p=None, tk=None, e=None, *args, **kwargs):
+    def refractivity(p: np.ndarray, tk: np.ndarray, e: np.ndarray) -> Tuple[np.ndarray]:
         """Computes profiles of wet refractivity, dry refractivity,
         refractive index.  Refractivity equations were taken from G.D.
         Thayer, 1974:  An improved equation for the radio refractive
@@ -140,7 +145,7 @@ class RTEquation:
         return dryn, wetn, refindx
 
     @staticmethod
-    def ray_tracing(z=None, refindx=None, angle=None, z0=None, *args, **kwargs):
+    def ray_tracing(z: np.ndarray, refindx: np.ndarray, angle: np.float, z0: np.float) -> np.ndarray:
         """Ray-tracing algorithm of Dutton, Thayer, and Westwater, rewritten for
         readability & attempted documentation.  Based on the technique shown in
         Radio Meteorology by Bean and Dutton (Fig. 3.20 and surrounding text).
@@ -365,22 +370,22 @@ class RTEquation:
         Also returns the cosmic background term for the rte.
 
         Args:
-            frq (np.ndarray): channel frequency (GHz).
-            nl (np.ndarray): number of profile levels.
-            tk (np.ndarray): temperature profile (K).
-            taulay (np.ndarray): profile of absorption integrated over each layer (np).
+            frq (numpy.ndarray): channel frequency (GHz).
+            nl (numpy.ndarray): number of profile levels.
+            tk (numpy.ndarray): temperature profile (K).
+            taulay (numpy.ndarray): profile of absorption integrated over each layer (np).
             es (np.float, optional): profile of absorption integrated over each layer (np). Defaults to 1.0.
 
         Returns:
             (tuple):
-
-                * hvk np.ndarray: [planck constant * frequency] / boltzmann constant
-                * boft np.ndarray: modified planck function for raob temperature profile
-                * bakgrnd np.ndarray: background term of radiative transfer equation
-                * boftatm np.ndarray: array of atmospheric planck radiance integrated (0,i)
-                * boftotl np.ndarray: total planck radiance from the atmosphere plus bakgrnd
-                * boftmr  np.ndarray: modified planck function for mean radiating temperature
-                * tauprof np.ndarray: array of integrated absorption (np; 0,i)
+            
+            :hvk: [planck constant * frequency] / boltzmann constant
+            :boft: modified planck function for raob temperature profile
+            :bakgrnd: background term of radiative transfer equation
+            :boftatm: array of atmospheric planck radiance integrated (0,i)
+            :boftotl: total planck radiance from the atmosphere plus bakgrnd
+            :boftmr: modified planck function for mean radiating temperature
+            :tauprof: array of integrated absorption (np; 0,i)
 
         .. warning:: nl arg is missing ??
         """
@@ -416,7 +421,7 @@ class RTEquation:
             # The background is a combination of surface emission and downwelling 
             # radiance (boftotl) reflected by the surface
             if tauprof[0] < expmax:
-                boftbg = np.dot(es, tk2b_mod(hvk, Ts)) + np.dot((1 - es), boftotl)
+                boftbg = np.dot(RTEquation.emissivity, tk2b_mod(hvk, Ts)) + np.dot((1 - RTEquation.emissivity), boftotl)
                 # boftbg_sat  = es * TK2B_mod(hvk,Ts); # SAT: eps * B(Tsrf) + (1-eps) B_dw
                 bakgrnd = np.dot(boftbg, np.exp(-tauprof[0]))
                 boftotl = bakgrnd + boftatm[0]

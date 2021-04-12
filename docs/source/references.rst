@@ -10,3 +10,6 @@ References
            <https://ntrs.nasa.gov/archive/nasa/casi.ntrs.nasa.gov/19770009539.pdf>`_,
            U.S. Government Printing Office, Washington, DC.
 
+.. [ANDERSON] ANDERSON et al. 1986 AFGL Atmospheric Constituent Profiles (0.120km): 
+            `ResearchGate PDF <https://www.researchgate.net/publication/235054307_AFGL_Atmospheric_Constituent_Profiles_0120km>`_, 
+            AFGL-TR-86-0110

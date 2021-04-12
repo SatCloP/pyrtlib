@@ -5,8 +5,9 @@
 [![build-docs-action](https://github.com/slarosa/pyrtlib/workflows/build-docs-action/badge.svg)](https://github.com/slarosa/pyrtlib/actions/workflows/build_docs.yml)
 [![run-python-tests](https://github.com/slarosa/pyrtlib/workflows/run-python-tests/badge.svg)](https://github.com/slarosa/pyrtlib/actions/workflows/ci.yml)
 [![Project Status: WIP – Initial development is in progress, but there has not yet been a stable, usable release suitable for the public.](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
-[![GitHub commit](https://img.shields.io/github/last-commit/slarosa/pyrtlib)](https://github.com/slarosa/pyrtlib/commits/main)
+[![GitHub release](https://img.shields.io/github/release/slarosa/pyrtlib.svg)](https://github.com/slarosa/pyrtlib)
 [![codecov](https://codecov.io/gh/slarosa/pyrtlib/branch/main/graph/badge.svg?token=7DV4B4U1OZ)](https://codecov.io/gh/slarosa/pyrtlib)
+<!--[![GitHub commit](https://img.shields.io/github/last-commit/slarosa/pyrtlib)](https://github.com/slarosa/pyrtlib/commits/main)-->
 <!-- [![license](https://img.shields.io/github/license/slarosa/pyrtlib.svg)](https://github.com/slarosa/pyrtlib/blob/main/LICENSE.md) -->
 
 A python package to compute atmospheric radiative transfer model based on the radiative transfer equation (RTE).
@@ -17,7 +18,7 @@ A python package to compute atmospheric radiative transfer model based on the ra
 
 For examples of how to use pyrtlib see the [examples gallery](docs/examples). Code can be downloaded both as python script or notebook file.
 
-## Performing calculation of brigthness temperature for a model.
+## Performing calculation of brightness temperature for a model.
 Atmospheric profile definition:
 
 ```python
@@ -36,18 +37,17 @@ Deifinition of angles and frequencies:
 >>> ang = np.array([90.])
 >>> frq = np.arange(20, 201, 1)
 ```
-Initialization of liquid and ice array (not used in clear-sky):
+Initialize parameters:
 ```python
->>> denliq = np.zeros(z.shape)
->>> denice = np.zeros(z.shape)
->>> cldh = np.zeros((2, 0))
+>>> rte = BTCloudRTE(z, p, t, rh, frq, ang)
 ```
-Execution of the main script:
+Set absorption mofel
 ```python
->>> df = tb_cloud_rte(z, p, t, rh, denliq, denice, cldh, frq, ang,
-...         absmdl='rose16',
-...         ray_tracing=True,
-...         from_sat=True)
+>>> rte.init_absmdl('rose16')
+```
+Execute model
+```python
+>>> df = rte.execute()
 >>> df.tbtotal
 0      297.391838
 1      296.186240

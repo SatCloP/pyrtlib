@@ -3,15 +3,15 @@
 This calss contains the AFGL Atmospheric Constituent Profiles (0-120km).
 """
 
+from typing import List, Tuple
 import numpy as np
 
 
 class AtmosphericProfiles:
     """AFGL Atmospheric Constituent Profiles (0-120km)
 
-    Each of these profile contains data at 50 atmospheric levels:
+    Each of these profile contains data at 50 atmospheric levels.
     Altitude (km), Pressure (mb), Density (cm-3), Molec. densities (ppmv):
-
     * 0 (H2O),
     * 1 (CO2),
     * 2 (O3),
@@ -20,10 +20,8 @@ class AtmosphericProfiles:
     * 5 (CH4),
     * 6 (O2)
     Plus suplimental profiles where available.
-
     The last set of data sets are constituent profiles of molecular
     densities (ppmv) for the minor absorbing atmospheric gases:
-
     * 7 (NO),
     * 8 (SO4),
     * 9 (NO2),
@@ -52,7 +50,6 @@ class AtmosphericProfiles:
     Plus suplimental profiles where available.
 
     Keywords for reading:
-
     'MODEL N' (A7) where N is the model number
     'MINGAS ' for reading minor gas profile.
     
@@ -61,9 +58,10 @@ class AtmosphericProfiles:
 
     References
     ----------
-    .. [1] REF. ANDERSON et al. 1986 AFGL-TR-86-0110
-    This file was partly copied from FASCOD2 routine MLATMB 10/11/87
 
+    .. [1] REF. ANDERSON et al. 1986 AFGL-TR-86-0110
+    
+    .. note:: This file was partly copied from FASCOD2 routine MLATMB 10/11/87
     """
 
     TROPICAL = 0
@@ -108,7 +106,22 @@ class AtmosphericProfiles:
     AIR = 99
 
     @staticmethod
-    def gl_atm(atm):
+    def atm_profiles() -> List[int]:
+        """[summary]
+
+        Returns:
+            List[int]: A list of standard profiles atmospheric
+        """
+        return [AtmosphericProfiles.TROPICAL,
+                AtmosphericProfiles.MIDLATITUDE_SUMMER,
+                AtmosphericProfiles.MIDLATITUDE_WINTER,
+                AtmosphericProfiles.SUBARCTIC_SUMMER,
+                AtmosphericProfiles.SUBARCTIC_WINTER,
+                AtmosphericProfiles.US_STANDARD]
+
+
+    @staticmethod
+    def gl_atm(atm: int) -> Tuple[np.ndarray]:
         """Returns the Atmopshere profile
         This method contains 6 model profiles:
         
@@ -127,7 +140,6 @@ class AtmosphericProfiles:
         +--------+---------------------+
         | 6      |  U.S. Standard      |
         +--------+---------------------+
-
 
         Args:
             option (int, optional): the atmosphere profile. Defaults to 1.

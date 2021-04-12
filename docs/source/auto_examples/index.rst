@@ -12,6 +12,27 @@ This gallery shows examples of pyrtlib functionality.  Community contributions a
 
 .. raw:: html
 
+    <div class="sphx-glr-thumbcontainer" tooltip="Atmospheric Profiles">
+
+.. only:: html
+
+ .. figure:: /auto_examples/images/thumb/sphx_glr_plot_atmosphere_thumb.png
+     :alt: Atmospheric Profiles
+
+     :ref:`sphx_glr_auto_examples_plot_atmosphere.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/plot_atmosphere
+
+.. raw:: html
+
     <div class="sphx-glr-thumbcontainer" tooltip="Performing Brightness Temperature calculation">
 
 .. only:: html
@@ -72,27 +93,6 @@ This gallery shows examples of pyrtlib functionality.  Community contributions a
    :hidden:
 
    /auto_examples/plot_water_vapour_profile
-
-.. raw:: html
-
-    <div class="sphx-glr-thumbcontainer" tooltip="Atmospheric Profiles">
-
-.. only:: html
-
- .. figure:: /auto_examples/images/thumb/sphx_glr_plot_atmosphere_thumb.png
-     :alt: Atmospheric Profiles
-
-     :ref:`sphx_glr_auto_examples_plot_atmosphere.py`
-
-.. raw:: html
-
-    </div>
-
-
-.. toctree::
-   :hidden:
-
-   /auto_examples/plot_atmosphere
 .. raw:: html
 
     <div class="sphx-glr-clear"></div>

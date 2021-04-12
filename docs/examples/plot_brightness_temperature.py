@@ -5,7 +5,7 @@ Performing Brightness Temperature calculation
 
 # %%
 # This example shows how to use the
-# :py:meth:`pyrtlib.main.tb_cloud_rte` method to calculate brightness temperature from Satellite and from ground
+# :py:class:`pyrtlib.main.BTCloudRTE` method to calculate brightness temperature from Satellite and from ground
 
 import matplotlib.pyplot as plt
 
@@ -13,7 +13,7 @@ plt.rcParams.update({'font.size': 15})
 import numpy as np
 
 from pyrtlib.atmp import AtmosphericProfiles as atmp
-from pyrtlib.main import tb_cloud_rte
+from pyrtlib.main import BTCloudRTE
 from pyrtlib.utils import ppmv2gkg, mr2rh
 
 atm = ['Tropical',
@@ -36,17 +36,13 @@ for i in range(0, 2):
     frq = np.arange(20, 201, 1)
     nf = len(frq)
 
-    denliq = np.zeros(z.shape)
-    denice = np.zeros(z.shape)
-    cldh = np.zeros((2, 0))
-
     ax.set_xlabel('Frequency (GHz)')
     ax.set_ylabel('BT (K)')
 
-    df = tb_cloud_rte(z, p, t, rh, denliq, denice, cldh, frq, ang,
-                      absmdl=mdl,
-                      ray_tracing=True,
-                      from_sat=True)
+    rte = BTCloudRTE(z, p, t, rh, frq, ang)
+    rte.init_absmdl(mdl)
+    df = rte.execute()
+
     df = df.set_index(frq)
     df.tbtotal.plot(ax=ax, linewidth=1, label='{} - {}'.format(atm[i], mdl))
 
