@@ -7,6 +7,7 @@ __author__ = ''
 __date__ = 'March 2021'
 __copyright__ = '(C) 2021, CNR-IMAA'
 
+import warnings
 from typing import Dict, Tuple, Union
 
 import numpy as np
@@ -160,11 +161,11 @@ class BTCloudRTE(object):
         """
         # ... convert cloud base and cloud top to (km above antenna height) ...
         # ... compute (beglev) and (endlev) ...
+        ncld = len(cldh[0, :])
+        self.cldh = cldh - self.z0
+        self.beglev = np.zeros((2,))
+        self.endlev = np.zeros((2,))
         if getattr(self, 'cloudy'):
-            ncld = len(cldh[0, :])
-            self.cldh = cldh - self.z0
-            self.beglev = np.zeros((2,))
-            self.endlev = np.zeros((2,))
             for j in range(0, ncld):
                 for i in range(0, self.nl):
                     if self.z[i] == self.cldh[j, 0]: self.beglev[j] = i
@@ -173,7 +174,9 @@ class BTCloudRTE(object):
             self.denice = denice
             self.denliq = denliq
         else:
-            raise AttributeError("Set cloudy to True before running init_cloudy()")
+            warnings.warn("It seems that BTCloudRTE.cloudy attribute is not set to True.\
+                Sets it to True for running model in cloudy condition.")
+            # raise AttributeError("Set cloudy to True before running init_cloudy()")
 
     def execute(self, only_bt: bool = True) -> Union[Tuple[pd.DataFrame, Dict[str, np.ndarray]]]:
         """[summary]
@@ -183,73 +186,73 @@ class BTCloudRTE(object):
         
         Returns a pandas dataframe containing:
         
-        * tbtotal:
+        tbtotal:
             brightness temperature (K) includes cosmic background; 
             indexed by frequency and elevation angle
         
-        * tbatm:
+        tbatm:
             atmospheric brightness temperature (K), no cosmic; 
             background;indexed by frequency and elevation angle
         
-        * tmr:
+        tmr:
             mean radiating temperature of the atmosphere (K);
             indexed by frequency and elevation angle
         
-        * tmrcld:
+        tmrcld:
             mean radiating temperature (K) of the lowest cloud layer;
             indexed by frequency and elevation angle
         
-        * taudry:
+        taudry:
             dry air absorption integrated over each ray path (Np);
             indexed by frequency and elevation angle
         
-        * tauwet:
+        tauwet:
             water vapor absorption integrated over each ray path (Np);
             indexed by frequency and elevation angle
         
-        * tauliq:
+        tauliq:
             cloud liquid absorption integrated over each ray path (Np);
             indexed by frequency and elevation angle
         
-        * tauice:
+        tauice:
             cloud ice absorption integrated over each ray path (Np);
             indexed by frequency and elevation angle
 
         and a dictionary containing:
 
-        * taulaydry:
+        taulaydry:
             dry air absorption integrated over each ray path (Np);
             indexed by frequency, elevation angle and height profile
 
-        * taulaywet:
+        taulaywet:
             water vapor absorption integrated over each ray path (Np);
             indexed by frequency, elevation angle and height profile
 
-        * taulayliq:
+        taulayliq:
             cloud liquid absorption integrated over each ray path (Np);
             indexed by frequency, elevation angle and height profile
 
-        * taulayice:
+        taulayice:
             cloud ice absorption integrated over each ray path (Np);
             indexed by frequency, elevation angle and height profile
 
-        * srho:
+        srho:
             water vapor density integrated along each ray path (cm);
             indexed by elevation angle
         
-        * swet:
+        swet:
             wet refractivity integrated along each ray path (cm);
             indexed by elevation angle
         
-        * sdry:
+        sdry:
             dry refractivity integrated along each ray path (cm);
             indexed by elevation angle
         
-        * sliq:
+        sliq:
             cloud ice density integrated along each ray path (cm);
             indexed by elevation angle
         
-        * sice:
+        sice:
             cloud liquid density integrated along each ray path (cm);
             indexed by elevation angle
 

@@ -72,7 +72,7 @@ class LiqAbsModel(AbsModel):
             fp = np.dot((np.dot(316.0, theta1) + 146.4), theta1) + 20.2
             fs = np.dot(39.8, fp)
             eps = (eps0 - eps1) / np.complex(1.0, freq / fp) + (eps1 - eps2) / complex(1.0, freq / fs) + eps2
-        elif LiqAbsModel.model in ['rose17', 'rose16', 'rose19', 'rose19sd']:
+        elif LiqAbsModel.model in ['rose17', 'rose16', 'rose19', 'rose19sd', 'makarov11']:
             eps = dilec12(freq, temp)
         else:
             raise ValueError('[AbsLiq] No model available with this name: {} . Sorry...'.format(LiqAbsModel.model))
@@ -114,7 +114,7 @@ class N2AbsModel(AbsModel):
 
         th = 300.0 / t
         fdepen = 0.5 + 0.5 / (1.0 + (f / 450.0) ** 2)
-        if N2AbsModel.model in ['rose16', 'rose17', 'rose18', 'rose19', 'rose19sd']:
+        if N2AbsModel.model in ['rose16', 'rose17', 'rose18', 'rose19', 'rose19sd', 'makarov11']:
             l, m, n = 6.5e-14, 3.6, 1.34
         elif N2AbsModel.model in ['rose20', 'rose20sd']:
             l, m, n = 9.95e-14, 3.22, 1
@@ -286,7 +286,7 @@ class H2OAbsModel(AbsModel):
                             res += width0 / (df[j] ** 2 + wsq) - base
 
                 summ += s * res * (f / self.h2oll.fl[i]) ** 2
-        elif H2OAbsModel.model in ['rose16', 'rose03', 'rose17', 'rose98']:
+        elif H2OAbsModel.model in ['rose16', 'rose03', 'rose17', 'rose98', 'makarov11']:
             ti2 = ti ** 2.5
             summ = 0.0
             for i in range(0, nlines):
@@ -570,11 +570,11 @@ class O2AbsModel(AbsModel):
         th1 = th - 1.0
         b = th ** self.o2ll.x
         preswv = vapden * temp / 216.68
-        if O2AbsModel.model in ['rose03', 'rose16', 'rose17', 'rose18', 'rose98']:
+        if O2AbsModel.model in ['rose03', 'rose16', 'rose17', 'rose18', 'rose98', 'makarov11']:
             preswv = vapden * temp / 217.0
         presda = pres - preswv
         den = 0.001 * (presda * b + 1.2 * preswv * th)
-        if O2AbsModel.model in ['rose03', 'rose16', 'rose98']:
+        if O2AbsModel.model in ['rose03', 'rose16', 'rose98', 'makarov11']:
             den = 0.001 * (presda * b + 1.1 * preswv * th)
         if O2AbsModel.model == 'rose03':
             dens = 0.001 * (presda * th ** 0.9 + 1.1 * preswv * th)
@@ -586,7 +586,7 @@ class O2AbsModel(AbsModel):
         # nico intensities of the non-resonant transitions for o16-o16 and o16-o18, from jpl's line compilation
         # 1.571e-17 (o16-o16) + 1.3e-19 (o16-o18) = 1.584e-17
         summ = 1.584e-17 * freq * freq * dfnr / (th * (freq * freq + dfnr * dfnr))
-        if O2AbsModel.model in ['rose03', 'rose16', 'rose17', 'rose18', 'rose98']:
+        if O2AbsModel.model in ['rose03', 'rose16', 'rose17', 'rose18', 'rose98', 'makarov11']:
             summ = 0.0
         nlines = len(self.o2ll.f)
         if O2AbsModel.model in ['rose03', 'rose98']:
@@ -652,7 +652,7 @@ class O2AbsModel(AbsModel):
             ncpp *= 5.034e+11 * presda * th ** 3 / 3.14159
         else:
             ncpp *= 1.6097e11 * presda * th ** 3  # nico: n/pi*sum0
-        if O2AbsModel.model in ['rose03', 'rose16', 'rose17', 'rose18', 'rose98']:
+        if O2AbsModel.model in ['rose03', 'rose16', 'rose17', 'rose18', 'rose98', 'makarov11']:
             ncpp += N2AbsModel.n2_absorption(temp, pres, freq)
         # change the units from np/km to ppm
         npp = (o2abs / db2np) / factor

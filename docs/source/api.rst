@@ -28,6 +28,21 @@ Example
     rte.emissivity = 0.6
     df = rte.execute()
 
+Also, it is possible to execute a combination of absorption models. The following example use :code:`rose19sd` model for O2 and
+:code:`rose16` for H2O:
+
+.. code-block:: python
+
+    from pyrtlib.main import BTCloudRTE
+    from pyrtlib.utils import import_lineshape
+    from pyrtlib.absmodel import H2OAbsModel, O2AbsModel
+
+    rte = BTCloudRTE(z, p, t, rh, frq, ang)
+    rte.init_absmdl('rose19sd')
+    H2OAbsModel.model = 'rose16'
+    H2OAbsModel.h2oll = import_lineshape('h2oll_rose16')
+    df = rte.execute()
+
 Atmospheric Profiles
 ====================
 
@@ -68,6 +83,20 @@ Example
 Radiative Transfer Equation
 ===========================
 
+RTE functions called from :py:class:`pyrtlib.rte.RTEquation`:
+
+* :code:`bright` = compute temperature for the modified Planck radiance 
+* :code:`cloudy_absorption`   = computes cloud (liquid and ice) absorption profiles
+* :code:`cloud_integrated_density`   = integrates cloud water density of path ds (linear) 
+* :code:`cloud_radiating_temperature`   = computes mean radiating temperature of a cloud 
+* :code:`clearsky_absorption`   = computes clear-sky (h2o and o2) absorption profiles
+* :code:`exponential_integration`   = integrates (ln) absorption over profile layers
+* :code:`planck`   = computes modified planck radiance and related quantities
+* :code:`ray_tracing`  = computes refracted path length between profile levels
+* :code:`refractivity`  = computes vapor pressure and refractivity profiles
+* :code:`vapor`    = computes vapor pressure and vapor density 
+
+
 .. autosummary::
     :toctree: generated/
 
@@ -103,5 +132,7 @@ Line Shape
 
 .. autosummary::
     :toctree: generated/
+    :template: custom-module-template.rst 
 
     pyrtlib.lineshape
+    pyrtlib.absmod_uncertainty

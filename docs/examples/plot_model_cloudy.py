@@ -40,8 +40,8 @@ denliq = np.zeros(z.shape)
 denice = np.zeros(z.shape)
 cldh = np.empty((2, 2))
 
-for i in [0, 1]:
-    if i == 0:
+for i in [False, True]:
+    if i:
         text_plot = 'clear-sky'
     else:
         # build a cloud
