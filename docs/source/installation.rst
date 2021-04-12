@@ -61,7 +61,7 @@ Deactivate the virtualenv:
 Installing from source
 ----------------------
 
-Download latest release of pyrtlib source from this `link <https://github.com/slarosa/pyrtlib/archive/refs/tags/v1.0.1.tar.gz>`_.
+Download latest release of pyrtlib source from this `link <https://github.com/slarosa/pyrtlib/archive/refs/tags/v1.1.0.tar.gz>`_.
 
 .. code-block:: console
 
