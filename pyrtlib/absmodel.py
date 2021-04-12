@@ -222,10 +222,10 @@ class H2OAbsModel(AbsModel):
             return
 
         pvap = (rho * t) / 216.68
-        if H2OAbsModel.model in ['rose03', 'rose16', 'rose17', 'rose98']:
+        if H2OAbsModel.model in ['rose03', 'rose16', 'rose17', 'rose98', 'makarov11']:
             pvap = (rho * t) / 217.0
         pda = p - pvap
-        if H2OAbsModel.model in ['rose03', 'rose16', 'rose98']:
+        if H2OAbsModel.model in ['rose03', 'rose16', 'rose98', 'makarov11']:
             den = 3.335e+16 * rho
         else:
             den = 3.344e+16 * rho

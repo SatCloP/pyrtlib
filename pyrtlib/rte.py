@@ -555,12 +555,12 @@ class RTEquation:
             if O2AbsModel.model in ['rose19sd', 'rose19']:
                 npp, ncpp = O2AbsModel().o2abs_rosen18(pdrykpa, v, ekpa, frq)
                 aO2[i] = factor * npp * db2np
-            if O2AbsModel.model in ['rose03', 'rose16', 'rose17', 'rose18', 'rose20', 'rose20sd', 'rose98']:
+            if O2AbsModel.model in ['rose03', 'rose16', 'rose17', 'rose18', 'rose20', 'rose20sd', 'rose98', 'makarov11']:
                 npp, ncpp = O2AbsModel().o2abs_rosen19(pdrykpa, v, ekpa, frq)
                 ncpp = 0 if O2AbsModel.model in ['rose20', 'rose20sd'] else ncpp
                 aO2[i] = factor * (npp + ncpp) * db2np
             # add N2 term
-            if N2AbsModel.model not in ['rose03', 'rose16', 'rose17', 'rose18', 'rose98']:
+            if N2AbsModel.model not in ['rose03', 'rose16', 'rose17', 'rose18', 'rose98', 'makarov11']:
                 aN2[i] = N2AbsModel.n2_absorption(tk[i], np.dot(pdrykpa, 10), frq)
 
             if not N2AbsModel.model:
