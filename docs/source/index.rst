@@ -37,18 +37,17 @@ Deifinition of angles and frequencies:
 >>> ang = np.array([90.])
 >>> frq = np.arange(20, 201, 1)
 
-Initialization of liquid and ice array (not used in clear-sky):
+Initialize parameters for main execution:
 
->>> denliq = np.zeros(z.shape)
->>> denice = np.zeros(z.shape)
->>> cldh = np.zeros((2, 0))
+>>> rte = BTCloudRTE(z, p, t, rh, frq, ang)
 
-Execution of the main script:
+Set absorption mofel
 
->>> df = tb_cloud_rte(z, p, t, rh, denliq, denice, cldh, frq, ang,
-...         absmdl='rose16',
-...         ray_tracing=True,
-...         from_sat=True)
+>>> rte.init_absmdl('rose16')
+
+Execute model
+
+>>> df = rte.execute()
 >>> df.tbtotal
 0      297.391838
 1      296.186240
