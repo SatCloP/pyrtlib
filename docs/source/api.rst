@@ -40,7 +40,7 @@ Also, it is possible to execute a combination of absorption models. The followin
     rte = BTCloudRTE(z, p, t, rh, frq, ang)
     rte.init_absmdl('rose19sd')
     H2OAbsModel.model = 'rose16'
-    H2OAbsModel.h2oll = import_lineshape('h2oll_rose16')
+    H2OAbsModel.h2oll = import_lineshape('h2oll_{}'.format(H2OAbsModel.model))
     df = rte.execute()
 
 Atmospheric Profiles
@@ -105,6 +105,9 @@ RTE functions called from :py:class:`pyrtlib.rte.RTEquation`:
 
 Absorption Models
 =================
+
+Computes absorption coefficient in atmosphere due to water vapor (:math:`H_2O`), oxygen in air (:math:`O_2`), suspended cloud liquid water droplets and 
+collision-induced power absorption coefficient (neper/km) in air ("dry continuum", mostly due to :math:`N_2`-:math:`N_2`, but also contributions from :math:`O_2`-:math:`N_2` and :math:`O_2`-:math:`O_2`)
 
 .. autosummary::
     :toctree: generated/

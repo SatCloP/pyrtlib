@@ -139,6 +139,7 @@ class H2OAbsModel(AbsModel):
 
     def __init__(self):
         super(H2OAbsModel, self).__init__()
+        self._h2oll = None
 
     @property
     def h2oll(self) -> types.MethodType:
@@ -275,7 +276,7 @@ class H2OAbsModel(AbsModel):
                             else:
                                 delta2 = 0.0
                             xc = np.complex((width0 - np.dot(1.5, width2)), df[j] + np.dot(1.5, delta2)) / np.complex(width2, -delta2)
-                        
+
                         xrt = np.sqrt(xc)
 
                         pxw = 1.77245385090551603 * xrt * dcerror(-np.imag(xrt), np.real(xrt))
@@ -369,6 +370,7 @@ class O2AbsModel(AbsModel):
 
     def __init__(self):
         super(O2AbsModel, self).__init__()
+        self._o2ll = None
 
     @property
     def o2ll(self) -> types.MethodType:
