@@ -121,7 +121,7 @@ class AtmosphericProfiles:
 
 
     @staticmethod
-    def gl_atm(atm: int) -> Tuple[np.ndarray]:
+    def gl_atm(atm: int) -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
         """Returns the Atmopshere profile
         This method contains 6 model profiles:
         
@@ -142,16 +142,14 @@ class AtmosphericProfiles:
         +--------+---------------------+
 
         Args:
-            option (int, optional): the atmosphere profile. Defaults to 1.
+            option (int): the atmosphere profile.
 
         Returns:
-            (tuple):
-            
-            * a [type]: altitudes (km) (50x1)
-            * p [type]: pressure (mbar) (50x1)
-            * d [type]: total density (cm-3) (50x1)
-            * t [type]: temperature (K) (50x1)
-            * md [type]: molecular densities (ppmv) (50x #gases)
+            Tuple[numpy.ndarray, numpy.ndarray, numpy.ndarray, numpy.ndarray, numpy.ndarray]: * a np.ndarray: altitudes (km) (50x1)
+            * p np.ndarray: pressure (mbar) (50x1)
+            * d np.ndarray: total density (cm-3) (50x1)
+            * t np.ndarray: temperature (K) (50x1)
+            * md np.ndarray: molecular densities (ppmv) (50x #gases)
 
         .. note:: adapted from glatm.dat.  DCT 3/26/97
         """
@@ -400,7 +398,7 @@ class AtmosphericProfiles:
                 94000.0, 72500.0
             ])
 
-            # MODEL 3. MIDLATITUDE WINTER
+        # MODEL 3. MIDLATITUDE WINTER
         elif option == 3:
             #
             # Latitude (deg)
@@ -521,7 +519,7 @@ class AtmosphericProfiles:
                 94000.0, 72500.0
             ])
 
-            # MODEL 4. SUBARCTIC SUMMER
+        # MODEL 4. SUBARCTIC SUMMER
         elif option == 4:
             #
             # Latitude (deg)
@@ -644,7 +642,7 @@ class AtmosphericProfiles:
                 94000.0, 72500.0
             ])
 
-            # MODEL 5. SUBARCTIC WINTER
+        # MODEL 5. SUBARCTIC WINTER
         elif option == 5:
             #
             # Latitude (deg)
@@ -765,7 +763,7 @@ class AtmosphericProfiles:
                 94000.0, 72500.0
             ])
 
-            # MODEL 6. U.S. STANDARD
+        # MODEL 6. U.S. STANDARD
         elif option == 6:
             #
             # Latitude (deg)
@@ -888,18 +886,6 @@ class AtmosphericProfiles:
                 94000.0, 72500.0
             ])
 
-        # gasids = np.arange(1, 8)
-        # a = a.T.reshape(50, 1, order='F')
-        # p = p.T.reshape(50, 1, order='F')
-        # t = t.T.reshape(50, 1, order='F')
-        # d = d.T.reshape(50, 1, order='F')
-        # g1 = g1.T.reshape(50, 1, order='F')
-        # g2 = g2.T.reshape(50, 1, order='F')
-        # g3 = g3.T.reshape(50, 1, order='F')
-        # g4 = g4.T.reshape(50, 1, order='F')
-        # g5 = g5.T.reshape(50, 1, order='F')
-        # g6 = g6.T.reshape(50, 1, order='F')
-        # g7 = g7.T.reshape(50, 1, order='F')
         md = np.column_stack((g1, g2, g3, g4, g5, g6, g7))
 
         return a, p, d, t, md

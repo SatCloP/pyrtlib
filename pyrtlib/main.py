@@ -178,7 +178,7 @@ class BTCloudRTE(object):
                 Sets it to True for running model in cloudy condition.")
             # raise AttributeError("Set cloudy to True before running init_cloudy()")
 
-    def execute(self, only_bt: bool = True) -> Union[Tuple[pd.DataFrame, Dict[str, np.ndarray]]]:
+    def execute(self, only_bt: bool = True) -> Union[pd.DataFrame, Tuple[pd.DataFrame, Dict[str, np.ndarray]]]:
         """[summary]
 
         Args:
@@ -257,7 +257,7 @@ class BTCloudRTE(object):
             indexed by elevation angle
 
         Returns:
-            Tuple[pandas.DataFrame, Dict[str, numpy.ndarray]]: [description]
+            Union[pandas.DataFrame, Tuple[pandas.DataFrame, Dict[str, numpy.ndarray]]]: [description]
         """
 
         # Set RTE
