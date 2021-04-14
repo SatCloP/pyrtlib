@@ -128,11 +128,16 @@ texinfo_documents = [
 #     if app.builder.name == 'html':
 #         app.builder.search = False
 
-# # Register custom CSS files.
-# def setup(app):
-#    app.add_css_file("custom.css")
-#    # == disable search functionality for html
-#    app.connect('builder-inited', on_builder_inited)
+# custom CSS workarounds
+def setup(app):
+    #    app.add_css_file("custom.css")
+    #    # == disable search functionality for html
+    #    app.connect('builder-inited', on_builder_inited)   
+    # A workaround for the responsive tables always having annoying scrollbars.
+    app.add_css_file("noscrollbar.css")
+    # Override footnote callout CSS to be normal text instead of superscript
+    # In-line links to references as numbers in brackets.
+    app.add_css_file("refs_format.css")
 
 # suppress "WARNING: Footnote [1] is not referenced." messages
 # https://github.com/pvlib/pvlib-python/issues/837
