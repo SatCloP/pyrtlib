@@ -28,8 +28,8 @@ Example
     rte.emissivity = 0.6
     df = rte.execute()
 
-Also, it is possible to execute a combination of absorption models. The following example use :code:`rose19sd` model for O2 and
-:code:`rose16` for H2O:
+Also, it is possible to execute a combination of absorption models. The following example use :code:`rose19sd` model for :math:`O_2` and
+:code:`rose16` for :math:`H_2O`:
 
 .. code-block:: python
 
@@ -60,7 +60,7 @@ The file contains 6 model profiles:
   
 Each of these profile contains data at 50 atmospheric levels:  
 Altitude (km), Pressure (mb), Density (cm-3), Molec. densities (ppmv):
-1(H2O),  2(CO2),  3(O3), 4(N2O),   5(CO),    6(CH4),   7(O2)
+1(:math:`H_2O`),  2(:math:`CO_2`),  3(:math:`O_3`), 4(:math:`N_2O`),   5(:math:`CO`),    6(:math:`CH_4`),   7(:math:`O_2`)
 Plus suplimental profiles where available.
 
 .. autosummary::
@@ -89,7 +89,7 @@ RTE functions called from :py:class:`pyrtlib.rte.RTEquation`:
 * :code:`cloudy_absorption`   = computes cloud (liquid and ice) absorption profiles
 * :code:`cloud_integrated_density`   = integrates cloud water density of path ds (linear) 
 * :code:`cloud_radiating_temperature`   = computes mean radiating temperature of a cloud 
-* :code:`clearsky_absorption`   = computes clear-sky (h2o and o2) absorption profiles
+* :code:`clearsky_absorption`   = computes clear-sky (:math:`H_2O` and :math:`O_2`) absorption profiles
 * :code:`exponential_integration`   = integrates (ln) absorption over profile layers
 * :code:`planck`   = computes modified planck radiance and related quantities
 * :code:`ray_tracing`  = computes refracted path length between profile levels
