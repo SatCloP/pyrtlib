@@ -257,7 +257,7 @@ class BTCloudRTE(object):
             cloud liquid density integrated along each ray path (cm);
             indexed by elevation angle
 
-        Returns:
+        :rtype:
             Union[pandas.DataFrame, Tuple[pandas.DataFrame, Dict[str, numpy.ndarray]]]: [description]
         """
 
