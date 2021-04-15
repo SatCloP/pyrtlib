@@ -6,12 +6,24 @@ The baseline are the routines of Rosenkranz 2016 + modification to water-2-air b
 Example:
 
 >>> from pyrtlib.absmod_uncertainty import AMU
->>> AMU['delta_a'].uncer
-array([0.1 , 0.01, 0.  , 0.  , 0.  , 0.  , 0.  , 0.  , 0.  , 0.  , 0.  ,
-       0.  , 0.  , 0.  , 0.  ])
->>> AMU['delta_a'].value
-array([ 0.   , -0.096,  0.   ,  0.   ,  0.   ,  0.   ,  0.   ,  0.   ,
-        0.   ,  0.   ,  0.   ,  0.   ,  0.   ,  0.   ,  0.   ])
+>>> AMU['O2gamma_WL'].value
+array([1.688, 1.703, 1.513, 1.491, 1.415, 1.408, 1.353, 1.339, 1.295,
+       1.292, 1.262, 1.263, 1.223, 1.217, 1.189, 1.174, 1.134, 1.134,
+       1.089, 1.088, 1.037, 1.038, 0.996, 0.996, 0.955, 0.955, 0.906,
+       0.906, 0.858, 0.858, 0.811, 0.811, 0.764, 0.764, 0.717, 0.717,
+       0.669, 0.669, 2.78 , 1.64 , 1.64 , 1.64 , 1.6  , 1.6  , 1.6  ,
+       1.6  , 1.62 , 1.47 , 1.47 ])
+>>> AMU['O2gamma_WL'].uncer
+array([0.   , 0.   , 0.   , 0.   , 0.   , 0.   , 0.   , 0.   , 0.   ,
+       0.   , 0.   , 0.   , 0.   , 0.   , 0.   , 0.   , 0.   , 0.   ,
+       0.   , 0.   , 0.012, 0.012, 0.015, 0.015, 0.017, 0.017, 0.019,
+       0.019, 0.021, 0.021, 0.024, 0.024, 0.026, 0.026, 0.028, 0.028,
+       0.031, 0.031, 0.   , 0.   , 0.   , 0.   , 0.   , 0.   , 0.   ,
+       0.   , 0.   , 0.   , 0.   ])
+>>> AMU['O2gamma_WL'].units
+'MHz/mb'
+>>> AMU['O2gamma_WL'].refer
+'Rosenkranz, pers. comm., 2017'
 
 Hystory:
     * 2016/12/05 - Nico - First created
@@ -420,7 +432,7 @@ AMU = {
     'Y300_NL': AMU_NT(
         value=np.array([- 0.036,0.2547,- 0.3655,0.5495,- 0.5696,0.6181,- 0.4252,0.3517,- 0.1496,0.043,0.064,- 0.1605,0.2906,- 0.373,0.4169,- 0.4819,0.4963,- 0.5481,0.5512,- 0.5931,0.6212,- 0.6558,0.692,- 0.7208,0.7312,- 0.755,0.7555,- 0.7751,0.7914,- 0.8073,0.8307,- 0.8431,0.8676,- 0.8761,0.9046,- 0.9092,0.9416,- 0.9423,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0]),
         uncer=1.0,
-        units='1/bar == 1/1e5Pa =~ 1/atm',
+        units='1/mb',
         refer='Tretyakov et al., 2005; Uncertainty from Rosenkranz, pers. comm., 2017'
     ),
     'O2_V': AMU_NT(
@@ -449,6 +461,9 @@ AMU['O2gamma_mmW'] = AMU['O2gamma_mmW']._replace(uncer=np_zeros)
 np_zeros = np.zeros(AMU['O2gamma'].value.shape)
 np_zeros[34:49] = AMU['O2gamma'].value[34:49] * 0.1
 AMU['O2gamma_NL'] = AMU['O2gamma_NL']._replace(uncer=np_zeros)
+np_zeros = np.zeros(AMU['O2gamma'].value.shape)
+np_zeros[20:38] = SIGMA[20:38, 2]
+AMU['O2gamma_WL'] = AMU['O2gamma_WL']._replace(uncer=np_zeros)
 np_zeros = np.zeros(AMU['Y300'].value.shape)
 np_zeros[0:34] = U[37:71]
 AMU['Y300'] = AMU['Y300']._replace(uncer=np_zeros)
