@@ -40,7 +40,7 @@ Initialize parameters for main execution:
 
 >>> rte = BTCloudRTE(z, p, t, rh, frq, ang)
 
-Set absorption mofel
+Set absorption model
 
 >>> rte.init_absmdl('rose16')
 

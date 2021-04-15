@@ -1,11 +1,11 @@
 """
-Performing Brightness Temperature calculation form satellite
-============================================================
+Performing Brightness Temperature calculation from ground
+=========================================================
 """
 
 # %%
 # This example shows how to use the
-# :py:class:`pyrtlib.main.BTCloudRTE` method to calculate brightness temperature from satellite
+# :py:class:`pyrtlib.main.BTCloudRTE` method to calculate brightness temperature from ground
 
 import matplotlib.pyplot as plt
 
@@ -40,6 +40,7 @@ for i in range(0, 6):
     ax.set_ylabel('BT (K)')
 
     rte = BTCloudRTE(z, p, t, rh, frq, ang)
+    rte.satellite = False
     rte.init_absmdl(mdl)
     df = rte.execute()
 

@@ -43,8 +43,8 @@ Also, it is possible to execute a combination of absorption models. The followin
     H2OAbsModel.h2oll = import_lineshape('h2oll_{}'.format(H2OAbsModel.model))
     df = rte.execute()
 
-Atmospheric Profiles
-====================
+Standard Atmospheric Profiles
+=============================
 
 Atmospheric constituent profiles (0-120km) (suplimented with other data) [ANDERSON]_
 This file was partly copied from FASCOD2 routine MLATMB 10/11/87
@@ -120,8 +120,10 @@ collision-induced power absorption coefficient (neper/km) in air ("dry continuum
     pyrtlib.absmodel.LiqAbsModel
 
 
-Utility Function
-================
+Utility Functions
+=================
+
+The utils module contains funtions of general utility used in multiple places throughout *pyrtlib*.
  
 .. autosummary::
     :toctree: generated/

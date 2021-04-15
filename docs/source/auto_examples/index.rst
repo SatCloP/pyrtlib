@@ -33,12 +33,12 @@ This gallery shows examples of pyrtlib functionality.  Community contributions a
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="Performing Brightness Temperature calculation">
+    <div class="sphx-glr-thumbcontainer" tooltip="Performing Brightness Temperature calculation form satellite">
 
 .. only:: html
 
  .. figure:: /auto_examples/images/thumb/sphx_glr_plot_brightness_temperature_thumb.png
-     :alt: Performing Brightness Temperature calculation
+     :alt: Performing Brightness Temperature calculation form satellite
 
      :ref:`sphx_glr_auto_examples_plot_brightness_temperature.py`
 
@@ -51,6 +51,27 @@ This gallery shows examples of pyrtlib functionality.  Community contributions a
    :hidden:
 
    /auto_examples/plot_brightness_temperature
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Performing Brightness Temperature calculation from ground">
+
+.. only:: html
+
+ .. figure:: /auto_examples/images/thumb/sphx_glr_plot_brightness_temperature_ground_thumb.png
+     :alt: Performing Brightness Temperature calculation from ground
+
+     :ref:`sphx_glr_auto_examples_plot_brightness_temperature_ground.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/plot_brightness_temperature_ground
 
 .. raw:: html
 

@@ -33,7 +33,7 @@ rh = mr2rh(p, t, gkg)[0] / 100
 mdl = 'rose19sd'
 
 ang = np.array([90.])
-frq = np.arange(20, 201, 1)
+frq = np.arange(20, 61, 1)
 nf = len(frq)
 
 denliq = np.zeros(z.shape)
