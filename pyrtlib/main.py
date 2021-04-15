@@ -97,10 +97,11 @@ class BTCloudRTE(object):
 
     @property
     def satellite(self) -> bool:
-        """Performing model calculation from satellite.
+        """If :code:`True` performing model calculation from satellite otherwise from ground
 
         Returns:
-            bool: If True performing calculation from satellite otherwise from ground.
+            bool: If True performing calculation from satellite 
+                    otherwise from ground. Default to True.
         """
         return self._satellite
 
@@ -113,7 +114,7 @@ class BTCloudRTE(object):
 
     @property
     def emissivity(self) -> np.float:
-        """Surface emissivity.
+        """Surface emissivity. Default to 1.0
 
         Returns:
             np.float: The surface emissivity.

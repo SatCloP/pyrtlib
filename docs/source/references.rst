@@ -13,3 +13,7 @@ References
 .. [ANDERSON] ANDERSON et al. 1986 AFGL Atmospheric Constituent Profiles (0.120km): 
             `ResearchGate PDF <https://www.researchgate.net/publication/235054307_AFGL_Atmospheric_Constituent_Profiles_0120km>`_, 
             AFGL-TR-86-0110
+
+.. [Payne] Payne, V. H., Mlawer, E. J., Cady-Pereira, K. E., and Moncet, J.-L.: Water vapor continuum absorption in the
+        microwave, IEEE T. Geosci. Remote, 49, 2194–2208,
+        https://doi.org/10.1109/TGRS.2010.2091416, 2011.
