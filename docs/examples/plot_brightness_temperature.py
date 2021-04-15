@@ -41,6 +41,7 @@ for i in range(0, 6):
 
     rte = BTCloudRTE(z, p, t, rh, frq, ang)
     rte.init_absmdl(mdl)
+    rte.emissivity = 0.6
     df = rte.execute()
 
     df = df.set_index(frq)
