@@ -550,15 +550,19 @@ class RTEquation:
             ekpa = e[i] / 10.0
             pdrykpa = p[i] / 10.0 - ekpa
 
-            # if H2OAbsModel.model == 'rose19sd':
-            npp, ncpp = H2OAbsModel().h2o_rosen19_sd(pdrykpa, v, ekpa, frq)
-            awet[i] = factor * (npp + ncpp) * db2np
+            if H2OAbsModel.model == 'rose21sd':
+                npp, ncpp = H2OAbsModel().h2o_rosen21_sd(pdrykpa, v, ekpa, frq)
+                awet[i] = factor * (npp + ncpp) * db2np
+            else:
+                npp, ncpp = H2OAbsModel().h2o_rosen19_sd(pdrykpa, v, ekpa, frq)
+                awet[i] = factor * (npp + ncpp) * db2np
+            
             if O2AbsModel.model in ['rose19sd', 'rose19']:
                 npp, ncpp = O2AbsModel().o2abs_rosen18(pdrykpa, v, ekpa, frq)
                 aO2[i] = factor * npp * db2np
-            if O2AbsModel.model in ['rose03', 'rose16', 'rose17', 'rose18', 'rose20', 'rose20sd', 'rose98', 'makarov11']:
+            if O2AbsModel.model in ['rose03', 'rose16', 'rose17', 'rose18', 'rose20', 'rose20sd', 'rose21sd', 'rose98', 'makarov11']:
                 npp, ncpp = O2AbsModel().o2abs_rosen19(pdrykpa, v, ekpa, frq)
-                ncpp = 0 if O2AbsModel.model in ['rose20', 'rose20sd'] else ncpp
+                ncpp = 0 if O2AbsModel.model in ['rose20', 'rose20sd', 'rose21sd'] else ncpp
                 aO2[i] = factor * (npp + ncpp) * db2np
             # add N2 term
             if N2AbsModel.model not in ['rose03', 'rose16', 'rose17', 'rose18', 'rose98', 'makarov11']:

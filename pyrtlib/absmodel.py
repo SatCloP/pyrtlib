@@ -365,6 +365,131 @@ class H2OAbsModel(AbsModel):
 
         return npp, ncpp
 
+    def h2o_rosen21_sd(self, pdrykpa: np.ndarray, vx: np.ndarray, ekpa: np.ndarray, frq: np.ndarray) -> Union[
+        Tuple[np.ndarray, np.ndarray], None]:
+        """Compute absorption coefficients in atmosphere due to water vapor
+        this version should not be used with a line list older than june 2018,
+        nor the new list with an older version of this subroutine.
+        Line parameters will be read from file h2o_list.asc; intensities
+        should include the isotope abundance factors.
+        this version uses a line-shape cutoff.
+
+        Args:
+            pdrykpa ([type], optional): [description]. Defaults to none.
+            vx ([type], optional): [description]. Defaults to none.
+            ekpa ([type], optional): [description]. Defaults to none.
+            frq ([type], optional): [description]. Defaults to none.
+
+        Returns:
+            [type]: [description]
+
+        References
+        ----------
+        .. [1] Rosenkranz, P.W.: Line-By-Line Microwave Radiative Transfer (Non-Scattering), Remote Sens. Code Library, Doi:10.21982/M81013, 2017
+
+        Example:
+
+        .. code-block:: python
+
+            import numpy as np
+            from pyrtlib.rte import RTEquation
+            from pyrtlib.absmodel import H2OAbsModel, AbsModel
+            from pyrtlib.atmp import AtmosphericProfiles as atmp
+            from pyrtlib.utils import ppmv2gkg, mr2rh, import_lineshape
+
+            z, p, d, tk, md = atmp.gl_atm(atmp.TROPICAL)
+            frq = np.arange(20, 201, 1)
+            ice = 0
+            gkg = ppmv2gkg(md[:, atmp.H2O], atmp.H2O)
+            rh = mr2rh(p, tk, gkg)[0] / 100
+
+            e, rho = RTEquation.vapor(tk, rh, ice)
+
+            AbsModel.model = 'rose16'
+            H2OAbsModel.h2oll = import_lineshape('h2oll_{}'.format('rose21sd'))
+            for i in range(0, len(z)):
+                v = 300.0 / tk[i]
+                ekpa = e[i] / 10.0
+                pdrykpa = p[i] / 10.0 - ekpa
+                for j in range(0, len(frq)):
+                    _, _ = H2OAbsModel().h2o_rosen21_sd(pdrykpa, v, ekpa, frq[j])
+
+        """
+        # nico: the best-fit voigt are given in koshelev et al. 2018, table 2 (rad,
+        # mhz/torr). these correspond to w3(1) and ws(1) in h2o_list_r18 (mhz/mb)
+
+        # cyh ***********************************************
+        db2np = np.log(10.0) * 0.1
+        rvap = (0.01 * 8.31451) / 18.01528
+        factor = 0.182 * frq
+        t = 300.0 / vx
+        p = (pdrykpa + ekpa) * 10.0
+        rho = ekpa * 10.0 / (rvap * t)
+        f = frq
+        # cyh ***********************************************
+
+        if rho.any() <= 0.0:
+            # abh2o = 0.0
+            # npp = 0
+            # ncpp = 0
+            return
+
+        pvap = (rho * t) / 216.68
+        pda = p - pvap
+        den = 3.344e+16 * rho
+        # continuum terms
+        ti = self.h2oll.reftcon / t
+        con = (self.h2oll.cf * pda * ti ** self.h2oll.xcf + self.h2oll.cs * pvap * ti ** self.h2oll.xcs) * \
+              pvap * f * f
+        # nico 2019/03/18 *********************************************************
+        # add resonances
+        nlines = len(self.h2oll.fl)
+        ti = self.h2oll.reftline / t
+        df = np.zeros((2, 1))
+
+        tiln = np.log(ti)
+        ti2 = np.exp(2.5 * tiln)
+        summ = 0.0
+        for i in range(0, nlines):
+            width0 = self.h2oll.w0[i] * pda * ti ** self.h2oll.x[i] + self.h2oll.w0s[i] * pvap * ti ** \
+                     self.h2oll.xs[i]
+            if self.h2oll.w2[i] > 0:
+                width2 = self.h2oll.w2[i] * pda * ti ** self.h2oll.xw2[i] + self.h2oll.w2s[i] * pvap * ti ** \
+                         self.h2oll.xw2s[i]
+            else:
+                width2 = 0
+
+            delta2 = self.h2oll.d2[i] * pda + self.h2oll.d2s[i] * pvap  # delta2 assumed independent of t
+
+            shiftf = self.h2oll.sh[i] * pda * (1. - self.h2oll.aair[i] * tiln) * ti ** self.h2oll.xh[i]
+            shifts = self.h2oll.shs[i] * pvap * (1. - self.h2oll.aself[i] * tiln) * ti ** self.h2oll.xhs[i]
+            shift = shiftf + shifts
+
+            wsq = width0 ** 2
+            s = self.h2oll.s1[i] * ti2 * np.exp(self.h2oll.b2[i] * (1. - ti))
+            df[0] = f - self.h2oll.fl[i] - shift
+            df[1] = f + self.h2oll.fl[i] + shift
+            base = width0 / (562500.0 + wsq)
+            res = 0.0
+            for j in range(0, 2):
+                if width2 > 0 and j == 0 and np.abs(df[j]) < (10 * width0):
+                    # speed-dependent resonant shape factor
+                    # double complex dcerror,xc,xrt,pxw,a
+                    xc = np.complex((width0 - 1.5 * width2), df[j] + 1.5 * delta2) / np.complex(width2, -delta2)
+                    xrt = np.sqrt(xc)
+                    pxw = 1.77245385090551603 * xrt * dcerror(-np.imag(xrt), np.real(xrt))
+                    sd = 2.0 * (1.0 - pxw) / (np.complex(width2, -delta2))
+                    res += np.real(sd) - base
+                elif np.abs(df[j]) < 750.0:
+                    res += width0 / (df[j] ** 2 + wsq) - base
+
+            summ += s * res * (f / self.h2oll.fl[i]) ** 2
+
+        npp = (3.1831e-05 * den * summ / db2np) / factor
+        ncpp = (con / db2np) / factor
+
+        return npp, ncpp
+
     def h2o_uncertainty(self, pdrykpa: np.ndarray, vx: np.ndarray, ekpa: np.ndarray, frq: np.ndarray, amu: dict) -> \
             Union[Tuple[np.ndarray, np.ndarray], None]:
         """[summary]
