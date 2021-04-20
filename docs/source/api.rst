@@ -137,7 +137,7 @@ Line Shape
 
 .. autosummary::
     :toctree: generated/
-    :template: custom-module-template.rst 
+    :template: custom-module-template.rst
 
     pyrtlib.lineshape
     pyrtlib.absmod_uncertainty

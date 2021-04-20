@@ -3,26 +3,63 @@ This module provides the uncertainties affecting absorption model
 coefficients I was able to find in litterature.
 The baseline are the routines of Rosenkranz 2016 + modification to water-2-air by Koshelev et al 2015.
 
+.. graphviz::
+    :caption: Perturbation of spectroscopic parameters
+    :align: center
+
+        digraph process {
+            size="8,6";
+            # rankdir="TB";
+            graph [fontname="Verdana", fontsize="12"];
+            node [fontname="Verdana", fontsize="12"];
+            edge [fontname="Sans", fontsize="10"];
+
+            ClrAbs_uncertainty [label="ClrAbs_uncertainty()", shape="component"];
+            absmod_uncertainties_perturb [label="Perturbation", shape="component"];
+            H2O [label="h2o_uncertainty()", shape="component",
+                style=filled];
+            O2N2 [label="o2n2_uncertainty()", shape="component",
+                style=filled];
+            APU [label="APU_line_mixing()", shape="component",
+                    style=filled];
+            F1 [label="Residual Makarov", shape="note"];
+            F2 [label="Residual Tetryakov", shape="note"];
+            F3 [label="Slope Ratio", shape="note"];
+            USEKOSHELEV2017 [label=" USEKOSHELEV2017 ", shape="note"];
+
+            ClrAbs_uncertainty -> absmod_uncertainties_perturb [label=" what, mode "];
+            absmod_uncertainties_perturb -> USEKOSHELEV2017_WHAT [label=" amu ", dir="back"];
+            USEKOSHELEV2017 -> USEKOSHELEV2017_WHAT [label=" ", shape="circle"];
+            
+            absmod_uncertainties_perturb -> ABSMDL [label=" amu ", shape="circle", dir="back"];
+            absmod_uncertainties_perturb -> H2O [label=" amu "];
+            absmod_uncertainties_perturb -> O2N2 [label=" amu "];
+            O2N2 -> APU [label=" APU ", rankdir=" TB "];
+            APU -> F1;
+            APU -> F2;
+            APU -> F3 [label ="method 3"];
+     }
+
 Example:
 
->>> from pyrtlib.absmod_uncertainty import AMU
->>> AMU['O2gamma_WL'].value
+>>> from pyrtlib.absmod_uncertainty import amu
+>>> amu['O2gamma_WL'].value
 array([1.688, 1.703, 1.513, 1.491, 1.415, 1.408, 1.353, 1.339, 1.295,
        1.292, 1.262, 1.263, 1.223, 1.217, 1.189, 1.174, 1.134, 1.134,
        1.089, 1.088, 1.037, 1.038, 0.996, 0.996, 0.955, 0.955, 0.906,
        0.906, 0.858, 0.858, 0.811, 0.811, 0.764, 0.764, 0.717, 0.717,
        0.669, 0.669, 2.78 , 1.64 , 1.64 , 1.64 , 1.6  , 1.6  , 1.6  ,
        1.6  , 1.62 , 1.47 , 1.47 ])
->>> AMU['O2gamma_WL'].uncer
+>>> amu['O2gamma_WL'].uncer
 array([0.   , 0.   , 0.   , 0.   , 0.   , 0.   , 0.   , 0.   , 0.   ,
        0.   , 0.   , 0.   , 0.   , 0.   , 0.   , 0.   , 0.   , 0.   ,
        0.   , 0.   , 0.012, 0.012, 0.015, 0.015, 0.017, 0.017, 0.019,
        0.019, 0.021, 0.021, 0.024, 0.024, 0.026, 0.026, 0.028, 0.028,
        0.031, 0.031, 0.   , 0.   , 0.   , 0.   , 0.   , 0.   , 0.   ,
        0.   , 0.   , 0.   , 0.   ])
->>> AMU['O2gamma_WL'].units
+>>> amu['O2gamma_WL'].units
 'MHz/mb'
->>> AMU['O2gamma_WL'].refer
+>>> amu['O2gamma_WL'].refer
 'Rosenkranz, pers. comm., 2017'
 
 Hystory:
@@ -52,30 +89,111 @@ References
 .. [6] Tretyakov, JMS, 2016
 """
 
-from collections import namedtuple
 import os
-import numpy as np
+from copy import deepcopy
+from dataclasses import dataclass
+from typing import Tuple, Optional
 
-from .utils import uncertainty_propagation
+import numpy as np
+import scipy.interpolate as si
 
 UNKNOWN = 0.0
 MB2TORR = 0.750062
-USEKOSHELEV2017 = 1
-USEKOSHELEV2017_WHAT = 'RAD'
+USEKOSHELEV2017 = True
+USEKOSHELEV2017_WHAT = 'rad'
 C_CM = 29979245800.0
 
 PATH = os.path.dirname(os.path.abspath(__file__))
 U = np.loadtxt(open(os.path.join(PATH, "lineshape", "u.csv"), "rb"), delimiter=",")
 SIGMA = np.loadtxt(open(os.path.join(PATH, "lineshape", "sigma_widths_revised.csv"), "rb"), delimiter=",")
+TVEC = np.loadtxt(open(os.path.join(PATH, "lineshape", "Tvec.csv"), "rb"), delimiter=",")
+PVEC = np.loadtxt(open(os.path.join(PATH, "lineshape", "Pvec.csv"), "rb"), delimiter=",")
+FVEC = np.loadtxt(open(os.path.join(PATH, "lineshape", "Fvec.csv"), "rb"), delimiter=",")
+PR_EXT = np.loadtxt(open(os.path.join(PATH, "lineshape", "PR_ext.csv"), "rb"), delimiter=",")
 
-FIELDS = (
-    'value',
-    'uncer',
-    'units',
-    'refer')
+# FIELDS = (
+#     'value',
+#     'uncer',
+#     'units',
+#     'refer')
 
-AMU_NT = namedtuple('AMU_NT', FIELDS)
-AMU_NT.__new__.__defaults__ = (None,) * len(AMU_NT._fields)
+# AMU_NT = namedtuple('AMU_NT', FIELDS)
+# """Absirption model uncertainties for spectroscopic parameters"""
+# AMU_NT.__new__.__defaults__ = (None,) * len(AMU_NT._fields)
+
+@dataclass
+class AMU_NT:
+    value: np.ndarray
+    uncer: np.ndarray
+    units: str
+    refer: str
+
+
+def uncertainty_propagation(fun: str, A: np.ndarray, B: np.ndarray, sA: np.ndarray, sB: np.ndarray,
+                            a: Optional[np.float] = 1.0, b: Optional[np.float] = 1.0, sAB: Optional[np.float] = 0.0) -> \
+        Tuple[np.ndarray, np.ndarray]:
+    r"""This function propagates uncertainty given two variables A, B and their
+    associated uncertainty.
+
+    +--------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+    | Function                                   | Standard deviation                                                                                                                                                                 |
+    +--------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+    | .. math:: \displaystyle f=aA\,             | .. math:: \displaystyle \sigma _{f}=|a|\sigma _{A}                                                                                                                                 |
+    +--------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+    | .. math:: \displaystyle f=aA+bB\,          | .. math:: \displaystyle \sigma _{f}={\sqrt {a^{2}\sigma _{A}^{2}+b^{2}\sigma _{B}^{2}+2ab\,\sigma _{AB}}}                                                                          |
+    +--------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+    | .. math:: \displaystyle f=aA-bB\,          | .. math:: \displaystyle \sigma _{f}={\sqrt {a^{2}\sigma _{A}^{2}+b^{2}\sigma _{B}^{2}-2ab\,\sigma _{AB}}}                                                                          |
+    +--------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+    | .. math:: \displaystyle f=AB\,             | .. math:: \displaystyle \sigma _{f}\approx \left|f\right|{\sqrt {\left({\frac {\sigma _{A}}{A}}\right)^{2}+\left({\frac {\sigma _{B}}{B}}\right)^{2}+2{\frac {\sigma _{AB}}{AB}}}} |
+    +--------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+    | .. math:: \displaystyle f={\frac {A}{B}}\, | .. math:: \displaystyle \sigma _{f}\approx \left|f\right|{\sqrt {\left({\frac {\sigma _{A}}{A}}\right)^{2}+\left({\frac {\sigma _{B}}{B}}\right)^{2}-2{\frac {\sigma _{AB}}{AB}}}} |
+    +--------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+    | .. math:: \displaystyle f=A^{a}\,          | .. math:: \displaystyle \sigma _{f}=|a|A^{a-1}\sigma _{A}                                                                                                                          |
+    +--------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+
+    Args:
+        fun (str): [description].
+        A (numpy.ndarray): variable A
+        B (numpy.ndarray): variable B
+        sA (numpy.ndarray): uncertainty on A
+        sB (numpy.ndarray): uncertainty on B
+        a (float): multiplier for A. Defaults to 1.0.
+        b (float): multiplier for B. Defaults to 1.0.
+        sAB (float): sqrt of covariance between A and B. Defaults to 0.0.
+
+    Raises:
+        ValueError: [description]
+
+    Returns:
+        tuple: function computed with imput variables and uncertainty on function used
+
+    References:
+        .. [1] Wikipedia: Propagation of uncertainty https://en.wikipedia.org/wiki/Propagation_of_uncertainty
+    """
+    if fun == 'aA':
+        F = a * A
+        sF = np.abs(a) * sA
+    elif fun == 'aA+bB':
+        F = a * A + b * B
+        sF = np.sqrt(a ** 2 * sA ** 2 + b ** 2 * sB ** 2 + 2 * a * b * sAB)
+    elif fun == 'aA-bB':
+        F = a * A - b * B
+        sF = np.sqrt(a ** 2 * sA ** 2 + b ** 2 * sB ** 2 - 2 * a * b * sAB)
+    elif fun == 'A*B':
+        F = A * B
+        # sF = np.sqrt( B**2*sA**2 + A**2*sB**2 + 2*A*B*sAB )
+        sF = np.abs(A * B) * np.sqrt((sA / A) ** 2 + (sB / B) ** 2 + 2 * sAB / (A * B))
+    elif fun == 'A/B':
+        F = A / B
+        sF = np.abs(A / B) * np.sqrt((sA / A) ** 2 + (sB / B) ** 2 - 2 * sAB / (A * B))
+    elif fun == 'A^a':
+        F = A ** a;
+        sF = np.abs(a) * A ** (a - 1) * sA;
+    else:
+        raise ValueError("[utils] fun argument is mandatory")
+
+    return F, sF
+
 
 AMU = {
     'w2a': AMU_NT(
@@ -84,7 +202,7 @@ AMU = {
         units='unitless',
         refer='Koshelev et al., JQSRT, 2015'
     ),
-    'con_CF': AMU_NT(
+    'con_Cf': AMU_NT(
         value=5.43e-10,
         uncer=UNKNOWN,
         units='1/(km*(mb^2*GHz^2))',
@@ -344,14 +462,26 @@ AMU = {
     # Units in Ros. model are [MHz/mb]; the conversion factor is 1/torr2mb, i.e. mb2torr
     # For other lines I here assume 0 uncertainty, as this is correlated and it's treated as O2gammaWL (weaker lines) below
     'O2BE': AMU_NT(
-        value=np.array([0.01,0.014,0.083,0.083,0.207,0.207,0.387,0.387,0.621,0.621,0.91,0.91,1.255,1.255,1.654,1.654,2.109,2.109,2.618,2.618,3.182,3.182,3.8,3.8,4.474,4.474,5.201,5.201,5.983,5.983,6.819,6.819,7.709,7.709,8.653,8.653,9.651,9.651,0.019,0.048,0.045,0.044,0.049,0.084,0.145,0.136,0.141,0.145,0.201]),
-        uncer= (0.25 * np.array([0.01,0.014,0.083,0.083,0.207,0.207,0.387,0.387,0.621,0.621,0.91,0.91,1.255,1.255,1.654,1.654,2.109,2.109,2.618,2.618,3.182,3.182,3.8,3.8,4.474,4.474,5.201,5.201,5.983,5.983,6.819,6.819,7.709,7.709,8.653,8.653,9.651,9.651,0.019,0.048,0.045,0.044,0.049,0.084,0.145,0.136,0.141,0.145,0.201])) / 100,
+        value=np.array(
+            [0.01, 0.014, 0.083, 0.083, 0.207, 0.207, 0.387, 0.387, 0.621, 0.621, 0.91, 0.91, 1.255, 1.255, 1.654,
+             1.654, 2.109, 2.109, 2.618, 2.618, 3.182, 3.182, 3.8, 3.8, 4.474, 4.474, 5.201, 5.201, 5.983, 5.983, 6.819,
+             6.819, 7.709, 7.709, 8.653, 8.653, 9.651, 9.651, 0.019, 0.048, 0.045, 0.044, 0.049, 0.084, 0.145, 0.136,
+             0.141, 0.145, 0.201]),
+        uncer=(0.25 * np.array(
+            [0.01, 0.014, 0.083, 0.083, 0.207, 0.207, 0.387, 0.387, 0.621, 0.621, 0.91, 0.91, 1.255, 1.255, 1.654,
+             1.654, 2.109, 2.109, 2.618, 2.618, 3.182, 3.182, 3.8, 3.8, 4.474, 4.474, 5.201, 5.201, 5.983, 5.983, 6.819,
+             6.819, 7.709, 7.709, 8.653, 8.653, 9.651, 9.651, 0.019, 0.048, 0.045, 0.044, 0.049, 0.084, 0.145, 0.136,
+             0.141, 0.145, 0.201])) / 100,
         units='unitless',
         refer='Tretyakov, Personal communication, 2016'
     ),
     'O2gamma': AMU_NT(
-        value=np.array([1.688,1.703,1.513,1.491,1.415,1.408,1.353,1.339,1.295,1.292,1.262,1.263,1.223,1.217,1.189,1.174,1.134,1.134,1.089,1.088,1.037,1.038,0.996,0.996,0.955,0.955,0.906,0.906,0.858,0.858,0.811,0.811,0.764,0.764,0.717,0.717,0.669,0.669,2.78,1.64,1.64,1.64,1.6,1.6,1.6,1.6,1.62,1.47,1.47]),
-        uncer= U[3:37],
+        value=np.array(
+            [1.688, 1.703, 1.513, 1.491, 1.415, 1.408, 1.353, 1.339, 1.295, 1.292, 1.262, 1.263, 1.223, 1.217, 1.189,
+             1.174, 1.134, 1.134, 1.089, 1.088, 1.037, 1.038, 0.996, 0.996, 0.955, 0.955, 0.906, 0.906, 0.858, 0.858,
+             0.811, 0.811, 0.764, 0.764, 0.717, 0.717, 0.669, 0.669, 2.78, 1.64, 1.64, 1.64, 1.6, 1.6, 1.6, 1.6, 1.62,
+             1.47, 1.47]),
+        uncer=U[3:37],
         units='MHz/mb',
         refer='Tretyakov, JMS, 2005 + Rosenkranz Pers. Comm. 2017'
     ),
@@ -366,28 +496,40 @@ AMU = {
     # Per Phil suggestion (2017/10/03), after his new uncertainty calculations, these lines can be perturbed independently, so are treated above (O2gamma)
     # O2gamma_WL should only be used if one wants to compute the impact of uncertainties from all weaker lines together
     'O2gamma_WL': AMU_NT(
-        value=np.array([1.688,1.703,1.513,1.491,1.415,1.408,1.353,1.339,1.295,1.292,1.262,1.263,1.223,1.217,1.189,1.174,1.134,1.134,1.089,1.088,1.037,1.038,0.996,0.996,0.955,0.955,0.906,0.906,0.858,0.858,0.811,0.811,0.764,0.764,0.717,0.717,0.669,0.669,2.78,1.64,1.64,1.64,1.6,1.6,1.6,1.6,1.62,1.47,1.47]),
-        uncer= SIGMA[20:38, 2],
+        value=np.array(
+            [1.688, 1.703, 1.513, 1.491, 1.415, 1.408, 1.353, 1.339, 1.295, 1.292, 1.262, 1.263, 1.223, 1.217, 1.189,
+             1.174, 1.134, 1.134, 1.089, 1.088, 1.037, 1.038, 0.996, 0.996, 0.955, 0.955, 0.906, 0.906, 0.858, 0.858,
+             0.811, 0.811, 0.764, 0.764, 0.717, 0.717, 0.669, 0.669, 2.78, 1.64, 1.64, 1.64, 1.6, 1.6, 1.6, 1.6, 1.62,
+             1.47, 1.47]),
+        uncer=SIGMA[20:38, 2],
         units='MHz/mb',
         refer='Rosenkranz, pers. comm., 2017'
     ),
     # TODO: check better solution to referencing value within uncer
     'O2gamma_mmW': AMU_NT(
-        value=np.array([1.688,1.703,1.513,1.491,1.415,1.408,1.353,1.339,1.295,1.292,1.262,1.263,1.223,1.217,1.189,1.174,1.134,1.134,1.089,1.088,1.037,1.038,0.996,0.996,0.955,0.955,0.906,0.906,0.858,0.858,0.811,0.811,0.764,0.764,0.717,0.717,0.669,0.669,2.78,1.64,1.64,1.64,1.6,1.6,1.6,1.6,1.62,1.47,1.47]),
-        uncer= 0.0,
+        value=np.array(
+            [1.688, 1.703, 1.513, 1.491, 1.415, 1.408, 1.353, 1.339, 1.295, 1.292, 1.262, 1.263, 1.223, 1.217, 1.189,
+             1.174, 1.134, 1.134, 1.089, 1.088, 1.037, 1.038, 0.996, 0.996, 0.955, 0.955, 0.906, 0.906, 0.858, 0.858,
+             0.811, 0.811, 0.764, 0.764, 0.717, 0.717, 0.669, 0.669, 2.78, 1.64, 1.64, 1.64, 1.6, 1.6, 1.6, 1.6, 1.62,
+             1.47, 1.47]),
+        uncer=0.0,
         units='MHz/mb',
         refer='Rosenkranz, pers. comm., 2017'
     ),
     # TODO: check better solution to referencing value within uncer
     'O2gamma_NL': AMU_NT(
-        value=np.array([1.688,1.703,1.513,1.491,1.415,1.408,1.353,1.339,1.295,1.292,1.262,1.263,1.223,1.217,1.189,1.174,1.134,1.134,1.089,1.088,1.037,1.038,0.996,0.996,0.955,0.955,0.906,0.906,0.858,0.858,0.811,0.811,0.764,0.764,0.717,0.717,0.669,0.669,2.78,1.64,1.64,1.64,1.6,1.6,1.6,1.6,1.62,1.47,1.47]),
-        uncer= 0.1 * SIGMA[20:38, 2],
+        value=np.array(
+            [1.688, 1.703, 1.513, 1.491, 1.415, 1.408, 1.353, 1.339, 1.295, 1.292, 1.262, 1.263, 1.223, 1.217, 1.189,
+             1.174, 1.134, 1.134, 1.089, 1.088, 1.037, 1.038, 0.996, 0.996, 0.955, 0.955, 0.906, 0.906, 0.858, 0.858,
+             0.811, 0.811, 0.764, 0.764, 0.717, 0.717, 0.669, 0.669, 2.78, 1.64, 1.64, 1.64, 1.6, 1.6, 1.6, 1.6, 1.62,
+             1.47, 1.47]),
+        uncer=0.1 * SIGMA[20:38, 2],
         units='MHz/mb',
         refer='Rosenkranz, pers. comm., 2017'
     ),
     'Snr': AMU_NT(
         value=1.584e-17,
-        uncer=1.584e-17 * 5 /100,
+        uncer=1.584e-17 * 5 / 100,
         units='Hz*cm2/GHz2',
         refer='Pickett et al., 1998, i.e. JPL line compilation'
     ),
@@ -423,26 +565,42 @@ AMU = {
     ),
     # TODO: check better solution to referencing value within uncer
     'Y300': AMU_NT(
-        value=np.array([- 0.036,0.2547,- 0.3655,0.5495,- 0.5696,0.6181,- 0.4252,0.3517,- 0.1496,0.043,0.064,- 0.1605,0.2906,- 0.373,0.4169,- 0.4819,0.4963,- 0.5481,0.5512,- 0.5931,0.6212,- 0.6558,0.692,- 0.7208,0.7312,- 0.755,0.7555,- 0.7751,0.7914,- 0.8073,0.8307,- 0.8431,0.8676,- 0.8761,0.9046,- 0.9092,0.9416,- 0.9423,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0]),
+        value=np.array(
+            [-0.036, 0.2547, -0.3655, 0.5495, -0.5696, 0.6181, -0.4252, 0.3517, -0.1496, 0.043, 0.064, -0.1605,
+             0.2906, -0.373, 0.4169, -0.4819, 0.4963, -0.5481, 0.5512, -0.5931, 0.6212, -0.6558, 0.692, -0.7208,
+             0.7312, -0.755, 0.7555, -0.7751, 0.7914, -0.8073, 0.8307, -0.8431, 0.8676, -0.8761, 0.9046, -0.9092,
+             0.9416, -0.9423, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]),
         uncer=1.0,
         units='1/bar == 1/1e5Pa =~ 1/atm',
         refer='Tretyakov et al., 2005; Uncertainty from Rosenkranz, pers. comm., 2017'
     ),
     # TODO: check better solution to referencing value within uncer
     'Y300_NL': AMU_NT(
-        value=np.array([- 0.036,0.2547,- 0.3655,0.5495,- 0.5696,0.6181,- 0.4252,0.3517,- 0.1496,0.043,0.064,- 0.1605,0.2906,- 0.373,0.4169,- 0.4819,0.4963,- 0.5481,0.5512,- 0.5931,0.6212,- 0.6558,0.692,- 0.7208,0.7312,- 0.755,0.7555,- 0.7751,0.7914,- 0.8073,0.8307,- 0.8431,0.8676,- 0.8761,0.9046,- 0.9092,0.9416,- 0.9423,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0]),
+        value=np.array(
+            [-0.036, 0.2547, -0.3655, 0.5495, -0.5696, 0.6181, -0.4252, 0.3517, -0.1496, 0.043, 0.064, -0.1605,
+             0.2906, -0.373, 0.4169, -0.4819, 0.4963, -0.5481, 0.5512, -0.5931, 0.6212, -0.6558, 0.692, -0.7208,
+             0.7312, -0.755, 0.7555, -0.7751, 0.7914, -0.8073, 0.8307, -0.8431, 0.8676, -0.8761, 0.9046, -0.9092,
+             0.9416, -0.9423, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]),
         uncer=1.0,
         units='1/mb',
         refer='Tretyakov et al., 2005; Uncertainty from Rosenkranz, pers. comm., 2017'
     ),
     'O2_V': AMU_NT(
-        value=np.array([0.0079,- 0.0978,0.0844,- 0.1273,0.0699,- 0.0776,0.2309,- 0.2825,0.0436,- 0.0584,0.6056,- 0.6619,0.6451,- 0.6759,0.6547,- 0.6675,0.6135,- 0.6139,0.2952,- 0.2895,0.2654,- 0.259,0.375,- 0.368,0.5085,- 0.5002,0.6206,- 0.6091,0.6526,- 0.6393,0.664,- 0.6475,0.6729,- 0.6545,0.68,- 0.66,0.685,- 0.665,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0]),
+        value=np.array(
+            [0.0079, -0.0978, 0.0844, -0.1273, 0.0699, -0.0776, 0.2309, -0.2825, 0.0436, -0.0584, 0.6056, -0.6619,
+             0.6451, -0.6759, 0.6547, -0.6675, 0.6135, -0.6139, 0.2952, -0.2895, 0.2654, -0.259, 0.375, -0.368,
+             0.5085, -0.5002, 0.6206, -0.6091, 0.6526, -0.6393, 0.664, -0.6475, 0.6729, -0.6545, 0.68, -0.66,
+             0.685, -0.665, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]),
         uncer=1.0,
         units='1/bar == 1/1e5Pa =~ 1/atm',
         refer='Tretyakov et al., 2005; Uncertainty from Rosenkranz, pers. comm., 2017'
     ),
     'O2_V_NL': AMU_NT(
-        value=np.array([0.0079,- 0.0978,0.0844,- 0.1273,0.0699,- 0.0776,0.2309,- 0.2825,0.0436,- 0.0584,0.6056,- 0.6619,0.6451,- 0.6759,0.6547,- 0.6675,0.6135,- 0.6139,0.2952,- 0.2895,0.2654,- 0.259,0.375,- 0.368,0.5085,- 0.5002,0.6206,- 0.6091,0.6526,- 0.6393,0.664,- 0.6475,0.6729,- 0.6545,0.68,- 0.66,0.685,- 0.665,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0]),
+        value=np.array(
+            [0.0079, -0.0978, 0.0844, -0.1273, 0.0699, -0.0776, 0.2309, -0.2825, 0.0436, -0.0584, 0.6056, -0.6619,
+             0.6451, -0.6759, 0.6547, -0.6675, 0.6135, -0.6139, 0.2952, -0.2895, 0.2654, -0.259, 0.375, -0.368,
+             0.5085, -0.5002, 0.6206, -0.6091, 0.6526, -0.6393, 0.664, -0.6475, 0.6729, -0.6545, 0.68, -0.66,
+             0.685, -0.665, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]),
         uncer=1.0,
         units='1/mb',
         refer='Rosenkranz, pers. comm., 2017'
@@ -455,27 +613,62 @@ AMU = {
     ),
 }
 
+# np_zeros = np.zeros(AMU['O2gamma'].value.shape)
+# np_zeros[38:49] = AMU['O2gamma'].value[38:49] * 0.1
+# AMU['O2gamma_mmW'] = AMU['O2gamma_mmW']._replace(uncer=np_zeros)
+# np_zeros = np.zeros(AMU['O2gamma'].value.shape)
+# np_zeros[34:49] = AMU['O2gamma'].value[34:49] * 0.1
+# AMU['O2gamma_NL'] = AMU['O2gamma_NL']._replace(uncer=np_zeros)
+# np_zeros = np.zeros(AMU['O2gamma'].value.shape)
+# np_zeros[20:38] = SIGMA[20:38, 2]
+# AMU['O2gamma_WL'] = AMU['O2gamma_WL']._replace(uncer=np_zeros)
+# np_zeros = np.zeros(AMU['Y300'].value.shape)
+# np_zeros[0:34] = U[37:71]
+# AMU['Y300'] = AMU['Y300']._replace(uncer=np_zeros)
+# np_zeros = np.zeros(AMU['Y300'].value.shape)
+# np_zeros[34:49] = AMU['Y300'].value[34:49] * 0.2
+# AMU['Y300_NL'] = AMU['Y300_NL']._replace(uncer=np_zeros)
+# np_zeros = np.zeros(AMU['O2_V'].value.shape)
+# np_zeros[0:34] = U[71:105]
+# AMU['O2_V'] = AMU['O2_V']._replace(uncer=np_zeros)
+# np_zeros = np.zeros(AMU['O2_V'].value.shape)
+# np_zeros[34:49] = AMU['O2_V'].value[34:49] * 0.2
+# AMU['O2_V_NL'] = AMU['O2_V_NL']._replace(uncer=np_zeros)
+
 np_zeros = np.zeros(AMU['O2gamma'].value.shape)
 np_zeros[38:49] = AMU['O2gamma'].value[38:49] * 0.1
-AMU['O2gamma_mmW'] = AMU['O2gamma_mmW']._replace(uncer=np_zeros)
+AMU['O2gamma_mmW'].uncer = np_zeros
 np_zeros = np.zeros(AMU['O2gamma'].value.shape)
 np_zeros[34:49] = AMU['O2gamma'].value[34:49] * 0.1
-AMU['O2gamma_NL'] = AMU['O2gamma_NL']._replace(uncer=np_zeros)
+AMU['O2gamma_NL'].uncer = np_zeros
 np_zeros = np.zeros(AMU['O2gamma'].value.shape)
 np_zeros[20:38] = SIGMA[20:38, 2]
-AMU['O2gamma_WL'] = AMU['O2gamma_WL']._replace(uncer=np_zeros)
+AMU['O2gamma_WL'].uncer = np_zeros
 np_zeros = np.zeros(AMU['Y300'].value.shape)
 np_zeros[0:34] = U[37:71]
-AMU['Y300'] = AMU['Y300']._replace(uncer=np_zeros)
+AMU['Y300'].uncer = np_zeros
 np_zeros = np.zeros(AMU['Y300'].value.shape)
 np_zeros[34:49] = AMU['Y300'].value[34:49] * 0.2
-AMU['Y300_NL'] = AMU['Y300_NL']._replace(uncer=np_zeros)
+AMU['Y300_NL'].uncer = np_zeros
 np_zeros = np.zeros(AMU['O2_V'].value.shape)
 np_zeros[0:34] = U[71:105]
-AMU['O2_V'] = AMU['O2_V']._replace(uncer=np_zeros)
+AMU['O2_V'].uncer = np_zeros
 np_zeros = np.zeros(AMU['O2_V'].value.shape)
 np_zeros[34:49] = AMU['O2_V'].value[34:49] * 0.2
-AMU['O2_V_NL'] = AMU['O2_V_NL']._replace(uncer=np_zeros)
+AMU['O2_V_NL'].uncer = np_zeros
+
+if USEKOSHELEV2017:
+    AMU['gamma_a'] = AMU['gamma_a_{}_k2017'.format(USEKOSHELEV2017_WHAT)]
+    AMU['gamma_w'] = AMU['gamma_w_{}_k2017'.format(USEKOSHELEV2017_WHAT)]
+    AMU['delta_a'] = AMU['delta_a_{}_k2017'.format(USEKOSHELEV2017_WHAT)]
+    AMU['delta_w'] = AMU['delta_w_{}_k2017'.format(USEKOSHELEV2017_WHAT)]
+
+AMU['gamma_a'].value = AMU['gamma_a'].value * MB2TORR
+AMU['gamma_a'].uncer[0:2] = np.array([0.039, 0.015])
+AMU['gamma_w'].value = AMU['gamma_w'].value * MB2TORR
+AMU['delta_a'].value = AMU['delta_a'].value * MB2TORR
+AMU['delta_w'].value = AMU['delta_w'].value * MB2TORR
+AMU['gamma_a'].units = AMU['gamma_w'].units = AMU['delta_a'].units = AMU['delta_w'].units = 'MHz/mb'
 
 for i in range(0, 2):
     AMU['SR'].value[i], \
@@ -484,3 +677,66 @@ for i in range(0, 2):
                                                  AMU['gamma_a'].value[i],
                                                  AMU['delta_a'].uncer[i],
                                                  AMU['gamma_a'].uncer[i])
+
+# units in Ros. model are [Hz*cm^2]; the conversion factor is just speed of light in cm (P. Rosenkranz, personal communication)
+# AMU['S'] = AMU['S']._replace(value=AMU['S'].value * C_CM, uncer=AMU['S'].uncer * C_CM, units='Hz*cm^2')
+AMU['S'].value = AMU['S'].value * C_CM
+AMU['S'].uncer = AMU['S'].uncer * C_CM
+AMU['S'].units = 'Hz*cm^2'
+
+
+def absmod_uncertainties_perturb(what: Optional[list] = [], mode: Optional[str] = 'non', index: Optional[int] = None):
+    """[summary]
+
+    Args:
+        what (list): [description]
+        mode (Optional[str], optional): [description]. Defaults to 'non'.
+        index (Optional[int], optional): [description]. Defaults to None.
+    """
+    AMU_copy = deepcopy(AMU)
+    if what == []:
+        param = list(AMU_copy.keys())
+    else:
+        param = what
+
+    param_index = index - 1 if index else index
+
+    npar = len(param)
+    for i in range(npar):
+        new_value = AMU_copy[param[i]].value
+        uncer = AMU_copy[param[i]].uncer
+        if mode == 'max':
+            # new_value[param_index] = new_value[param_index] + uncer[param_index]
+            AMU_copy[param[i]].value[param_index] = new_value[param_index] + uncer[param_index]
+        elif mode == 'min':
+            # new_value[param_index] = new_value[param_index] - uncer[param_index]
+            AMU_copy[param[i]].value[param_index] = new_value[param_index] - uncer[param_index]
+        elif mode == 'non':
+            pass
+        elif mode == 'ran':
+            # here rand or randn shall be used?
+            # note that rand is only positive ([0-1]) and randn gives more
+            # weight to values close to zero.
+            # So, one way could be to combine them, using rand and the sign of randn
+            # Assuming uncorrelated uncertainty:
+            # for ip1 = param_indx
+            #     p1.value(ip1) = p1.value(ip1) + p1.uncer(ip1) * rand(1) * sign(randn(1));
+            # end
+            raise NotImplementedError("sorry, random is not implemented yet")
+        else:
+            raise ValueError("mode args is not set or invalid")
+
+    return AMU_copy
+
+
+def apu_line_mixing(f: np.ndarray, t: np.ndarray, p: np.ndarray, residual_source: Optional[int] = 0):
+    unkn = 0.0  # unknown uncertainty outside the temp and freq range
+    if residual_source == 1:
+        pass
+    elif residual_source == 2:
+        pass
+    else:
+        tgrid, fgrid, pgrid = np.meshgrid(TVEC, FVEC, PVEC);
+        apu = si.interpn((tgrid, fgrid, pgrid), PR_EXT, t, f, p, 'linear')
+
+    return apu

@@ -61,6 +61,7 @@ class BTCloudRTE(object):
         self._satellite = from_sat
         self.cloudy = cloudy
         self._es = 1.0
+        self._uncertainty = False
 
         self.nl = len(z)
         self.nf = len(frq)
@@ -142,15 +143,22 @@ class BTCloudRTE(object):
         Args:
             absmdl (str): Absorption model for WV
         """
-        # Defines models
-        O2AbsModel.model = absmdl
-        O2AbsModel.o2ll = import_lineshape('o2ll_{}'.format(absmdl))
-
-        H2OAbsModel.model = absmdl
-        H2OAbsModel.h2oll = import_lineshape('h2oll_{}'.format(absmdl))
-
-        N2AbsModel.model = absmdl
-        LiqAbsModel.model = absmdl
+        if absmdl == 'uncertainty':
+            O2AbsModel.model = 'rose18'
+            O2AbsModel.o2ll = import_lineshape('o2ll_{}'.format('rose18'))
+            H2OAbsModel.model = 'rose18'
+            H2OAbsModel.h2oll = import_lineshape('h2oll_{}'.format('rose18'))
+            N2AbsModel.model = 'rose03'
+            LiqAbsModel.model = 'rose16'
+            self._uncertainty = True
+        else:
+            # Defines models
+            O2AbsModel.model = absmdl
+            O2AbsModel.o2ll = import_lineshape('o2ll_{}'.format(absmdl))
+            H2OAbsModel.model = absmdl
+            H2OAbsModel.h2oll = import_lineshape('h2oll_{}'.format(absmdl))
+            N2AbsModel.model = absmdl
+            LiqAbsModel.model = absmdl
 
     def init_cloudy(self, cldh: np.ndarray, denice: np.ndarray, denliq: np.ndarray) -> None:
         """[summary]
@@ -290,7 +298,14 @@ class BTCloudRTE(object):
             # this are based on NOAA RTE fortran routines
             for j in range(0, self.nf):
                 # Rosenkranz, personal communication, 2019/02/12 (email)
-                awet, adry = RTEquation.clearsky_absorption(self.p, self.tk, e, self.frq[j])
+                if self._uncertainty:
+                    awet, adry = RTEquation.clearsky_absorption_uncertainty(self.p, self.tk, e, self.frq[j])
+                    # a = np.loadtxt('/Users/slarosa/Downloads/awet.csv')
+                    # b = np.loadtxt('/Users/slarosa/Downloads/adry.csv')
+                    # np.testing.assert_allclose(awet, a)
+                    # np.testing.assert_allclose(adry, b)
+                else:
+                    awet, adry = RTEquation.clearsky_absorption(self.p, self.tk, e, self.frq[j])
                 self.sptauwet[j, k], \
                 self.ptauwet[j, k, :] = RTEquation.exponential_integration(1, awet, ds, 0, self.nl, 1)
                 self.sptaudry[j, k], \

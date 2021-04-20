@@ -174,8 +174,7 @@ class H2OAbsModel(AbsModel):
         ----------
         .. [1] Rosenkranz, P.W.: Line-By-Line Microwave Radiative Transfer (Non-Scattering), Remote Sens. Code Library, Doi:10.21982/M81013, 2017
 
-        Example
-        -------
+        Example:
 
         .. code-block:: python
 
@@ -236,7 +235,8 @@ class H2OAbsModel(AbsModel):
         if H2OAbsModel.model in ['rose03', 'rose98']:
             con = (5.43e-10 * pda * ti ** 3 + 1.8e-08 * pvap * ti ** 7.5) * pvap * f * f
         else:
-            con = (self.h2oll.cf * pda * ti ** self.h2oll.xcf + self.h2oll.cs * pvap * ti ** self.h2oll.xcs) * pvap * f * f
+            con = (self.h2oll.cf * pda * ti ** self.h2oll.xcf + self.h2oll.cs * pvap * ti ** self.h2oll.xcs) * \
+                  pvap * f * f
         # nico 2019/03/18 *********************************************************
         # add resonances
         nlines = len(self.h2oll.fl)
@@ -275,12 +275,14 @@ class H2OAbsModel(AbsModel):
                                 delta2 = (self.h2oll.d2air * pda) + (self.h2oll.d2self * pvap)
                             else:
                                 delta2 = 0.0
-                            xc = np.complex((width0 - np.dot(1.5, width2)), df[j] + np.dot(1.5, delta2)) / np.complex(width2, -delta2)
+                            xc = np.complex((width0 - np.dot(1.5, width2)), df[j] + np.dot(1.5, delta2)) / np.complex(
+                                width2, -delta2)
 
                         xrt = np.sqrt(xc)
 
                         pxw = 1.77245385090551603 * xrt * dcerror(-np.imag(xrt), np.real(xrt))
-                        sd = 2.0 * (1.0 - pxw) / (width2 if H2OAbsModel.model != 'rose20sd' else np.complex(width2, -delta2))
+                        sd = 2.0 * (1.0 - pxw) / (
+                            width2 if H2OAbsModel.model != 'rose20sd' else np.complex(width2, -delta2))
                         res += np.real(sd) - base
                     else:
                         if np.abs(df[j]) < 750.0:
@@ -360,6 +362,91 @@ class H2OAbsModel(AbsModel):
         npp = (3.183e-05 * den * summ / db2np) / factor
         ncpp = (con / db2np) / factor
         # cyh *************************************************************
+
+        return npp, ncpp
+
+    def h2o_uncertainty(self, pdrykpa: np.ndarray, vx: np.ndarray, ekpa: np.ndarray, frq: np.ndarray, amu: dict) -> \
+            Union[Tuple[np.ndarray, np.ndarray], None]:
+        """[summary]
+
+        Args:
+            pdrykpa (np.ndarray): [description]
+            vx (np.ndarray): [description]
+            ekpa (np.ndarray): [description]
+            frq (np.ndarray): [description]
+            amu (tuple): [description]
+
+        Returns:
+            Union[ Tuple[np.ndarray, np.ndarray], None]: [description]
+        """
+
+        # self.h2oll.cf = amu['con_Cf'].value
+        # self.h2oll.cs = amu['con_Cs'].value
+        self.h2oll.xcf = amu['con_Xf'].value
+        self.h2oll.xcs = amu['con_Xs'].value
+        # self.h2oll.s1[0:2] = amu['S'].value[0:2]
+        # self.h2oll.b2 = amu['B2'].value
+        self.h2oll.w0 = np.loadtxt('/Users/slarosa/Downloads/w0.csv')  # to check
+        self.h2oll.w0s = np.loadtxt('/Users/slarosa/Downloads/w0s.csv')  # to check
+        # self.h2oll.x[0:2] = amu['n_a'].value[0:2]
+        self.h2oll.xs[0:2] = amu['n_w'].value[0:2]
+        # self.h2oll.sh[0:2] = amu['delta_a'].value[0:2] / 1000.0
+        # self.h2oll.shs[0:2] = amu['delta_w'].value[0:2] / 1000.0
+        # self.h2oll.fl[0:2] = amu['FL'].value[0:2]
+
+        # b = np.loadtxt('/Users/slarosa/Downloads/w0.csv')
+        # np.testing.assert_allclose(self.h2oll.w0, b, verbose=True)
+        # print('allclose')
+        # return
+
+        db2np = np.log(10.0) * 0.1
+        rvap = (0.01 * 8.31451) / 18.01528
+        factor = 0.182 * frq
+        t = 300.0 / vx
+        p = (pdrykpa + ekpa) * 10.0
+        rho = ekpa * 10.0 / (rvap * t)
+        f = frq
+
+        if rho.any() <= 0.0:
+            # abh2o = 0.0
+            # npp = 0
+            # ncpp = 0
+            return
+
+        pvap = (rho * t) / 216.68
+        pda = p - pvap
+        den = 3.344e+16 * rho
+
+        # continuum terms
+        ti = self.h2oll.reftcon / t
+        con = (self.h2oll.cf * pda * ti ** self.h2oll.xcf + self.h2oll.cs * pvap * ti ** self.h2oll.xcs) * pvap * f * f
+        # add resonances
+        nlines = len(self.h2oll.fl)
+        ti = self.h2oll.reftline / t
+        df = np.zeros((2, 1))
+
+        ti2 = ti ** amu['wv_nS'].value
+        summ = 0.0
+        for i in range(0, nlines):
+            widthf = self.h2oll.w0[i] * pda * ti ** self.h2oll.x[i]
+            widths = self.h2oll.w0s[i] * pvap * ti ** self.h2oll.xs[i]
+            width = widthf + widths
+            shiftf = self.h2oll.sh[i] * pda * ti ** self.h2oll.xh[i]
+            shifts = self.h2oll.shs[i] * pvap * ti ** self.h2oll.xhs[i]
+            shift = shiftf + shifts
+            wsq = width ** 2
+            s = self.h2oll.s1[i] * ti2 * np.exp(self.h2oll.b2[i] * (1. - ti))
+            df[0] = f - self.h2oll.fl[i] - shift
+            df[1] = f + self.h2oll.fl[i] + shift
+            base = width / (562500.0 + wsq)
+            res = 0.0
+            for j in range(0, 2):
+                if np.abs(df[j]) < 750.0:
+                    res += width / (df[j] ** 2 + wsq) - base
+            summ += s * res * (f / self.h2oll.fl[i]) ** 2
+
+        npp = (3.183e-05 * den * summ / db2np) / factor
+        ncpp = (con / db2np) / factor
 
         return npp, ncpp
 
@@ -660,5 +747,73 @@ class O2AbsModel(AbsModel):
         npp = (o2abs / db2np) / factor
         ncpp = (ncpp / db2np) / factor
         # ************************************************************
+
+        return npp, ncpp
+
+    def o2abs_uncertainty(self, pdrykpa: float, vx: float, ekpa: float, frq: float, amu: dict) -> Tuple[
+        np.ndarray, np.ndarray]:
+        self.o2ll.w2a = amu['w2a'].value
+        self.o2ll.apu = amu['APU'].value
+        self.o2ll.w300[0:38] = amu['O2gamma'].value[0:38]
+        self.o2ll.w300[34:49] = amu['O2gamma_NL'].value[34:49]
+        self.o2ll.wb300 = amu['WB300'].value
+        self.o2ll.f = amu['O2FL'].value
+        self.o2ll.s300 = amu['O2S'].value
+        self.o2ll.be = amu['O2BE'].value
+        self.o2ll.x11 = amu['X11'].value
+        self.o2ll.x16 = amu['X16'].value
+        self.o2ll.x05 = amu['X05'].value
+        self.o2ll.x = self.o2ll.x05
+        self.o2ll.y300 = amu['Y300'].value
+        self.o2ll.y300[34:49] = amu['Y300_NL'].value[34:49]
+        self.o2ll.v = amu['O2_V'].value
+        self.o2ll.v[34:49] = amu['O2_V_NL'].value[34:49]
+        self.o2ll.snr = amu['Snr'].value
+        self.o2ll.ns = amu['O2_nS'].value
+
+        # cyh*** add the following lines *************************
+        db2np = np.log(10.0) * 0.1
+        rvap = (0.01 * 8.31451) / 18.01528
+        factor = 0.182 * frq
+        temp = 300.0 / vx
+        pres = (pdrykpa + ekpa) * 10.0
+        vapden = ekpa * 10.0 / (rvap * temp)
+        freq = frq
+        # cyh*****************************************************
+
+        th = 300.0 / temp
+        th1 = th - 1.0
+        b = th ** self.o2ll.x
+        preswv = (vapden * temp) / 217.0
+        presda = pres - preswv
+        den = 0.001 * (presda * b) + (self.o2ll.w2a * preswv * th)
+        dfnr = self.o2ll.wb300 * den
+        th3 = th ** (self.o2ll.ns + 1)
+        summ = 0.0
+
+        nlines = len(self.o2ll.f)
+        for k in range(0, nlines):
+            df = self.o2ll.w300[k] * den
+            fcen = self.o2ll.f[k]
+            y = den * (self.o2ll.y300[k] + self.o2ll.v[k] * th1)
+            strr = self.o2ll.s300[k] * np.exp(-self.o2ll.be[k] * th1)
+            sf1 = (df + (freq - fcen) * y) / ((freq - fcen) ** 2 + df * df)
+            sf2 = (df - (freq + fcen) * y) / ((freq + fcen) ** 2 + df * df)
+            summ += strr * (sf1 + sf2) * (freq / self.o2ll.f[k]) ** 2
+
+        o2abs = 1.6097e+11 * summ * presda * th3
+        o2abs = np.maximum(o2abs, 0.0)
+
+        # here goes apu_line_mixing
+        o2abs = o2abs * self.o2ll.apu
+
+        ncpp = self.o2ll.snr * freq * freq * dfnr / (th * (freq * freq + dfnr * dfnr))
+        ncpp = 1.6097e+11 * ncpp * presda * th3
+
+        # change the units from np/km to ppm
+        npp = (o2abs / db2np) / factor
+
+        ncpp = (ncpp / db2np) / factor
+        # cyh ************************************************************
 
         return npp, ncpp

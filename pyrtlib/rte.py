@@ -14,6 +14,7 @@ import numpy as np
 
 from .absmodel import O2AbsModel, H2OAbsModel, N2AbsModel, LiqAbsModel
 from .utils import constants, tk2b_mod
+from .absmod_uncertainty import absmod_uncertainties_perturb
 
 
 class RTEquation:
@@ -566,6 +567,32 @@ class RTEquation:
             if not N2AbsModel.model:
                 raise ValueError('No model avalaible with this name: {} . Sorry...'.format('model'))
 
+            adry[i] = aO2[i] + aN2[i]
+
+        return awet, adry
+
+    @staticmethod
+    def clearsky_absorption_uncertainty(p=None, tk=None, e=None, frq=None):
+        nl = len(p)
+        awet = np.zeros(p.shape)
+        adry = np.zeros(p.shape)
+        aO2 = np.zeros(p.shape)
+        aN2 = np.zeros(p.shape)
+        factor = np.dot(0.182, frq)
+        db2np = np.dot(np.log(10.0), 0.1)
+
+        amu_p = absmod_uncertainties_perturb(['gamma_a'], 'min', index=2)
+
+        for i in range(0, nl):
+            v = 300.0 / tk[i]
+            ekpa = e[i] / 10.0
+            pdrykpa = p[i] / 10.0 - ekpa
+            npp, ncpp = H2OAbsModel().h2o_uncertainty(pdrykpa, v, ekpa, frq, amu_p)
+            awet[i] = (factor * (npp + ncpp)) * db2np
+            npp, ncpp = O2AbsModel().o2abs_uncertainty(pdrykpa, v, ekpa, frq, amu_p)
+            aO2[i] = (factor * (npp + ncpp)) * db2np
+            # add N2 term
+            aN2[i] = N2AbsModel.n2_absorption(tk[i], np.dot(pdrykpa, 10), frq)
             adry[i] = aO2[i] + aN2[i]
 
         return awet, adry
