@@ -1,11 +1,12 @@
 import os
-from pyrtlib.absmodel import H2OAbsModel, LiqAbsModel, N2AbsModel, O2AbsModel
 # from pathlib import Path
 from unittest import TestCase
 
 import numpy as np
 import pandas as pd
+import pytest
 from numpy.testing import assert_allclose
+from pyrtlib.absmodel import H2OAbsModel, LiqAbsModel, O2AbsModel
 from pyrtlib.atmp import AtmosphericProfiles as atmp
 from pyrtlib.main import BTCloudRTE
 from pyrtlib.utils import ppmv2gkg, mr2rh, import_lineshape
@@ -56,7 +57,8 @@ class Test(TestCase):
         rte.init_absmdl('rose19sd')
         df = rte.execute()
 
-        df_expected = pd.read_csv(os.path.join(THIS_DIR, "data", "tb_tot_ros03_16_17_18_19_19sd_20_20sd_98_mak11_21sd.csv"))
+        df_expected = pd.read_csv(
+            os.path.join(THIS_DIR, "data", "tb_tot_ros03_16_17_18_19_19sd_20_20sd_98_mak11_21sd.csv"))
         assert_allclose(df.tbtotal, df_expected.ros19sd, atol=0)
 
     # @pytest.mark.datafiles(DATA_DIR)
@@ -73,7 +75,8 @@ class Test(TestCase):
         rte.init_absmdl('rose19')
         df = rte.execute()
 
-        df_expected = pd.read_csv(os.path.join(THIS_DIR, "data", "tb_tot_ros03_16_17_18_19_19sd_20_20sd_98_mak11_21sd.csv"))
+        df_expected = pd.read_csv(
+            os.path.join(THIS_DIR, "data", "tb_tot_ros03_16_17_18_19_19sd_20_20sd_98_mak11_21sd.csv"))
         assert_allclose(df.tbtotal, df_expected.ros19, atol=0)
 
     # @pytest.mark.datafiles(DATA_DIR)
@@ -90,7 +93,8 @@ class Test(TestCase):
         rte.init_absmdl('rose16')
         df = rte.execute()
 
-        df_expected = pd.read_csv(os.path.join(THIS_DIR, "data", "tb_tot_ros03_16_17_18_19_19sd_20_20sd_98_mak11_21sd.csv"))
+        df_expected = pd.read_csv(
+            os.path.join(THIS_DIR, "data", "tb_tot_ros03_16_17_18_19_19sd_20_20sd_98_mak11_21sd.csv"))
         assert_allclose(df.tbtotal, df_expected.ros16, atol=0)
 
     # @pytest.mark.datafiles(DATA_DIR)
@@ -109,7 +113,8 @@ class Test(TestCase):
         O2AbsModel.o2ll = import_lineshape('o2ll_{}'.format(O2AbsModel.model))
         df = rte.execute()
 
-        df_expected = pd.read_csv(os.path.join(THIS_DIR, "data", "tb_tot_ros03_16_17_18_19_19sd_20_20sd_98_mak11_21sd.csv"))
+        df_expected = pd.read_csv(
+            os.path.join(THIS_DIR, "data", "tb_tot_ros03_16_17_18_19_19sd_20_20sd_98_mak11_21sd.csv"))
         assert_allclose(df.tbtotal, df_expected.mak11, atol=0)
 
     # @pytest.mark.datafiles(DATA_DIR)
@@ -127,7 +132,8 @@ class Test(TestCase):
         rte.init_absmdl('rose03')
         df = rte.execute()
 
-        df_expected = pd.read_csv(os.path.join(THIS_DIR, "data", "tb_tot_ros03_16_17_18_19_19sd_20_20sd_98_mak11_21sd.csv"))
+        df_expected = pd.read_csv(
+            os.path.join(THIS_DIR, "data", "tb_tot_ros03_16_17_18_19_19sd_20_20sd_98_mak11_21sd.csv"))
         assert_allclose(df.tbtotal, df_expected.ros03, atol=0)
 
     # @pytest.mark.datafiles(DATA_DIR)
@@ -144,7 +150,8 @@ class Test(TestCase):
         rte.init_absmdl('rose17')
         df = rte.execute()
 
-        df_expected = pd.read_csv(os.path.join(THIS_DIR, "data", "tb_tot_ros03_16_17_18_19_19sd_20_20sd_98_mak11_21sd.csv"))
+        df_expected = pd.read_csv(
+            os.path.join(THIS_DIR, "data", "tb_tot_ros03_16_17_18_19_19sd_20_20sd_98_mak11_21sd.csv"))
         assert_allclose(df.tbtotal, df_expected.ros17, atol=0)
 
     # @pytest.mark.datafiles(DATA_DIR)
@@ -161,7 +168,8 @@ class Test(TestCase):
         rte.init_absmdl('rose20')
         df = rte.execute()
 
-        df_expected = pd.read_csv(os.path.join(THIS_DIR, "data", "tb_tot_ros03_16_17_18_19_19sd_20_20sd_98_mak11_21sd.csv"))
+        df_expected = pd.read_csv(
+            os.path.join(THIS_DIR, "data", "tb_tot_ros03_16_17_18_19_19sd_20_20sd_98_mak11_21sd.csv"))
         assert_allclose(df.tbtotal, df_expected.ros20, atol=0)
 
     # @pytest.mark.datafiles(DATA_DIR)
@@ -178,7 +186,8 @@ class Test(TestCase):
         rte.init_absmdl('rose20sd')
         df = rte.execute()
 
-        df_expected = pd.read_csv(os.path.join(THIS_DIR, "data", "tb_tot_ros03_16_17_18_19_19sd_20_20sd_98_mak11_21sd.csv"))
+        df_expected = pd.read_csv(
+            os.path.join(THIS_DIR, "data", "tb_tot_ros03_16_17_18_19_19sd_20_20sd_98_mak11_21sd.csv"))
         assert_allclose(df.tbtotal, df_expected.ros20sd, atol=0)
 
     # @pytest.mark.datafiles(DATA_DIR)
@@ -200,8 +209,9 @@ class Test(TestCase):
         LiqAbsModel.model = 'rose19sd'
         df = rte.execute()
 
-        df_expected = pd.read_csv(os.path.join(THIS_DIR, "data", "tb_tot_ros03_16_17_18_19_19sd_20_20sd_98_mak11_21sd.csv"))
-        assert_allclose(df.tbtotal, df_expected.ros21sd, atol=0.2)
+        df_expected = pd.read_csv(
+            os.path.join(THIS_DIR, "data", "tb_tot_ros03_16_17_18_19_19sd_20_20sd_98_mak11_21sd.csv"))
+        assert_allclose(df.tbtotal, df_expected.ros21sd, atol=0)
 
     # @pytest.mark.datafiles(DATA_DIR)
     def test_pyrtlib_sat_rose18(self):
@@ -217,7 +227,8 @@ class Test(TestCase):
         rte.init_absmdl('rose18')
         df = rte.execute()
 
-        df_expected = pd.read_csv(os.path.join(THIS_DIR, "data", "tb_tot_ros03_16_17_18_19_19sd_20_20sd_98_mak11_21sd.csv"))
+        df_expected = pd.read_csv(
+            os.path.join(THIS_DIR, "data", "tb_tot_ros03_16_17_18_19_19sd_20_20sd_98_mak11_21sd.csv"))
         assert_allclose(df.tbtotal, df_expected.ros18, atol=0)
 
     # @pytest.mark.datafiles(DATA_DIR)
@@ -234,7 +245,8 @@ class Test(TestCase):
         rte.init_absmdl('rose98')
         df = rte.execute()
 
-        df_expected = pd.read_csv(os.path.join(THIS_DIR, "data", "tb_tot_ros03_16_17_18_19_19sd_20_20sd_98_mak11_21sd.csv"))
+        df_expected = pd.read_csv(
+            os.path.join(THIS_DIR, "data", "tb_tot_ros03_16_17_18_19_19sd_20_20sd_98_mak11_21sd.csv"))
         assert_allclose(df.tbtotal, df_expected.ros98, atol=0)
 
     # @pytest.mark.datafiles(DATA_DIR)
@@ -283,5 +295,6 @@ class Test(TestCase):
         rte.init_absmdl('rose19sd')
 
         df = rte.execute()
-        df_expected = pd.read_csv(os.path.join(THIS_DIR, "data", "tb_tot_ros03_16_17_18_19_19sd_20_20sd_98_mak11_21sd.csv"))
+        df_expected = pd.read_csv(
+            os.path.join(THIS_DIR, "data", "tb_tot_ros03_16_17_18_19_19sd_20_20sd_98_mak11_21sd.csv"))
         assert_allclose(df.tbtotal, df_expected.ros19sd, atol=0)

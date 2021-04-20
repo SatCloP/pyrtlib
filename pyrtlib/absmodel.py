@@ -451,8 +451,7 @@ class H2OAbsModel(AbsModel):
         ti2 = np.exp(2.5 * tiln)
         summ = 0.0
         for i in range(0, nlines):
-            width0 = self.h2oll.w0[i] * pda * ti ** self.h2oll.x[i] + self.h2oll.w0s[i] * pvap * ti ** \
-                     self.h2oll.xs[i]
+            width0 = self.h2oll.w0[i] * pda * ti ** self.h2oll.x[i] + self.h2oll.w0s[i] * pvap * ti ** self.h2oll.xs[i]
             if self.h2oll.w2[i] > 0:
                 width2 = self.h2oll.w2[i] * pda * ti ** self.h2oll.xw2[i] + self.h2oll.w2s[i] * pvap * ti ** \
                          self.h2oll.xw2s[i]

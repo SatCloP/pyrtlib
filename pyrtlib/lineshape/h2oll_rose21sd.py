@@ -65,23 +65,15 @@ d2 = mtx[:, 18] / 1000.0
 d2s = mtx[:, 19] / 1000.0
 
 # replace non-existing shifting parameters with broadening parameters
-indx = np.where(np.isnan(xh))
-xh[indx] = x[indx]
-indx = np.where(np.isnan(xhs))
-xhs[indx] = xs[indx]
+indx = np.where(np.isnan(xh)); xh[indx] = x[indx]
+indx = np.where(np.isnan(xhs)); xhs[indx] = xs[indx]
+indx = np.where(np.isnan(xw2)); xw2[indx] = x[indx]
+indx = np.where(np.isnan(xw2s)); xw2s[indx] = xs[indx]
 # replace non-existing aair aself parameters with zero (to be agreed with phil)
-indx = np.where(np.isnan(xw2))
-xw2[indx] = xw2[indx]
-indx = np.where(np.isnan(xw2s))
-xw2s[indx] = xw2s[indx]
-indx = np.where(np.isnan(aair))
-aair[indx] = 0
-indx = np.where(np.isnan(aself))
-aself[indx] = 0
-indx = np.where(np.isnan(w2))
-w2[indx] = 0
-indx = np.where(np.isnan(w2s))
-w2s[indx] = 0
+indx = np.where(np.isnan(aair)); aair[indx] = 0
+indx = np.where(np.isnan(aself)); aself[indx] = 0
+indx = np.where(np.isnan(w2)); w2[indx] = 0
+indx = np.where(np.isnan(w2s)); w2s[indx] = 0
 # read continuum parameters; units: kelvin, 1/(km*mb^2*ghz^2)
 reftcon = ctr[0]
 cf = ctr[1]
