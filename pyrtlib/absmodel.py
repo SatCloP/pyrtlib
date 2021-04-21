@@ -154,21 +154,20 @@ class H2OAbsModel(AbsModel):
 
     def h2o_rosen19_sd(self, pdrykpa: np.ndarray, vx: np.ndarray, ekpa: np.ndarray, frq: np.ndarray) -> Union[
         Tuple[np.ndarray, np.ndarray], None]:
-        """Compute absorption coefficients in atmosphere due to water vapor
-        this version should not be used with a line list older than june 2018,
-        nor the new list with an older version of this subroutine.
+        """Compute absorption coefficients in atmosphere due to water vapor for all models excepts rose21sd. 
+        This version should not be used with a line list older than june 2018,
+        nor the new list with an older version of this subroutine. 
         Line parameters will be read from file h2o_list.asc; intensities
-        should include the isotope abundance factors.
-        this version uses a line-shape cutoff.
+        should include the isotope abundance factors. This version uses a line-shape cutoff.
 
         Args:
-            pdrykpa ([type], optional): [description]. Defaults to none.
-            vx ([type], optional): [description]. Defaults to none.
-            ekpa ([type], optional): [description]. Defaults to none.
-            frq ([type], optional): [description]. Defaults to none.
+            pdrykpa (numpy.ndarray): [description]
+            vx (numpy.ndarray): [description]
+            ekpa (numpy.ndarray): [description]
+            frq (numpy.ndarray): [description]
 
         Returns:
-            [type]: [description]
+            Union[ Tuple[numpy.ndarray, numpy.ndarray], None]: [description]
 
         References
         ----------
@@ -375,13 +374,13 @@ class H2OAbsModel(AbsModel):
         this version uses a line-shape cutoff.
 
         Args:
-            pdrykpa ([type], optional): [description]. Defaults to none.
-            vx ([type], optional): [description]. Defaults to none.
-            ekpa ([type], optional): [description]. Defaults to none.
-            frq ([type], optional): [description]. Defaults to none.
+            pdrykpa (numpy.ndarray): [description]
+            vx (numpy.ndarray): [description]
+            ekpa (numpy.ndarray): [description]
+            frq (numpy.ndarray): [description]
 
         Returns:
-            [type]: [description]
+            Union[ Tuple[numpy.ndarray, numpy.ndarray], None]: [description]
 
         References
         ----------
@@ -494,14 +493,14 @@ class H2OAbsModel(AbsModel):
         """[summary]
 
         Args:
-            pdrykpa (np.ndarray): [description]
-            vx (np.ndarray): [description]
-            ekpa (np.ndarray): [description]
-            frq (np.ndarray): [description]
-            amu (tuple): [description]
+            pdrykpa (numpy.ndarray): [description]
+            vx (numpy.ndarray): [description]
+            ekpa (numpy.ndarray): [description]
+            frq (numpy.ndarray): [description]
+            amu (dict): [description]
 
         Returns:
-            Union[ Tuple[np.ndarray, np.ndarray], None]: [description]
+            Union[ Tuple[numpy.ndarray, numpy.ndarray], None]: [description]
         """
 
         # self.h2oll.cf = amu['con_Cf'].value
