@@ -244,7 +244,7 @@ class Test(TestCase):
 
         df_expected = pd.read_csv(
             os.path.join(THIS_DIR, "data", "tb_tot_ros03_16_17_18_19_19sd_20_20sd_98_mak11_21sd.csv"))
-        assert_allclose(df.tbtotal, df_expected.ros98, atol=0)
+        assert_allclose(df.tbtotal, df_expected.rosen, atol=0)
 
     # @pytest.mark.datafiles(DATA_DIR)
     def test_pyrtlib_sat_rose98_cloudy(self):
