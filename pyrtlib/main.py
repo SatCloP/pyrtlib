@@ -146,8 +146,8 @@ class BTCloudRTE(object):
         if absmdl == 'uncertainty':
             O2AbsModel.model = 'rose18'
             O2AbsModel.o2ll = import_lineshape('o2ll_{}'.format('rose18'))
-            H2OAbsModel.model = 'rose18'
-            H2OAbsModel.h2oll = import_lineshape('h2oll_{}'.format('rose18'))
+            H2OAbsModel.model = 'rose17'
+            H2OAbsModel.h2oll = import_lineshape('h2oll_{}'.format('rose17'))
             N2AbsModel.model = 'rose03'
             LiqAbsModel.model = 'rose16'
             self._uncertainty = True

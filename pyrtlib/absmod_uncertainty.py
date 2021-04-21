@@ -664,7 +664,8 @@ if USEKOSHELEV2017:
     AMU['delta_w'] = AMU['delta_w_{}_k2017'.format(USEKOSHELEV2017_WHAT)]
 
 AMU['gamma_a'].value = AMU['gamma_a'].value * MB2TORR
-AMU['gamma_a'].uncer[0:2] = np.array([0.039, 0.015])
+AMU['gamma_a'].uncer = AMU['gamma_a'].uncer * MB2TORR
+# AMU['gamma_a'].uncer[0:2] = np.array([0.039, 0.015])
 AMU['gamma_w'].value = AMU['gamma_w'].value * MB2TORR
 AMU['delta_a'].value = AMU['delta_a'].value * MB2TORR
 AMU['delta_w'].value = AMU['delta_w'].value * MB2TORR

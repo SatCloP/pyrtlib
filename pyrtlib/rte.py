@@ -580,7 +580,7 @@ class RTEquation:
         nl = len(p)
         awet = np.zeros(p.shape)
         adry = np.zeros(p.shape)
-        aO2 = np.zeros(p.shape)
+        aO2_N2 = np.zeros(p.shape)
         aN2 = np.zeros(p.shape)
         factor = np.dot(0.182, frq)
         db2np = np.dot(np.log(10.0), 0.1)
@@ -594,9 +594,9 @@ class RTEquation:
             npp, ncpp = H2OAbsModel().h2o_uncertainty(pdrykpa, v, ekpa, frq, amu_p)
             awet[i] = (factor * (npp + ncpp)) * db2np
             npp, ncpp = O2AbsModel().o2abs_uncertainty(pdrykpa, v, ekpa, frq, amu_p)
-            aO2[i] = (factor * (npp + ncpp)) * db2np
             # add N2 term
-            aN2[i] = N2AbsModel.n2_absorption(tk[i], np.dot(pdrykpa, 10), frq)
-            adry[i] = aO2[i] + aN2[i]
+            # aN2[i] = N2AbsModel.n2_absorption(tk[i], np.dot(pdrykpa, 10), frq)
+            aO2_N2[i] = (factor * (npp + ncpp)) * db2np
+            adry[i] = aO2_N2[i]
 
         return awet, adry

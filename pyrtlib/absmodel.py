@@ -503,19 +503,20 @@ class H2OAbsModel(AbsModel):
             Union[ Tuple[numpy.ndarray, numpy.ndarray], None]: [description]
         """
 
-        # self.h2oll.cf = amu['con_Cf'].value
-        # self.h2oll.cs = amu['con_Cs'].value
+        self.h2oll.cf = amu['con_Cf'].value
+        self.h2oll.cs = amu['con_Cs'].value
         self.h2oll.xcf = amu['con_Xf'].value
         self.h2oll.xcs = amu['con_Xs'].value
-        # self.h2oll.s1[0:2] = amu['S'].value[0:2]
+        self.h2oll.s1[0:2] = amu['S'].value[0:2]
         # self.h2oll.b2 = amu['B2'].value
-        self.h2oll.w0 = np.loadtxt('/Users/slarosa/Downloads/w0.csv')  # to check
-        self.h2oll.w0s = np.loadtxt('/Users/slarosa/Downloads/w0s.csv')  # to check
-        # self.h2oll.x[0:2] = amu['n_a'].value[0:2]
+        self.h2oll.w0[0:2] = amu['gamma_a'].value[0:2] / 1000.0  # to check
+        self.h2oll.w0s[0:2] = amu['gamma_w'].value[0:2] / 1000.0  # to check
+        self.h2oll.x[0:2] = amu['n_a'].value[0:2]
         self.h2oll.xs[0:2] = amu['n_w'].value[0:2]
+        self.h2oll.sr[0:2] = amu['SR'].value[0:2]
         # self.h2oll.sh[0:2] = amu['delta_a'].value[0:2] / 1000.0
         # self.h2oll.shs[0:2] = amu['delta_w'].value[0:2] / 1000.0
-        # self.h2oll.fl[0:2] = amu['FL'].value[0:2]
+        self.h2oll.fl[0:2] = amu['FL'].value[0:2]
 
         # b = np.loadtxt('/Users/slarosa/Downloads/w0.csv')
         # np.testing.assert_allclose(self.h2oll.w0, b, verbose=True)
@@ -554,9 +555,9 @@ class H2OAbsModel(AbsModel):
             widthf = self.h2oll.w0[i] * pda * ti ** self.h2oll.x[i]
             widths = self.h2oll.w0s[i] * pvap * ti ** self.h2oll.xs[i]
             width = widthf + widths
-            shiftf = self.h2oll.sh[i] * pda * ti ** self.h2oll.xh[i]
-            shifts = self.h2oll.shs[i] * pvap * ti ** self.h2oll.xhs[i]
-            shift = shiftf + shifts
+            # shiftf = self.h2oll.sh[i] * pda * ti ** self.h2oll.xh[i]
+            # shifts = self.h2oll.shs[i] * pvap * ti ** self.h2oll.xhs[i]
+            shift = self.h2oll.sr[i] * widthf
             wsq = width ** 2
             s = self.h2oll.s1[i] * ti2 * np.exp(self.h2oll.b2[i] * (1. - ti))
             df[0] = f - self.h2oll.fl[i] - shift
@@ -886,7 +887,7 @@ class O2AbsModel(AbsModel):
         self.o2ll.x11 = amu['X11'].value
         self.o2ll.x16 = amu['X16'].value
         self.o2ll.x05 = amu['X05'].value
-        self.o2ll.x = self.o2ll.x05
+        self.o2ll.x = amu['X05'].value
         self.o2ll.y300 = amu['Y300'].value
         self.o2ll.y300[34:49] = amu['Y300_NL'].value[34:49]
         self.o2ll.v = amu['O2_V'].value
@@ -894,7 +895,6 @@ class O2AbsModel(AbsModel):
         self.o2ll.snr = amu['Snr'].value
         self.o2ll.ns = amu['O2_nS'].value
 
-        # cyh*** add the following lines *************************
         db2np = np.log(10.0) * 0.1
         rvap = (0.01 * 8.31451) / 18.01528
         factor = 0.182 * frq
@@ -902,16 +902,15 @@ class O2AbsModel(AbsModel):
         pres = (pdrykpa + ekpa) * 10.0
         vapden = ekpa * 10.0 / (rvap * temp)
         freq = frq
-        # cyh*****************************************************
 
         th = 300.0 / temp
         th1 = th - 1.0
         b = th ** self.o2ll.x
         preswv = (vapden * temp) / 217.0
         presda = pres - preswv
-        den = 0.001 * (presda * b) + (self.o2ll.w2a * preswv * th)
+        den = 0.001 * (presda * b + self.o2ll.w2a * preswv * th)
         dfnr = self.o2ll.wb300 * den
-        th3 = th ** (self.o2ll.ns + 1)
+        th3 = th ** (self.o2ll.ns + 1) # to perturb nS (default value 2)
         summ = 0.0
 
         nlines = len(self.o2ll.f)
@@ -931,12 +930,12 @@ class O2AbsModel(AbsModel):
         o2abs = o2abs * self.o2ll.apu
 
         ncpp = self.o2ll.snr * freq * freq * dfnr / (th * (freq * freq + dfnr * dfnr))
-        ncpp = 1.6097e+11 * ncpp * presda * th3
+        ncpp *= 1.6097e+11 * presda * th3
+        ncpp += N2AbsModel.n2_absorption(temp, pres, freq)
 
         # change the units from np/km to ppm
         npp = (o2abs / db2np) / factor
 
         ncpp = (ncpp / db2np) / factor
-        # cyh ************************************************************
 
         return npp, ncpp
