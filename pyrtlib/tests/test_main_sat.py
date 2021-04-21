@@ -191,7 +191,6 @@ class Test(TestCase):
         assert_allclose(df.tbtotal, df_expected.ros20sd, atol=0)
 
     # @pytest.mark.datafiles(DATA_DIR)
-    @pytest.mark.skip(reason="rose21sd throws an error with absolute tolerance to 0, to be fixed!!!")
     def test_pyrtlib_sat_rose21sd(self):
         z, p, _, t, md = atmp.gl_atm(atmp.TROPICAL)
 
@@ -205,8 +204,6 @@ class Test(TestCase):
         rte.init_absmdl('rose20')
         H2OAbsModel.model = 'rose21sd'
         H2OAbsModel.h2oll = import_lineshape('h2oll_{}'.format(H2OAbsModel.model))
-        O2AbsModel.model = 'rose21sd'
-        LiqAbsModel.model = 'rose19sd'
         df = rte.execute()
 
         df_expected = pd.read_csv(

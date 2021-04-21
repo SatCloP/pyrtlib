@@ -367,8 +367,8 @@ class H2OAbsModel(AbsModel):
 
     def h2o_rosen21_sd(self, pdrykpa: np.ndarray, vx: np.ndarray, ekpa: np.ndarray, frq: np.ndarray) -> Union[
         Tuple[np.ndarray, np.ndarray], None]:
-        """Compute absorption coefficients in atmosphere due to water vapor
-        this version should not be used with a line list older than june 2018,
+        """Compute absorption coefficients in atmosphere due to water vapor.
+        This version should not be used with a line list older than Dec.31, 2020,
         nor the new list with an older version of this subroutine.
         Line parameters will be read from file h2o_list.asc; intensities
         should include the isotope abundance factors.
