@@ -625,3 +625,50 @@ def height_to_pressure(height: np.float) -> np.float:
     Rd = R / Md
 
     return p0 * np.exp((g / (Rd * gamma)) * np.log(1 - ((height * gamma) / t0)))
+
+
+def dewpoint2rh(td: np.float, t: np.float, ice: Optional[bool] = False, method: Optional[str] = 'arm') -> np.float:
+    r"""Calculate relative humidity from temperature and dewpoint.
+    Value is calculated using the August-Roche-Magnus approximation. [AUGUST]_ [MAGNUS]_.
+
+    .. math:: RH = \frac {\exp(\frac{a T_d}{b+T_d})} {\exp(\frac{a T}{b+T})}
+
+    .. math:: where \ a = 17.625, b = 243.04
+
+    .. math:: RH = \frac {6.1078\times10^{\frac{aT_d}{b + T_db}}}{6.1078\times10^{\frac{a T}{b + T}}}
+
+    .. math:: where \ a = 7.5, b = 265.5
+
+    Args:
+        td (float): The dew point temperature in Celsius
+        t (float): The temperature in Celsius
+
+    Returns:
+        float: The relative humidity to the provided dew point temperature
+
+    References
+    ----------
+    .. [1] Alduchov, O. A., and R. E. Eskridge, 1996: Improved Magnus' form approximation of saturation vapor pressure. J. Appl. Meteor., 35, 601–609.
+    .. [2] August, E. F., 1828: Ueber die Berechnung der Expansivkraft des Wasserdunstes. Ann. Phys. Chem., 13, 122–137.
+    .. [3] Magnus, G., 1844: Versuche über die Spannkräfte des Wasserdampfs. Ann. Phys. Chem., 61, 225–247.
+    """
+    if method == 'arm':
+        a = 17.625
+        b = 243.04
+        rh = (np.exp((a * td) / (b + td)) / np.exp((a * t) / (b + t)))
+    else:
+        a = 7.5
+        b = 237.3
+        if ice:
+            a = 9.5
+            b = 265.5
+        # Vapor pressure (ED):
+        ed = 6.1078 * 10 ** ((td * a) / (td + b))
+
+        # saturated vapor pressure (es):
+        es = 6.1078 * 10 ** ((t * a) / (t + b))
+
+        # relative humidity = 100 * ed/es
+        rh = ed / es
+
+    return rh

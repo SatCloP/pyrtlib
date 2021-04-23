@@ -141,3 +141,13 @@ Line Shape
 
     pyrtlib.lineshape
     pyrtlib.absmod_uncertainty
+
+
+.. Web services
+=============
+
+.. .. autosummary::
+    :toctree: generated/
+
+..    pyrtlib.wyomingupperair.WyomingUpperAir
+    

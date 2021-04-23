@@ -6,7 +6,7 @@ Performing Brightness Temperature calculation form satellite
 # %%
 # This example shows how to use the
 # :py:class:`pyrtlib.main.BTCloudRTE` method to calculate brightness temperature from satellite.
-# Set emissivity to 0.6 used by [Payne]_ et al, 2011 (Figure 11)
+# Set emissivity to 0.6 used by [PAYNE]_ et al, 2011 (Figure 11)
 
 import matplotlib.pyplot as plt
 
