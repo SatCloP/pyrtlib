@@ -15,8 +15,8 @@ that the original TBMODEL, Cyber Version, returned.
 
     pyrtlib.main.BTCloudRTE
 
-Example
-.......
+    Example
+    .......
 
 .. code-block:: python
 
@@ -68,8 +68,8 @@ Plus suplimental profiles where available.
 
     pyrtlib.atmp.AtmosphericProfiles
 
-Example
-.......
+    Example
+    .......
 
 .. code-block:: python
 
@@ -143,11 +143,11 @@ Line Shape
     pyrtlib.absmod_uncertainty
 
 
-.. Web services
+Web services
 =============
 
-.. .. autosummary::
+ .. autosummary::
     :toctree: generated/
 
-..    pyrtlib.wyomingupperair.WyomingUpperAir
+    pyrtlib.wyomingupperair.WyomingUpperAir
     

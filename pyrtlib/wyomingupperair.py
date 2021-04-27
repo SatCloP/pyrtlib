@@ -7,7 +7,7 @@ Terms and conditions are as for siphon library license (https://github.com/Unida
 import warnings
 from datetime import datetime
 from io import StringIO
-from typing import Union
+from typing import Union, Optional
 
 import numpy as np
 import pandas as pd
@@ -43,7 +43,8 @@ class WyomingUpperAir(HTTPEndPoint):
 
         Returns
         -------
-            :class:`pandas.DataFrame` containing the data
+            df :  pandas.DataFrame
+                containing the data
 
         """
         endpoint = cls()
@@ -51,7 +52,7 @@ class WyomingUpperAir(HTTPEndPoint):
         return df
 
     @classmethod
-    def get_stations(cls, region: str) -> pd.DataFrame:
+    def get_stations(cls, region: Optional[str] = 'europe') -> pd.DataFrame:
         r"""Retrieve list of available stations from the Wyoming archive.
 
         +---------+----------------+
@@ -85,7 +86,8 @@ class WyomingUpperAir(HTTPEndPoint):
 
         Returns
         -------
-            :class:`pandas.DataFrame` stations id (index) and name
+            df : pandas.DataFrame
+                stations id and name
 
         """
 
@@ -102,7 +104,7 @@ class WyomingUpperAir(HTTPEndPoint):
                 cod, name = title.split(' ')[0], ' '.join(title.split(' ')[1:]).strip()
                 stations[cod] = name
 
-        df = pd.DataFrame.from_dict(stations, orient='index', columns=['station_name'])
+        df = pd.DataFrame(list(stations.items()), columns=['station_id','station_name'])
         return df
 
 
@@ -120,7 +122,8 @@ class WyomingUpperAir(HTTPEndPoint):
 
         Returns
         -------
-            :class:`pandas.DataFrame` containing the data
+            df :  pandas.DataFrame
+                containing the data
 
         """
         raw_data = self._get_data_raw(time, site_id)
