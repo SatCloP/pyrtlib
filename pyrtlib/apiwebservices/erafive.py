@@ -8,6 +8,7 @@ __author__ = ''
 __date__ = 'March 2021'
 __copyright__ = '(C) 2021, CNR-IMAA'
 
+import os
 import math
 from datetime import datetime
 from typing import Optional, Tuple
@@ -79,7 +80,8 @@ class ERA5Reanalysis:
         """
         # North, West, South, Est
         extent = [lonlat[1] + offset, lonlat[0] - offset, lonlat[1] - offset, lonlat[0] + offset]
-        nc_file = '{}/era5_reanlysis-{}.nc'.format(path, time.isoformat())
+        nc_file_name = 'era5_reanlysis-{}.nc'.format(time.isoformat())
+        nc_file = os.path.join(path, nc_file_name)
         c = cdsapi.Client()
         c.retrieve(
             'reanalysis-era5-pressure-levels',
