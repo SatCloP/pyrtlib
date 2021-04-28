@@ -3,17 +3,15 @@ The orignal code of this class can be found in https://github.com/Unidata/siphon
 Terms and conditions are as for siphon library license (https://github.com/Unidata/siphon/blob/master/LICENSE)
 """
 
-
 import warnings
 from datetime import datetime
 from io import StringIO
 from typing import Union, Optional
 
-import numpy as np
 import pandas as pd
 from bs4 import BeautifulSoup
 
-from .webservices import HTTPEndPoint
+from ..apiwebservices.webservices import HTTPEndPoint
 
 warnings.filterwarnings('ignore', 'Pandas doesn\'t allow columns to be created', UserWarning)
 
@@ -93,7 +91,7 @@ class WyomingUpperAir(HTTPEndPoint):
 
         endpoint = cls()
         endpoint._base = 'http://weather.uwyo.edu/upperair/'
-        
+
         resp = endpoint.get_path('{}.html'.format(region))
         soup = BeautifulSoup(resp.text, 'html.parser')
         area_tag = soup.find_all('area')
@@ -104,9 +102,8 @@ class WyomingUpperAir(HTTPEndPoint):
                 cod, name = title.split(' ')[0], ' '.join(title.split(' ')[1:]).strip()
                 stations[cod] = name
 
-        df = pd.DataFrame(list(stations.items()), columns=['station_id','station_name'])
+        df = pd.DataFrame(list(stations.items()), columns=['station_id', 'station_name'])
         return df
-
 
     def _get_data(self, time: datetime, site_id: Union[str, int]) -> pd.DataFrame:
         r"""Download and parse upper air observations from an online archive.

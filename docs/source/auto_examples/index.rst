@@ -75,6 +75,27 @@ This gallery shows examples of pyrtlib functionality.  Community contributions a
 
 .. raw:: html
 
+    <div class="sphx-glr-thumbcontainer" tooltip="Performing BT calculation form satellite using ERA5Reanalysis Observations">
+
+.. only:: html
+
+ .. figure:: /auto_examples/images/thumb/sphx_glr_plot_bt_era5_thumb.png
+     :alt: Performing BT calculation form satellite using ERA5Reanalysis Observations
+
+     :ref:`sphx_glr_auto_examples_plot_bt_era5.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/plot_bt_era5
+
+.. raw:: html
+
     <div class="sphx-glr-thumbcontainer" tooltip="Performing BT calculation form satellite using Wyoming Upper Air Observations">
 
 .. only:: html

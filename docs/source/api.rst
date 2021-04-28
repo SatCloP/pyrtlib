@@ -15,8 +15,8 @@ that the original TBMODEL, Cyber Version, returned.
 
     pyrtlib.main.BTCloudRTE
 
-    Example
-    .......
+Example
+.......
 
 .. code-block:: python
 
@@ -43,6 +43,7 @@ Also, it is possible to execute a combination of absorption models. The followin
     H2OAbsModel.h2oll = import_lineshape('h2oll_{}'.format(H2OAbsModel.model))
     df = rte.execute()
 
+
 Standard Atmospheric Profiles
 =============================
 
@@ -68,8 +69,9 @@ Plus suplimental profiles where available.
 
     pyrtlib.atmp.AtmosphericProfiles
 
-    Example
-    .......
+
+Example
+.......
 
 .. code-block:: python
 
@@ -143,11 +145,15 @@ Line Shape
     pyrtlib.absmod_uncertainty
 
 
-Web services
-=============
+API Web Services
+================
+Observations dataset web services which may be used in pyrtlib. Available dataset are the 
+Wyoming Upper Air Archive (University of Wyoming) or the ERA5 Reanalysis model data (Copernicus Climate Change Service).
+See examples to getting start to use these services.
 
- .. autosummary::
+.. autosummary::
     :toctree: generated/
 
-    pyrtlib.wyomingupperair.WyomingUpperAir
+    pyrtlib.apiwebservices.WyomingUpperAir
+    pyrtlib.apiwebservices.ERA5Reanalysis
     

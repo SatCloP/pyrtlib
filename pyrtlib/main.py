@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Main script !!!(right now only for testing)!!!.
 """

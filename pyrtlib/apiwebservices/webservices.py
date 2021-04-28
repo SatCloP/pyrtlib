@@ -3,15 +3,16 @@ The orignal code of this class can be found in https://github.com/Unidata/siphon
 Terms and conditions are as for siphon library license (https://github.com/Unidata/siphon/blob/master/LICENSE)
 """
 
-from typing import Optional
 import posixpath
 from io import BytesIO
+from typing import Optional
 from urllib.parse import urlencode, urljoin  # noqa
 
 import requests
 from requests.sessions import Session
 
-from . version import __version__
+from ..version import __version__
+
 
 class HTTPSessionManager(object):
     """Manage the creation of sessions for HTTP access."""

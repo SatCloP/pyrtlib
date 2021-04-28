@@ -134,7 +134,7 @@ texinfo_documents = [
 
 # custom CSS workarounds
 def setup(app):
-    #    app.add_css_file("custom.css")
+    # app.add_css_file("custom.css")
     #    # == disable search functionality for html
     #    app.connect('builder-inited', on_builder_inited)   
     # A workaround for the responsive tables always having annoying scrollbars.
