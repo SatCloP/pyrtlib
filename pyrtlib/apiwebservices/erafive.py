@@ -25,7 +25,7 @@ class ERA5Reanalysis:
     """Read and Download data from ERA5 CDS Reanalysis model data"""
 
     @classmethod
-    def read_data(cls, file: str, lonlat: tuple) -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray, datetime]:
+    def read_data(cls, file: str, lonlat: tuple) -> pd.DataFrame:
         """Read data from the ERA5Reanalysis dataset.
 
         Args:
@@ -33,7 +33,7 @@ class ERA5Reanalysis:
             lonlat (tuple): longitude and latitude
 
         Returns:
-            [type]: [description]
+            pandas.DataFrame: [description]
         """
         ERAFIVE = cls()
         nc = Dataset(file)
@@ -41,13 +41,26 @@ class ERA5Reanalysis:
         lons = nc.variables['longitude'][:]
         idx_lat = ERAFIVE.find_nearest(lats, lonlat[1])
         idx_lon = ERAFIVE.find_nearest(lons, lonlat[0])
+
         pres = np.asarray(nc.variables['level'][:])
         temp = np.asarray(nc.variables['t'][:, :, idx_lat, idx_lon])
         rh = np.asarray(nc.variables['r'][:, :, idx_lat, idx_lon]) / 100 # RH in decimal
+        clwc = np.asarray(nc.variables['clwc'][:, :, idx_lat, idx_lon]) * 1000 # g/g
+        ciwc = np.asarray(nc.variables['ciwc'][:, :, idx_lat, idx_lon]) * 1000 # g/g
+
         z = pressure_to_height(pres) / 1000 # Altitude in km
         date = pd.to_datetime(nc.variables['time'][:], origin='1900-01-01 00:00:00.0', unit='h')
 
-        return np.flip(z), np.flip(pres), np.flip(temp[0]), np.flip(rh[0]), date
+        df = pd.DataFrame({'pres': np.flip(pres),
+                           'z': np.flip(z),
+                           'temp': np.flip(temp[0]),
+                           'rh': np.flip(rh[0]),
+                           'clwc': np.flip(clwc[0]),
+                           'ciwc': np.flip(ciwc[0]),
+                           'time': np.repeat(date, len(z))
+                           })
+
+        return df
 
     def find_nearest(self, array, value):
         """Find index of nearest coordinate
@@ -88,7 +101,8 @@ class ERA5Reanalysis:
             {
                 'product_type': 'reanalysis',
                 'variable': [
-                    'relative_humidity', 'temperature',
+                    'relative_humidity', 'temperature', 'specific_cloud_ice_water_content', 
+                    'specific_cloud_liquid_water_content',
                 ],
                 'pressure_level': [
                     '1', '2', '3', '5', '7', '10', '20', '30', '50', '70', '100', '125', '150',

@@ -59,7 +59,6 @@ class BTCloudRTE(object):
         self.ray_tracing = ray_tracing
         self._satellite = from_sat
         self.cloudy = cloudy
-        self._es = 1.0
         self._uncertainty = False
 
         self.nl = len(z)
@@ -67,6 +66,8 @@ class BTCloudRTE(object):
         self.nang = len(angles)
 
         self.ice = False
+        # set emissivity
+        self._es = np.repeat(1.0, self.nf)
 
         # ... convert height profile to (km above antenna height) ...
         self.z0 = self.z[0]
@@ -113,7 +114,7 @@ class BTCloudRTE(object):
             raise ValueError("Please enter True or False")
 
     @property
-    def emissivity(self) -> np.float:
+    def emissivity(self) -> Union[np.float, np.ndarray]:
         """Surface emissivity. Default to 1.0
 
         Returns:
@@ -122,7 +123,7 @@ class BTCloudRTE(object):
         return self._es
 
     @emissivity.setter
-    def emissivity(self, emissivity: np.float) -> None:
+    def emissivity(self, emissivity: Union[np.float, np.ndarray]) -> None:
         """Setter for surface emissivty
 
         Args:
@@ -131,10 +132,12 @@ class BTCloudRTE(object):
         Raises:
             ValueError: [description]
         """
-        if emissivity and isinstance(emissivity, np.float):
+        if isinstance(emissivity, np.float):
+            self._es = np.repeat(emissivity, self.nf)
+        elif isinstance(emissivity, np.ndarray):
             self._es = emissivity
         else:
-            raise ValueError("Please enter True or False")
+            raise ValueError("Please enter a valid value or array for emissivity")
 
     def init_absmdl(self, absmdl: str):
         """[summary]
@@ -270,7 +273,6 @@ class BTCloudRTE(object):
 
         # Set RTE
         RTEquation.from_sat = self._satellite
-        RTEquation.emissivity = self._es
 
         # ... compute vapor pressure and vapor density ...
         e, rho = RTEquation.vapor(self.tk, self.rh, self.ice)
@@ -296,6 +298,7 @@ class BTCloudRTE(object):
             # ... handle each frequency ...
             # this are based on NOAA RTE fortran routines
             for j in range(0, self.nf):
+                RTEquation.emissivity = self._es[j]
                 # Rosenkranz, personal communication, 2019/02/12 (email)
                 if self._uncertainty:
                     awet, adry = RTEquation.clearsky_absorption_uncertainty(self.p, self.tk, e, self.frq[j])

@@ -76,7 +76,7 @@ class RTEquation:
         es = 10.0 ** es
         # Compute vapor pressure and vapor density.
         # The vapor density conversion follows the ideal gas law:
-        # apor pressure = vapor density * rvapor * tk
+        # vapor pressure = vapor density * rvapor * tk
 
         e = np.multiply(rh, es)
         rho = e / (np.dot(rvap, tk))
