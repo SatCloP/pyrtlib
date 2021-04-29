@@ -17,7 +17,7 @@ from pyrtlib.utils import import_lineshape
 from pyrtlib.absmodel import H2OAbsModel
 from pyrtlib.apiwebservices import ERA5Reanalysis
 
-# To request dataset from via ERA5Reanalysis API
+# To request dataset via CDS API
 # date = datetime(2020, 2, 22, 12)
 # nc_file = ERA5Reanalysis.request_data(tempfile.gettempdir(), date, lonlat)
 
@@ -40,7 +40,7 @@ df = df.set_index(frq)
 
 fig, ax = plt.subplots(1, 1, figsize=(12, 8))
 plt.title(
-    "ERA5Reanalysis Reanalysis dataset (hourly pressure levels) {}".format(time[0].strftime(format='%Y-%m-%d %H:%M')),
+    "ERA5 Reanalysis dataset (hourly pressure levels) {}".format(time[0].strftime(format='%Y-%m-%d %H:%M')),
     ha='center')
 ax.set_xlabel('Frequency [GHz]')
 ax.set_ylabel('${T_B}$ [K]')

@@ -43,8 +43,8 @@ class ERA5Reanalysis:
         idx_lon = ERAFIVE.find_nearest(lons, lonlat[0])
         pres = np.asarray(nc.variables['level'][:])
         temp = np.asarray(nc.variables['t'][:, :, idx_lat, idx_lon])
-        rh = np.asarray(nc.variables['r'][:, :, idx_lat, idx_lon])
-        z = pressure_to_height(pres) / 1000
+        rh = np.asarray(nc.variables['r'][:, :, idx_lat, idx_lon]) / 100 # RH in decimal
+        z = pressure_to_height(pres) / 1000 # Altitude in km
         date = pd.to_datetime(nc.variables['time'][:], origin='1900-01-01 00:00:00.0', unit='h')
 
         return np.flip(z), np.flip(pres), np.flip(temp[0]), np.flip(rh[0]), date
@@ -80,7 +80,7 @@ class ERA5Reanalysis:
         """
         # North, West, South, Est
         extent = [lonlat[1] + offset, lonlat[0] - offset, lonlat[1] - offset, lonlat[0] + offset]
-        nc_file_name = 'era5_reanlysis-{}.nc'.format(time.isoformat())
+        nc_file_name = 'era5_reanalysis-{}.nc'.format(time.isoformat())
         nc_file = os.path.join(path, nc_file_name)
         c = cdsapi.Client()
         c.retrieve(
