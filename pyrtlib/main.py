@@ -299,7 +299,6 @@ class BTCloudRTE(object):
             # this are based on NOAA RTE fortran routines
             for j in range(0, self.nf):
                 RTEquation.emissivity = self._es[j]
-                # Rosenkranz, personal communication, 2019/02/12 (email)
                 if self._uncertainty:
                     awet, adry = RTEquation.clearsky_absorption_uncertainty(self.p, self.tk, e, self.frq[j])
                     # a = np.loadtxt('/Users/slarosa/Downloads/awet.csv')
@@ -307,6 +306,7 @@ class BTCloudRTE(object):
                     # np.testing.assert_allclose(awet, a)
                     # np.testing.assert_allclose(adry, b)
                 else:
+                    # Rosenkranz, personal communication, 2019/02/12 (email)
                     awet, adry = RTEquation.clearsky_absorption(self.p, self.tk, e, self.frq[j])
                 self.sptauwet[j, k], \
                 self.ptauwet[j, k, :] = RTEquation.exponential_integration(1, awet, ds, 0, self.nl, 1)

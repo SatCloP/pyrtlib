@@ -26,7 +26,7 @@ class ERA5Reanalysis:
 
     @classmethod
     def read_data(cls, file: str, lonlat: tuple) -> pd.DataFrame:
-        """Read data from the ERA5Reanalysis dataset.
+        """Read data from the ERA5 Reanalysis dataset.
 
         Args:
             file (str): The netcdf file
@@ -34,6 +34,9 @@ class ERA5Reanalysis:
 
         Returns:
             pandas.DataFrame: [description]
+
+        .. note:: To convert specific cloud water content (CLWC) or specific cloud ice water content (CIWC) 
+            from kg kg-1 to g m-3 using this function :py:meth:`pyrtlib.utils.kgkg_to_gm3`
         """
         ERAFIVE = cls()
         nc = Dataset(file)
@@ -45,8 +48,9 @@ class ERA5Reanalysis:
         pres = np.asarray(nc.variables['level'][:])
         temp = np.asarray(nc.variables['t'][:, :, idx_lat, idx_lon])
         rh = np.asarray(nc.variables['r'][:, :, idx_lat, idx_lon]) / 100 # RH in decimal
-        clwc = np.asarray(nc.variables['clwc'][:, :, idx_lat, idx_lon]) * 1000 # g/g
-        ciwc = np.asarray(nc.variables['ciwc'][:, :, idx_lat, idx_lon]) * 1000 # g/g
+        clwc = np.asarray(nc.variables['clwc'][:, :, idx_lat, idx_lon])
+        ciwc = np.asarray(nc.variables['ciwc'][:, :, idx_lat, idx_lon])
+        q = np.asarray(nc.variables['q'][:, :, idx_lat, idx_lon])
 
         z = pressure_to_height(pres) / 1000 # Altitude in km
         date = pd.to_datetime(nc.variables['time'][:], origin='1900-01-01 00:00:00.0', unit='h')
@@ -57,6 +61,7 @@ class ERA5Reanalysis:
                            'rh': np.flip(rh[0]),
                            'clwc': np.flip(clwc[0]),
                            'ciwc': np.flip(ciwc[0]),
+                           'q': np.flip(q[0]),
                            'time': np.repeat(date, len(z))
                            })
 
@@ -102,7 +107,7 @@ class ERA5Reanalysis:
                 'product_type': 'reanalysis',
                 'variable': [
                     'relative_humidity', 'temperature', 'specific_cloud_ice_water_content', 
-                    'specific_cloud_liquid_water_content',
+                    'specific_cloud_liquid_water_content', 'specific_humidity'
                 ],
                 'pressure_level': [
                     '1', '2', '3', '5', '7', '10', '20', '30', '50', '70', '100', '125', '150',

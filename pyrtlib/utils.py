@@ -671,3 +671,37 @@ def dewpoint2rh(td: np.float, t: np.float, ice: Optional[bool] = False, method: 
         rh = ed / es
 
     return rh
+
+def kgkg_to_gm3(q: np.ndarray, p: np.ndarray, t:np.ndarray) -> np.ndarray:
+    r"""Utils function to convert Kg Kg-1 to g m-3. 
+
+    NWP models provide cloud liquid and ice water content in units kq kq-1. To convert
+    to g m-3 multiply the result of this function to value in kg kg-1.
+
+    .. math:: LWC = q_{liq} \frac{10^2 P}{R_{moist} T}
+
+    .. math:: R_{moist} = R_{dry} (1 + \frac{1 - \epsilon}{\epsilon} q_{h2o})
+
+    .. math:: \epsilon = \frac{M_{h2o}}{M_{dry}}
+
+    .. math:: R_{dry} = \frac{R}{M_{dry}}
+
+    The same equations are used for ice clouds, by replacing LWC by IWC and :math:`q_{liq}` by :math:`q_{ice}`
+
+    Args:
+        q (np.ndarray): specific humidity (Kg Kg-1)
+        p (np.ndarray): pressure (hPa)
+        t (np.ndarray): temperature (K)
+
+    Returns:
+        np.ndarray: [description]
+
+    References:
+        .. [1] M. Z. Jacobson. Fundamentals of atmospheric modelling. Cambridge Eds., 2005.
+    """
+    
+    eps = 0.621970585
+    rmoist = constants('Rdry')[0] * (1 + ((1-eps)/eps) * q)
+    gm3 = (1e2 * p) / (rmoist * t)
+
+    return gm3
