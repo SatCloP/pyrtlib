@@ -23,15 +23,15 @@ from pyrtlib.apiwebservices import ERA5Reanalysis
 
 # Tito Scalo, Potenza, Italy
 lonlat = (15.724447, 40.601019)
-nc_file = 'tito_download_era5.nc'
-z, p, t, rh, time = ERA5Reanalysis.read_data(nc_file, lonlat)
+nc_file = 'era5_reanalysis-2019-06-25T12:00:00.nc'
+df_era5 = ERA5Reanalysis.read_data(nc_file, lonlat)
 
 mdl = 'rose21sd'
 ang = np.array([90.])
 frq = np.arange(20, 201, 1)
 nf = len(frq)
 
-rte = BTCloudRTE(z, p, t, rh, frq, ang)
+rte = BTCloudRTE(df_era5.z.values, df_era5.p.values, df_era5.t.values, df_era5.rh.values, frq, ang)
 rte.init_absmdl('rose20')
 H2OAbsModel.model = 'rose21sd'
 H2OAbsModel.h2oll = import_lineshape('h2oll_{}'.format(H2OAbsModel.model))
@@ -40,7 +40,7 @@ df = df.set_index(frq)
 
 fig, ax = plt.subplots(1, 1, figsize=(12, 8))
 plt.title(
-    "ERA5 Reanalysis dataset (hourly pressure levels) {}".format(time[0].strftime(format='%Y-%m-%d %H:%M')),
+    "ERA5 Reanalysis dataset (hourly pressure levels) {}".format(df_era5.time[0].strftime(format='%Y-%m-%d %H:%M')),
     ha='center')
 ax.set_xlabel('Frequency [GHz]')
 ax.set_ylabel('${T_B}$ [K]')

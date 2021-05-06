@@ -50,17 +50,21 @@ class ERA5Reanalysis:
         rh = np.asarray(nc.variables['r'][:, :, idx_lat, idx_lon]) / 100 # RH in decimal
         clwc = np.asarray(nc.variables['clwc'][:, :, idx_lat, idx_lon])
         ciwc = np.asarray(nc.variables['ciwc'][:, :, idx_lat, idx_lon])
+        crwc = np.asarray(nc.variables['crwc'][:, :, idx_lat, idx_lon])
+        cswc = np.asarray(nc.variables['cswc'][:, :, idx_lat, idx_lon])
         q = np.asarray(nc.variables['q'][:, :, idx_lat, idx_lon])
 
         z = pressure_to_height(pres) / 1000 # Altitude in km
         date = pd.to_datetime(nc.variables['time'][:], origin='1900-01-01 00:00:00.0', unit='h')
 
-        df = pd.DataFrame({'pres': np.flip(pres),
+        df = pd.DataFrame({'p': np.flip(pres),
                            'z': np.flip(z),
-                           'temp': np.flip(temp[0]),
+                           't': np.flip(temp[0]),
                            'rh': np.flip(rh[0]),
                            'clwc': np.flip(clwc[0]),
                            'ciwc': np.flip(ciwc[0]),
+                           'crwc': np.flip(crwc[0]),
+                           'cswc': np.flip(cswc[0]),
                            'q': np.flip(q[0]),
                            'time': np.repeat(date, len(z))
                            })
@@ -100,15 +104,15 @@ class ERA5Reanalysis:
         extent = [lonlat[1] + offset, lonlat[0] - offset, lonlat[1] - offset, lonlat[0] + offset]
         nc_file_name = 'era5_reanalysis-{}.nc'.format(time.isoformat())
         nc_file = os.path.join(path, nc_file_name)
+
+        variables = ['relative_humidity', 'specific_cloud_ice_water_content', 'specific_cloud_liquid_water_content',
+                     'specific_humidity', 'specific_rain_water_content', 'specific_snow_water_content', 'temperature']
         c = cdsapi.Client()
         c.retrieve(
             'reanalysis-era5-pressure-levels',
             {
                 'product_type': 'reanalysis',
-                'variable': [
-                    'relative_humidity', 'temperature', 'specific_cloud_ice_water_content', 
-                    'specific_cloud_liquid_water_content', 'specific_humidity'
-                ],
+                'variable': variables,
                 'pressure_level': [
                     '1', '2', '3', '5', '7', '10', '20', '30', '50', '70', '100', '125', '150',
                     '175', '200', '225', '250', '300', '350', '400', '450', '500', '550', '600',
