@@ -6,7 +6,7 @@ Performing BT calculation form satellite using ERA5Reanalysis Observations
 # %%
 # This example shows how to use the
 # :py:class:`pyrtlib.main.BTCloudRTE` method to calculate brightness temperature from satellite using
-# observations from ERA5Reanalysis Reanalysis hourly pressure levels dataset.
+# observations from ERA5 Reanalysis hourly pressure levels dataset.
 
 import matplotlib.pyplot as plt
 
