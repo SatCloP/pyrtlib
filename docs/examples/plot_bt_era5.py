@@ -1,5 +1,5 @@
 """
-Performing BT calculation form satellite using ERA5Reanalysis Observations
+Performing BT calculation form satellite using ERA5 Reanalysis Observations
 ==========================================================================
 """
 

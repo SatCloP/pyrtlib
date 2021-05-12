@@ -172,21 +172,21 @@ class BTCloudRTE(object):
         """
         # ... convert cloud base and cloud top to (km above antenna height) ...
         # ... compute (beglev) and (endlev) ...
-        ncld = len(cldh[0, :])
+        ncld = cldh.shape[1]
         self.cldh = cldh - self.z0
-        self.beglev = np.zeros((2,))
-        self.endlev = np.zeros((2,))
+        self.beglev = np.zeros((ncld,))
+        self.endlev = np.zeros((ncld,))
         if getattr(self, 'cloudy'):
             for j in range(0, ncld):
                 for i in range(0, self.nl):
-                    if self.z[i] == self.cldh[j, 0]: self.beglev[j] = i
-                    if self.z[i] == self.cldh[j, 1]: self.endlev[j] = i
+                    if self.z[i] == self.cldh[0, j]: self.beglev[j] = i
+                    if self.z[i] == self.cldh[1, j]: self.endlev[j] = i
 
             self.denice = denice
             self.denliq = denliq
         else:
-            warnings.warn("It seems that BTCloudRTE.cloudy attribute is not set to True.\
-                Sets it to True for running model in cloudy condition.")
+            warnings.warn("It seems that BTCloudRTE.cloudy attribute is not set to True. "
+                          "Sets it to True for running model in cloudy condition.")
             # raise AttributeError("Set cloudy to True before running init_cloudy()")
 
     def execute(self, only_bt: bool = True) -> Union[pd.DataFrame, Tuple[pd.DataFrame, Dict[str, np.ndarray]]]:

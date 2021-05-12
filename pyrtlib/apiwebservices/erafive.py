@@ -10,6 +10,7 @@ __copyright__ = '(C) 2021, CNR-IMAA'
 
 import os
 import math
+import warnings
 from datetime import datetime
 from typing import Optional, Tuple
 
@@ -82,6 +83,8 @@ class ERA5Reanalysis:
             [type]: [description]
         """
         idx = np.searchsorted(array, value, side="left")
+        if np.amax(array) < value < np.amin(array):
+            warnings.warn('Out of boundingbox: value {} is out of dataset extent'.format(value))
         if idx > 0 and (idx == len(array) or math.fabs(value - array[idx - 1]) < math.fabs(value - array[idx])):
             return idx - 1
         else:

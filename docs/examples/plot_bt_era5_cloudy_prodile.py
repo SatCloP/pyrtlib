@@ -1,6 +1,6 @@
 """
-Performing BT calculation form satellite using ERA5Reanalysis Observations in cloudy condition.
-===============================================================================================
+Performing BT calculation form satellite using ERA5 Reanalysis Observations in cloudy condition.
+================================================================================================
 """
 
 # %%
@@ -31,9 +31,8 @@ ang = np.array([90.])
 frq = np.arange(20, 201, 1)
 nf = len(frq)
 
-cldh = np.empty((2, 2))
-cldh[:, 0] = np.array([df_era5.z[0], df_era5.z[15]])
-cldh[:, 1] = np.array([df_era5.z[15], df_era5.z[36]])
+cldh = np.empty((2, 1))
+cldh[:, 0] = np.array([np.min(df_era5.z), np.max(df_era5.z)])
 
 total_mass = 1 - df_era5.ciwc.values - df_era5.clwc.values - df_era5.crwc.values - df_era5.cswc.values
 denice = df_era5.ciwc.values * kgkg_to_kgm3(df_era5.q.values * (1/total_mass),
