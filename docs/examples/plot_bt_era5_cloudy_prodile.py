@@ -35,10 +35,10 @@ cldh = np.empty((2, 1))
 cldh[:, 0] = np.array([np.min(df_era5.z), np.max(df_era5.z)])
 
 total_mass = 1 - df_era5.ciwc.values - df_era5.clwc.values - df_era5.crwc.values - df_era5.cswc.values
-denice = df_era5.ciwc.values * kgkg_to_kgm3(df_era5.q.values * (1/total_mass),
-                                            df_era5.p.values, df_era5.t.values) * 1000 * (1/total_mass)
-denliq = df_era5.clwc.values * kgkg_to_kgm3(df_era5.q.values * (1/total_mass),
-                                            df_era5.p.values, df_era5.t.values) * 1000 * (1/total_mass)
+denice = df_era5.ciwc.values * (1/total_mass) * kgkg_to_kgm3(df_era5.q.values * (1/total_mass),
+                                            df_era5.p.values, df_era5.t.values) * 1000
+denliq = df_era5.clwc.values * (1/total_mass) * kgkg_to_kgm3(df_era5.q.values * (1/total_mass),
+                                            df_era5.p.values, df_era5.t.values) * 1000
 
 fig = plt.figure(figsize=(12, 8))
 gs = gridspec.GridSpec(1, 3,

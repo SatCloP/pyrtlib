@@ -75,12 +75,12 @@ This gallery shows examples of pyrtlib functionality.  Community contributions a
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="Performing BT calculation form satellite using ERA5Reanalysis Observations">
+    <div class="sphx-glr-thumbcontainer" tooltip="Performing BT calculation form satellite using ERA5 Reanalysis Observations">
 
 .. only:: html
 
  .. figure:: /auto_examples/images/thumb/sphx_glr_plot_bt_era5_thumb.png
-     :alt: Performing BT calculation form satellite using ERA5Reanalysis Observations
+     :alt: Performing BT calculation form satellite using ERA5 Reanalysis Observations
 
      :ref:`sphx_glr_auto_examples_plot_bt_era5.py`
 
@@ -93,6 +93,27 @@ This gallery shows examples of pyrtlib functionality.  Community contributions a
    :hidden:
 
    /auto_examples/plot_bt_era5
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Performing BT calculation form satellite using ERA5 Reanalysis Observations in cloudy condition...">
+
+.. only:: html
+
+ .. figure:: /auto_examples/images/thumb/sphx_glr_plot_bt_era5_cloudy_prodile_thumb.png
+     :alt: Performing BT calculation form satellite using ERA5 Reanalysis Observations in cloudy condition.
+
+     :ref:`sphx_glr_auto_examples_plot_bt_era5_cloudy_prodile.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/plot_bt_era5_cloudy_prodile
 
 .. raw:: html
 
