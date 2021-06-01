@@ -1,8 +1,14 @@
 from unittest import TestCase
-
+import os
 from numpy.testing import assert_allclose
 from pyrtlib.absmod_uncertainty import absmod_uncertainties_perturb
+import numpy as np
+import pandas as pd
+from pyrtlib.atmp import AtmosphericProfiles as atmp
+from pyrtlib.main import BTCloudRTE
+from pyrtlib.utils import ppmv2gkg, mr2rh, import_lineshape
 
+THIS_DIR = os.path.dirname(os.path.abspath(__file__))
 
 class Test(TestCase):
     def test_absmod_uncertainties_perturb_min(self):
@@ -25,3 +31,20 @@ class Test(TestCase):
         amu = absmod_uncertainties_perturb(['gamma_a'], 'max', 2)
         expected1 = 2.959744652000000
         assert_allclose(expected1, amu['gamma_a'].value[1])
+
+    def test_pyrtlib_uncertainty(self):
+        z, p, _, t, md = atmp.gl_atm(atmp.TROPICAL)
+
+        gkg = ppmv2gkg(md[:, atmp.H2O], atmp.H2O)
+        rh = mr2rh(p, t, gkg)[0] / 100
+
+        ang = np.array([90.])
+        frq = np.arange(20, 201, 1)
+
+        rte = BTCloudRTE(z, p, t, rh, frq, ang)
+        rte.init_absmdl('uncertainty')
+        df = rte.execute()
+
+        df_expected = pd.read_csv(
+            os.path.join(THIS_DIR, "data", "tbtotal_uncertainty_gamma_a_min.csv"))
+        assert_allclose(df.tbtotal, df_expected.gamma_a, atol=0.01)

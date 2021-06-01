@@ -55,6 +55,8 @@ def constants(string: str) -> Tuple[float, str]:
     +---------------+-------------------------------------------+
     | 'Rwatvap'     |  Gas constant of water vapor [J kg-1 K-1] |
     +---------------+-------------------------------------------+
+    | 'R'           |  Gas constant [J mol-1 K-1]               |
+    +---------------+-------------------------------------------+
     | 'Tcosmicbkg'  |  Cosmic Background Temperature [K]        |
     +---------------+-------------------------------------------+
 
@@ -113,6 +115,10 @@ def constants(string: str) -> Tuple[float, str]:
         Tcos = 2.728
         units = '[K]'
         out = np.copy(Tcos)
+    elif string == 'R':
+        Rgas = 8.31446261815324
+        units = '[J mol-1 K-1]'
+        out = np.copy(Rgas)
     else:
         raise ValueError('No constant avalaible with this name: {} . Sorry...'.format(string))
 
@@ -712,3 +718,21 @@ def kgkg_to_kgm3(q: np.ndarray, p: np.ndarray, t: np.ndarray) -> np.ndarray:
     kgm3 = (1e2 * p) / (rmoist * t)
 
     return kgm3
+
+def ppmv_to_moleculesm3(mr: np.ndarray, p: np.ndarray, t: np.ndarray) -> np.ndarray:
+    """For any gas, this function converts mixing ratio  (in ppmv) to number density (molecules/m3).
+
+    Args:
+        mr (np.ndarray): mixing ratio in ppmv
+        p (np.ndarray): pressure in Pa
+        t (np.ndarray): temperature in K
+
+    Returns:
+        np.ndarray: [description]
+    """
+    av = constants('avogadro')[0]
+    rg = constants('R')[0]
+    n_air = (av * p) / (rg * t) # (molecules/m3)
+    nr_molm3 = n_air * mr * 1e-6
+    
+    return nr_molm3
