@@ -12,7 +12,7 @@ from typing import Tuple, Optional, Union
 
 import numpy as np
 
-from .absmodel import O2AbsModel, H2OAbsModel, N2AbsModel, LiqAbsModel
+from .absmodel import O2AbsModel, H2OAbsModel, N2AbsModel, LiqAbsModel, O3AbsModel
 from .utils import constants, tk2b_mod
 from .absmod_uncertainty import absmod_uncertainties_perturb
 
@@ -503,7 +503,7 @@ class RTEquation:
         return aliq, aice
 
     @staticmethod
-    def clearsky_absorption(p=None, tk=None, e=None, frq=None, *args, **kwargs):
+    def clearsky_absorption(p: np.ndarray, tk: np.ndarray, e: np.ndarray, frq: np.ndarray, o3n: np.ndarray = None):
         """  Computes profiles of water vapor and dry air absorption for
         a given set of frequencies.  Subroutines H2O_xxx and O2_xxx
         contain the absorption model of Leibe and Layton [1987:
@@ -542,6 +542,7 @@ class RTEquation:
         adry = np.zeros(p.shape)
         aO2 = np.zeros(p.shape)
         aN2 = np.zeros(p.shape)
+        aO3 = np.zeros(p.shape)
         factor = np.dot(0.182, frq)
         db2np = np.dot(np.log(10.0), 0.1)
         for i in range(0, nl):
@@ -571,7 +572,10 @@ class RTEquation:
             if not N2AbsModel.model:
                 raise ValueError('No model avalaible with this name: {} . Sorry...'.format('model'))
 
-            adry[i] = aO2[i] + aN2[i]
+            if O3AbsModel.model in ['rose18', 'rose21', 'rose21sd']:
+                aO3[i] = O3AbsModel().o3abs_rose21(tk[i], p[i], frq, o3n[i])
+
+            adry[i] = aO2[i] + aN2[i] + aO3[i]
 
         return awet, adry
 

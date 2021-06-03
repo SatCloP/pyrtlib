@@ -75,6 +75,27 @@ This gallery shows examples of pyrtlib functionality.  Community contributions a
 
 .. raw:: html
 
+    <div class="sphx-glr-thumbcontainer" tooltip="Performing Brightness Temperature calculation form satellite with Ozone">
+
+.. only:: html
+
+ .. figure:: /auto_examples/images/thumb/sphx_glr_plot_brightness_temperature_wO3_thumb.png
+     :alt: Performing Brightness Temperature calculation form satellite with Ozone
+
+     :ref:`sphx_glr_auto_examples_plot_brightness_temperature_wO3.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/plot_brightness_temperature_wO3
+
+.. raw:: html
+
     <div class="sphx-glr-thumbcontainer" tooltip="Performing BT calculation form satellite using ERA5 Reanalysis Observations">
 
 .. only:: html

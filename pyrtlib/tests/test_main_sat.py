@@ -6,10 +6,10 @@ import numpy as np
 import pandas as pd
 import pytest
 from numpy.testing import assert_allclose
-from pyrtlib.absmodel import H2OAbsModel, LiqAbsModel, O2AbsModel
+from pyrtlib.absmodel import H2OAbsModel, LiqAbsModel, O2AbsModel, O3AbsModel
 from pyrtlib.atmp import AtmosphericProfiles as atmp
 from pyrtlib.main import BTCloudRTE
-from pyrtlib.utils import ppmv2gkg, mr2rh, import_lineshape
+from pyrtlib.utils import ppmv2gkg, ppmv_to_moleculesm3, mr2rh, import_lineshape
 
 # TEST_DIR = Path(__file__).parent
 # DATA_DIR = os.path.join(TEST_DIR, 'data')
@@ -295,3 +295,32 @@ class Test(TestCase):
         df_expected = pd.read_csv(
             os.path.join(THIS_DIR, "data", "tb_tot_ros03_16_17_18_19_19sd_20_20sd_98_mak11_21sd.csv"))
         assert_allclose(df.tbtotal, df_expected.ros19sd, atol=0)
+
+    def test_pyrtlib_sat_rose21_wo3(self):
+        z, p, _, t, md = atmp.gl_atm(atmp.US_STANDARD)
+
+        o3n_ppmv = md[:, atmp.O3]
+        o3n = np.zeros(z.shape)
+        for k in range(0, len(z)):
+            o3n[k] = ppmv_to_moleculesm3(o3n_ppmv[k], p[k] * 100.0, t[k])
+        # o3n = np.interp(z,o3n,z)
+        # o3n_matlab = np.loadtxt("/Users/slarosa/Downloads/o3.csv", delimiter=',')
+        # assert_allclose(o3n, o3n_matlab, atol=0)
+
+        gkg = ppmv2gkg(md[:, atmp.H2O], atmp.H2O)
+        rh = mr2rh(p, t, gkg)[0] / 100
+
+        ang = np.array([90.])
+        frq = np.arange(20, 201, 1)
+
+        rte = BTCloudRTE(z, p, t, rh, frq, ang, o3n)
+        rte.init_absmdl('rose20')
+        H2OAbsModel.model = 'rose21sd'
+        H2OAbsModel.h2oll = import_lineshape('h2oll_{}'.format(H2OAbsModel.model))
+        O3AbsModel.model = 'rose18'
+        O3AbsModel.o3ll = import_lineshape('o3ll_{}'.format(O3AbsModel.model))
+        df = rte.execute()
+
+        df_expected = pd.read_csv(
+            os.path.join(THIS_DIR, "data", "tb_tot_ros21sd_wo3.csv"))
+        assert_allclose(df.tbtotal, df_expected.ros21sd_wo3, atol=0)

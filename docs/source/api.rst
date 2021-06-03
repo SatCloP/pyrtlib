@@ -108,7 +108,7 @@ RTE functions called from :py:class:`pyrtlib.rte.RTEquation`:
 Absorption Models
 =================
 
-Computes absorption coefficient in atmosphere due to water vapor (:math:`H_2O`), oxygen in air (:math:`O_2`), suspended cloud liquid water droplets and 
+Computes absorption coefficient in atmosphere due to water vapor (:math:`H_2O`), oxygen in air (:math:`O_2`), ozone in air (:math:`O_3`), suspended cloud liquid water droplets and 
 collision-induced power absorption coefficient (neper/km) in air ("dry continuum", mostly due to :math:`N_2`-:math:`N_2`, but also contributions from :math:`O_2`-:math:`N_2` and :math:`O_2`-:math:`O_2`)
 
 .. autosummary::
@@ -118,6 +118,7 @@ collision-induced power absorption coefficient (neper/km) in air ("dry continuum
     pyrtlib.absmodel.AbsModel
     pyrtlib.absmodel.H2OAbsModel
     pyrtlib.absmodel.O2AbsModel
+    pyrtlib.absmodel.O3AbsModel
     pyrtlib.absmodel.N2AbsModel
     pyrtlib.absmodel.LiqAbsModel
 

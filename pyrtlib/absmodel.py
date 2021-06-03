@@ -473,10 +473,10 @@ class H2OAbsModel(AbsModel):
                 if width2 > 0 and j == 0 and np.abs(df[j]) < (10 * width0):
                     # speed-dependent resonant shape factor
                     # double complex dcerror,xc,xrt,pxw,a
-                    xc = np.complex((width0 - 1.5 * width2), df[j] + 1.5 * delta2) / np.complex(width2, -delta2)
+                    xc = complex((width0 - 1.5 * width2), df[j] + 1.5 * delta2) / complex(width2, -delta2)
                     xrt = np.sqrt(xc)
                     pxw = 1.77245385090551603 * xrt * dcerror(-np.imag(xrt), np.real(xrt))
-                    sd = 2.0 * (1.0 - pxw) / (np.complex(width2, -delta2))
+                    sd = 2.0 * (1.0 - pxw) / (complex(width2, -delta2))
                     res += np.real(sd) - base
                 elif np.abs(df[j]) < 750.0:
                     res += width0 / (df[j] ** 2 + wsq) - base
@@ -910,7 +910,7 @@ class O2AbsModel(AbsModel):
         presda = pres - preswv
         den = 0.001 * (presda * b + self.o2ll.w2a * preswv * th)
         dfnr = self.o2ll.wb300 * den
-        th3 = th ** (self.o2ll.ns + 1) # to perturb nS (default value 2)
+        th3 = th ** (self.o2ll.ns + 1)  # to perturb nS (default value 2)
         summ = 0.0
 
         nlines = len(self.o2ll.f)
@@ -939,3 +939,66 @@ class O2AbsModel(AbsModel):
         ncpp = (ncpp / db2np) / factor
 
         return npp, ncpp
+
+
+class O3AbsModel(AbsModel):
+    """This class contains the :math:`O_3` absorption model used in pyrtlib.
+    """
+
+    def __init__(self):
+        super(O3AbsModel, self).__init__()
+        self._o3ll = None
+
+    @property
+    def o3ll(self) -> types.MethodType:
+        return self._o3ll
+
+    @o3ll.setter
+    def o3ll(self, o3ll) -> None:
+        if o3ll and isinstance(o3ll, types.MethodType):
+            self._o3ll = o3ll
+        else:
+            raise ValueError("Please enter a valid absorption model")
+
+    def o3abs_rose21(self, t: np.ndarray, p: np.ndarray, f: np.ndarray, o3n: np.ndarray) -> np.ndarray:
+        """This function computes power absorption coeff (Np/km) in the atmosphere 
+        due to selcted lines of ozone (O3).
+
+        Args:
+            t (np.ndarray): Temperature (K)
+            p (np.ndarray): Total Pressure (mb)
+            f (np.ndarray): Frequency (GHz)
+            o3n (np.ndarray): Ozone Number Density (molecules/m^3)
+
+        Returns:
+            np.ndarray: Ozone Power Absorption Coeff. (Np/km)
+        """
+
+        if o3n.any() <= 0:
+            abs_o3 = 0
+            return
+
+        den = 1e-06 * o3n
+        ti = self.o3ll.reftline / t
+        ti2 = ti ** 2.5
+        qvinv = 1.0 - np.exp(-1008.0 / t)
+        # add resonances within 1 ghz of f.  most of the ozone is in the 
+        # stratosphere, so lines are relatively narrow, and lorentz shape
+        # factor is ok.
+        sum = 0.0
+        nlines = len(self.o3ll.fl)
+        for k in range(0, nlines):
+            if self.o3ll.fl[k] > (f + 1.0):
+                break
+            if self.o3ll.fl[k] >= (f - 1.0):
+                widthc = self.o3ll.w[k] * p * ti ** self.o3ll.x[k]
+                betad2 = 3.85e-15 * t * self.o3ll.fl[k] ** 2
+                # approximate width combines pressure and doppler broadening:
+                width = 0.5346 * widthc + np.sqrt(0.2166 * widthc * widthc + 0.6931 * betad2)
+                s = self.o3ll.s1[k] * np.exp(self.o3ll.b[k] * (1.0 - ti))
+                shape = (f / self.o3ll.fl[k]) ** 2 * width / ((f - self.o3ll.fl[k]) ** 2 + width * width)
+                sum += s * shape
+
+        abs_o3 = 3.183e-05 * sum * qvinv * ti2 * den
+
+        return abs_o3

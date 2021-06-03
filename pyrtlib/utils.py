@@ -573,7 +573,7 @@ def dcerror(x: np.ndarray, y: np.ndarray) -> np.ndarray:
     # compute w in quadrants 1 or 2
     # from eqs.(13), w(z) = [w(-z*)]*
     # expansion in terms of ZH results in conjugation of w when X changes sign.
-    zh = np.complex(np.abs(y), - x)
+    zh = complex(np.abs(y), - x)
     asum = (((((a[6] * zh + a[5]) * zh + a[4]) * zh + a[3]) * zh + a[2]) * zh + a[1]) * zh + a[0]
     bsum = ((((((zh + b[6]) * zh + b[5]) * zh + b[4]) * zh + b[3]) * zh + b[2]) * zh + b[1]) * zh + b[0]
     w = asum / bsum

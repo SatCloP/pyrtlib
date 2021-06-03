@@ -23,7 +23,7 @@ class BTCloudRTE(object):
     """
 
     def __init__(self, z: np.ndarray, p: np.ndarray, tk: np.ndarray, rh: np.ndarray, frq: np.ndarray,
-                 angles: np.ndarray, absmdl: str = '', ray_tracing: bool = True, from_sat: bool = True,
+                 angles: np.ndarray, o3n: np.ndarray = None, absmdl: str = '', ray_tracing: bool = True, from_sat: bool = True,
                  cloudy: bool = False):
         """User interface which computes brightness temperatures (Tb), mean
         radiating temperature (Tmr), and integrated absorption (Tau) for 
@@ -55,6 +55,7 @@ class BTCloudRTE(object):
         self.rh = rh
         self.frq = frq
         self.angles = angles
+        self.o3n = o3n
 
         self.ray_tracing = ray_tracing
         self._satellite = from_sat
@@ -307,7 +308,7 @@ class BTCloudRTE(object):
                     # np.testing.assert_allclose(adry, b)
                 else:
                     # Rosenkranz, personal communication, 2019/02/12 (email)
-                    awet, adry = RTEquation.clearsky_absorption(self.p, self.tk, e, self.frq[j])
+                    awet, adry = RTEquation.clearsky_absorption(self.p, self.tk, e, self.frq[j], self.o3n)
                 self.sptauwet[j, k], \
                 self.ptauwet[j, k, :] = RTEquation.exponential_integration(1, awet, ds, 0, self.nl, 1)
                 self.sptaudry[j, k], \
