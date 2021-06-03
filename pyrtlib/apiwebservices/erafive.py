@@ -14,7 +14,10 @@ import warnings
 from datetime import datetime
 from typing import Optional, Tuple
 
-import cdsapi
+try:
+    import cdsapi
+except ModuleNotFoundError as e:
+    warnings.warn("Module CDSAPI must be installed to download ERA5 Reanalysis dataset.")
 import numpy as np
 import pandas as pd
 from netCDF4 import Dataset
