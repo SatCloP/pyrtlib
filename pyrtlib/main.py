@@ -141,7 +141,7 @@ class BTCloudRTE(object):
             raise ValueError("Please enter a valid value or array for emissivity")
 
     def init_absmdl(self, absmdl: str):
-        """[summary]
+        """Initialize absorption models.
 
         Args:
             absmdl (str): Absorption model for WV
@@ -164,7 +164,7 @@ class BTCloudRTE(object):
             LiqAbsModel.model = absmdl
 
     def init_cloudy(self, cldh: np.ndarray, denice: np.ndarray, denliq: np.ndarray) -> None:
-        """[summary]
+        """Initialize cloudy conditions parameters.
 
         Args:
             cldh (numpy.ndarray): cloud base/top heights (km MSL
@@ -191,7 +191,7 @@ class BTCloudRTE(object):
             # raise AttributeError("Set cloudy to True before running init_cloudy()")
 
     def execute(self, only_bt: bool = True) -> Union[pd.DataFrame, Tuple[pd.DataFrame, Dict[str, np.ndarray]]]:
-        """[summary]
+        """Execution of main script.
 
         Args:
             only_bt (bool): If True (default) returns only brightness temperature. Default to True.
@@ -302,10 +302,6 @@ class BTCloudRTE(object):
                 RTEquation.emissivity = self._es[j]
                 if self._uncertainty:
                     awet, adry = RTEquation.clearsky_absorption_uncertainty(self.p, self.tk, e, self.frq[j])
-                    # a = np.loadtxt('/Users/slarosa/Downloads/awet.csv')
-                    # b = np.loadtxt('/Users/slarosa/Downloads/adry.csv')
-                    # np.testing.assert_allclose(awet, a)
-                    # np.testing.assert_allclose(adry, b)
                 else:
                     # Rosenkranz, personal communication, 2019/02/12 (email)
                     awet, adry = RTEquation.clearsky_absorption(self.p, self.tk, e, self.frq[j], self.o3n)

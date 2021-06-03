@@ -572,7 +572,7 @@ class RTEquation:
             if not N2AbsModel.model:
                 raise ValueError('No model avalaible with this name: {} . Sorry...'.format('model'))
 
-            if o3n.any() and O3AbsModel.model in ['rose18', 'rose21', 'rose21sd']:
+            if not o3n is None and O3AbsModel.model in ['rose18', 'rose21', 'rose21sd']:
                 aO3[i] = O3AbsModel().o3abs_rose21(tk[i], p[i], frq, o3n[i])
 
             adry[i] = aO2[i] + aN2[i] + aO3[i]
