@@ -60,10 +60,8 @@ class Test(TestCase):
         nc_file = os.path.join(THIS_DIR, "data", "era5_reanalysis-2019-06-25T12:00:00.nc")
         df_era5 = ERA5Reanalysis.read_data(nc_file, lonlat)
 
-        mdl = 'rose21sd'
         ang = np.array([90.])
         frq = np.arange(20, 201, 1)
-        nf = len(frq)
 
         rte = BTCloudRTE(df_era5.z.values, df_era5.p.values, df_era5.t.values, df_era5.rh.values, frq, ang)
         rte.satellite = False

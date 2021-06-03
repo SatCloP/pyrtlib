@@ -9,8 +9,8 @@ from numpy.testing import assert_allclose
 from pyrtlib.absmodel import H2OAbsModel, LiqAbsModel, O2AbsModel, O3AbsModel
 from pyrtlib.atmp import AtmosphericProfiles as atmp
 from pyrtlib.main import BTCloudRTE
-from pyrtlib.apiwebservices import WyomingUpperAir
-from pyrtlib.utils import ppmv2gkg, ppmv_to_moleculesm3, mr2rh, import_lineshape, dewpoint2rh
+from pyrtlib.apiwebservices import WyomingUpperAir, ERA5Reanalysis
+from pyrtlib.utils import ppmv2gkg, ppmv_to_moleculesm3, mr2rh, import_lineshape, dewpoint2rh, kgkg_to_kgm3
 
 # TEST_DIR = Path(__file__).parent
 # DATA_DIR = os.path.join(TEST_DIR, 'data')
@@ -338,10 +338,8 @@ class Test(TestCase):
 
         rh = dewpoint2rh(df_w.dewpoint, df_w.temperature).values
 
-        mdl = 'rose21sd'
         ang = np.array([90.])
         frq = np.arange(20, 201, 1)
-        nf = len(frq)
 
         rte = BTCloudRTE(z, p, t, rh, frq, ang)
         rte.emissivity = 0.6
@@ -353,3 +351,34 @@ class Test(TestCase):
         df_expected = pd.read_csv(
             os.path.join(THIS_DIR, "data", "tb_tot_rose21sd_RAOB_es.csv"))
         assert_allclose(df.tbtotal, df_expected.tbtotal, atol=0)
+
+    def test_pyrtlib_sat_rose21sd_ERA5_cloudy(self):
+        lonlat = (15.724447, 40.601019)
+        nc_file = os.path.join(THIS_DIR, "data", "era5_reanalysis-2019-06-25T12:00:00.nc")
+        df_era5 = ERA5Reanalysis.read_data(nc_file, lonlat)
+
+        ang = np.array([90.])
+        frq = np.arange(20, 201, 1)
+
+        cldh = np.empty((2, 1))
+        cldh[:, 0] = np.array([np.min(df_era5.z), np.max(df_era5.z)])
+
+        total_mass = 1 - df_era5.ciwc.values - df_era5.clwc.values - df_era5.crwc.values - df_era5.cswc.values
+        denice = df_era5.ciwc.values * (1/total_mass) * kgkg_to_kgm3(df_era5.q.values * (1/total_mass),
+                                                    df_era5.p.values, df_era5.t.values) * 1000
+        denliq = df_era5.clwc.values * (1/total_mass) * kgkg_to_kgm3(df_era5.q.values * (1/total_mass),
+                                                    df_era5.p.values, df_era5.t.values) * 1000
+
+
+        rte = BTCloudRTE(df_era5.z.values, df_era5.p.values, df_era5.t.values, df_era5.rh.values, frq, ang)
+        rte.init_absmdl('rose20')
+        rte.init_cloudy(cldh, denice, denliq)
+        H2OAbsModel.model = 'rose21sd'
+        H2OAbsModel.h2oll = import_lineshape('h2oll_{}'.format(H2OAbsModel.model))
+    
+        df = rte.execute()
+
+        df_expected = pd.read_csv(
+            os.path.join(THIS_DIR, "data", "tb_tot_rose21sd_ERA5_cloudy.csv"))
+        assert_allclose(df.tbtotal, df_expected.tbtotal, atol=0)
+        
