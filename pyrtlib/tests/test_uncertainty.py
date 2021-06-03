@@ -33,7 +33,6 @@ class Test(TestCase):
         expected1 = 2.959744652000000
         assert_allclose(expected1, amu['gamma_a'].value[1])
     
-    @pytest.mark.skip(reason="rose03 not completly implemented yet")
     def test_pyrtlib_uncertainty(self):
         z, p, _, t, md = atmp.gl_atm(atmp.TROPICAL)
 
@@ -49,4 +48,4 @@ class Test(TestCase):
 
         df_expected = pd.read_csv(
             os.path.join(THIS_DIR, "data", "tbtotal_uncertainty_gamma_a_min.csv"))
-        assert_allclose(df.tbtotal, df_expected.gamma_a, atol=0.01)
+        assert_allclose(df.tbtotal, df_expected.gamma_a, atol=0)
