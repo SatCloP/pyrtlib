@@ -296,7 +296,7 @@ class Test(TestCase):
             os.path.join(THIS_DIR, "data", "tb_tot_ros03_16_17_18_19_19sd_20_20sd_98_mak11_21sd.csv"))
         assert_allclose(df.tbtotal, df_expected.ros19sd, atol=0)
 
-    def test_pyrtlib_sat_rose21_wo3(self):
+    def test_pyrtlib_sat_rose21_wO3(self):
         z, p, _, t, md = atmp.gl_atm(atmp.US_STANDARD)
 
         o3n_ppmv = md[:, atmp.O3]
