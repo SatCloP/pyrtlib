@@ -236,7 +236,7 @@ class RTEquation:
             return np.asarray(ds)
 
     @staticmethod
-    def exponential_integration(zeroflg=None, x=None, ds=None, ibeg=None, iend=None, factor=None, *args, **kwargs):
+    def exponential_integration(zeroflg: bool, x: np.ndarray, ds: np.ndarray, ibeg: np.int, iend: np.int, factor: np.float):
         """ EXPonential INTegration: Integrate the profile in array x over the layers defined in
         array ds, saving the integrals over each layer.
 
@@ -267,7 +267,7 @@ class RTEquation:
             elif np.abs(x[i] - x[i - 1]) < 1e-09:
                 xlayer = x[i]
             elif x[i - 1] == 0.0 or x[i] == 0.0:
-                if zeroflg == 0:
+                if not zeroflg:
                     xlayer = 0.0
                 else:
                     xlayer = np.dot((x[i] + x[i - 1]), 0.5)
@@ -284,7 +284,7 @@ class RTEquation:
         return sxds, xds.reshape(iend)
 
     @staticmethod
-    def cloud_radiating_temperature(ibase=None, itop=None, hvk=None, tauprof=None, boftatm=None, *args, **kwargs):
+    def cloud_radiating_temperature(ibase: np.float, itop: np.float, hvk: np.ndarray, tauprof: np.ndarray, boftatm: np.ndarray):
         """Computes the mean radiating temperature of a cloud with base and top at
         profile levels ibase and itop, respectively.  The algorithm assumes that
         the input cloud is the lowest (or only) cloud layer observed.
@@ -332,7 +332,7 @@ class RTEquation:
         return tmrcld
 
     @staticmethod
-    def cloud_integrated_density(dencld=None, ds=None, lbase=None, ltop=None, *args, **kwargs):
+    def cloud_integrated_density(dencld: np.ndarray, ds: np.ndarray, lbase: np.ndarray, ltop: np.ndarray):
         """Integrates cloud water density over path ds (linear algorithm).
 
         Args:
@@ -455,7 +455,7 @@ class RTEquation:
         return boftotl, boftatm, boftmr, tauprof, hvk, boft, bakgrnd
 
     @staticmethod
-    def cloudy_absorption(tk=None, denl=None, deni=None, frq=None, *args, **kwargs):
+    def cloudy_absorption(tk: np.ndarray, denl: np.ndarray, deni: np.ndarray, frq: np.ndarray):
         """Multiplies cloud density profiles by a given fraction and computes the
         corresponding cloud liquid and ice absorption profiles, using Rosenkranz's
         cloud liquid absorption routine ABLIQ and ice absorption of Westwater
@@ -580,7 +580,7 @@ class RTEquation:
         return awet, adry
 
     @staticmethod
-    def clearsky_absorption_uncertainty(p=None, tk=None, e=None, frq=None):
+    def clearsky_absorption_uncertainty(p: np.ndarray, tk: np.ndarray, e: np.ndarray, frq: np.ndarray, amu: Tuple):
         nl = len(p)
         awet = np.zeros(p.shape)
         adry = np.zeros(p.shape)
@@ -589,15 +589,13 @@ class RTEquation:
         factor = np.dot(0.182, frq)
         db2np = np.dot(np.log(10.0), 0.1)
 
-        amu_p = absmod_uncertainties_perturb(['gamma_a'], 'min', index=2)
-
         for i in range(0, nl):
             v = 300.0 / tk[i]
             ekpa = e[i] / 10.0
             pdrykpa = p[i] / 10.0 - ekpa
-            npp, ncpp = H2OAbsModel().h2o_uncertainty(pdrykpa, v, ekpa, frq, amu_p)
+            npp, ncpp = H2OAbsModel().h2o_uncertainty(pdrykpa, v, ekpa, frq, amu)
             awet[i] = (factor * (npp + ncpp)) * db2np
-            npp, ncpp = O2AbsModel().o2abs_uncertainty(pdrykpa, v, ekpa, frq, amu_p)
+            npp, ncpp = O2AbsModel().o2abs_uncertainty(pdrykpa, v, ekpa, frq, amu)
             # add N2 term
             # aN2[i] = N2AbsModel.n2_absorption(tk[i], np.dot(pdrykpa, 10), frq)
             aO2_N2[i] = (factor * (npp + ncpp)) * db2np

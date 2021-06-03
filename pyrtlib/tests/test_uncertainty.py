@@ -33,7 +33,7 @@ class Test(TestCase):
         expected1 = 2.959744652000000
         assert_allclose(expected1, amu['gamma_a'].value[1])
     
-    def test_pyrtlib_uncertainty(self):
+    def test_pyrtlib_uncertainty_gamma_a(self):
         z, p, _, t, md = atmp.gl_atm(atmp.TROPICAL)
 
         gkg = ppmv2gkg(md[:, atmp.H2O], atmp.H2O)
@@ -42,7 +42,9 @@ class Test(TestCase):
         ang = np.array([90.])
         frq = np.arange(20, 201, 1)
 
-        rte = BTCloudRTE(z, p, t, rh, frq, ang)
+        amu = absmod_uncertainties_perturb(['gamma_a'], 'min', index=2)
+
+        rte = BTCloudRTE(z, p, t, rh, frq, ang, amu=amu)
         rte.init_absmdl('uncertainty')
         df = rte.execute()
 

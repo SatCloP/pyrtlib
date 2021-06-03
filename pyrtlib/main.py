@@ -7,7 +7,7 @@ __date__ = 'March 2021'
 __copyright__ = '(C) 2021, CNR-IMAA'
 
 import warnings
-from typing import Dict, Tuple, Union
+from typing import Dict, Tuple, Union, Optional
 
 import numpy as np
 import pandas as pd
@@ -22,9 +22,13 @@ class BTCloudRTE(object):
     Initialize BTCloudRTE
     """
 
-    def __init__(self, z: np.ndarray, p: np.ndarray, tk: np.ndarray, rh: np.ndarray, frq: np.ndarray,
-                 angles: np.ndarray, o3n: np.ndarray = None, absmdl: str = '', ray_tracing: bool = True, from_sat: bool = True,
-                 cloudy: bool = False):
+    def __init__(self, z: np.ndarray, p: np.ndarray, tk: np.ndarray, rh: np.ndarray, frq: np.ndarray, angles: np.ndarray,
+                 o3n: Optional[np.ndarray] = None,
+                 amu: Optional[Tuple] = None,
+                 absmdl: Optional[str] = '',
+                 ray_tracing: Optional[bool] = True,
+                 from_sat: Optional[bool] = True,
+                 cloudy: Optional[bool] = False):
         """User interface which computes brightness temperatures (Tb), mean
         radiating temperature (Tmr), and integrated absorption (Tau) for 
         clear or cloudy conditions,  Also returns all integrated quantities
@@ -56,6 +60,7 @@ class BTCloudRTE(object):
         self.frq = frq
         self.angles = angles
         self.o3n = o3n
+        self.amu = amu
 
         self.ray_tracing = ray_tracing
         self._satellite = from_sat
@@ -289,9 +294,9 @@ class BTCloudRTE(object):
             # ds = [0; diff(z)]; # in alternative simple diff of z
 
             # ... Integrate over path (ds) ...
-            self.srho[k], _ = RTEquation.exponential_integration(1, rho, ds, 0, self.nl, 0.1)
-            self.swet[k], _ = RTEquation.exponential_integration(1, wetn, ds, 0, self.nl, 0.1)
-            self.sdry[k], _ = RTEquation.exponential_integration(1, dryn, ds, 0, self.nl, 0.1)
+            self.srho[k], _ = RTEquation.exponential_integration(True, rho, ds, 0, self.nl, 0.1)
+            self.swet[k], _ = RTEquation.exponential_integration(True, wetn, ds, 0, self.nl, 0.1)
+            self.sdry[k], _ = RTEquation.exponential_integration(True, dryn, ds, 0, self.nl, 0.1)
             if self.cloudy:
                 self.sliq[k] = RTEquation.cloud_integrated_density(self.denliq, ds, self.beglev, self.endlev)
                 self.sice[k] = RTEquation.cloud_integrated_density(self.denice, ds, self.beglev, self.endlev)
@@ -301,7 +306,7 @@ class BTCloudRTE(object):
             for j in range(0, self.nf):
                 RTEquation.emissivity = self._es[j]
                 if self._uncertainty:
-                    awet, adry = RTEquation.clearsky_absorption_uncertainty(self.p, self.tk, e, self.frq[j])
+                    awet, adry = RTEquation.clearsky_absorption_uncertainty(self.p, self.tk, e, self.frq[j], self.amu)
                 else:
                     # Rosenkranz, personal communication, 2019/02/12 (email)
                     awet, adry = RTEquation.clearsky_absorption(self.p, self.tk, e, self.frq[j], self.o3n)

@@ -75,6 +75,27 @@ This gallery shows examples of pyrtlib functionality.  Community contributions a
 
 .. raw:: html
 
+    <div class="sphx-glr-thumbcontainer" tooltip="Performing uncertainty on Brightness Temperature">
+
+.. only:: html
+
+ .. figure:: /auto_examples/images/thumb/sphx_glr_plot_brightness_temperature_uncertainties_thumb.png
+     :alt: Performing uncertainty on Brightness Temperature
+
+     :ref:`sphx_glr_auto_examples_plot_brightness_temperature_uncertainties.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/plot_brightness_temperature_uncertainties
+
+.. raw:: html
+
     <div class="sphx-glr-thumbcontainer" tooltip="Performing Brightness Temperature calculation form satellite with Ozone">
 
 .. only:: html

@@ -729,6 +729,9 @@ def absmod_uncertainties_perturb(what: Optional[list] = [], mode: Optional[str] 
 
     return AMU_copy
 
+def compute_jacobian():
+    pass
+
 # @NotImplemented
 def apu_line_mixing(f: np.ndarray, t: np.ndarray, p: np.ndarray, residual_source: Optional[int] = 0):
     unkn = 0.0  # unknown uncertainty outside the temp and freq range
