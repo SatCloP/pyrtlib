@@ -4,12 +4,13 @@ from unittest import TestCase
 
 import numpy as np
 import pandas as pd
-import pytest
+from datetime import datetime
 from numpy.testing import assert_allclose
 from pyrtlib.absmodel import H2OAbsModel, LiqAbsModel, O2AbsModel, O3AbsModel
 from pyrtlib.atmp import AtmosphericProfiles as atmp
 from pyrtlib.main import BTCloudRTE
-from pyrtlib.utils import ppmv2gkg, ppmv_to_moleculesm3, mr2rh, import_lineshape
+from pyrtlib.apiwebservices import WyomingUpperAir
+from pyrtlib.utils import ppmv2gkg, ppmv_to_moleculesm3, mr2rh, import_lineshape, dewpoint2rh
 
 # TEST_DIR = Path(__file__).parent
 # DATA_DIR = os.path.join(TEST_DIR, 'data')
@@ -324,3 +325,31 @@ class Test(TestCase):
         df_expected = pd.read_csv(
             os.path.join(THIS_DIR, "data", "tb_tot_ros21sd_wo3.csv"))
         assert_allclose(df.tbtotal, df_expected.ros21sd_wo3, atol=0)
+
+    def test_pyrtlib_sat_rose21sd_wyoming_es(self):
+        date = datetime(2021, 4, 22, 12)
+        station = 'LIRE'
+        df_w = WyomingUpperAir.request_data(date, station)
+
+        z, p, t, gkg = df_w.height.values / 1000, \
+                    df_w.pressure.values, \
+                    df_w.temperature.values + 273.25, \
+                    df_w.mixr.values
+
+        rh = dewpoint2rh(df_w.dewpoint, df_w.temperature).values
+
+        mdl = 'rose21sd'
+        ang = np.array([90.])
+        frq = np.arange(20, 201, 1)
+        nf = len(frq)
+
+        rte = BTCloudRTE(z, p, t, rh, frq, ang)
+        rte.emissivity = 0.6
+        rte.init_absmdl('rose20')
+        H2OAbsModel.model = 'rose21sd'
+        H2OAbsModel.h2oll = import_lineshape('h2oll_{}'.format(H2OAbsModel.model))
+        df = rte.execute()
+
+        df_expected = pd.read_csv(
+            os.path.join(THIS_DIR, "data", "tb_tot_rose21sd_RAOB_es.csv"))
+        assert_allclose(df.tbtotal, df_expected.tbtotal, atol=0)
