@@ -30,41 +30,44 @@ fig, ax = plt.subplots(1, 1, figsize=(12, 8))
 ax.set_xlabel('Frequency [GHz]')
 ax.set_ylabel('$\Delta {T_B}$ [K]')
 
-z, p, d, t, md = atmp.gl_atm(5) # 'U.S. Standard'
+for i in range(0, 6):
 
-gkg = ppmv2gkg(md[:, atmp.H2O], atmp.H2O)
-rh = mr2rh(p, t, gkg)[0] / 100
+    z, p, d, t, md = atmp.gl_atm(i) # 'U.S. Standard'
 
-ang = np.array([90.])
-frq = np.arange(120, 201, 1)
+    gkg = ppmv2gkg(md[:, atmp.H2O], atmp.H2O)
+    rh = mr2rh(p, t, gkg)[0] / 100
 
-amu = absmod_uncertainties_perturb(['gamma_a', 'gamma_w'], 'non', index=2)
+    ang = np.array([90.])
+    frq = np.arange(150, 201, 1)
 
-rte = BTCloudRTE(z, p, t, rh, frq, ang, amu=amu)
-rte.init_absmdl('uncertainty')
-df = rte.execute()
-df = df.set_index(frq)
+    amu = absmod_uncertainties_perturb()
 
-amu = absmod_uncertainties_perturb(['gamma_a', 'gamma_w'], 'max', index=2)
+    rte = BTCloudRTE(z, p, t, rh, frq, ang, amu=amu)
+    rte.init_absmdl('uncertainty')
+    df = rte.execute()
+    df = df.set_index(frq)
 
-rte = BTCloudRTE(z, p, t, rh, frq, ang, amu=amu)
-rte.init_absmdl('uncertainty')
-df_gamma_a = rte.execute()
-df_gamma_a = df_gamma_a.set_index(frq)
+    amu = absmod_uncertainties_perturb(['gamma_a', 'gamma_w'], 'max', index=2)
 
-df['delta_max'] = df.tbtotal - df_gamma_a.tbtotal
+    rte = BTCloudRTE(z, p, t, rh, frq, ang, amu=amu)
+    rte.init_absmdl('uncertainty')
+    df_gamma_a = rte.execute()
+    df_gamma_a = df_gamma_a.set_index(frq)
 
-amu = absmod_uncertainties_perturb(['gamma_a', 'gamma_w'], 'min', index=2)
+    df['delta_max'] = df.tbtotal - df_gamma_a.tbtotal
 
-rte = BTCloudRTE(z, p, t, rh, frq, ang, amu=amu)
-rte.init_absmdl('uncertainty')
-df_gamma_a = rte.execute()
-df_gamma_a = df_gamma_a.set_index(frq)
+    amu = absmod_uncertainties_perturb(['gamma_a', 'gamma_w'], 'min', index=2)
 
-df['delta_min'] = df.tbtotal - df_gamma_a.tbtotal
+    rte = BTCloudRTE(z, p, t, rh, frq, ang, amu=amu)
+    rte.init_absmdl('uncertainty')
+    df_gamma_a = rte.execute()
+    df_gamma_a = df_gamma_a.set_index(frq)
 
-df.delta_max.plot(ax=ax, style='--', label='$\Delta {T_B}$ (uncertainty_max)')
-df.delta_min.plot(ax=ax, label='$\Delta {T_B}$ (uncertainty_min)')
+    df['delta_min'] = df.tbtotal - df_gamma_a.tbtotal
 
-ax.legend()
+    df.delta_max.plot(ax=ax, style='--', label='{}'.format(atm[i]))
+    df.delta_min.plot(ax=ax, label='{}'.format(atm[i]))
+
+# ax.legend()
+plt.title("Perturbed parameters: $\gamma_a, \gamma_w$")
 plt.show()

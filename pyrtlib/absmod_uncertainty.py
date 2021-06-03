@@ -700,6 +700,8 @@ def absmod_uncertainties_perturb(what: Optional[list] = [], mode: Optional[str] 
     else:
         param = what
 
+    # remember here we are using matlab logig for indexing (i.e. indes start from 1 instead that 0)
+    # must be changed!!!!!
     param_index = index - 1 if index else index
 
     npar = len(param)
