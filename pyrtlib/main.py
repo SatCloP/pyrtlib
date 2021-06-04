@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Main script !!!(right now only for testing)!!!.
 """
@@ -7,7 +6,8 @@ __author__ = ''
 __date__ = 'March 2021'
 __copyright__ = '(C) 2021, CNR-IMAA'
 
-from typing import Dict, Tuple, Union
+import warnings
+from typing import Dict, Tuple, Union, Optional
 
 import numpy as np
 import pandas as pd
@@ -22,9 +22,13 @@ class BTCloudRTE(object):
     Initialize BTCloudRTE
     """
 
-    def __init__(self, z: np.ndarray, p: np.ndarray, tk: np.ndarray, rh: np.ndarray, frq: np.ndarray,
-                 angles: np.ndarray, absmdl: str = '', ray_tracing: bool = True, from_sat: bool = True,
-                 cloudy: bool = False):
+    def __init__(self, z: np.ndarray, p: np.ndarray, tk: np.ndarray, rh: np.ndarray, frq: np.ndarray, angles: np.ndarray,
+                 o3n: Optional[np.ndarray] = None,
+                 amu: Optional[Tuple] = None,
+                 absmdl: Optional[str] = '',
+                 ray_tracing: Optional[bool] = True,
+                 from_sat: Optional[bool] = True,
+                 cloudy: Optional[bool] = False):
         """User interface which computes brightness temperatures (Tb), mean
         radiating temperature (Tmr), and integrated absorption (Tau) for 
         clear or cloudy conditions,  Also returns all integrated quantities
@@ -55,17 +59,21 @@ class BTCloudRTE(object):
         self.rh = rh
         self.frq = frq
         self.angles = angles
+        self.o3n = o3n
+        self.amu = amu
 
         self.ray_tracing = ray_tracing
         self._satellite = from_sat
         self.cloudy = cloudy
-        self._es = 1.0
+        self._uncertainty = False
 
         self.nl = len(z)
         self.nf = len(frq)
         self.nang = len(angles)
 
         self.ice = False
+        # set emissivity
+        self._es = np.repeat(1.0, self.nf)
 
         # ... convert height profile to (km above antenna height) ...
         self.z0 = self.z[0]
@@ -96,10 +104,11 @@ class BTCloudRTE(object):
 
     @property
     def satellite(self) -> bool:
-        """Performing model calculation from satellite.
+        """If :code:`True` performing model calculation from satellite otherwise from ground
 
         Returns:
-            bool: If True performing calculation from satellite otherwise from ground.
+            bool: If True performing calculation from satellite 
+                    otherwise from ground. Default to True.
         """
         return self._satellite
 
@@ -111,8 +120,8 @@ class BTCloudRTE(object):
             raise ValueError("Please enter True or False")
 
     @property
-    def emissivity(self) -> np.float:
-        """Surface emissivity.
+    def emissivity(self) -> Union[np.float, np.ndarray]:
+        """Surface emissivity. Default to 1.0
 
         Returns:
             np.float: The surface emissivity.
@@ -120,7 +129,7 @@ class BTCloudRTE(object):
         return self._es
 
     @emissivity.setter
-    def emissivity(self, emissivity: np.float) -> None:
+    def emissivity(self, emissivity: Union[np.float, np.ndarray]) -> None:
         """Setter for surface emissivty
 
         Args:
@@ -129,29 +138,38 @@ class BTCloudRTE(object):
         Raises:
             ValueError: [description]
         """
-        if emissivity and isinstance(emissivity, np.float):
+        if isinstance(emissivity, np.float):
+            self._es = np.repeat(emissivity, self.nf)
+        elif isinstance(emissivity, np.ndarray):
             self._es = emissivity
         else:
-            raise ValueError("Please enter True or False")
+            raise ValueError("Please enter a valid value or array for emissivity")
 
     def init_absmdl(self, absmdl: str):
-        """[summary]
+        """Initialize absorption models.
 
         Args:
             absmdl (str): Absorption model for WV
         """
-        # Defines models
-        O2AbsModel.model = absmdl
-        O2AbsModel.o2ll = import_lineshape('o2ll_{}'.format(absmdl))
-
-        H2OAbsModel.model = absmdl
-        H2OAbsModel.h2oll = import_lineshape('h2oll_{}'.format(absmdl))
-
-        N2AbsModel.model = absmdl
-        LiqAbsModel.model = absmdl
+        if absmdl == 'uncertainty':
+            O2AbsModel.model = 'rose18'
+            O2AbsModel.o2ll = import_lineshape('o2ll_{}'.format('rose18'))
+            H2OAbsModel.model = 'rose17'
+            H2OAbsModel.h2oll = import_lineshape('h2oll_{}'.format('rose17'))
+            N2AbsModel.model = 'rose03'
+            LiqAbsModel.model = 'rose16'
+            self._uncertainty = True
+        else:
+            # Defines models
+            O2AbsModel.model = absmdl
+            O2AbsModel.o2ll = import_lineshape('o2ll_{}'.format(absmdl))
+            H2OAbsModel.model = absmdl
+            H2OAbsModel.h2oll = import_lineshape('h2oll_{}'.format(absmdl))
+            N2AbsModel.model = absmdl
+            LiqAbsModel.model = absmdl
 
     def init_cloudy(self, cldh: np.ndarray, denice: np.ndarray, denliq: np.ndarray) -> None:
-        """[summary]
+        """Initialize cloudy conditions parameters.
 
         Args:
             cldh (numpy.ndarray): cloud base/top heights (km MSL
@@ -160,106 +178,107 @@ class BTCloudRTE(object):
         """
         # ... convert cloud base and cloud top to (km above antenna height) ...
         # ... compute (beglev) and (endlev) ...
+        ncld = cldh.shape[1]
+        self.cldh = cldh - self.z0
+        self.beglev = np.zeros((ncld,))
+        self.endlev = np.zeros((ncld,))
         if getattr(self, 'cloudy'):
-            ncld = len(cldh[0, :])
-            self.cldh = cldh - self.z0
-            self.beglev = np.zeros((2,))
-            self.endlev = np.zeros((2,))
             for j in range(0, ncld):
                 for i in range(0, self.nl):
-                    if self.z[i] == self.cldh[j, 0]: self.beglev[j] = i
-                    if self.z[i] == self.cldh[j, 1]: self.endlev[j] = i
+                    if self.z[i] == self.cldh[0, j]: self.beglev[j] = i
+                    if self.z[i] == self.cldh[1, j]: self.endlev[j] = i
 
             self.denice = denice
             self.denliq = denliq
         else:
-            raise AttributeError("Set cloudy to True before running init_cloudy()")
+            warnings.warn("It seems that BTCloudRTE.cloudy attribute is not set to True. "
+                          "Sets it to True for running model in cloudy condition.")
+            # raise AttributeError("Set cloudy to True before running init_cloudy()")
 
-    def execute(self, only_bt: bool = True) -> Union[Tuple[pd.DataFrame, Dict[str, np.ndarray]]]:
-        """[summary]
+    def execute(self, only_bt: bool = True) -> Union[pd.DataFrame, Tuple[pd.DataFrame, Dict[str, np.ndarray]]]:
+        """Execution of main script.
 
         Args:
             only_bt (bool): If True (default) returns only brightness temperature. Default to True.
         
         Returns a pandas dataframe containing:
         
-        * tbtotal:
+        tbtotal:
             brightness temperature (K) includes cosmic background; 
             indexed by frequency and elevation angle
         
-        * tbatm:
+        tbatm:
             atmospheric brightness temperature (K), no cosmic; 
             background;indexed by frequency and elevation angle
         
-        * tmr:
+        tmr:
             mean radiating temperature of the atmosphere (K);
             indexed by frequency and elevation angle
         
-        * tmrcld:
+        tmrcld:
             mean radiating temperature (K) of the lowest cloud layer;
             indexed by frequency and elevation angle
         
-        * taudry:
+        taudry:
             dry air absorption integrated over each ray path (Np);
             indexed by frequency and elevation angle
         
-        * tauwet:
+        tauwet:
             water vapor absorption integrated over each ray path (Np);
             indexed by frequency and elevation angle
         
-        * tauliq:
+        tauliq:
             cloud liquid absorption integrated over each ray path (Np);
             indexed by frequency and elevation angle
         
-        * tauice:
+        tauice:
             cloud ice absorption integrated over each ray path (Np);
             indexed by frequency and elevation angle
 
         and a dictionary containing:
 
-        * taulaydry:
+        taulaydry:
             dry air absorption integrated over each ray path (Np);
             indexed by frequency, elevation angle and height profile
 
-        * taulaywet:
+        taulaywet:
             water vapor absorption integrated over each ray path (Np);
             indexed by frequency, elevation angle and height profile
 
-        * taulayliq:
+        taulayliq:
             cloud liquid absorption integrated over each ray path (Np);
             indexed by frequency, elevation angle and height profile
 
-        * taulayice:
+        taulayice:
             cloud ice absorption integrated over each ray path (Np);
             indexed by frequency, elevation angle and height profile
 
-        * srho:
+        srho:
             water vapor density integrated along each ray path (cm);
             indexed by elevation angle
         
-        * swet:
+        swet:
             wet refractivity integrated along each ray path (cm);
             indexed by elevation angle
         
-        * sdry:
+        sdry:
             dry refractivity integrated along each ray path (cm);
             indexed by elevation angle
         
-        * sliq:
+        sliq:
             cloud ice density integrated along each ray path (cm);
             indexed by elevation angle
         
-        * sice:
+        sice:
             cloud liquid density integrated along each ray path (cm);
             indexed by elevation angle
 
-        Returns:
-            Tuple[pandas.DataFrame, Dict[str, numpy.ndarray]]: [description]
+        :rtype:
+            Union[pandas.DataFrame, Tuple[pandas.DataFrame, Dict[str, numpy.ndarray]]]: [description]
         """
 
         # Set RTE
         RTEquation.from_sat = self._satellite
-        RTEquation.emissivity = self._es
 
         # ... compute vapor pressure and vapor density ...
         e, rho = RTEquation.vapor(self.tk, self.rh, self.ice)
@@ -275,9 +294,9 @@ class BTCloudRTE(object):
             # ds = [0; diff(z)]; # in alternative simple diff of z
 
             # ... Integrate over path (ds) ...
-            self.srho[k], _ = RTEquation.exponential_integration(1, rho, ds, 0, self.nl, 0.1)
-            self.swet[k], _ = RTEquation.exponential_integration(1, wetn, ds, 0, self.nl, 0.1)
-            self.sdry[k], _ = RTEquation.exponential_integration(1, dryn, ds, 0, self.nl, 0.1)
+            self.srho[k], _ = RTEquation.exponential_integration(True, rho, ds, 0, self.nl, 0.1)
+            self.swet[k], _ = RTEquation.exponential_integration(True, wetn, ds, 0, self.nl, 0.1)
+            self.sdry[k], _ = RTEquation.exponential_integration(True, dryn, ds, 0, self.nl, 0.1)
             if self.cloudy:
                 self.sliq[k] = RTEquation.cloud_integrated_density(self.denliq, ds, self.beglev, self.endlev)
                 self.sice[k] = RTEquation.cloud_integrated_density(self.denice, ds, self.beglev, self.endlev)
@@ -285,8 +304,12 @@ class BTCloudRTE(object):
             # ... handle each frequency ...
             # this are based on NOAA RTE fortran routines
             for j in range(0, self.nf):
-                # Rosenkranz, personal communication, 2019/02/12 (email)
-                awet, adry = RTEquation.clearsky_absorption(self.p, self.tk, e, self.frq[j])
+                RTEquation.emissivity = self._es[j]
+                if self._uncertainty:
+                    awet, adry = RTEquation.clearsky_absorption_uncertainty(self.p, self.tk, e, self.frq[j], self.amu)
+                else:
+                    # Rosenkranz, personal communication, 2019/02/12 (email)
+                    awet, adry = RTEquation.clearsky_absorption(self.p, self.tk, e, self.frq[j], self.o3n)
                 self.sptauwet[j, k], \
                 self.ptauwet[j, k, :] = RTEquation.exponential_integration(1, awet, ds, 0, self.nl, 1)
                 self.sptaudry[j, k], \

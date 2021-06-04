@@ -33,12 +33,12 @@ This gallery shows examples of pyrtlib functionality.  Community contributions a
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="Performing Brightness Temperature calculation">
+    <div class="sphx-glr-thumbcontainer" tooltip="Performing Brightness Temperature calculation form satellite">
 
 .. only:: html
 
  .. figure:: /auto_examples/images/thumb/sphx_glr_plot_brightness_temperature_thumb.png
-     :alt: Performing Brightness Temperature calculation
+     :alt: Performing Brightness Temperature calculation form satellite
 
      :ref:`sphx_glr_auto_examples_plot_brightness_temperature.py`
 
@@ -51,6 +51,132 @@ This gallery shows examples of pyrtlib functionality.  Community contributions a
    :hidden:
 
    /auto_examples/plot_brightness_temperature
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Performing Brightness Temperature calculation from ground">
+
+.. only:: html
+
+ .. figure:: /auto_examples/images/thumb/sphx_glr_plot_brightness_temperature_ground_thumb.png
+     :alt: Performing Brightness Temperature calculation from ground
+
+     :ref:`sphx_glr_auto_examples_plot_brightness_temperature_ground.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/plot_brightness_temperature_ground
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Performing uncertainty on Brightness Temperature">
+
+.. only:: html
+
+ .. figure:: /auto_examples/images/thumb/sphx_glr_plot_brightness_temperature_uncertainties_thumb.png
+     :alt: Performing uncertainty on Brightness Temperature
+
+     :ref:`sphx_glr_auto_examples_plot_brightness_temperature_uncertainties.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/plot_brightness_temperature_uncertainties
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Performing Brightness Temperature calculation form satellite with Ozone">
+
+.. only:: html
+
+ .. figure:: /auto_examples/images/thumb/sphx_glr_plot_brightness_temperature_wO3_thumb.png
+     :alt: Performing Brightness Temperature calculation form satellite with Ozone
+
+     :ref:`sphx_glr_auto_examples_plot_brightness_temperature_wO3.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/plot_brightness_temperature_wO3
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Performing BT calculation form satellite using ERA5 Reanalysis Observations">
+
+.. only:: html
+
+ .. figure:: /auto_examples/images/thumb/sphx_glr_plot_bt_era5_thumb.png
+     :alt: Performing BT calculation form satellite using ERA5 Reanalysis Observations
+
+     :ref:`sphx_glr_auto_examples_plot_bt_era5.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/plot_bt_era5
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Performing BT calculation form satellite using ERA5 Reanalysis Observations in cloudy condition...">
+
+.. only:: html
+
+ .. figure:: /auto_examples/images/thumb/sphx_glr_plot_bt_era5_cloudy_prodile_thumb.png
+     :alt: Performing BT calculation form satellite using ERA5 Reanalysis Observations in cloudy condition.
+
+     :ref:`sphx_glr_auto_examples_plot_bt_era5_cloudy_prodile.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/plot_bt_era5_cloudy_prodile
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Performing BT calculation form satellite using Wyoming Upper Air Observations">
+
+.. only:: html
+
+ .. figure:: /auto_examples/images/thumb/sphx_glr_plot_bt_wyoming_thumb.png
+     :alt: Performing BT calculation form satellite using Wyoming Upper Air Observations
+
+     :ref:`sphx_glr_auto_examples_plot_bt_wyoming.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/plot_bt_wyoming
 
 .. raw:: html
 

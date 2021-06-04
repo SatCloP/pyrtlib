@@ -13,3 +13,13 @@ References
 .. [ANDERSON] ANDERSON et al. 1986 AFGL Atmospheric Constituent Profiles (0.120km): 
             `ResearchGate PDF <https://www.researchgate.net/publication/235054307_AFGL_Atmospheric_Constituent_Profiles_0120km>`_, 
             AFGL-TR-86-0110
+
+.. [PAYNE] Payne, V. H., Mlawer, E. J., Cady-Pereira, K. E., and Moncet, J.-L.: Water vapor continuum absorption in the
+        microwave, IEEE T. Geosci. Remote, 49, 2194–2208,
+        https://doi.org/10.1109/TGRS.2010.2091416, 2011.
+
+.. [AUGUST] Alduchov, O. A., and R. E. Eskridge, 1996: Improved Magnus' form approximation of saturation vapor pressure. 
+        J. Appl. Meteor., 35, 601–609, http://journals.ametsoc.org/doi/abs/10.1175/1520-0450%281996%29035%3C0601%3AIMFAOS%3E2.0.CO%3B2.
+
+.. [MAGNUS] Magnus, G., 1844: Versuche über die Spannkräfte des Wasserdampfs. Ann. Phys. Chem., 61, 225–247, 
+        http://onlinelibrary.wiley.com/doi/10.1002/andp.18441370202/abstract.

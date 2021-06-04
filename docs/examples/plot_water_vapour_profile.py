@@ -22,7 +22,7 @@ from pyrtlib.atmp import AtmosphericProfiles as atmp
 from pyrtlib.utils import ppmv2gkg, mr2rh, import_lineshape, height_to_pressure
 
 z, p, d, tk, md = atmp.gl_atm(atmp.TROPICAL)
-frq = np.arange(20, 201, 1)
+frq = np.arange(20, 61, 1)
 ice = 0
 gkg = ppmv2gkg(md[:, atmp.H2O], atmp.H2O)
 rh = mr2rh(p, tk, gkg)[0] / 100
@@ -54,13 +54,13 @@ ax[1].yaxis.tick_right()
 ax[1].yaxis.set_major_formatter(ScalarFormatter())
 ax[1].yaxis.set_major_formatter(ticker.FuncFormatter(lambda y, _: '{:g}'.format(y)))
 
-mask = np.isin(frq, [22, 60, 118, 180])
+mask = np.isin(frq, [20, 22, 60])
 freq = np.nonzero(mask)
 for i in freq[0]:
     ax[0].plot(awet[i, :], z, label='{} GHz - {}'.format(frq[i], mdl))
     ax[1].plot(adry[i, :], z, label='{} GHz - {}'.format(frq[i], mdl))
 
-ax[0].plot(rho, z, label='Vapor density [g/m3]', linestyle='--')
+# ax[0].plot(rho, z, label='Vapor density [g/m3]', linestyle='--')
 
 ax[0].set_xlabel("WV [np/km]")
 ax[1].set_xlabel("DryAir [np/km]")

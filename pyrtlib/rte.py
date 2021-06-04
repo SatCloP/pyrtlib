@@ -12,8 +12,9 @@ from typing import Tuple, Optional, Union
 
 import numpy as np
 
-from .absmodel import O2AbsModel, H2OAbsModel, N2AbsModel, LiqAbsModel
+from .absmodel import O2AbsModel, H2OAbsModel, N2AbsModel, LiqAbsModel, O3AbsModel
 from .utils import constants, tk2b_mod
+from .absmod_uncertainty import absmod_uncertainties_perturb
 
 
 class RTEquation:
@@ -75,7 +76,7 @@ class RTEquation:
         es = 10.0 ** es
         # Compute vapor pressure and vapor density.
         # The vapor density conversion follows the ideal gas law:
-        # apor pressure = vapor density * rvapor * tk
+        # vapor pressure = vapor density * rvapor * tk
 
         e = np.multiply(rh, es)
         rho = e / (np.dot(rvap, tk))
@@ -235,7 +236,7 @@ class RTEquation:
             return np.asarray(ds)
 
     @staticmethod
-    def exponential_integration(zeroflg=None, x=None, ds=None, ibeg=None, iend=None, factor=None, *args, **kwargs):
+    def exponential_integration(zeroflg: bool, x: np.ndarray, ds: np.ndarray, ibeg: np.int, iend: np.int, factor: np.float):
         """ EXPonential INTegration: Integrate the profile in array x over the layers defined in
         array ds, saving the integrals over each layer.
 
@@ -266,7 +267,7 @@ class RTEquation:
             elif np.abs(x[i] - x[i - 1]) < 1e-09:
                 xlayer = x[i]
             elif x[i - 1] == 0.0 or x[i] == 0.0:
-                if zeroflg == 0:
+                if not zeroflg:
                     xlayer = 0.0
                 else:
                     xlayer = np.dot((x[i] + x[i - 1]), 0.5)
@@ -283,7 +284,7 @@ class RTEquation:
         return sxds, xds.reshape(iend)
 
     @staticmethod
-    def cloud_radiating_temperature(ibase=None, itop=None, hvk=None, tauprof=None, boftatm=None, *args, **kwargs):
+    def cloud_radiating_temperature(ibase: np.float, itop: np.float, hvk: np.ndarray, tauprof: np.ndarray, boftatm: np.ndarray):
         """Computes the mean radiating temperature of a cloud with base and top at
         profile levels ibase and itop, respectively.  The algorithm assumes that
         the input cloud is the lowest (or only) cloud layer observed.
@@ -331,7 +332,7 @@ class RTEquation:
         return tmrcld
 
     @staticmethod
-    def cloud_integrated_density(dencld=None, ds=None, lbase=None, ltop=None, *args, **kwargs):
+    def cloud_integrated_density(dencld: np.ndarray, ds: np.ndarray, lbase: np.ndarray, ltop: np.ndarray):
         """Integrates cloud water density over path ds (linear algorithm).
 
         Args:
@@ -454,7 +455,7 @@ class RTEquation:
         return boftotl, boftatm, boftmr, tauprof, hvk, boft, bakgrnd
 
     @staticmethod
-    def cloudy_absorption(tk=None, denl=None, deni=None, frq=None, *args, **kwargs):
+    def cloudy_absorption(tk: np.ndarray, denl: np.ndarray, deni: np.ndarray, frq: np.ndarray):
         """Multiplies cloud density profiles by a given fraction and computes the
         corresponding cloud liquid and ice absorption profiles, using Rosenkranz's
         cloud liquid absorption routine ABLIQ and ice absorption of Westwater
@@ -502,7 +503,7 @@ class RTEquation:
         return aliq, aice
 
     @staticmethod
-    def clearsky_absorption(p=None, tk=None, e=None, frq=None, *args, **kwargs):
+    def clearsky_absorption(p: np.ndarray, tk: np.ndarray, e: np.ndarray, frq: np.ndarray, o3n: np.ndarray = None):
         """  Computes profiles of water vapor and dry air absorption for
         a given set of frequencies.  Subroutines H2O_xxx and O2_xxx
         contain the absorption model of Leibe and Layton [1987:
@@ -541,6 +542,7 @@ class RTEquation:
         adry = np.zeros(p.shape)
         aO2 = np.zeros(p.shape)
         aN2 = np.zeros(p.shape)
+        aO3 = np.zeros(p.shape)
         factor = np.dot(0.182, frq)
         db2np = np.dot(np.log(10.0), 0.1)
         for i in range(0, nl):
@@ -549,23 +551,54 @@ class RTEquation:
             ekpa = e[i] / 10.0
             pdrykpa = p[i] / 10.0 - ekpa
 
-            # if H2OAbsModel.model == 'rose19sd':
-            npp, ncpp = H2OAbsModel().h2o_rosen19_sd(pdrykpa, v, ekpa, frq)
-            awet[i] = factor * (npp + ncpp) * db2np
+            if H2OAbsModel.model == 'rose21sd':
+                npp, ncpp = H2OAbsModel().h2o_rosen21_sd(pdrykpa, v, ekpa, frq)
+                awet[i] = factor * (npp + ncpp) * db2np
+            else:
+                npp, ncpp = H2OAbsModel().h2o_rosen19_sd(pdrykpa, v, ekpa, frq)
+                awet[i] = factor * (npp + ncpp) * db2np
+            
             if O2AbsModel.model in ['rose19sd', 'rose19']:
                 npp, ncpp = O2AbsModel().o2abs_rosen18(pdrykpa, v, ekpa, frq)
                 aO2[i] = factor * npp * db2np
-            if O2AbsModel.model in ['rose03', 'rose16', 'rose17', 'rose18', 'rose20', 'rose20sd', 'rose98']:
+            if O2AbsModel.model in ['rose03', 'rose16', 'rose17', 'rose18', 'rose20', 'rose20sd', 'rose98', 'makarov11']:
                 npp, ncpp = O2AbsModel().o2abs_rosen19(pdrykpa, v, ekpa, frq)
                 ncpp = 0 if O2AbsModel.model in ['rose20', 'rose20sd'] else ncpp
                 aO2[i] = factor * (npp + ncpp) * db2np
             # add N2 term
-            if N2AbsModel.model not in ['rose03', 'rose16', 'rose17', 'rose18', 'rose98']:
+            if N2AbsModel.model not in ['rose03', 'rose16', 'rose17', 'rose18', 'rose98', 'makarov11']:
                 aN2[i] = N2AbsModel.n2_absorption(tk[i], np.dot(pdrykpa, 10), frq)
 
             if not N2AbsModel.model:
                 raise ValueError('No model avalaible with this name: {} . Sorry...'.format('model'))
 
-            adry[i] = aO2[i] + aN2[i]
+            if not o3n is None and O3AbsModel.model in ['rose18', 'rose21', 'rose21sd']:
+                aO3[i] = O3AbsModel().o3abs_rose21(tk[i], p[i], frq, o3n[i])
+
+            adry[i] = aO2[i] + aN2[i] + aO3[i]
+
+        return awet, adry
+
+    @staticmethod
+    def clearsky_absorption_uncertainty(p: np.ndarray, tk: np.ndarray, e: np.ndarray, frq: np.ndarray, amu: Tuple):
+        nl = len(p)
+        awet = np.zeros(p.shape)
+        adry = np.zeros(p.shape)
+        aO2_N2 = np.zeros(p.shape)
+        aN2 = np.zeros(p.shape)
+        factor = np.dot(0.182, frq)
+        db2np = np.dot(np.log(10.0), 0.1)
+
+        for i in range(0, nl):
+            v = 300.0 / tk[i]
+            ekpa = e[i] / 10.0
+            pdrykpa = p[i] / 10.0 - ekpa
+            npp, ncpp = H2OAbsModel().h2o_uncertainty(pdrykpa, v, ekpa, frq, amu)
+            awet[i] = (factor * (npp + ncpp)) * db2np
+            npp, ncpp = O2AbsModel().o2abs_uncertainty(pdrykpa, v, ekpa, frq, amu)
+            # add N2 term
+            # aN2[i] = N2AbsModel.n2_absorption(tk[i], np.dot(pdrykpa, 10), frq)
+            aO2_N2[i] = (factor * (npp + ncpp)) * db2np
+            adry[i] = aO2_N2[i]
 
         return awet, adry

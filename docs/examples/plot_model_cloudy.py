@@ -33,15 +33,15 @@ rh = mr2rh(p, t, gkg)[0] / 100
 mdl = 'rose19sd'
 
 ang = np.array([90.])
-frq = np.arange(20, 201, 1)
+frq = np.arange(20, 61, 1)
 nf = len(frq)
 
 denliq = np.zeros(z.shape)
 denice = np.zeros(z.shape)
 cldh = np.empty((2, 2))
 
-for i in [0, 1]:
-    if i == 0:
+for i in [False, True]:
+    if not i:
         text_plot = 'clear-sky'
     else:
         # build a cloud

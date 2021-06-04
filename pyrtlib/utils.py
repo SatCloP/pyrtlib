@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 This module contains the utils functions.
 """
@@ -7,7 +6,6 @@ __author__ = ''
 __date__ = 'March 2021'
 __copyright__ = '(C) 2021, CNR-IMAA'
 
-from functools import wraps
 from typing import Tuple, Optional
 
 import numpy as np
@@ -21,45 +19,6 @@ def import_lineshape(name):
     except ImportError:
         return None
     return vars(module)[name]
-
-
-def function(f):
-    """
-    This is a simple decorator
- 
-    Parameters:
-       f (method): The function method
-    """
-
-    @wraps(f)
-    def helper(*args, **kwargs):
-        helper.nargin = len(args)
-        # helper.varargin = cellarray(args)
-        return f(*args, **kwargs)
-
-    return helper
-
-
-def arange(start, stop, step=1, **kwargs):
-    """Comfortable function to increment array index
-    to make it usable as a matlab array.
-
-    .. todo:: must be moved to utils function
-
-    Args:
-        start ([type]): [description]
-        stop ([type]): [description]
-        step (int, optional): [description]. Defaults to 1.
-
-    Returns:
-        [type]: [description]
-    """
-    expand_value = 1 if step > 0 else -1
-
-    return np.arange(start,
-                     stop + expand_value,
-                     step,
-                     **kwargs).reshape(1, -1)
 
 
 def constants(string: str) -> Tuple[float, str]:
@@ -95,6 +54,8 @@ def constants(string: str) -> Tuple[float, str]:
     | 'Rdry'        |  Gas constant of dry air [J kg-1 K-1]     |
     +---------------+-------------------------------------------+
     | 'Rwatvap'     |  Gas constant of water vapor [J kg-1 K-1] |
+    +---------------+-------------------------------------------+
+    | 'R'           |  Gas constant [J mol-1 K-1]               |
     +---------------+-------------------------------------------+
     | 'Tcosmicbkg'  |  Cosmic Background Temperature [K]        |
     +---------------+-------------------------------------------+
@@ -154,6 +115,10 @@ def constants(string: str) -> Tuple[float, str]:
         Tcos = 2.728
         units = '[K]'
         out = np.copy(Tcos)
+    elif string == 'R':
+        Rgas = 8.31446261815324
+        units = '[J mol-1 K-1]'
+        out = np.copy(Rgas)
     else:
         raise ValueError('No constant avalaible with this name: {} . Sorry...'.format(string))
 
@@ -608,7 +573,7 @@ def dcerror(x: np.ndarray, y: np.ndarray) -> np.ndarray:
     # compute w in quadrants 1 or 2
     # from eqs.(13), w(z) = [w(-z*)]*
     # expansion in terms of ZH results in conjugation of w when X changes sign.
-    zh = np.complex(np.abs(y), - x)
+    zh = complex(np.abs(y), - x)
     asum = (((((a[6] * zh + a[5]) * zh + a[4]) * zh + a[3]) * zh + a[2]) * zh + a[1]) * zh + a[0]
     bsum = ((((((zh + b[6]) * zh + b[5]) * zh + b[4]) * zh + b[3]) * zh + b[2]) * zh + b[1]) * zh + b[0]
     w = asum / bsum
@@ -665,3 +630,109 @@ def height_to_pressure(height: np.float) -> np.float:
     Rd = R / Md
 
     return p0 * np.exp((g / (Rd * gamma)) * np.log(1 - ((height * gamma) / t0)))
+
+
+def dewpoint2rh(td: np.float, t: np.float, ice: Optional[bool] = False, method: Optional[str] = 'arm') -> np.float:
+    r"""Calculate relative humidity from temperature and dewpoint.
+    Value is calculated using the August-Roche-Magnus approximation. [AUGUST]_ [MAGNUS]_.
+
+    .. math:: RH = \frac {\exp(\frac{a T_d}{b+T_d})} {\exp(\frac{a T}{b+T})}
+
+    .. math:: where \ a = 17.625, b = 243.04
+
+    .. math:: RH = \frac {6.1078\times10^{\frac{aT_d}{b + T_db}}}{6.1078\times10^{\frac{a T}{b + T}}}
+
+    .. math:: where \ a = 7.5, b = 265.5
+
+    Args:
+        td (float): The dew point temperature in Celsius
+        t (float): The temperature in Celsius
+
+    Returns:
+        float: The relative humidity to the provided dew point temperature
+
+    References
+    ----------
+    .. [1] Alduchov, O. A., and R. E. Eskridge, 1996: Improved Magnus' form approximation of saturation vapor pressure. J. Appl. Meteor., 35, 601–609.
+    .. [2] August, E. F., 1828: Ueber die Berechnung der Expansivkraft des Wasserdunstes. Ann. Phys. Chem., 13, 122–137.
+    .. [3] Magnus, G., 1844: Versuche über die Spannkräfte des Wasserdampfs. Ann. Phys. Chem., 61, 225–247.
+    """
+    if method == 'arm':
+        a = 17.625
+        b = 243.04
+        rh = (np.exp((a * td) / (b + td)) / np.exp((a * t) / (b + t)))
+    else:
+        a = 7.5
+        b = 237.3
+        if ice:
+            a = 9.5
+            b = 265.5
+        # Vapor pressure (ED):
+        ed = 6.1078 * 10 ** ((td * a) / (td + b))
+
+        # saturated vapor pressure (es):
+        es = 6.1078 * 10 ** ((t * a) / (t + b))
+
+        # relative humidity = 100 * ed/es
+        rh = ed / es
+
+    return rh
+
+
+def kgkg_to_kgm3(q: np.ndarray, p: np.ndarray, t: np.ndarray) -> np.ndarray:
+    r"""Utils function to convert from Kg Kg-1 to kg m-3. 
+
+    NWP models provide cloud liquid and ice water content in units kq kq-1. To convert
+    to g m-3 multiply the result of this function to the value in kg kg-1.
+
+    .. math:: LWC = q_{liq} \frac{10^2 P}{R_{moist} T}
+
+    .. math:: R_{moist} = R_{dry} (1 + \frac{1 - \epsilon}{\epsilon} q_{h2o})
+
+    .. math:: \epsilon = \frac{M_{h2o}}{M_{dry}}
+
+    .. math:: R_{dry} = \frac{R}{M_{dry}}
+
+    where:
+    :math:`q_{liq}` is the mass mixing ratio for liquid cloud, :math:`P` is the atmospheric pressure 
+    in hPa, :math:`T` is the atmospheric temperature in K, :math:`R_{moist}` is the moist 
+    air gas constant (in J kg-1 K-1), :math:`R_{dry}` is the gas constant for dry air and :math:`q_{h2o}` is the specific humidity 
+    (given as the ratio between the mass of water vapor and the mass of moist air)
+
+    The same equations are used for ice clouds, by replacing LWC by IWC and :math:`q_{liq}` by :math:`q_{ice}`
+
+    Args:
+        q (np.ndarray): specific humidity (Kg Kg-1)
+        p (np.ndarray): pressure (hPa)
+        t (np.ndarray): temperature (K)
+
+    Returns:
+        np.ndarray: [description]
+
+    References:
+        .. [1] M. Z. Jacobson. Fundamentals of atmospheric modelling. Cambridge Eds., 2005.
+    """
+
+    eps = 0.621970585
+    rmoist = (constants('Rdry')[0]) * (1 + ((1 - eps) / eps) * q)
+    kgm3 = (1e2 * p) / (rmoist * t)
+
+    return kgm3
+
+def ppmv_to_moleculesm3(mr: np.ndarray, p: np.ndarray, t: np.ndarray) -> np.ndarray:
+    """For any gas, this function converts mixing ratio  (in ppmv) to number density (molecules/m3).
+
+    Args:
+        mr (np.ndarray): mixing ratio in ppmv
+        p (np.ndarray): pressure in Pa
+        t (np.ndarray): temperature in K
+
+    Returns:
+        np.ndarray: [description]
+    """
+    av = constants('avogadro')[0]
+    rg = constants('R')[0]
+    n_air = (av * p) / (rg * t) # (molecules/m3)
+    nr_molm3 = n_air * mr * 1e-6
+    
+    return nr_molm3
