@@ -38,7 +38,7 @@ for i in range(0, 6):
     rh = mr2rh(p, t, gkg)[0] / 100
 
     ang = np.array([90.])
-    frq = np.arange(150, 201, 1)
+    frq = np.arange(20, 151, 1)
 
     amu = absmod_uncertainties_perturb()
 
@@ -47,27 +47,27 @@ for i in range(0, 6):
     df = rte.execute()
     df = df.set_index(frq)
 
-    amu = absmod_uncertainties_perturb(['gamma_a', 'gamma_w'], 'max', index=2)
+    amu = absmod_uncertainties_perturb(['gamma_a'], 'max', index=2)
 
     rte = BTCloudRTE(z, p, t, rh, frq, ang, amu=amu)
     rte.init_absmdl('uncertainty')
-    df_gamma_a = rte.execute()
-    df_gamma_a = df_gamma_a.set_index(frq)
+    df_gamma = rte.execute()
+    df_gamma = df_gamma.set_index(frq)
 
-    df['delta_max'] = df.tbtotal - df_gamma_a.tbtotal
+    df['delta_max_gamma_a'] = df_gamma.tbtotal - df.tbtotal
 
-    amu = absmod_uncertainties_perturb(['gamma_a', 'gamma_w'], 'min', index=2)
+    amu = absmod_uncertainties_perturb(['gamma_a'], 'min', index=2)
 
     rte = BTCloudRTE(z, p, t, rh, frq, ang, amu=amu)
     rte.init_absmdl('uncertainty')
-    df_gamma_a = rte.execute()
-    df_gamma_a = df_gamma_a.set_index(frq)
+    df_gamma = rte.execute()
+    df_gamma = df_gamma.set_index(frq)
 
-    df['delta_min'] = df.tbtotal - df_gamma_a.tbtotal
+    df['delta_min_gamma_a'] = df_gamma.tbtotal - df.tbtotal
 
-    df.delta_max.plot(ax=ax, style='--', label='{}'.format(atm[i]))
-    df.delta_min.plot(ax=ax, label='{}'.format(atm[i]))
+    df.delta_max_gamma_a.plot(ax=ax, style='--', label='{}'.format(atm[i]))
+    df.delta_min_gamma_a.plot(ax=ax, label='{}'.format(atm[i]))
 
 # ax.legend()
-plt.title("Perturbed parameters: $\gamma_a, \gamma_w$")
+plt.title("Perturbed parameters: $\gamma_a$")
 plt.show()
