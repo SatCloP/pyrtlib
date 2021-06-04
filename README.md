@@ -1,6 +1,6 @@
 <img align="" src="resources/logo/logo_large.png" width="300">
 
-# A Radiative Transfer Python Library (no scattering)
+# A Radiative Transfer Python Library (non-scattering)
 
 [![build-docs-action](https://github.com/slarosa/pyrtlib/workflows/build-docs-action/badge.svg)](https://github.com/slarosa/pyrtlib/actions/workflows/build_docs.yml)
 [![run-python-tests](https://github.com/slarosa/pyrtlib/workflows/run-python-tests/badge.svg)](https://github.com/slarosa/pyrtlib/actions/workflows/ci.yml)
