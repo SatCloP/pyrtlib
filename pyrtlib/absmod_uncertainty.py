@@ -663,14 +663,6 @@ if USEKOSHELEV2017:
     AMU['delta_a'] = AMU['delta_a_{}_k2017'.format(USEKOSHELEV2017_WHAT)]
     AMU['delta_w'] = AMU['delta_w_{}_k2017'.format(USEKOSHELEV2017_WHAT)]
 
-AMU['gamma_a'].value = AMU['gamma_a'].value * MB2TORR
-AMU['gamma_a'].uncer = AMU['gamma_a'].uncer * MB2TORR
-# AMU['gamma_a'].uncer[0:2] = np.array([0.039, 0.015])
-AMU['gamma_w'].value = AMU['gamma_w'].value * MB2TORR
-AMU['delta_a'].value = AMU['delta_a'].value * MB2TORR
-AMU['delta_w'].value = AMU['delta_w'].value * MB2TORR
-AMU['gamma_a'].units = AMU['gamma_w'].units = AMU['delta_a'].units = AMU['delta_w'].units = 'MHz/mb'
-
 for i in range(0, 2):
     AMU['SR'].value[i], \
     AMU['SR'].uncer[i] = uncertainty_propagation('A/B',
@@ -678,6 +670,14 @@ for i in range(0, 2):
                                                  AMU['gamma_a'].value[i],
                                                  AMU['delta_a'].uncer[i],
                                                  AMU['gamma_a'].uncer[i])
+
+AMU['gamma_a'].value = AMU['gamma_a'].value * MB2TORR
+AMU['gamma_a'].uncer = AMU['gamma_a'].uncer * MB2TORR
+# AMU['gamma_a'].uncer[0:2] = np.array([0.039, 0.015])
+AMU['gamma_w'].value = AMU['gamma_w'].value * MB2TORR
+AMU['delta_a'].value = AMU['delta_a'].value * MB2TORR
+AMU['delta_w'].value = AMU['delta_w'].value * MB2TORR
+AMU['gamma_a'].units = AMU['gamma_w'].units = AMU['delta_a'].units = AMU['delta_w'].units = 'MHz/mb'
 
 # units in Ros. model are [Hz*cm^2]; the conversion factor is just speed of light in cm (P. Rosenkranz, personal communication)
 # AMU['S'] = AMU['S']._replace(value=AMU['S'].value * C_CM, uncer=AMU['S'].uncer * C_CM, units='Hz*cm^2')
@@ -702,7 +702,7 @@ def absmod_uncertainties_perturb(what: Optional[list] = [], mode: Optional[str] 
 
     # remember here we are using matlab logig for indexing (i.e. indes start from 1 instead that 0)
     # must be changed!!!!!
-    param_index = index - 1 if index else index
+    param_index = index # - 1 if index else index
 
     npar = len(param)
     for i in range(npar):

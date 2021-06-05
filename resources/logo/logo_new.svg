@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   viewBox="0 0 87.84 36"
+   width="87.84"
+   height="36"
+   version="1.1"
+   id="svg843"
+   sodipodi:docname="logo_new.svg"
+   inkscape:export-filename="/Users/slarosa/pyrtlib.png"
+   inkscape:export-xdpi="1093.3334"
+   inkscape:export-ydpi="1093.3334"
+   inkscape:version="1.0.1 (c497b03c, 2020-09-10)">
+  <metadata
+     id="metadata849">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs847">
+    <inkscape:path-effect
+       effect="bspline"
+       id="path-effect2094"
+       is_visible="true"
+       lpeversion="1"
+       weight="33.333333"
+       steps="2"
+       helper_size="0"
+       apply_no_weight="true"
+       apply_with_weight="true"
+       only_selected="false" />
+    <inkscape:path-effect
+       effect="bspline"
+       id="path-effect2080"
+       is_visible="true"
+       lpeversion="1"
+       weight="33.333333"
+       steps="2"
+       helper_size="0"
+       apply_no_weight="true"
+       apply_with_weight="true"
+       only_selected="false" />
+    <inkscape:path-effect
+       effect="bspline"
+       id="path-effect2076"
+       is_visible="true"
+       lpeversion="1"
+       weight="33.333333"
+       steps="2"
+       helper_size="0"
+       apply_no_weight="true"
+       apply_with_weight="true"
+       only_selected="false" />
+    <inkscape:path-effect
+       effect="bspline"
+       id="path-effect2071"
+       is_visible="true"
+       lpeversion="1"
+       weight="33.333333"
+       steps="2"
+       helper_size="0"
+       apply_no_weight="true"
+       apply_with_weight="true"
+       only_selected="false" />
+    <inkscape:path-effect
+       effect="bspline"
+       id="path-effect2055"
+       is_visible="true"
+       lpeversion="1"
+       weight="33.333333"
+       steps="2"
+       helper_size="0"
+       apply_no_weight="true"
+       apply_with_weight="true"
+       only_selected="false" />
+  </defs>
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1920"
+     inkscape:window-height="1155"
+     id="namedview845"
+     showgrid="false"
+     inkscape:zoom="14.799636"
+     inkscape:cx="43.919998"
+     inkscape:cy="18"
+     inkscape:window-x="0"
+     inkscape:window-y="23"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg843"
+     inkscape:document-rotation="0" />
+  <text
+     xml:space="preserve"
+     style="font-style:normal;font-weight:normal;font-size:18.6667px;line-height:1.25;font-family:sans-serif;fill:#1662a6;fill-opacity:1;stroke:none"
+     x="34.474709"
+     y="23.317312"
+     id="text853"><tspan
+       sodipodi:role="line"
+       id="tspan851"
+       x="34.474709"
+       y="23.317312"
+       style="font-style:normal;font-variant:normal;font-weight:300;font-stretch:normal;font-size:18.6667px;font-family:'Apple SD Gothic Neo';-inkscape-font-specification:'Apple SD Gothic Neo Light';fill:#1662a6;fill-opacity:1">pyrtlib</tspan></text>
+  <path
+     d="m 12.69341,16.439115 c -0.09163,0.04038 -0.187033,0.06214 -0.284799,0.06214 -0.731363,0 -1.324104,-1.188701 -1.324104,-2.655242 0,-1.35586 0.506782,-2.473344 1.161159,-2.634605 v -4.53e-4 l 0.864316,-0.348828 -3.05557,-5.7824728 -6.4618264,-2.2585562 7.7143764,14.600323 6.461827,2.258783 -2.30201,-4.356758 -2.773369,1.116122 z"
+     id="path833"
+     style="color:#ead017;fill:#ead017;stroke:none;stroke-width:0.231433;stroke-opacity:1" />
+  <path
+     d="m 19.493406,8.3672384 -6.461826,-2.258783 2.084278,3.9451016 2.750225,-1.1093176 c 0.02928,-0.01406 0.05928,-0.02609 0.08926,-0.03606 l 0.0064,-0.0025 v 4.54e-4 c 0.06825,-0.022 0.138149,-0.03356 0.209467,-0.03356 0.731364,0 1.323868,1.1884756 1.323868,2.6552426 0,1.260601 -0.437825,2.315259 -1.025608,2.586749 v 6.8e-4 l -0.01393,0.0057 c -0.01394,0.0059 -0.02763,0.01159 -0.0418,0.01679 l -0.940357,0.378317 3.272122,6.192997 6.462299,2.258557 z"
+     id="path835"
+     style="color:#ead017;fill:#ead017;stroke:none;stroke-width:0.231433;stroke-opacity:1" />
+  <ellipse
+     style="fill:#1662a6;fill-opacity:1;stroke:none;stroke-width:0.285274;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     id="path2067"
+     cx="15.250245"
+     cy="12.688331"
+     rx="1.4630942"
+     ry="1.3770299" />
+  <path
+     id="path2065-5-0"
+     style="fill:#ead017;fill-opacity:1;stroke:#1662a6;stroke-width:0.476102;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     d="m 29.967712,13.193271 -5.514762,2.620944 4.507485,8.533223 -8.748829,-3.058888 -1.462068,-2.765803 -1.256572,0.59628 -12.5960247,5.659621 a 13.810685,13.810685 0 0 0 11.2956597,8.08854 13.810685,13.810685 0 0 0 12.612867,-5.828061 13.810685,13.810685 0 0 0 1.162244,-13.845856 z" />
+</svg>

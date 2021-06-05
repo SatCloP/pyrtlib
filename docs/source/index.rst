@@ -1,4 +1,4 @@
-.. image:: ../../resources/logo/logo_large.png
+.. image:: ../../resources/logo/logo_large_new.png
   :width: 600
 
 .. pyrtlib documentation master file, created by sphinx-quickstart on Fri Mar 19 09:49:16 2021. 

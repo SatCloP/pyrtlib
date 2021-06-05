@@ -1,4 +1,4 @@
-<img align="" src="resources/logo/logo_large.png" width="300">
+<img align="" src="resources/logo/logo_large_new.png" width="300">
 
 # A Radiative Transfer Python Library (no scattering)
 
