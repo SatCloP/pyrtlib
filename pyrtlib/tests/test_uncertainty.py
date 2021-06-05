@@ -14,7 +14,7 @@ THIS_DIR = os.path.dirname(os.path.abspath(__file__))
 
 class Test(TestCase):
     def test_absmod_uncertainties_perturb_min(self):
-        amu = absmod_uncertainties_perturb(['gamma_a'], 'min', 2)
+        amu = absmod_uncertainties_perturb(['gamma_a'], 'min', 1)
         expected0 = 0.016501364000000
         assert_allclose(expected0, amu['gamma_a'].uncer[0])
         expected1 = 0.015001240000000
@@ -26,11 +26,11 @@ class Test(TestCase):
         assert_allclose(expected1, amu['gamma_a'].value[1])
 
     def test_absmod_uncertainties_perturb_max(self):
-        amu = absmod_uncertainties_perturb(['gamma_a'], 'max', 1)
+        amu = absmod_uncertainties_perturb(['gamma_a'], 'max', 0)
         expected0 = 2.715224440000000
         assert_allclose(expected0, amu['gamma_a'].value[0])
 
-        amu = absmod_uncertainties_perturb(['gamma_a'], 'max', 2)
+        amu = absmod_uncertainties_perturb(['gamma_a'], 'max', 1)
         expected1 = 2.959744652000000
         assert_allclose(expected1, amu['gamma_a'].value[1])
 
