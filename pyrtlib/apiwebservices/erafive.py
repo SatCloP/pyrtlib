@@ -94,14 +94,14 @@ class ERA5Reanalysis:
             return idx
 
     @staticmethod
-    def request_data(path: str, time: datetime, lonlat: tuple, offset: Optional[np.float] = 0.3) -> str:
+    def request_data(path: str, time: datetime, lonlat: tuple, offset: Optional[float] = 0.3) -> str:
         """Download ERA5Reanalysis data from the Copernicus Climate Change Service.
 
         Args:
             path (str): The output directory
             time (datetime): The date and time of the desired observation.
             lonlat (tuple): The coordinatre in degrees, longitude and latitude
-            offset (Optional[np.float], optional): The offset to apply to coordinates to get the extent. Defaults to 0.3.
+            offset (Optional[float], optional): The offset to apply to coordinates to get the extent. Defaults to 0.3.
 
         Returns:
             str: The path to downloaded netcdf file
