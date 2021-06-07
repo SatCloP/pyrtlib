@@ -146,7 +146,7 @@ class RTEquation:
         return dryn, wetn, refindx
 
     @staticmethod
-    def ray_tracing(z: np.ndarray, refindx: np.ndarray, angle: np.float, z0: np.float) -> np.ndarray:
+    def ray_tracing(z: np.ndarray, refindx: np.ndarray, angle: float, z0: float) -> np.ndarray:
         """Ray-tracing algorithm of Dutton, Thayer, and Westwater, rewritten for
         readability & attempted documentation.  Based on the technique shown in
         Radio Meteorology by Bean and Dutton (Fig. 3.20 and surrounding text).
@@ -236,7 +236,7 @@ class RTEquation:
             return np.asarray(ds)
 
     @staticmethod
-    def exponential_integration(zeroflg: bool, x: np.ndarray, ds: np.ndarray, ibeg: np.int, iend: np.int, factor: np.float):
+    def exponential_integration(zeroflg: bool, x: np.ndarray, ds: np.ndarray, ibeg: np.int, iend: np.int, factor: float):
         """ EXPonential INTegration: Integrate the profile in array x over the layers defined in
         array ds, saving the integrals over each layer.
 
@@ -284,7 +284,7 @@ class RTEquation:
         return sxds, xds.reshape(iend)
 
     @staticmethod
-    def cloud_radiating_temperature(ibase: np.float, itop: np.float, hvk: np.ndarray, tauprof: np.ndarray, boftatm: np.ndarray):
+    def cloud_radiating_temperature(ibase: float, itop: float, hvk: np.ndarray, tauprof: np.ndarray, boftatm: np.ndarray):
         """Computes the mean radiating temperature of a cloud with base and top at
         profile levels ibase and itop, respectively.  The algorithm assumes that
         the input cloud is the lowest (or only) cloud layer observed.
@@ -359,7 +359,7 @@ class RTEquation:
         return scld
 
     @staticmethod
-    def planck(frq: np.ndarray, tk: np.ndarray, taulay: np.ndarray, es: Optional[np.float] = 1.0) -> Tuple[
+    def planck(frq: np.ndarray, tk: np.ndarray, taulay: np.ndarray, es: Optional[float] = 1.0) -> Tuple[
         np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
         """  Computes the modified planck function (equation (4) in schroeder and
         westwater, 1992: guide to passive microwave weighting function
@@ -375,7 +375,7 @@ class RTEquation:
             nl (numpy.ndarray): number of profile levels.
             tk (numpy.ndarray): temperature profile (K).
             taulay (numpy.ndarray): profile of absorption integrated over each layer (np).
-            es (np.float, optional): profile of absorption integrated over each layer (np). Defaults to 1.0.
+            es (float, optional): profile of absorption integrated over each layer (np). Defaults to 1.0.
 
         Returns:
             (tuple):

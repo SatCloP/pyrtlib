@@ -22,7 +22,8 @@ class BTCloudRTE(object):
     Initialize BTCloudRTE
     """
 
-    def __init__(self, z: np.ndarray, p: np.ndarray, tk: np.ndarray, rh: np.ndarray, frq: np.ndarray, angles: np.ndarray,
+    def __init__(self, z: np.ndarray, p: np.ndarray, tk: np.ndarray, rh: np.ndarray, frq: np.ndarray,
+                 angles: Optional[np.ndarray] = np.array([90.]),
                  o3n: Optional[np.ndarray] = None,
                  amu: Optional[Tuple] = None,
                  absmdl: Optional[str] = '',
@@ -120,7 +121,7 @@ class BTCloudRTE(object):
             raise ValueError("Please enter True or False")
 
     @property
-    def emissivity(self) -> Union[np.float, np.ndarray]:
+    def emissivity(self) -> Union[float, np.ndarray]:
         """Surface emissivity. Default to 1.0
 
         Returns:
@@ -129,7 +130,7 @@ class BTCloudRTE(object):
         return self._es
 
     @emissivity.setter
-    def emissivity(self, emissivity: Union[np.float, np.ndarray]) -> None:
+    def emissivity(self, emissivity: Union[float, np.ndarray]) -> None:
         """Setter for surface emissivty
 
         Args:
@@ -138,7 +139,7 @@ class BTCloudRTE(object):
         Raises:
             ValueError: [description]
         """
-        if isinstance(emissivity, np.float):
+        if isinstance(emissivity, float):
             self._es = np.repeat(emissivity, self.nf)
         elif isinstance(emissivity, np.ndarray):
             self._es = emissivity

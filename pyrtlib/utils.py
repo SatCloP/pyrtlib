@@ -586,7 +586,7 @@ def dcerror(x: np.ndarray, y: np.ndarray) -> np.ndarray:
     return dcerror
 
 
-def pressure_to_height(pressure: np.float) -> np.float:
+def pressure_to_height(pressure: float) -> float:
     r"""Convert pressure data to height using the U.S. standard atmosphere [NOAA1976]_.
     The implementation uses the formula outlined in [Hobbs1977]_ pg.60-61.
 
@@ -609,7 +609,7 @@ def pressure_to_height(pressure: np.float) -> np.float:
     return (t0 / gamma) * (1 - (pressure / p0) ** (Rd * gamma / g))
 
 
-def height_to_pressure(height: np.float) -> np.float:
+def height_to_pressure(height: float) -> float:
     r"""Convert height data to pressures using the U.S. standard atmosphere [NOAA1976]_.
     The implementation inverts the formula outlined in [Hobbs1977]_ pg.60-61.
 
@@ -632,7 +632,7 @@ def height_to_pressure(height: np.float) -> np.float:
     return p0 * np.exp((g / (Rd * gamma)) * np.log(1 - ((height * gamma) / t0)))
 
 
-def dewpoint2rh(td: np.float, t: np.float, ice: Optional[bool] = False, method: Optional[str] = 'arm') -> np.float:
+def dewpoint2rh(td: float, t: float, ice: Optional[bool] = False, method: Optional[str] = 'arm') -> float:
     r"""Calculate relative humidity from temperature and dewpoint.
     Value is calculated using the August-Roche-Magnus approximation. [AUGUST]_ [MAGNUS]_.
 

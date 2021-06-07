@@ -130,7 +130,7 @@ class AMU_NT:
 
 
 def uncertainty_propagation(fun: str, A: np.ndarray, B: np.ndarray, sA: np.ndarray, sB: np.ndarray,
-                            a: Optional[np.float] = 1.0, b: Optional[np.float] = 1.0, sAB: Optional[np.float] = 0.0) -> \
+                            a: Optional[float] = 1.0, b: Optional[float] = 1.0, sAB: Optional[float] = 0.0) -> \
         Tuple[np.ndarray, np.ndarray]:
     r"""This function propagates uncertainty given two variables A, B and their
     associated uncertainty.
@@ -710,10 +710,16 @@ def absmod_uncertainties_perturb(what: Optional[list] = [], mode: Optional[str] 
         uncer = AMU_copy[param[i]].uncer
         if mode == 'max':
             # new_value[param_index] = new_value[param_index] + uncer[param_index]
-            AMU_copy[param[i]].value[param_index] = new_value[param_index] + uncer[param_index]
+            if isinstance(new_value, float) or isinstance(uncer, float):
+                AMU_copy[param[i]].value = new_value + uncer
+            else:
+                AMU_copy[param[i]].value[param_index] = new_value[param_index] + uncer[param_index]
         elif mode == 'min':
             # new_value[param_index] = new_value[param_index] - uncer[param_index]
-            AMU_copy[param[i]].value[param_index] = new_value[param_index] - uncer[param_index]
+            if isinstance(new_value, float) or isinstance(uncer, float):
+                AMU_copy[param[i]].value = new_value - uncer
+            else:
+                AMU_copy[param[i]].value[param_index] = new_value[param_index] - uncer[param_index]
         elif mode == 'non':
             pass
         elif mode == 'ran':
