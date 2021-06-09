@@ -198,10 +198,9 @@ class Test(TestCase):
         gkg = ppmv2gkg(md[:, atmp.H2O], atmp.H2O)
         rh = mr2rh(p, t, gkg)[0] / 100
 
-        ang = np.array([90.])
         frq = np.arange(20, 201, 1)
 
-        rte = BTCloudRTE(z, p, t, rh, frq, ang)
+        rte = BTCloudRTE(z, p, t, rh, frq)
         rte.init_absmdl('rose20')
         H2OAbsModel.model = 'rose21sd'
         H2OAbsModel.h2oll = import_lineshape('h2oll_{}'.format(H2OAbsModel.model))

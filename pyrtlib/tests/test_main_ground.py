@@ -4,7 +4,7 @@ from unittest import TestCase
 
 import numpy as np
 import pandas as pd
-from numpy.testing import assert_allclose
+from numpy.testing import assert_allclose, assert_equal
 from pyrtlib.atmp import AtmosphericProfiles as atmp
 from pyrtlib.main import BTCloudRTE
 from pyrtlib.absmodel import H2OAbsModel
@@ -44,16 +44,15 @@ class Test(TestCase):
         gkg = ppmv2gkg(md[:, atmp.H2O], atmp.H2O)
         rh = mr2rh(p, t, gkg)[0] / 100
 
-        ang = np.array([90.])
         frq = np.arange(20, 201, 1)
 
-        rte = BTCloudRTE(z, p, t, rh, frq, ang)
+        rte = BTCloudRTE(z, p, t, rh, frq)
         rte.satellite = False
         rte.init_absmdl('rose03')
         df = rte.execute()
 
         df_expected = pd.read_csv(os.path.join(THIS_DIR, "data", "tb_tot_ground_ros03_19sd_21sdera5.csv"))
-        assert_allclose(df.tbtotal, df_expected.ros03, atol=0)
+        assert_allclose(df.tbtotal.values, df_expected.ros03)
 
     def test_pyrtlib_ground_rose21sd_ERA5(self):
         lonlat = (15.724447, 40.601019)
