@@ -110,7 +110,7 @@ def constants(string: str) -> Tuple[float, str]:
         units = '[J kg-1 K-1]'
         out = np.copy(Rv)
     elif string == 'Tcosmicbkg':
-        # Tcos = 2.736; # +/- 0.017 [K] Cosmic Background Temperature, 
+        # Tcos = 2.736; # +/- 0.017 [K] Cosmic Background Temperature,
         # from Janssen, Atmospheric Remote Sensing by Microwave Radiometry, pag.12
         Tcos = 2.728
         units = '[K]'
@@ -120,7 +120,9 @@ def constants(string: str) -> Tuple[float, str]:
         units = '[J mol-1 K-1]'
         out = np.copy(Rgas)
     else:
-        raise ValueError('No constant avalaible with this name: {} . Sorry...'.format(string))
+        raise ValueError(
+            'No constant avalaible with this name: {} . Sorry...'.format(
+                string))
 
     return out, units
 
@@ -206,7 +208,10 @@ def ppmv2gkg(ppmv: np.ndarray, gasid: int) -> np.ndarray:
     return gkg
 
 
-def mr2rh(p: np.ndarray, t: np.ndarray, w: np.ndarray, Tconvert: np.ndarray = None) -> np.ndarray:
+def mr2rh(p: np.ndarray,
+          t: np.ndarray,
+          w: np.ndarray,
+          Tconvert: np.ndarray = None) -> np.ndarray:
     """Determine relative humidity (#) given
     reference pressure (mbar), temperature (t,K), and
     water vapor mass mixing ratio (w,g/kg)
@@ -322,7 +327,9 @@ def e2mr(p: np.ndarray, e: np.ndarray) -> np.ndarray:
     return mr
 
 
-def satmix(p: np.ndarray, T: np.ndarray, Tconvert: Optional[np.ndarray] = None) -> np.ndarray:
+def satmix(p: np.ndarray,
+           T: np.ndarray,
+           Tconvert: Optional[np.ndarray] = None) -> np.ndarray:
     """Compute saturation mixing ratio [g/kg] given reference pressure, 
     p [mbar] and temperature, T [K].  If Tconvert input, the calculation uses 
     the saturation vapor pressure over ice (opposed to over water) 
@@ -455,7 +462,8 @@ def esice_goffgratch(T: np.ndarray) -> np.ndarray:
     c2 = 3.56654
     c3 = 0.876793
     ratio = 273.15 / T
-    tmp = (np.dot(-c1, (ratio - 1.0))) - (np.dot(c2, np.log10(ratio))) + (np.dot(
+    tmp = (np.dot(-c1,
+                  (ratio - 1.0))) - (np.dot(c2, np.log10(ratio))) + (np.dot(
         c3, (1.0 - (1.0 / ratio)))) + np.log10(ewi)
 
     svp = 10.0 ** tmp
@@ -526,14 +534,16 @@ def dilec12(f: np.ndarray, tk: np.ndarray) -> np.ndarray:
     # P.W. Rosenkranz, IEEE Trans. Geosci. & Remote Sens. v.53(3) pp.1387-93 (2015).
     delta = 4.008724 * np.exp(-tc / 103.05)
     hdelta = delta / 2.0
-    f1 = 10.46012 + (0.1454962 * tc) + (0.063267156 * tc ** 2) + (0.00093786645 * tc ** 3)
+    f1 = 10.46012 + (0.1454962 * tc) + (0.063267156 * tc ** 2) + (0.00093786645 *
+                                                                  tc ** 3)
     # z1 = (-.75,1.) * f1;
     # z2 = (-4500.,2000.)
     z1 = np.complex(-0.75, 1.0) * f1
     z2 = np.complex(-4500.0, 2000.0)
     cnorm = np.log(z2 / z1)
     chip = (hdelta * np.log((z - z2) / (z - z1))) / cnorm
-    chij = (hdelta * np.log((z - np.conj(z2)) / (z - np.conj(z1)))) / np.conj(cnorm)
+    chij = (hdelta * np.log(
+        (z - np.conj(z2)) / (z - np.conj(z1)))) / np.conj(cnorm)
     dchi = chip + chij - delta
     kappa = kappa + dchi
 
@@ -564,18 +574,27 @@ def dcerror(x: np.ndarray, y: np.ndarray) -> np.ndarray:
     # DOUBLE PRECISION X,Y,a(0:6),b(0:6)
     # DOUBLE COMPLEX ASUM,BSUM,ZH,w
 
-    a = np.asarray([122.607931777104326, 214.382388694706425, 181.928533092181549, 93.155580458138441,
-                    30.180142196210589, 5.912626209773153, 0.564189583562615])
+    a = np.asarray([
+        122.607931777104326, 214.382388694706425, 181.928533092181549,
+        93.155580458138441, 30.180142196210589, 5.912626209773153,
+        0.564189583562615
+    ])
 
-    b = np.asarray([122.607931773875350, 352.730625110963558, 457.334478783897737, 348.703917719495792,
-                    170.354001821091472, 53.992906912940207, 10.479857114260399])
+    b = np.asarray([
+        122.607931773875350, 352.730625110963558, 457.334478783897737,
+        348.703917719495792, 170.354001821091472, 53.992906912940207,
+        10.479857114260399
+    ])
 
     # compute w in quadrants 1 or 2
     # from eqs.(13), w(z) = [w(-z*)]*
     # expansion in terms of ZH results in conjugation of w when X changes sign.
-    zh = complex(np.abs(y), - x)
-    asum = (((((a[6] * zh + a[5]) * zh + a[4]) * zh + a[3]) * zh + a[2]) * zh + a[1]) * zh + a[0]
-    bsum = ((((((zh + b[6]) * zh + b[5]) * zh + b[4]) * zh + b[3]) * zh + b[2]) * zh + b[1]) * zh + b[0]
+    zh = complex(np.abs(y), -x)
+    asum = (((((a[6] * zh + a[5]) * zh + a[4]) * zh + a[3]) * zh + a[2]) * zh +
+            a[1]) * zh + a[0]
+    bsum = (((((
+                       (zh + b[6]) * zh + b[5]) * zh + b[4]) * zh + b[3]) * zh + b[2]) * zh +
+            b[1]) * zh + b[0]
     w = asum / bsum
     if y >= 0:
         dcerror = w
@@ -629,10 +648,14 @@ def height_to_pressure(height: float) -> float:
     Md = 28.96546e-3
     Rd = R / Md
 
-    return p0 * np.exp((g / (Rd * gamma)) * np.log(1 - ((height * gamma) / t0)))
+    return p0 * np.exp(
+        (g / (Rd * gamma)) * np.log(1 - ((height * gamma) / t0)))
 
 
-def dewpoint2rh(td: float, t: float, ice: Optional[bool] = False, method: Optional[str] = 'arm') -> float:
+def dewpoint2rh(td: float,
+                t: float,
+                ice: Optional[bool] = False,
+                method: Optional[str] = 'arm') -> float:
     r"""Calculate relative humidity from temperature and dewpoint.
     Value is calculated using the August-Roche-Magnus approximation. [AUGUST]_ [MAGNUS]_.
 
@@ -719,7 +742,9 @@ def kgkg_to_kgm3(q: np.ndarray, p: np.ndarray, t: np.ndarray) -> np.ndarray:
 
     return kgm3
 
-def ppmv_to_moleculesm3(mr: np.ndarray, p: np.ndarray, t: np.ndarray) -> np.ndarray:
+
+def ppmv_to_moleculesm3(mr: np.ndarray, p: np.ndarray,
+                        t: np.ndarray) -> np.ndarray:
     """For any gas, this function converts mixing ratio  (in ppmv) to number density (molecules/m3).
 
     Args:
@@ -732,8 +757,36 @@ def ppmv_to_moleculesm3(mr: np.ndarray, p: np.ndarray, t: np.ndarray) -> np.ndar
     """
     av = constants('avogadro')[0]
     rg = constants('R')[0]
-    n_air = (av * p) / (rg * t) # (molecules/m3)
+    n_air = (av * p) / (rg * t)  # (molecules/m3)
     nr_molm3 = n_air * mr * 1e-6
-    
+
     return nr_molm3
-    
+
+
+def get_frequencies(instr: Optional[str] = 'hat'):
+    """[summary]
+
+    Args:
+        instr (str, optional): [description]. Defaults to 'hat'.
+
+    Returns:
+        [type]: [description]
+    """
+    frequencies = {
+        'hat': [
+            22.2400, 23.0400, 23.8400, 25.4400, 26.2400, 27.8400, 31.4000,
+            51.2600, 52.2800, 53.8600, 54.9400, 56.6600, 57.3000, 58.0000
+        ],
+        'mp3': [
+            22.234, 22.500, 23.034, 23.834, 25.000, 26.234, 28.000, 30.000,
+            51.248, 51.760, 52.280, 52.804, 53.336, 53.848, 54.400, 54.940,
+            55.500, 56.020, 56.660, 57.288, 57.964, 58.800
+        ],
+        'tem': [
+            51.25, 51.75, 52.25, 52.85, 53.35, 53.85, 54.40, 54.90, 55.40,
+            56.00, 56.50, 57.00
+        ],
+        'k2w': [23.8400, 31.4000, 72.5000, 82.5000, 90.0000, 150.000]
+    }
+
+    return frequencies.get(instr)

@@ -21,3 +21,5 @@
     Other parameters from HITRAN2016.
     Continuum re-adjusted for new line par. Mar. 20, 2019.
 """
+
+from ..absmod_uncertainty import uncertainty_propagation

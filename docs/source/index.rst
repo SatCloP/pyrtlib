@@ -77,7 +77,7 @@ Name: tbtotal, Length: 181, dtype: float64
    :maxdepth: 3
    :caption: Examples:
    
-   tutorial
+   notebook/index
    auto_examples/index
 
 .. toctree::

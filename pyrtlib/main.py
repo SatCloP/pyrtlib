@@ -146,6 +146,9 @@ class BTCloudRTE(object):
         else:
             raise ValueError("Please enter a valid value or array for emissivity")
 
+    def set_amu(self, amu: Tuple) -> Tuple:
+        self.amu = amu
+
     def init_absmdl(self, absmdl: str):
         """Initialize absorption models.
 

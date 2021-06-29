@@ -876,6 +876,19 @@ class O2AbsModel(AbsModel):
 
     def o2abs_uncertainty(self, pdrykpa: float, vx: float, ekpa: float, frq: float, amu: dict) -> Tuple[
         np.ndarray, np.ndarray]:
+        """[summary]
+
+        Args:
+            pdrykpa (float): [description]
+            vx (float): [description]
+            ekpa (float): [description]
+            frq (float): [description]
+            amu (dict): [description]
+
+        Returns:
+            Tuple[ np.ndarray, np.ndarray]: [description]
+        """
+        
         self.o2ll.w2a = amu['w2a'].value
         self.o2ll.apu = amu['APU'].value
         self.o2ll.w300[0:38] = amu['O2gamma'].value[0:38]

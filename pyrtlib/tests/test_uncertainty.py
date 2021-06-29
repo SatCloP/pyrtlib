@@ -4,7 +4,7 @@ from unittest import TestCase
 import numpy as np
 import pandas as pd
 from numpy.testing import assert_allclose, assert_equal
-from pyrtlib.absmod_uncertainty import absmod_uncertainties_perturb, AMU
+from pyrtlib.absmod_uncertainty import absmod_uncertainties_perturb
 from pyrtlib.atmp import AtmosphericProfiles as atmp
 from pyrtlib.main import BTCloudRTE
 from pyrtlib.utils import ppmv2gkg, mr2rh
