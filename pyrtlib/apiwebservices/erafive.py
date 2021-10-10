@@ -19,6 +19,8 @@ try:
 except ModuleNotFoundError as e:
     warnings.warn("Module CDSAPI must be installed to download ERA5 Reanalysis dataset.")
 import numpy as np
+# from scipy.spatial import cKDTree
+from sklearn.neighbors import BallTree, KDTree
 import pandas as pd
 from netCDF4 import Dataset
 
@@ -46,17 +48,18 @@ class ERA5Reanalysis:
         nc = Dataset(file)
         lats = nc.variables['latitude'][:]
         lons = nc.variables['longitude'][:]
-        idx_lat = ERAFIVE.find_nearest(lats, lonlat[1])
-        idx_lon = ERAFIVE.find_nearest(lons, lonlat[0])
+        # idx_lat = ERAFIVE.find_nearest(lats, lonlat[1])
+        # idx_lon = ERAFIVE.find_nearest(lons, lonlat[0])
+        idx, dist = ERAFIVE.find_nearest(lons, lats, lonlat)
 
         pres = np.asarray(nc.variables['level'][:])
-        temp = np.asarray(nc.variables['t'][:, :, idx_lat, idx_lon])
-        rh = np.asarray(nc.variables['r'][:, :, idx_lat, idx_lon]) / 100 # RH in decimal
-        clwc = np.asarray(nc.variables['clwc'][:, :, idx_lat, idx_lon])
-        ciwc = np.asarray(nc.variables['ciwc'][:, :, idx_lat, idx_lon])
-        crwc = np.asarray(nc.variables['crwc'][:, :, idx_lat, idx_lon])
-        cswc = np.asarray(nc.variables['cswc'][:, :, idx_lat, idx_lon])
-        q = np.asarray(nc.variables['q'][:, :, idx_lat, idx_lon])
+        temp = np.asarray(nc.variables['t'][:, :, idx, idx])
+        rh = np.asarray(nc.variables['r'][:, :, idx, idx]) / 100 # RH in decimal
+        clwc = np.asarray(nc.variables['clwc'][:, :, idx, idx])
+        ciwc = np.asarray(nc.variables['ciwc'][:, :, idx, idx])
+        crwc = np.asarray(nc.variables['crwc'][:, :, idx, idx])
+        cswc = np.asarray(nc.variables['cswc'][:, :, idx, idx])
+        q = np.asarray(nc.variables['q'][:, :, idx, idx])
 
         z = pressure_to_height(pres) / 1000 # Altitude in km
         date = pd.to_datetime(nc.variables['time'][:], origin='1900-01-01 00:00:00.0', unit='h')
@@ -73,9 +76,9 @@ class ERA5Reanalysis:
                            'time': np.repeat(date, len(z))
                            })
 
-        return df
+        return df #, (idx, dist), np.stack((lons, lats))
 
-    def find_nearest(self, array, value):
+    def find_nearest(self, lons, lats, point):
         """Find index of nearest coordinate
 
         Args:
@@ -85,13 +88,25 @@ class ERA5Reanalysis:
         Returns:
             [type]: [description]
         """
-        idx = np.searchsorted(array, value, side="left")
-        if np.amax(array) < value < np.amin(array):
-            warnings.warn('Out of boundingbox: value {} is out of dataset extent'.format(value))
-        if idx > 0 and (idx == len(array) or math.fabs(value - array[idx - 1]) < math.fabs(value - array[idx])):
-            return idx - 1
-        else:
-            return idx
+        # idx = np.searchsorted(array, value, side="left")
+        # if np.amax(array) < value < np.amin(array):
+        #     warnings.warn('Out of boundingbox: value {} is out of dataset extent'.format(value))
+        # if idx > 0 and (idx == len(array) or math.fabs(value - array[idx - 1]) < math.fabs(value - array[idx])):
+        #     return idx - 1
+        # else:
+        #     return idx
+
+        # scipy
+        # combined_x_y_arrays = np.dstack([lats.ravel(), lons.ravel()])[0]
+        # # points = list(point.transpose())
+        #
+        # mytree = cKDTree(combined_x_y_arrays)
+        # dist, indexes = mytree.query(point)
+
+        ball = BallTree(np.radians(np.stack((lats, lons), axis=-1)), metric='haversine')
+        dist, indexes = ball.query(np.radians(np.array(np.flip(point)).reshape(1, 2)), k=1)
+        
+        return indexes[0][0], dist
 
     @staticmethod
     def request_data(path: str, time: datetime, lonlat: tuple, offset: Optional[float] = 0.3) -> str:
