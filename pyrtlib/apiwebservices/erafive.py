@@ -109,13 +109,14 @@ class ERA5Reanalysis:
         return indexes[0][0], dist
 
     @staticmethod
-    def request_data(path: str, time: datetime, lonlat: tuple, offset: Optional[float] = 0.3) -> str:
+    def request_data(path: str, time: datetime, lonlat: tuple, resolution: Optional[float] = 0.25, offset: Optional[float] = 0.4) -> str:
         """Download ERA5Reanalysis data from the Copernicus Climate Change Service.
 
         Args:
             path (str): The output directory
             time (datetime): The date and time of the desired observation.
             lonlat (tuple): The coordinatre in degrees, longitude and latitude
+            resolution (Optional[float], optional): The pixel size of the requested grid data. Defaults to 0.25.
             offset (Optional[float], optional): The offset to apply to coordinates to get the extent. Defaults to 0.3.
 
         Returns:
@@ -145,7 +146,7 @@ class ERA5Reanalysis:
                 'day': time.day,
                 'time': '{}:00'.format(time.hour),
                 'area': extent,
-                'grid': [0.25, 0.25],
+                'grid': [resolution,resolution],
                 'format': 'netcdf',
             },
             nc_file)

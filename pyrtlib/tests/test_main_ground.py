@@ -55,7 +55,7 @@ class Test(TestCase):
         assert_allclose(df.tbtotal.values, df_expected.ros03)
 
     def test_pyrtlib_ground_rose21sd_ERA5(self):
-        lonlat = (15.724447, 40.601019)
+        lonlat = (15.8158, 38.2663)
         nc_file = os.path.join(THIS_DIR, "data", "era5_reanalysis-2019-06-25T12:00:00.nc")
         df_era5 = ERA5Reanalysis.read_data(nc_file, lonlat)
 
