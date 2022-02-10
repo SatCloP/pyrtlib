@@ -47,7 +47,7 @@ for i in range(0, 6):
     df = rte.execute()
     df = df.set_index(frq)
 
-    amu = absmod_uncertainties_perturb(['gamma_a'], 'max', index=2)
+    amu = absmod_uncertainties_perturb(['gamma_a'], 'max', index=1)
 
     rte = BTCloudRTE(z, p, t, rh, frq, ang, amu=amu)
     rte.init_absmdl('uncertainty')
@@ -56,7 +56,7 @@ for i in range(0, 6):
 
     df['delta_max_gamma_a'] = df_gamma.tbtotal - df.tbtotal
 
-    amu = absmod_uncertainties_perturb(['gamma_a'], 'min', index=2)
+    amu = absmod_uncertainties_perturb(['gamma_a'], 'min', index=1)
 
     rte = BTCloudRTE(z, p, t, rh, frq, ang, amu=amu)
     rte.init_absmdl('uncertainty')
