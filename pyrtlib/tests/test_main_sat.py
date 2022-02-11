@@ -1,7 +1,7 @@
 import os
 # from pathlib import Path
 from unittest import TestCase
-
+import pytest
 import numpy as np
 import pandas as pd
 from datetime import datetime
@@ -9,7 +9,7 @@ from numpy.testing import assert_allclose
 from pyrtlib.absmodel import H2OAbsModel, LiqAbsModel, O2AbsModel, O3AbsModel
 from pyrtlib.atmp import AtmosphericProfiles as atmp
 from pyrtlib.main import BTCloudRTE
-from pyrtlib.apiwebservices import WyomingUpperAir, ERA5Reanalysis
+from pyrtlib.apiwebservices import WyomingUpperAir, ERA5Reanalysis, IGRAUpperAir
 from pyrtlib.utils import ppmv2gkg, ppmv_to_moleculesm3, mr2rh, import_lineshape, dewpoint2rh, kgkg_to_kgm3
 
 # TEST_DIR = Path(__file__).parent
@@ -336,6 +336,32 @@ class Test(TestCase):
                     df_w.mixr.values
 
         rh = dewpoint2rh(df_w.dewpoint, df_w.temperature).values
+
+        ang = np.array([90.])
+        frq = np.arange(20, 201, 1)
+
+        rte = BTCloudRTE(z, p, t, rh, frq, ang)
+        rte.emissivity = 0.6
+        rte.init_absmdl('rose20')
+        H2OAbsModel.model = 'rose21sd'
+        H2OAbsModel.h2oll = import_lineshape('h2oll_{}'.format(H2OAbsModel.model))
+        df = rte.execute()
+
+        df_expected = pd.read_csv(
+            os.path.join(THIS_DIR, "data", "tb_tot_rose21sd_RAOB_es.csv"))
+        assert_allclose(df.tbtotal, df_expected.tbtotal, atol=0)
+        
+    @pytest.mark.skip(reason="IGRA2 dataset is not completly clear yet to me")
+    def test_pyrtlib_sat_rose21sd_igra2(self):
+        date = datetime(2018, 1, 1, 12)
+        station = 'ASM00094610'
+        df_igra2, header = IGRAUpperAir.request_data(date, station)
+
+        z, p, t = df_igra2.height.values / 1000, \
+                    df_igra2.pressure.values, \
+                    df_igra2.temperature.values + 273.25
+        
+        rh = dewpoint2rh(df_igra2.dewpoint, df_igra2.temperature).values
 
         ang = np.array([90.])
         frq = np.arange(20, 201, 1)
