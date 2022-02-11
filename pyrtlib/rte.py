@@ -149,7 +149,7 @@ class RTEquation:
     def ray_tracing(z: np.ndarray, refindx: np.ndarray, angle: float, z0: float) -> np.ndarray:
         """Ray-tracing algorithm of Dutton, Thayer, and Westwater, rewritten for
         readability & attempted documentation.  Based on the technique shown in
-        Radio Meteorology by Bean and Dutton (Fig. 3.20 and surrounding text).
+        Radio Meteorology by Bean and Dutton (Fig. 3.20 and surrounding text) [Bean-Dutton]_.
 
         Args:
             z ([type], optional): eight profile (km above observation height, z0). Defaults to None.

@@ -21,5 +21,8 @@ References
 .. [AUGUST] Alduchov, O. A., and R. E. Eskridge, 1996: Improved Magnus' form approximation of saturation vapor pressure. 
         J. Appl. Meteor., 35, 601–609, http://journals.ametsoc.org/doi/abs/10.1175/1520-0450%281996%29035%3C0601%3AIMFAOS%3E2.0.CO%3B2.
 
-.. [MAGNUS] Magnus, G., 1844: Versuche über die Spannkräfte des Wasserdampfs. Ann. Phys. Chem., 61, 225–247, 
+.. [MAGNUS] Magnus, G., 1844: Versuche über die Spannkräfte des Wasserdampfs. Ann. Phys. Chem., 61, 225 – 247, 
         http://onlinelibrary.wiley.com/doi/10.1002/andp.18441370202/abstract.
+
+.. [Bean-Dutton] Bradford R. Bean, E. J. Dutton: Radio Meteorology - Superintendentof Documents, U.S.GovernmentPrint.Office, 1966 - 435 pagine, 
+        https://books.google.it/books?id=Jw9RAAAAMAAJ&printsec=frontcover&hl=it&source=gbs_ge_summary_r&cad=0#v=onepage&q&f=false.

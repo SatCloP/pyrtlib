@@ -149,12 +149,13 @@ Line Shape
 API Web Services
 ================
 Observations dataset web services which may be used in pyrtlib. 
-Available datasets are the Wyoming Upper Air Archive (University of Wyoming) or the 
+Available datasets are the Wyoming Upper Air Archive (University of Wyoming), NCEI’s Integrated Radiosonde Archive version 2 or the 
 ERA5 Reanalysis model data (Copernicus Climate Change Service). See examples to get started to use these services.
 
 .. autosummary::
     :toctree: generated/
 
     pyrtlib.apiwebservices.WyomingUpperAir
+    pyrtlib.apiwebservices.IGRAUpperAir
     pyrtlib.apiwebservices.ERA5Reanalysis
     
