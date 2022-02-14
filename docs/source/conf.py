@@ -20,7 +20,7 @@ from sphinx_gallery.sorting import FileNameSortKey
 # -- Project information -----------------------------------------------------
 
 project = 'pyrtlib'
-copyright = '2021, CNR-IMAA'
+copyright = '2021-2022, CNR-IMAA'
 author = 'Salvatore Larosa'
 
 # The full version, including alpha/beta/rc tags
