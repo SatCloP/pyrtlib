@@ -7,14 +7,14 @@ __author__ = ''
 __date__ = 'March 2021'
 __copyright__ = '(C) 2021, CNR-IMAA'
 
-import datetime
+from datetime import datetime
 from io import BytesIO
 from io import StringIO
 import itertools
 import sys
 import warnings
 from zipfile import ZipFile
-from typing import Union, Optional, Tuple, Dict
+from typing import List, Union, Optional, Tuple, Dict
 
 import numpy as np
 import pandas as pd
@@ -56,7 +56,7 @@ class IGRAUpperAir(HTTPEndPoint):
         super().__init__('https://www1.ncdc.noaa.gov/pub/data/igra/')
 
     @classmethod
-    def request_data(cls, time, site_id, derived=False) -> Tuple[pd.DataFrame, pd.DataFrame]:
+    def request_data(cls, time: datetime, site_id: str, beg2018: Optional[bool] = False, derived: Optional[bool] = False) -> Tuple[pd.DataFrame, pd.DataFrame]:
         """Retreive IGRA version 2 data for one station.
 
         Parameters
@@ -76,14 +76,18 @@ class IGRAUpperAir(HTTPEndPoint):
         igra2 = cls()
 
         # Set parameters for data query
-        if derived:
-            igra2.folder = 'derived/derived-por/'
-            igra2.suffix = igra2.suffix + '-drvd.txt'
+        if beg2018:
+            igra2.folder = 'data/data-y2d/'
+            igra2.suffix = igra2.suffix + '-data-beg2018.txt'
         else:
             igra2.folder = 'data/data-por/'
             igra2.suffix = igra2.suffix + '-data.txt'
+            
+        if derived:
+            igra2.folder = 'derived/derived-por/'
+            igra2.suffix = igra2.suffix + '-drvd.txt'
 
-        if type(time) == datetime.datetime:
+        if type(time) == datetime:
             igra2.begin_date = time
             igra2.end_date = time
         else:
@@ -146,7 +150,7 @@ class IGRAUpperAir(HTTPEndPoint):
 
         return body, header, dates_long, dates
 
-    def _select_date_range(self, lines) -> Tuple:
+    def _select_date_range(self, lines: List) -> Tuple:
         """Identify lines containing headers within the range begin_date to end_date.
 
         Parameters
@@ -166,9 +170,9 @@ class IGRAUpperAir(HTTPEndPoint):
 
                 # All soundings have YMD, most have hour
                 try:
-                    date = datetime.datetime(year, month, day, hour)
+                    date = datetime(year, month, day, hour)
                 except ValueError:
-                    date = datetime.datetime(year, month, day)
+                    date = datetime(year, month, day)
 
                 # Check date
                 if self.begin_date <= date <= self.end_date:
@@ -224,7 +228,7 @@ class IGRAUpperAir(HTTPEndPoint):
             else:
                 return 0
 
-        def _ctime(strformat='MMMSS'):
+        def _ctime(strformat: str = 'MMMSS'):
             """Return a function converting a string from MMMSS or HHMM to seconds."""
             def _ctime_strformat(val):
                 time = val.strip().zfill(5)
@@ -385,7 +389,7 @@ class IGRAUpperAir(HTTPEndPoint):
                            'na_values': na_vals,
                            'index_col': False}}
 
-    def _clean_body_df(self, df):
+    def _clean_body_df(self, df: pd.DataFrame):
         """Format the dataframe, remove empty rows, and add units attribute."""
         if self.suffix == '-drvd.txt':
             df = df.dropna(subset=('temperature', 'reported_relative_humidity',
@@ -437,7 +441,7 @@ class IGRAUpperAir(HTTPEndPoint):
 
         return df
 
-    def _clean_header_df(self, df) -> pd.DataFrame:
+    def _clean_header_df(self, df: pd.DataFrame) -> pd.DataFrame:
         """Format the header dataframe and add units."""
         if self.suffix == '-drvd.txt':
             df.units = {'release_time': 'second',

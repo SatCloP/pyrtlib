@@ -353,15 +353,16 @@ class Test(TestCase):
         
     @pytest.mark.skip(reason="IGRA2 dataset is not completly clear yet to me")
     def test_pyrtlib_sat_rose21sd_igra2(self):
-        date = datetime(2018, 1, 1, 12)
+        date = datetime(2018, 1, 2, 12)
         station = 'ASM00094610'
-        df_igra2, header = IGRAUpperAir.request_data(date, station)
+        df_igra2, header = IGRAUpperAir.request_data(date, station, derived=True)
 
-        z, p, t = df_igra2.height.values / 1000, \
+        z, p, t = df_igra2.calculated_height.values / 1000, \
                     df_igra2.pressure.values, \
-                    df_igra2.temperature.values + 273.25
+                    df_igra2.temperature.values
         
-        rh = dewpoint2rh(df_igra2.dewpoint, df_igra2.temperature).values
+        # rh = dewpoint2rh(df_igra2.dewpoint, df_igra2.temperature).values
+        rh = df_igra2.calculated_relative_humidity.fillna(0).values / 100
 
         ang = np.array([90.])
         frq = np.arange(20, 201, 1)

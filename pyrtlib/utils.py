@@ -703,7 +703,7 @@ def dewpoint2rh(td: float,
 
 
 def kgkg_to_kgm3(q: np.ndarray, p: np.ndarray, t: np.ndarray) -> np.ndarray:
-    r"""Utils function to convert from Kg Kg-1 to kg m-3. 
+    r"""Utils function to convert from Kg Kg-1 to kg m-3. [Jacobson]_
 
     NWP models provide cloud liquid and ice water content in units kq kq-1. To convert
     to g m-3 multiply the result of this function to the value in kg kg-1.
