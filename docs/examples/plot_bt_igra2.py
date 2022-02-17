@@ -1,5 +1,5 @@
 """
-Performing BT calculation from satellite using Wyoming Upper Air Observations
+Performing BT calculation from satellite using IGRA2 Upper Air Observations
 =============================================================================
 """
 
@@ -17,18 +17,20 @@ from datetime import datetime
 from pyrtlib.main import BTCloudRTE
 from pyrtlib.utils import dewpoint2rh, import_lineshape
 from pyrtlib.absmodel import H2OAbsModel
-from pyrtlib.apiwebservices import WyomingUpperAir
+from pyrtlib.apiwebservices import IGRAUpperAir
 
-date = datetime(2021, 4, 22, 12)
-station = 'LIRE'
-df_w = WyomingUpperAir.request_data(date, station)
+date = datetime(2020, 6, 1, 12)
+station = 'SPM00008221'
+df_igra2, header = IGRAUpperAir.request_data(date, station)
 
-z, p, t, gkg = df_w.height.values / 1000, \
-               df_w.pressure.values, \
-               df_w.temperature.values + 273.25, \
-               df_w.mixr.values
+df_igra2 = df_igra2[df_igra2.pressure.notna() & 
+                    df_igra2.temperature.notna() & 
+                    df_igra2.dewpoint.notna() & 
+                    df_igra2.height.notna()]
 
-rh = dewpoint2rh(df_w.dewpoint, df_w.temperature).values
+z, p, t = df_igra2.height.values / 1000, df_igra2.pressure.values, df_igra2.temperature.values + 273.25
+
+rh = dewpoint2rh(df_igra2.dewpoint, df_igra2.temperature).values
 
 mdl = 'rose21sd'
 ang = np.array([90.])
@@ -43,10 +45,10 @@ df = rte.execute()
 df = df.set_index(frq)
 
 fig, ax = plt.subplots(1, 1, figsize=(12, 8))
-plt.suptitle(df_w.title[0], y=0.96)
-plt.title("Wyoming UpperAir Radiosonde Archive", fontsize=10, ha='center')
+plt.suptitle("{}, {}, {} - {}".format(header.site_id.values[0], header.latitude.values[0], header.longitude.values[0], header.date.values[0]), y=0.96)
+plt.title("IGRA2 UpperAir Radiosonde Archive", fontsize=10, ha='center')
 ax.set_xlabel('Frequency [GHz]')
 ax.set_ylabel('${T_B}$ [K]')
-df.tbtotal.plot(ax=ax, linewidth=2, label='{} - {}'.format(df_w.station[0], mdl))
+df.tbtotal.plot(ax=ax, linewidth=2, label='{} - {}'.format(header.site_id.values[0], mdl))
 ax.legend()
 plt.show()

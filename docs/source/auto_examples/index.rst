@@ -159,12 +159,33 @@ This gallery shows examples of pyrtlib functionality.  Community contributions a
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="Performing BT calculation form satellite using Wyoming Upper Air Observations">
+    <div class="sphx-glr-thumbcontainer" tooltip="Performing BT calculation from satellite using IGRA2 Upper Air Observations">
+
+.. only:: html
+
+ .. figure:: /auto_examples/images/thumb/sphx_glr_plot_bt_igra2_thumb.png
+     :alt: Performing BT calculation from satellite using IGRA2 Upper Air Observations
+
+     :ref:`sphx_glr_auto_examples_plot_bt_igra2.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/plot_bt_igra2
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Performing BT calculation from satellite using Wyoming Upper Air Observations">
 
 .. only:: html
 
  .. figure:: /auto_examples/images/thumb/sphx_glr_plot_bt_wyoming_thumb.png
-     :alt: Performing BT calculation form satellite using Wyoming Upper Air Observations
+     :alt: Performing BT calculation from satellite using Wyoming Upper Air Observations
 
      :ref:`sphx_glr_auto_examples_plot_bt_wyoming.py`
 
