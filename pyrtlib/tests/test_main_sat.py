@@ -10,7 +10,7 @@ from pyrtlib.absmodel import H2OAbsModel, LiqAbsModel, O2AbsModel, O3AbsModel
 from pyrtlib.atmp import AtmosphericProfiles as atmp
 from pyrtlib.main import BTCloudRTE
 from pyrtlib.apiwebservices import WyomingUpperAir, ERA5Reanalysis, IGRAUpperAir
-from pyrtlib.utils import ppmv2gkg, ppmv_to_moleculesm3, mr2rh, import_lineshape, dewpoint2rh, kgkg_to_kgm3
+from pyrtlib.utils import ppmv2gkg, ppmv_to_moleculesm3, mr2rh, import_lineshape, dewpoint2rh, kgkg_to_kgm3, pressure_to_height
 
 # TEST_DIR = Path(__file__).parent
 # DATA_DIR = os.path.join(TEST_DIR, 'data')
@@ -349,20 +349,21 @@ class Test(TestCase):
 
         df_expected = pd.read_csv(
             os.path.join(THIS_DIR, "data", "tb_tot_rose21sd_RAOB_es.csv"))
-        assert_allclose(df.tbtotal, df_expected.tbtotal, atol=0)
+        assert_allclose(df.tbtotal, df_expected.tbtotal_wyoming, atol=0)
         
-    @pytest.mark.skip(reason="IGRA2 dataset is not completly clear yet to me")
-    def test_pyrtlib_sat_rose21sd_igra2(self):
-        date = datetime(2018, 1, 2, 12)
-        station = 'ASM00094610'
-        df_igra2, header = IGRAUpperAir.request_data(date, station, derived=True)
+    def test_pyrtlib_sat_rose21sd_igra2_es(self):
+        date = datetime(2020, 6, 1, 12)
+        station = 'SPM00008221'
+        df_igra2, header = IGRAUpperAir.request_data(date, station)
+        
+        df_igra2 = df_igra2[df_igra2.pressure.notna() & 
+                            df_igra2.temperature.notna() & 
+                            df_igra2.dewpoint.notna() & 
+                            df_igra2.height.notna()]
 
-        z, p, t = df_igra2.calculated_height.values / 1000, \
-                    df_igra2.pressure.values, \
-                    df_igra2.temperature.values
+        z, p, t = df_igra2.height.values / 1000, df_igra2.pressure.values, df_igra2.temperature.values + 273.25
         
-        # rh = dewpoint2rh(df_igra2.dewpoint, df_igra2.temperature).values
-        rh = df_igra2.calculated_relative_humidity.fillna(0).values / 100
+        rh = dewpoint2rh(df_igra2.dewpoint, df_igra2.temperature).values
 
         ang = np.array([90.])
         frq = np.arange(20, 201, 1)
@@ -376,7 +377,7 @@ class Test(TestCase):
 
         df_expected = pd.read_csv(
             os.path.join(THIS_DIR, "data", "tb_tot_rose21sd_RAOB_es.csv"))
-        assert_allclose(df.tbtotal, df_expected.tbtotal, atol=0)
+        assert_allclose(df.tbtotal, df_expected.tbtotal_igra2, atol=0)
 
     def test_pyrtlib_sat_rose21sd_ERA5_cloudy(self):
         lonlat = (15.8158, 38.2663)

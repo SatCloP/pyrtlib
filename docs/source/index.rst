@@ -8,8 +8,15 @@
 Welcome to pyrtlib's documentation!
 ====================================================
 
-pyrtlib is a python tool that provides a set of
-functions and classes for simulating ........
+pyrtlib allows to simulate and calculate radiometric parameters and estimting propogation parameters using as input meteorological data.
+Some meteorological dataset are built-in in pyrtlib which can be download and used directly in pyrtlib. It considers atmospheric profiles from both radiosounding observations (RAOB) and model reanalysis (ERA5).
+RAOB profiles come from Wyoming Upper Air Archive (University of Wyoming) and NCEI’s Integrated Radiosonde Archive version 2 by the National Climatic Data Center (NCDC) of the National Oceanic and Atmospheric Administration (NOAA).
+
+pyrtlib also allows to quantify absorption model uncertainty due to uncertainty in the underlying spectroscopic parameters. [Cimini-2018]_
+The approach is applied to a widely used microwave absorption model [Rosenkranz-2017]_, on which pyrtlib is based, and radiative transfer calculations at any frequencies range, 
+which are commonly exploited for atmospheric sounding by microwave radiometer (MWR).  
+
+.. pyrtlib is a python tool that provides a set of calsses and methods for simulating ........
 
 The source code for pyrtlib python package is hosted on `github
 <https://github.com/slarosa/pyrtlib>`_.
@@ -40,11 +47,11 @@ Initialize parameters for main execution:
 
 >>> rte = BTCloudRTE(z, p, t, rh, frq, ang)
 
-Set absorption model
+Set absorption model:
 
 >>> rte.init_absmdl('rose16')
 
-Execute model
+Execute model:
 
 >>> df = rte.execute()
 >>> df.tbtotal
@@ -61,6 +68,53 @@ Execute model
 180    277.936645
 Name: tbtotal, Length: 181, dtype: float64
 
+Preview of the output dataframe (see :py:meth:`pyrtlib.main.BTCloudRTE.execute` for more info):
+
+.. list-table::
+   :widths: 25 25 25 25 25 25 25 25
+   :header-rows: 1
+
+   * - tbtotal
+     - tbatm
+     - tmr
+     - tmrcld
+     - tauwet
+     - taudry
+     - tauliq
+     - tauice
+   * - 297.391838 
+     - 0.0 
+     - 281.191287
+     - 0.0
+     - 0.120341 
+     - 0.012855
+     - 0.0
+     - 0.0
+   * - 296.186240    
+     - 0.0      
+     - 280.517137    
+     - 0.0       
+     - 0.188802    
+     - 0.013524    
+     - 0.0       
+     - 0.0
+   * - ...
+     - ...
+     - ...
+     - ...
+     - ...
+     - ...
+     - ...
+     - ...
+   * - 277.936645    
+     - 0.0      
+     - 276.874793    
+     - 0.0       
+     - 3.041382    
+     - 0.026476    
+     - 0.0      
+     -  0.0 
+  
 .. toctree::
    :maxdepth: 3
    :caption: Installation:
