@@ -378,6 +378,34 @@ class Test(TestCase):
         df_expected = pd.read_csv(
             os.path.join(THIS_DIR, "data", "tb_tot_rose21sd_RAOB_es.csv"))
         assert_allclose(df.tbtotal, df_expected.tbtotal_igra2, atol=0)
+        
+    def test_pyrtlib_sat_rose21sd_igra2_beg2018_es(self):
+        date = datetime(2018, 10, 2, 0)
+        station = 'ASM00094610'
+        df_igra2, header = IGRAUpperAir.request_data(date, station, beg2018=True)
+        
+        df_igra2 = df_igra2[df_igra2.pressure.notna() & 
+                            df_igra2.temperature.notna() & 
+                            df_igra2.dewpoint.notna() & 
+                            df_igra2.height.notna()]
+
+        z, p, t = df_igra2.height.values / 1000, df_igra2.pressure.values, df_igra2.temperature.values + 273.25
+        
+        rh = dewpoint2rh(df_igra2.dewpoint, df_igra2.temperature).values
+
+        ang = np.array([90.])
+        frq = np.arange(20, 201, 1)
+
+        rte = BTCloudRTE(z, p, t, rh, frq, ang)
+        rte.emissivity = 0.6
+        rte.init_absmdl('rose20')
+        H2OAbsModel.model = 'rose21sd'
+        H2OAbsModel.h2oll = import_lineshape('h2oll_{}'.format(H2OAbsModel.model))
+        df = rte.execute()
+
+        df_expected = pd.read_csv(
+            os.path.join(THIS_DIR, "data", "tb_tot_rose21sd_RAOB_es.csv"))
+        assert_allclose(df.tbtotal, df_expected.tbtotal_igra2_beg2018, atol=0)
 
     def test_pyrtlib_sat_rose21sd_ERA5_cloudy(self):
         lonlat = (15.8158, 38.2663)
