@@ -379,10 +379,10 @@ class Test(TestCase):
             os.path.join(THIS_DIR, "data", "tb_tot_rose21sd_RAOB_es.csv"))
         assert_allclose(df.tbtotal, df_expected.tbtotal_igra2, atol=0)
         
-    def test_pyrtlib_sat_rose21sd_igra2_beg2018_es(self):
-        date = datetime(2018, 10, 2, 0)
+    def test_pyrtlib_sat_rose21sd_igra2_beg2021_es(self):
+        date = datetime(2021, 10, 2, 0)
         station = 'ASM00094610'
-        df_igra2, header = IGRAUpperAir.request_data(date, station, beg2018=True)
+        df_igra2, header = IGRAUpperAir.request_data(date, station, beg2021=True)
         
         df_igra2 = df_igra2[df_igra2.pressure.notna() & 
                             df_igra2.temperature.notna() & 
@@ -405,7 +405,7 @@ class Test(TestCase):
 
         df_expected = pd.read_csv(
             os.path.join(THIS_DIR, "data", "tb_tot_rose21sd_RAOB_es.csv"))
-        assert_allclose(df.tbtotal, df_expected.tbtotal_igra2_beg2018, atol=0)
+        assert_allclose(df.tbtotal, df_expected.tbtotal_igra2_beg2021, atol=0)
 
     def test_pyrtlib_sat_rose21sd_ERA5_cloudy(self):
         lonlat = (15.8158, 38.2663)

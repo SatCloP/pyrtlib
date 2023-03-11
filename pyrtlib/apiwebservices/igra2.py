@@ -56,7 +56,7 @@ class IGRAUpperAir(HTTPEndPoint):
         super().__init__('https://www1.ncdc.noaa.gov/pub/data/igra/')
 
     @classmethod
-    def request_data(cls, time: datetime, site_id: str, beg2018: Optional[bool] = False, derived: Optional[bool] = False) -> Tuple[pd.DataFrame, pd.DataFrame]:
+    def request_data(cls, time: datetime, site_id: str, beg2021: Optional[bool] = False, derived: Optional[bool] = False) -> Tuple[pd.DataFrame, pd.DataFrame]:
         """Retreive IGRA version 2 data for one station.
 
         Parameters
@@ -76,9 +76,9 @@ class IGRAUpperAir(HTTPEndPoint):
         igra2 = cls()
 
         # Set parameters for data query
-        if beg2018:
+        if beg2021:
             igra2.folder = 'data/data-y2d/'
-            igra2.suffix = igra2.suffix + '-data-beg2018.txt'
+            igra2.suffix = igra2.suffix + '-data-beg2021.txt'
         else:
             igra2.folder = 'data/data-por/'
             igra2.suffix = igra2.suffix + '-data.txt'
