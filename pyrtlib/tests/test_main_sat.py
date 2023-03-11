@@ -10,7 +10,7 @@ from pyrtlib.absmodel import H2OAbsModel, LiqAbsModel, O2AbsModel, O3AbsModel
 from pyrtlib.atmp import AtmosphericProfiles as atmp
 from pyrtlib.main import BTCloudRTE
 from pyrtlib.apiwebservices import WyomingUpperAir, ERA5Reanalysis, IGRAUpperAir
-from pyrtlib.utils import ppmv2gkg, ppmv_to_moleculesm3, mr2rh, import_lineshape, dewpoint2rh, kgkg_to_kgm3, pressure_to_height
+from pyrtlib.utils import ppmv2gkg, ppmv_to_moleculesm3, mr2rh, import_lineshape, dewpoint2rh, kgkg_to_kgm3, pressure_to_height, to_kelvin
 
 # TEST_DIR = Path(__file__).parent
 # DATA_DIR = os.path.join(TEST_DIR, 'data')
@@ -332,7 +332,7 @@ class Test(TestCase):
 
         z, p, t, gkg = df_w.height.values / 1000, \
                     df_w.pressure.values, \
-                    df_w.temperature.values + 273.25, \
+                    to_kelvin(df_w.temperature.values), \
                     df_w.mixr.values
 
         rh = dewpoint2rh(df_w.dewpoint, df_w.temperature).values
@@ -361,7 +361,7 @@ class Test(TestCase):
                             df_igra2.dewpoint.notna() & 
                             df_igra2.height.notna()]
 
-        z, p, t = df_igra2.height.values / 1000, df_igra2.pressure.values, df_igra2.temperature.values + 273.25
+        z, p, t = df_igra2.height.values / 1000, df_igra2.pressure.values, to_kelvin(df_igra2.temperature.values)
         
         rh = dewpoint2rh(df_igra2.dewpoint, df_igra2.temperature).values
 
@@ -389,7 +389,7 @@ class Test(TestCase):
                             df_igra2.dewpoint.notna() & 
                             df_igra2.height.notna()]
 
-        z, p, t = df_igra2.height.values / 1000, df_igra2.pressure.values, df_igra2.temperature.values + 273.25
+        z, p, t = df_igra2.height.values / 1000, df_igra2.pressure.values, to_kelvin(df_igra2.temperature.values)
         
         rh = dewpoint2rh(df_igra2.dewpoint, df_igra2.temperature).values
 

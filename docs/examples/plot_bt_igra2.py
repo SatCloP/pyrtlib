@@ -15,7 +15,7 @@ import numpy as np
 from datetime import datetime
 
 from pyrtlib.main import BTCloudRTE
-from pyrtlib.utils import dewpoint2rh, import_lineshape
+from pyrtlib.utils import dewpoint2rh, import_lineshape, to_kelvin
 from pyrtlib.absmodel import H2OAbsModel
 from pyrtlib.apiwebservices import IGRAUpperAir
 
@@ -28,7 +28,7 @@ df_igra2 = df_igra2[df_igra2.pressure.notna() &
                     df_igra2.dewpoint.notna() & 
                     df_igra2.height.notna()]
 
-z, p, t = df_igra2.height.values / 1000, df_igra2.pressure.values, df_igra2.temperature.values + 273.25
+z, p, t = df_igra2.height.values / 1000, df_igra2.pressure.values, to_kelvin(df_igra2.temperature.values)
 
 rh = dewpoint2rh(df_igra2.dewpoint, df_igra2.temperature).values
 

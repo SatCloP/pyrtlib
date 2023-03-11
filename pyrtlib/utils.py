@@ -790,3 +790,29 @@ def get_frequencies(instr: Optional[str] = 'hat'):
     }
 
     return frequencies.get(instr)
+
+def to_kelvin(t:np.ndarray) -> np.ndarray:
+    """Convert T from Celsius to Kelvin
+
+    Args:
+        t (np.ndarray): Temperature (°C)
+
+    Returns:
+        np.ndarray: Temperature (K)
+    """
+    t_k = t + 273.25
+
+    return t_k
+
+def to_celsius(t:np.ndarray) -> np.ndarray:
+    """Convert T from Kelvin to Celsius
+
+    Args:
+        t (np.ndarray): Temperature (K)
+
+    Returns:
+        np.ndarray: Temperature (°C)
+    """
+    t_c = t - 273.25
+
+    return t_c
