@@ -1,7 +1,7 @@
 setuptools
 numpy
 scipy
-sklearn
+scikit-learn
 pandas
 pytest
 pytest-datafiles>=2.0
