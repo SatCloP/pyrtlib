@@ -3,7 +3,7 @@ from unittest import TestCase
 import numpy as np
 from numpy.testing import assert_allclose, assert_almost_equal
 from pyrtlib.atmp import AtmosphericProfiles as atmp
-from pyrtlib.utils import ppmv2gkg, mr2rh, gas_mass, height_to_pressure, pressure_to_height
+from pyrtlib.utils import ppmv2gkg, mr2rh, gas_mass, height_to_pressure, pressure_to_height, to_kelvin, to_celsius
 
 z, p, d, tk, md = atmp.gl_atm(atmp.TROPICAL)
 
@@ -76,3 +76,11 @@ class Test(TestCase):
     def test_height_to_pressure(self):
         p = height_to_pressure(5000)
         assert_almost_equal(p, 577.63, decimal=2)
+
+    def test_to_kelvin(self):
+        t = to_kelvin(25)
+        assert_almost_equal(t, 298.25, decimal=2)
+
+    def test_to_celsius(self):
+        t = to_celsius(298.25)
+        assert_almost_equal(t, 25, decimal=2)
