@@ -33,12 +33,12 @@ This gallery shows examples of pyrtlib functionality.  Community contributions a
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="Performing Brightness Temperature calculation form satellite">
+    <div class="sphx-glr-thumbcontainer" tooltip="Performing Brightness Temperature calculation from satellite">
 
 .. only:: html
 
  .. figure:: /auto_examples/images/thumb/sphx_glr_plot_brightness_temperature_thumb.png
-     :alt: Performing Brightness Temperature calculation form satellite
+     :alt: Performing Brightness Temperature calculation from satellite
 
      :ref:`sphx_glr_auto_examples_plot_brightness_temperature.py`
 
@@ -96,12 +96,12 @@ This gallery shows examples of pyrtlib functionality.  Community contributions a
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="Performing Brightness Temperature calculation form ground with Ozone">
+    <div class="sphx-glr-thumbcontainer" tooltip="Performing Brightness Temperature calculation from ground with Ozone">
 
 .. only:: html
 
  .. figure:: /auto_examples/images/thumb/sphx_glr_plot_brightness_temperature_wO3_thumb.png
-     :alt: Performing Brightness Temperature calculation form ground with Ozone
+     :alt: Performing Brightness Temperature calculation from ground with Ozone
 
      :ref:`sphx_glr_auto_examples_plot_brightness_temperature_wO3.py`
 
@@ -117,12 +117,12 @@ This gallery shows examples of pyrtlib functionality.  Community contributions a
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="Performing BT calculation form satellite using ERA5 Reanalysis Observations">
+    <div class="sphx-glr-thumbcontainer" tooltip="Performing BT calculation from satellite using ERA5 Reanalysis Observations">
 
 .. only:: html
 
  .. figure:: /auto_examples/images/thumb/sphx_glr_plot_bt_era5_thumb.png
-     :alt: Performing BT calculation form satellite using ERA5 Reanalysis Observations
+     :alt: Performing BT calculation from satellite using ERA5 Reanalysis Observations
 
      :ref:`sphx_glr_auto_examples_plot_bt_era5.py`
 
@@ -138,12 +138,12 @@ This gallery shows examples of pyrtlib functionality.  Community contributions a
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="Performing BT calculation form satellite using ERA5 Reanalysis Observations in cloudy condition...">
+    <div class="sphx-glr-thumbcontainer" tooltip="Performing BT calculation from satellite using ERA5 Reanalysis Observations in cloudy condition...">
 
 .. only:: html
 
  .. figure:: /auto_examples/images/thumb/sphx_glr_plot_bt_era5_cloudy_prodile_thumb.png
-     :alt: Performing BT calculation form satellite using ERA5 Reanalysis Observations in cloudy condition.
+     :alt: Performing BT calculation from satellite using ERA5 Reanalysis Observations in cloudy condition.
 
      :ref:`sphx_glr_auto_examples_plot_bt_era5_cloudy_prodile.py`
 

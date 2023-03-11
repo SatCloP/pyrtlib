@@ -1,5 +1,5 @@
 """
-Performing BT calculation form satellite using ERA5 Reanalysis Observations in cloudy condition.
+Performing BT calculation from satellite using ERA5 Reanalysis Observations in cloudy condition.
 ================================================================================================
 """
 

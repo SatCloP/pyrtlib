@@ -236,7 +236,7 @@ class RTEquation:
             return np.asarray(ds)
 
     @staticmethod
-    def exponential_integration(zeroflg: bool, x: np.ndarray, ds: np.ndarray, ibeg: np.int, iend: np.int, factor: float):
+    def exponential_integration(zeroflg: bool, x: np.ndarray, ds: np.ndarray, ibeg: int, iend: int, factor: float):
         """ EXPonential INTegration: Integrate the profile in array x over the layers defined in
         array ds, saving the integrals over each layer.
 

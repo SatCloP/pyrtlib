@@ -1,5 +1,5 @@
 """
-Performing Brightness Temperature calculation form satellite
+Performing Brightness Temperature calculation from satellite
 ============================================================
 """
 
