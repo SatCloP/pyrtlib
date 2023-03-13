@@ -3,7 +3,8 @@ from unittest import TestCase
 import numpy as np
 from numpy.testing import assert_allclose, assert_almost_equal
 from pyrtlib.atmp import AtmosphericProfiles as atmp
-from pyrtlib.utils import ppmv2gkg, mr2rh, gas_mass, height_to_pressure, pressure_to_height, to_kelvin, to_celsius, get_frequencies
+from pyrtlib.utils import (ppmv2gkg, mr2rh, gas_mass, height_to_pressure, pressure_to_height,
+                           to_kelvin, to_celsius, get_frequencies, eswat_goffgratch, satvap, satmix)
 
 z, p, d, tk, md = atmp.gl_atm(atmp.TROPICAL)
 
@@ -93,3 +94,21 @@ class Test(TestCase):
                                 186.71, 188.21, 189.41, 191.71])
         
         assert_almost_equal(frequencies, get_frequencies('MWI'), decimal=4)
+
+    def test_eswat_goffgratch(self):
+        eswat = eswat_goffgratch(273.25)
+        assert_almost_equal(eswat, 6.147856307200233, decimal=10)
+        eswat = eswat_goffgratch(np.array([273.25, 280.5]))
+        assert_almost_equal(eswat, np.array([ 6.14785631, 10.24931596]), decimal=5)
+
+    def test_satvap(self):
+        sat_vap = satvap(273.25)
+        assert_almost_equal(sat_vap, 6.147856307200233, decimal=10)
+        sat_vap = satvap(np.array([273.25, 280.5]))
+        assert_almost_equal(sat_vap, np.array([ 6.14785631, 10.24931596]), decimal=5)
+
+    def test_satmix(self):
+        sat_mix = satmix(1000, 273.25)
+        assert_almost_equal(sat_mix, 3.8474392877771995, decimal=10)
+        sat_mix = satmix(np.array([1000, 950, 850]), np.array([273.25, 260.34, 258.36]))
+        assert_almost_equal(sat_mix, np.array([3.84743929, 1.4993625 , 1.42541609]), decimal=5)
