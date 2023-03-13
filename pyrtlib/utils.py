@@ -134,7 +134,7 @@ def gas_mass(gasid: int) -> float:
 
     Args:
         gasid (int): The gas ID defined in :py:class:`~pyrtlib.atmp.AtmosphericProfiles`
-    
+
     Returns:
         float: The mass of the HITRAN gas ID
 
@@ -143,39 +143,72 @@ def gas_mass(gasid: int) -> float:
 
     """
 
-    if gasid == 0: amus = np.dot(2, 1) + 16
-    if gasid == 1: amus = 12 + np.dot(2, 16)
-    if gasid == 2: amus = np.dot(3, 16)
-    if gasid == 3: amus = np.dot(2, 14) + 16
-    if gasid == 4: amus = 12 + 16
-    if gasid == 5: amus = 12 + np.dot(4, 1)
-    if gasid == 6: amus = np.dot(2, 16)
-    if gasid == 7: amus = 14 + 16
-    if gasid == 8: amus = 32 + np.dot(2, 16)
-    if gasid == 9: amus = 14 + np.dot(2, 16)
-    if gasid == 10: amus = 14 + np.dot(3, 1)
-    if gasid == 11: amus = 1 + 14 + np.dot(3, 16)
-    if gasid == 12: amus = 16 + 1
-    if gasid == 13: amus = 1 + 19
-    if gasid == 14: amus = 1 + 35
-    if gasid == 15: amus = 1 + 80
-    if gasid == 16: amus = 1 + 127
-    if gasid == 17: amus = 35 + 16
-    if gasid == 18: amus = 16 + 12 + 32
-    if gasid == 19: amus = np.dot(2, 1) + 12 + 16
-    if gasid == 20: amus = 1 + 16 + 35
-    if gasid == 21: amus = np.dot(2, 14)
-    if gasid == 22: amus = 1 + 12 + 14
-    if gasid == 23: amus = 12 + np.dot(3, 1) + 35
-    if gasid == 24: amus = np.dot(2, 1) + np.dot(2, 16)
-    if gasid == 25: amus = np.dot(2, 12) + np.dot(2, 1)
-    if gasid == 26: amus = np.dot(2, 12) + np.dot(6, 1)
-    if gasid == 27: amus = 31 + np.dot(3, 1)
-    if gasid == 28: amus = 12 + 16 + np.dot(2, 19)
-    if gasid == 29: amus = 32 + np.dot(6, 19)
-    if gasid == 30: amus = np.dot(2, 1) + 32
-    if gasid == 31: amus = 1 + 12 + np.dot(2, 16) + 1
-    if gasid == 99: amus = 28.9402753669
+    if gasid == 0:
+        amus = np.dot(2, 1) + 16
+    if gasid == 1:
+        amus = 12 + np.dot(2, 16)
+    if gasid == 2:
+        amus = np.dot(3, 16)
+    if gasid == 3:
+        amus = np.dot(2, 14) + 16
+    if gasid == 4:
+        amus = 12 + 16
+    if gasid == 5:
+        amus = 12 + np.dot(4, 1)
+    if gasid == 6:
+        amus = np.dot(2, 16)
+    if gasid == 7:
+        amus = 14 + 16
+    if gasid == 8:
+        amus = 32 + np.dot(2, 16)
+    if gasid == 9:
+        amus = 14 + np.dot(2, 16)
+    if gasid == 10:
+        amus = 14 + np.dot(3, 1)
+    if gasid == 11:
+        amus = 1 + 14 + np.dot(3, 16)
+    if gasid == 12:
+        amus = 16 + 1
+    if gasid == 13:
+        amus = 1 + 19
+    if gasid == 14:
+        amus = 1 + 35
+    if gasid == 15:
+        amus = 1 + 80
+    if gasid == 16:
+        amus = 1 + 127
+    if gasid == 17:
+        amus = 35 + 16
+    if gasid == 18:
+        amus = 16 + 12 + 32
+    if gasid == 19:
+        amus = np.dot(2, 1) + 12 + 16
+    if gasid == 20:
+        amus = 1 + 16 + 35
+    if gasid == 21:
+        amus = np.dot(2, 14)
+    if gasid == 22:
+        amus = 1 + 12 + 14
+    if gasid == 23:
+        amus = 12 + np.dot(3, 1) + 35
+    if gasid == 24:
+        amus = np.dot(2, 1) + np.dot(2, 16)
+    if gasid == 25:
+        amus = np.dot(2, 12) + np.dot(2, 1)
+    if gasid == 26:
+        amus = np.dot(2, 12) + np.dot(6, 1)
+    if gasid == 27:
+        amus = 31 + np.dot(3, 1)
+    if gasid == 28:
+        amus = 12 + 16 + np.dot(2, 19)
+    if gasid == 29:
+        amus = 32 + np.dot(6, 19)
+    if gasid == 30:
+        amus = np.dot(2, 1) + 32
+    if gasid == 31:
+        amus = 1 + 12 + np.dot(2, 16) + 1
+    if gasid == 99:
+        amus = 28.9402753669
 
     mass_proton = 1.6726485e-27
     mass_molecule = np.dot(mass_proton, amus)
@@ -189,12 +222,12 @@ def ppmv2gkg(ppmv: np.ndarray, gasid: int) -> np.ndarray:
     Args:
         ppmv (np.ndarray): mass mixing ratio (g/kg).
         gasid (int): HITRAN gas id.
-    
+
     Returns:
         np.ndarray: Mass mixing ratio in g/kg
 
     See also:
-        
+
         :py:meth:`gas_mass` 
     """
 
@@ -215,15 +248,15 @@ def mr2rh(p: np.ndarray,
     """Determine relative humidity (#) given
     reference pressure (mbar), temperature (t,K), and
     water vapor mass mixing ratio (w,g/kg)
-    
+
     Two RHs are returned: rh1 is with RH defined as the ratio 
     of water vapor partial pressure to saturation vapor pressure and
     rh2 is with RH defined as the ratio of water vapor mixing ratio to 
     saturation mixing ratio.
-    
+
     if input, Tconvert is used as the temperature point to switch
     from using saturation vapor pressure over water to over ice.
-    
+
     DCT 3/5/00
 
 
@@ -259,7 +292,7 @@ def mr2rho(mr: np.ndarray, tk: np.ndarray, p: np.ndarray) -> np.ndarray:
     water vapor mass mixing ratio (g/kg)
 
     Equations were provided by Holger Linne' from Max Planck Institute.
-    
+
     Nico 2002/05/09 (Looking at rho2mr.email.m from DCT)
     Nico 2018/06/20
 
@@ -309,13 +342,13 @@ def mr2e(p: np.ndarray, mr: np.ndarray) -> np.ndarray:
 def e2mr(p: np.ndarray, e: np.ndarray) -> np.ndarray:
     """Compute H2O mass mixing ratio (mr,g/kg) given
     pressure (p,mbar) and H2O partial pressure (e,mbar)
-        
+
     DCT 3/6/00
 
     Args:
         p ([type], optional): [description]. Defaults to None.
         e ([type], optional): [description]. Defaults to None.
-    
+
     Returns:
         [type]: [description]
     """
@@ -334,7 +367,7 @@ def satmix(p: np.ndarray,
     p [mbar] and temperature, T [K].  If Tconvert input, the calculation uses 
     the saturation vapor pressure over ice (opposed to over water) 
     for temperatures less than Tconvert [K].
-        
+
     DCT, updated 3/5/00
 
     Args:
@@ -363,7 +396,7 @@ def satvap(T, Tconvert: Optional[np.ndarray] = None) -> np.ndarray:
     If Tconvert is input, the calculation uses the saturation vapor 
     pressure over ice (opposed to over water) for temperatures less than 
     Tconvert [K].
-        
+
     DCT, updated 3/5/00
 
     Args:
@@ -426,7 +459,7 @@ def eswat_goffgratch(T: np.ndarray) -> np.ndarray:
           (c2 * np.log10(t_ratio)) - \
           (c3 * (10.0 ** (c4 * (1.0 - rt_ratio)) - 1.0)) + \
           (c5 * (10.0 ** (-1.0 * c6 * (t_ratio - 1.0)) - 1.0)) + \
-          np.log10(sl_pressure)
+        np.log10(sl_pressure)
 
     svp = 10.0 ** tmp
 
@@ -464,7 +497,7 @@ def esice_goffgratch(T: np.ndarray) -> np.ndarray:
     ratio = 273.15 / T
     tmp = (np.dot(-c1,
                   (ratio - 1.0))) - (np.dot(c2, np.log10(ratio))) + (np.dot(
-        c3, (1.0 - (1.0 / ratio)))) + np.log10(ewi)
+                      c3, (1.0 - (1.0 / ratio)))) + np.log10(ewi)
 
     svp = 10.0 ** tmp
 
@@ -524,7 +557,8 @@ def dilec12(f: np.ndarray, tk: np.ndarray) -> np.ndarray:
     theta = 300.0 / tk
     # static dielectric constant model from
     # Patek et al. (J.Phys.Chem.Ref.Data. v.38(1), 21 (2009).
-    kappa = -43.7527 * theta ** 0.05 + 299.504 * theta ** 1.47 - 399.364 * theta ** 2.11 + 221.327 * theta ** 2.31
+    kappa = -43.7527 * theta ** 0.05 + 299.504 * theta ** 1.47 - \
+        399.364 * theta ** 2.11 + 221.327 * theta ** 2.31
     # Debye term from
     # W. Ellison, J. Phys. Chem. Ref. Data, 36, 1-18 (2007).
     delta = 80.69715 * np.exp(-tc / 226.45)
@@ -593,8 +627,8 @@ def dcerror(x: np.ndarray, y: np.ndarray) -> np.ndarray:
     asum = (((((a[6] * zh + a[5]) * zh + a[4]) * zh + a[3]) * zh + a[2]) * zh +
             a[1]) * zh + a[0]
     bsum = (((((
-                       (zh + b[6]) * zh + b[5]) * zh + b[4]) * zh + b[3]) * zh + b[2]) * zh +
-            b[1]) * zh + b[0]
+        (zh + b[6]) * zh + b[5]) * zh + b[4]) * zh + b[3]) * zh + b[2]) * zh +
+        b[1]) * zh + b[0]
     w = asum / bsum
     if y >= 0:
         dcerror = w
@@ -791,7 +825,8 @@ def get_frequencies(instr: Optional[str] = 'hat'):
 
     return frequencies.get(instr)
 
-def to_kelvin(t:np.ndarray) -> np.ndarray:
+
+def to_kelvin(t: np.ndarray) -> np.ndarray:
     """Convert T from Celsius to Kelvin
 
     Args:
@@ -804,7 +839,8 @@ def to_kelvin(t:np.ndarray) -> np.ndarray:
 
     return t_k
 
-def to_celsius(t:np.ndarray) -> np.ndarray:
+
+def to_celsius(t: np.ndarray) -> np.ndarray:
     """Convert T from Kelvin to Celsius
 
     Args:
@@ -816,3 +852,66 @@ def to_celsius(t:np.ndarray) -> np.ndarray:
     t_c = t - 273.25
 
     return t_c
+
+
+def get_frequencies(instrument: str) -> np.ndarray:
+    """Get frequencies from main instrument used
+
+    Args:
+        instrument (str): Instrument from which getting frequencies
+
+    Returns:
+        np.ndarray: Frequencies of the instrument selected
+
+    Example:
+        >>> from pyrtlib.utils import get_frequencies
+        >>> mwi = get_frequencies("MWI")
+        >>> print(mwi)
+    """
+    cf = 183.31
+    cf2 = 243.20
+    cf3 = 325.15
+    cf4 = 448.00
+    cf6 = 664.00
+    cf118 = 118.7503
+    cf165 = 165.5
+    cf53 = 57.290344
+    cf57 = 57.290344
+
+    if instrument == 'SAPHIR':
+        freq = np.array([cf-11, cf-6.8, cf-4.2, cf-2.8, cf-1.1, cf-0.2,
+                        cf+0.2, cf+1.1, cf+2.8, cf+4.2, cf+6.8, cf+11])
+
+    elif instrument == 'AMSU':
+        freq = np.array([89.0, 150.0, cf-7.0, cf-3.0, cf-1.0,
+                        cf+1.0, cf+3.0, cf+7.0])  # AMSU-B
+    elif instrument == 'ATMS':
+        freq = np.array([88.2, 165.5, cf-7.0, cf-4.5, cf-3.0, cf -
+                        1.8, cf-1.0, cf+1.0, cf+1.80, cf+3.0, cf+4.5, cf+7.0])
+    elif instrument == 'MWI':
+        freq = np.array([18.7, 23.8, 31.4, 50.3, 52.61, 53.24, 53.75, 89,
+                        cf118-3.2, cf118-2.1, cf118-1.4, cf118 -
+                         1.2, cf118+1.2, cf118+1.4, cf118+2.1, cf118+3.2,
+                        cf165-0.725, cf165+0.725,
+                        cf-8.4, cf-6.1, cf-4.9, cf-3.4, cf-2.0, cf+2.0, cf+3.4, cf+4.9, cf+6.1, cf+8.4])
+    elif instrument == 'MWS':
+        freq = np.array([23.8, 31.4, 50.3, 52.8,
+                        53.246-0.08, 53.246+0.08, 53.596-0.115, 53.596+0.115, 53.948-0.081, 53.948+0.081,
+                        54.4, 54.94, 55.5, cf57,
+                        cf57-0.217, cf57-0.217,
+                        cf57-0.3222-0.048, cf57-0.3222+0.048, cf57+0.3222-0.048, cf57+0.3222+0.048,
+                        cf57-0.3222-0.022, cf57-0.3222+0.022, cf57+0.3222-0.022, cf57+0.3222+0.022,
+                        cf57-0.3222-0.010, cf57-0.3222+0.010, cf57+0.3222-0.010, cf57+0.3222+0.010,
+                        cf57-0.3222-0.045, cf57-0.3222+0.045, cf57+0.3222-0.045, cf57+0.3222+0.045,
+                        89,
+                        cf165-0.725, cf165+0.725,
+                        cf-7.0, cf-4.5, cf-3.0, cf-1.8, cf-1.0, cf+1.0, cf+1.8, cf+3.0, cf+4.5, cf+7.0,
+                        229])
+    elif instrument == 'ICI':
+        freq = np.array([cf-7.0, cf-3.4, cf-2.0, cf-0.2, cf+0.2, cf+2.0, cf+3.4, cf+7.0,
+                        cf2-2.5, cf2+2.5,
+                        cf3-9.5, cf3-3.5, cf3-1.5, cf3+1.5, cf3+3.5, cf3+9.5,
+                        cf4-7.2, cf4-3.0, cf4-1.4, cf4+1.4, cf4+3.0, cf4+7.2,
+                        cf6-4.2, cf6+4.2])
+
+    return freq
