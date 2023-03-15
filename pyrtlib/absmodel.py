@@ -488,7 +488,7 @@ class H2OAbsModel(AbsModel):
             ncpp = (con / db2np) / factor
 
         if H2OAbsModel.model == 'rose22sd':
-            pvap = constants("R") * rho * t #(rho * t) / 216.68 #TODO: check units for costant
+            pvap = constants("Rwatvap")[0] * rho * t #TODO: check units for costant
             pda = p - pvap
             # den = 3.344e+16 * rho
             # continuum terms

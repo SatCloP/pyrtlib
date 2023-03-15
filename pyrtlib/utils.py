@@ -106,7 +106,7 @@ def constants(string: str) -> Tuple[float, str]:
         units = '[J kg-1 K-1]'
         out = np.copy(Rd)
     elif string == 'Rwatvap':
-        Rv = 461.5
+        Rv = 461.52
         units = '[J kg-1 K-1]'
         out = np.copy(Rv)
     elif string == 'Tcosmicbkg':
