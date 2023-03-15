@@ -8,7 +8,7 @@ from typing import Tuple, Union
 
 import numpy as np
 
-from .utils import dilec12, dcerror
+from .utils import dilec12, dcerror, constants
 
 
 class AbsModel(object):
@@ -427,64 +427,120 @@ class H2OAbsModel(AbsModel):
         f = frq
         # cyh ***********************************************
 
-        if rho.any() <= 0.0:
-            # abh2o = 0.0
-            # npp = 0
-            # ncpp = 0
-            return
+        if H2OAbsModel.model == 'rose21sd':
+            if rho.any() <= 0.0:
+                # abh2o = 0.0
+                # npp = 0
+                # ncpp = 0
+                return
 
-        pvap = (rho * t) / 216.68
-        pda = p - pvap
-        den = 3.344e+16 * rho
-        # continuum terms
-        ti = self.h2oll.reftcon / t
-        con = (self.h2oll.cf * pda * ti ** self.h2oll.xcf + self.h2oll.cs * pvap * ti ** self.h2oll.xcs) * \
-              pvap * f * f
-        # nico 2019/03/18 *********************************************************
-        # add resonances
-        nlines = len(self.h2oll.fl)
-        ti = self.h2oll.reftline / t
-        df = np.zeros((2, 1))
+            pvap = (rho * t) / 216.68
+            pda = p - pvap
+            den = 3.344e+16 * rho
+            # continuum terms
+            ti = self.h2oll.reftcon / t
+            con = (self.h2oll.cf * pda * ti ** self.h2oll.xcf + self.h2oll.cs * pvap * ti ** self.h2oll.xcs) * \
+                pvap * f * f
+            # nico 2019/03/18 *********************************************************
+            # add resonances
+            nlines = len(self.h2oll.fl)
+            ti = self.h2oll.reftline / t
+            df = np.zeros((2, 1))
 
-        tiln = np.log(ti)
-        ti2 = np.exp(2.5 * tiln)
-        summ = 0.0
-        for i in range(0, nlines):
-            width0 = self.h2oll.w0[i] * pda * ti ** self.h2oll.x[i] + self.h2oll.w0s[i] * pvap * ti ** self.h2oll.xs[i]
-            if self.h2oll.w2[i] > 0:
-                width2 = self.h2oll.w2[i] * pda * ti ** self.h2oll.xw2[i] + self.h2oll.w2s[i] * pvap * ti ** \
-                         self.h2oll.xw2s[i]
-            else:
-                width2 = 0
+            tiln = np.log(ti)
+            ti2 = np.exp(2.5 * tiln)
+            summ = 0.0
+            for i in range(0, nlines):
+                width0 = self.h2oll.w0[i] * pda * ti ** self.h2oll.x[i] + self.h2oll.w0s[i] * pvap * ti ** self.h2oll.xs[i]
+                if self.h2oll.w2[i] > 0:
+                    width2 = self.h2oll.w2[i] * pda * ti ** self.h2oll.xw2[i] + self.h2oll.w2s[i] * pvap * ti ** \
+                            self.h2oll.xw2s[i]
+                else:
+                    width2 = 0
 
-            delta2 = self.h2oll.d2[i] * pda + self.h2oll.d2s[i] * pvap  # delta2 assumed independent of t
+                delta2 = self.h2oll.d2[i] * pda + self.h2oll.d2s[i] * pvap  # delta2 assumed independent of t
 
-            shiftf = self.h2oll.sh[i] * pda * (1. - self.h2oll.aair[i] * tiln) * ti ** self.h2oll.xh[i]
-            shifts = self.h2oll.shs[i] * pvap * (1. - self.h2oll.aself[i] * tiln) * ti ** self.h2oll.xhs[i]
-            shift = shiftf + shifts
+                shiftf = self.h2oll.sh[i] * pda * (1. - self.h2oll.aair[i] * tiln) * ti ** self.h2oll.xh[i]
+                shifts = self.h2oll.shs[i] * pvap * (1. - self.h2oll.aself[i] * tiln) * ti ** self.h2oll.xhs[i]
+                shift = shiftf + shifts
 
-            wsq = width0 ** 2
-            s = self.h2oll.s1[i] * ti2 * np.exp(self.h2oll.b2[i] * (1. - ti))
-            df[0] = f - self.h2oll.fl[i] - shift
-            df[1] = f + self.h2oll.fl[i] + shift
-            base = width0 / (562500.0 + wsq)
-            res = 0.0
-            for j in range(0, 2):
-                if width2 > 0 and j == 0 and np.abs(df[j]) < (10 * width0):
-                    # speed-dependent resonant shape factor
-                    # double complex dcerror,xc,xrt,pxw,a
-                    xc = complex((width0 - 1.5 * width2), df[j] + 1.5 * delta2) / complex(width2, -delta2)
-                    xrt = np.sqrt(xc)
-                    pxw = 1.77245385090551603 * xrt * dcerror(-np.imag(xrt), np.real(xrt))
-                    sd = 2.0 * (1.0 - pxw) / (complex(width2, -delta2))
-                    res += np.real(sd) - base
-                elif np.abs(df[j]) < 750.0:
-                    res += width0 / (df[j] ** 2 + wsq) - base
+                wsq = width0 ** 2
+                s = self.h2oll.s1[i] * ti2 * np.exp(self.h2oll.b2[i] * (1. - ti))
+                df[0] = f - self.h2oll.fl[i] - shift
+                df[1] = f + self.h2oll.fl[i] + shift
+                base = width0 / (562500.0 + wsq)
+                res = 0.0
+                for j in range(0, 2):
+                    if width2 > 0 and j == 0 and np.abs(df[j]) < (10 * width0):
+                        # speed-dependent resonant shape factor
+                        # double complex dcerror,xc,xrt,pxw,a
+                        xc = complex((width0 - 1.5 * width2), df[j] + 1.5 * delta2) / complex(width2, -delta2)
+                        xrt = np.sqrt(xc)
+                        pxw = 1.77245385090551603 * xrt * dcerror(-np.imag(xrt), np.real(xrt))
+                        sd = 2.0 * (1.0 - pxw) / (complex(width2, -delta2))
+                        res += np.real(sd) - base
+                    elif np.abs(df[j]) < 750.0:
+                        res += width0 / (df[j] ** 2 + wsq) - base
 
-            summ += s * res * (f / self.h2oll.fl[i]) ** 2
+                summ += s * res * (f / self.h2oll.fl[i]) ** 2
 
-        npp = (3.1831e-05 * den * summ / db2np) / factor
-        ncpp = (con / db2np) / factor
+            npp = (3.1831e-05 * den * summ / db2np) / factor
+            ncpp = (con / db2np) / factor
+
+        if H2OAbsModel.model == 'rose22sd':
+            pvap = constants("R") * rho * t #(rho * t) / 216.68 #TODO: check units for costant
+            pda = p - pvap
+            # den = 3.344e+16 * rho
+            # continuum terms
+            ti = self.h2oll.reftcon / t
+            con = (self.h2oll.cf * pda * ti ** self.h2oll.xcf + self.h2oll.cs * pvap * ti ** self.h2oll.xcs) * pvap * f * f
+
+            ti = self.h2oll.reftline / t
+            tiln = np.log(ti)
+            ti2 = np.exp(2.5 * tiln)
+
+            df = np.zeros((2, 1))
+            nlines = len(self.h2oll.fl)
+
+            summ = 0.0
+            for i in range(0, nlines):
+                if np.abs(f-self.h2oll.fl[i] > 750.1):  #TODO: check fortran code #skip if F is outside the truncated l.s.
+                    continue
+                width0 = self.h2oll.w0[i] * pda * ti ** self.h2oll.x[i] + self.h2oll.w0s[i] * pvap * ti ** self.h2oll.xs[i]
+                
+                if self.h2oll.w2[i] > 0:
+                    width2 = self.h2oll.w2[i] * pda * ti ** self.h2oll.xw2[i] + self.h2oll.w2s[i] * pvap * ti ** \
+                            self.h2oll.xw2s[i]
+                else:
+                    width2 = 0
+
+                delta2 = self.h2oll.d2[i] * pda + self.h2oll.d2s[i] * pvap  # delta2 assumed independent of t
+
+                shiftf = self.h2oll.sh[i] * pda * (1. - self.h2oll.aair[i] * tiln) * ti ** self.h2oll.xh[i]
+                shifts = self.h2oll.shs[i] * pvap * (1. - self.h2oll.aself[i] * tiln) * ti ** self.h2oll.xhs[i]
+                shift = shiftf + shifts
+
+                wsq = width0 ** 2
+                s = self.h2oll.s1[i] * ti2 * np.exp(self.h2oll.b2[i] * (1. - ti))
+                df[0] = f - self.h2oll.fl[i] - shift
+                df[1] = f + self.h2oll.fl[i] + shift
+                base = width0 / (562500.0 + wsq)
+                res = 0.0
+                for j in range(0, 2):
+                    if width2 > 0 and j == 0 and np.abs(df[j]) < (10 * width0):
+                        # speed-dependent resonant shape factor, minus base
+                        xc = complex((width0 - 1.5 * width2), df[j] + 1.5 * delta2) / complex(width2, -delta2)
+                        xrt = np.sqrt(xc)
+                        pxw = 1.77245385090551603 * xrt * dcerror(-np.imag(xrt), np.real(xrt))
+                        sd = 2.0 * (1.0 - pxw) / (complex(width2, -delta2))
+                        res += np.real(sd) - base
+                    elif np.abs(df[j]) < 750.0:
+                        res += width0 / (df[j] ** 2 + wsq) - base
+
+                summ += s * res * (f / self.h2oll.fl[i]) ** 2
+
+            npp = (1.e-10 * rho * summ / db2np) / factor #TODO:??
+            ncpp = (con / db2np) / factor
 
         return npp, ncpp
 
@@ -785,6 +841,8 @@ class O2AbsModel(AbsModel):
         preswv = vapden * temp / 216.68
         if O2AbsModel.model in ['rose03', 'rose16', 'rose17', 'rose18', 'rose98', 'makarov11']:
             preswv = vapden * temp / 217.0
+        if O2AbsModel.model in ['rose22']:
+            preswv = 4.615228e-3 * vapden * temp
         presda = pres - preswv
         den = 0.001 * (presda * b + 1.2 * preswv * th)
         if O2AbsModel.model in ['rose03', 'rose16', 'rose98', 'makarov11']:
@@ -998,20 +1056,38 @@ class O3AbsModel(AbsModel):
         # add resonances within 1 ghz of f.  most of the ozone is in the 
         # stratosphere, so lines are relatively narrow, and lorentz shape
         # factor is ok.
-        sum = 0.0
-        nlines = len(self.o3ll.fl)
-        for k in range(0, nlines):
-            if self.o3ll.fl[k] > (f + 1.0):
-                break
-            if self.o3ll.fl[k] >= (f - 1.0):
-                widthc = self.o3ll.w[k] * p * ti ** self.o3ll.x[k]
-                betad2 = 3.85e-15 * t * self.o3ll.fl[k] ** 2
-                # approximate width combines pressure and doppler broadening:
-                width = 0.5346 * widthc + np.sqrt(0.2166 * widthc * widthc + 0.6931 * betad2)
-                s = self.o3ll.s1[k] * np.exp(self.o3ll.b[k] * (1.0 - ti))
-                shape = (f / self.o3ll.fl[k]) ** 2 * width / ((f - self.o3ll.fl[k]) ** 2 + width * width)
-                sum += s * shape
+        if O3AbsModel.model in ["rose22"]:
+            sum = 0.0
+            nlines = len(self.o3ll.fl)
+            for k in range(0, nlines):
+                if self.o3ll.fl[k] > (f + 1.0):
+                    break
+                if self.o3ll.fl[k] >= (f - 1.0):
+                    widthc = self.o3ll.w[k] * p * ti ** self.o3ll.x[k]
+                    betad = .62065e-7 * self.o3ll.fl[k] * np.sqrt(t)
+                    arg1 = (self.o3ll.fl[k]-f)/betad
+                    arg2 = widthc/betad
+                    s = self.o3ll.s1[k] * np.exp(self.o3ll.b[k] * (1.0 - ti))
+                    sum += s * np.real(dcerror(arg1, arg2))/betad # TODO: check fortran code DREAL
 
-        abs_o3 = 3.183e-05 * sum * qvinv * ti2 * den
+            abs_o3 = .56419e-4 * sum * qvinv * ti2 * den
+        else:
+            sum = 0.0
+            nlines = len(self.o3ll.fl)
+            for k in range(0, nlines):
+                if self.o3ll.fl[k] > (f + 1.0):
+                    break
+                if self.o3ll.fl[k] >= (f - 1.0):
+                    widthc = self.o3ll.w[k] * p * ti ** self.o3ll.x[k]
+                    betad2 = 3.85e-15 * t * self.o3ll.fl[k] ** 2
+                    # approximate width combines pressure and doppler broadening:
+                    width = 0.5346 * widthc + np.sqrt(0.2166 * widthc * widthc + 0.6931 * betad2)
+                    s = self.o3ll.s1[k] * np.exp(self.o3ll.b[k] * (1.0 - ti))
+                    shape = (f / self.o3ll.fl[k]) ** 2 * width / ((f - self.o3ll.fl[k]) ** 2 + width * width)
+                    sum += s * shape
+
+            abs_o3 = 3.183e-05 * sum * qvinv * ti2 * den
+
+        
 
         return abs_o3
