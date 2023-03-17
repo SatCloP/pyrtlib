@@ -8,7 +8,8 @@ from typing import Tuple, Union
 
 import numpy as np
 
-from .utils import dilec12, dcerror, constants
+from pyrtlib.atmp import AtmosphericProfiles as atmp
+from .utils import dilec12, dcerror, constants, gas_mass
 
 
 class AbsModel(object):
@@ -99,7 +100,7 @@ class N2AbsModel(AbsModel):
 
         Args:
             t ([type], optional): Temperature (K). Defaults to None.
-            p ([type], optional): Dry Air Pressure (Mb). Defaults to None.
+            p ([type], optional): Dry Air Pressure (mb). Defaults to None.
             f ([type], optional): Frequency (Ghz)(Valid 0-2000 Ghz). Defaults to None.
 
         Returns:
@@ -116,7 +117,7 @@ class N2AbsModel(AbsModel):
         fdepen = 0.5 + 0.5 / (1.0 + (f / 450.0) ** 2)
         if N2AbsModel.model in ['rose16', 'rose17', 'rose18', 'rose19', 'rose19sd', 'makarov11']:
             l, m, n = 6.5e-14, 3.6, 1.34
-        elif N2AbsModel.model in ['rose20', 'rose20sd']:
+        elif N2AbsModel.model in ['rose20', 'rose20sd', 'rose22sd']:
             l, m, n = 9.95e-14, 3.22, 1
         elif N2AbsModel.model == 'rose03':
             l, m, n = 6.5e-14, 3.6, 1.29
@@ -488,7 +489,7 @@ class H2OAbsModel(AbsModel):
             ncpp = (con / db2np) / factor
 
         if H2OAbsModel.model == 'rose22sd':
-            pvap = constants("Rwatvap")[0] * rho * t #TODO: check units for costant
+            pvap = (constants("Rwatvap")[0] * 1e-05) * rho * t #TODO: check units for costant
             pda = p - pvap
             # den = 3.344e+16 * rho
             # continuum terms
@@ -504,7 +505,7 @@ class H2OAbsModel(AbsModel):
 
             summ = 0.0
             for i in range(0, nlines):
-                if np.abs(f-self.h2oll.fl[i] > 750.1):  #TODO: check fortran code #skip if F is outside the truncated l.s.
+                if np.abs(f-self.h2oll.fl[i] > 750.1):  #skip if F is outside the truncated l.s.
                     continue
                 width0 = self.h2oll.w0[i] * pda * ti ** self.h2oll.x[i] + self.h2oll.w0s[i] * pvap * ti ** self.h2oll.xs[i]
                 
@@ -538,8 +539,8 @@ class H2OAbsModel(AbsModel):
                         res += width0 / (df[j] ** 2 + wsq) - base
 
                 summ += s * res * (f / self.h2oll.fl[i]) ** 2
-
-            npp = (1.e-10 * rho * summ / db2np) / factor #TODO:??
+            
+            npp = (1.e-10 * rho * summ / (np.pi * gas_mass(atmp.H2O) * 1000) / db2np) / factor #TODO:??
             ncpp = (con / db2np) / factor
 
         return npp, ncpp
@@ -841,7 +842,7 @@ class O2AbsModel(AbsModel):
         preswv = vapden * temp / 216.68
         if O2AbsModel.model in ['rose03', 'rose16', 'rose17', 'rose18', 'rose98', 'makarov11']:
             preswv = vapden * temp / 217.0
-        if O2AbsModel.model in ['rose22']:
+        if O2AbsModel.model in ['rose22', 'rose22sd']:
             preswv = 4.615228e-3 * vapden * temp
         presda = pres - preswv
         den = 0.001 * (presda * b + 1.2 * preswv * th)
@@ -901,7 +902,7 @@ class O2AbsModel(AbsModel):
         # o2abs = 1.004 * np.maximum(o2abs, 0.0)
         if O2AbsModel.model != 'rose98':
             o2abs = np.maximum(o2abs, 0.0)
-        if O2AbsModel.model in ['rose20', 'rose20sd']:
+        if O2AbsModel.model in ['rose20', 'rose20sd', 'rose22', 'rose22sd']:
             o2abs = 1.004 * np.maximum(o2abs, 0.0)
 
         # *** ********************************************************
@@ -1056,7 +1057,7 @@ class O3AbsModel(AbsModel):
         # add resonances within 1 ghz of f.  most of the ozone is in the 
         # stratosphere, so lines are relatively narrow, and lorentz shape
         # factor is ok.
-        if O3AbsModel.model in ["rose22"]:
+        if O3AbsModel.model in ["rose22", "rose222sd"]:
             sum = 0.0
             nlines = len(self.o3ll.fl)
             for k in range(0, nlines):
