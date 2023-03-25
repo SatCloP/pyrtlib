@@ -117,7 +117,7 @@ class N2AbsModel(AbsModel):
         fdepen = 0.5 + 0.5 / (1.0 + (f / 450.0) ** 2)
         if N2AbsModel.model in ['rose16', 'rose17', 'rose18', 'rose19', 'rose19sd', 'makarov11']:
             l, m, n = 6.5e-14, 3.6, 1.34
-        elif N2AbsModel.model in ['rose20', 'rose20sd', 'rose22sd']:
+        elif N2AbsModel.model in ['rose20', 'rose20sd', 'rose21sd', 'rose22sd']:
             l, m, n = 9.95e-14, 3.22, 1
         elif N2AbsModel.model == 'rose03':
             l, m, n = 6.5e-14, 3.6, 1.29
@@ -125,7 +125,7 @@ class N2AbsModel(AbsModel):
             l, m, n = 6.4e-14, 3.55, 1
             fdepen = 1
         else:
-            raise ValueError('[AbsN2] No model available with this name: {} . Sorry...'.format(AbsModel.model))
+            raise ValueError('[AbsN2] No model available with this name: {} . Sorry...'.format(N2AbsModel.model))
 
         bf = l * fdepen * p * p * f * f * th ** m
 
