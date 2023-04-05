@@ -727,8 +727,8 @@ def virtual_temperature(t: np.ndarray, mr: np.ndarray):
 
 
 # TODO: based on metpy calc function, remember to cite package
-def virtual_temperature(t: np.ndarray, mr: np.ndarray):
-    """Calculate virtual temperature.
+def virtual_temperature(t: np.ndarray, mr: np.ndarray) -> np.ndarray:
+    r"""Calculate virtual temperature.
     This calculation must be given an air parcel's temperature and mixing ratio.
     The implementation uses the formula outlined in [Hobbs2006]_ pg.80.
 
@@ -739,7 +739,7 @@ def virtual_temperature(t: np.ndarray, mr: np.ndarray):
         mr (np.ndarray): Mass mixing ratio (g/kg)
 
     Returns:
-        _type_: _description_
+        np.ndarray: Corresponding virtual temperature of the parcel
     """
 
     molecular_weight_ratio = constants("Rdry")[0] / constants("Rwatvap")[0]
@@ -750,15 +750,13 @@ def virtual_temperature(t: np.ndarray, mr: np.ndarray):
 
 # TODO: based on metpy calc function, remember to cite package
 def thickness_hydrostatic(p: np.ndarray, t: np.ndarray, mr: Optional[np.ndarray] = None) -> np.float32:
-    r"""Calculate the thickness of a layer given pressure, temperature and relative humidity.
-    Similar to ``thickness_hydrostatic``, this thickness calculation uses the pressure,
-    temperature, and relative humidity profiles via the hypsometric equation with virtual
-    temperature adjustment
+    r"""Calculate the thickness of a layer via the hypsometric equation.
+    This thickness calculation uses the pressure and temperature profiles (and optionally
+    mixing ratio) via the hypsometric equation with virtual temperature adjustment.
     
     .. math:: Z_2 - Z_1 = -\frac{R_d}{g} \int_{p_1}^{p_2} T_v d\ln p,
     
-    which is based off of Equation 3.24 in [Hobbs2006]_. Virtual temperature is calculated
-    from the profiles of temperature and relative humidity.
+    Which is based off of Equation 3.24 in [Hobbs2006]_.
     This assumes a hydrostatic atmosphere.
 
     Args:

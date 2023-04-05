@@ -14,13 +14,14 @@
 # import sys
 # sys.path.insert(0, os.path.abspath('.'))
 import warnings
+from datetime import datetime
 from sphinx_gallery.sorting import FileNameSortKey
 
 
 # -- Project information -----------------------------------------------------
-
+cur_date = datetime.utcnow()
 project = 'pyrtlib'
-copyright = '2021-2022, CNR-IMAA'
+copyright = f'2021-{cur_date:%Y}, CNR-IMAA'
 author = 'Salvatore Larosa'
 
 # The full version, including alpha/beta/rc tags
