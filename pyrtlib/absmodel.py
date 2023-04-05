@@ -73,7 +73,7 @@ class LiqAbsModel(AbsModel):
             fp = np.dot((np.dot(316.0, theta1) + 146.4), theta1) + 20.2
             fs = np.dot(39.8, fp)
             eps = (eps0 - eps1) / np.complex(1.0, freq / fp) + (eps1 - eps2) / complex(1.0, freq / fs) + eps2
-        elif LiqAbsModel.model in ['rose17', 'rose16', 'rose19', 'rose20', 'rose19sd', 'makarov11']:
+        elif LiqAbsModel.model in ['rose17', 'rose16', 'rose19', 'rose20', 'rose19sd', 'rose22sd', 'makarov11']:
             eps = dilec12(freq, temp)
         else:
             raise ValueError('[AbsLiq] No model available with this name: {} . Sorry...'.format(LiqAbsModel.model))

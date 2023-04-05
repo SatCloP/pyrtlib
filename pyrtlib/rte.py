@@ -409,15 +409,16 @@ class RTEquation:
             ###########################################################################
             # Then compute upwelling radiance 
             # Adapted from Planck_xxx.m, but from Satellite i-1 becomes i+1
+            # taulay changed to i+1, debugged by ISMAR project
             ###########################################################################
             Ts = tk[0]
             boft[nl - 1] = tk2b_mod(hvk, tk[nl - 1])
-            for i in range(nl - 2, -1, -1):
+            for i in range(nl - 2, -1, -1): 
                 boft[i] = tk2b_mod(hvk, tk[i])
-                boftlay = (boft[i + 1] + np.dot(boft[i], np.exp(-taulay[i]))) / (1.0 + np.exp(-taulay[i]))
-                batmlay = np.dot(np.dot(boftlay, np.exp(-tauprof[i + 1])), (1.0 - np.exp(-taulay[i])))
+                boftlay = (boft[i + 1] + np.dot(boft[i], np.exp(-taulay[i+1]))) / (1.0 + np.exp(-taulay[i+1]))
+                batmlay = np.dot(np.dot(boftlay, np.exp(-tauprof[i + 1])), (1.0 - np.exp(-taulay[i+1])))
                 boftatm[i] = boftatm[i + 1] + batmlay
-                tauprof[i] = tauprof[i + 1] + taulay[i]
+                tauprof[i] = tauprof[i + 1] + taulay[i+1]
 
             # The background is a combination of surface emission and downwelling 
             # radiance (boftotl) reflected by the surface
