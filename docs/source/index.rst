@@ -21,7 +21,8 @@ which are commonly exploited for atmospheric sounding by microwave radiometer (M
 The source code for pyrtlib python package is hosted on `github
 <https://github.com/slarosa/pyrtlib>`_.
 
-.. image:: ../../resources/spectrum.png
+.. image:: ../../resources/spectrum_r22.jpeg
+.. image:: ../../resources/r98_r22.jpeg
 
 
 Example:

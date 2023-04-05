@@ -29,7 +29,7 @@ def tick_function_pressure(x):
     return ["%.1f" % z for z in v]
 
 
-z, p, d, t, md = atmp.gl_atm(atmp.TROPICAL)
+z, p, d, t, md = atmp.gl_atm(atmp.US_STANDARD)
 
 gkg = ppmv2gkg(md[:, atmp.H2O], atmp.H2O)
 rh = mr2rh(p, t, gkg)[0] / 100

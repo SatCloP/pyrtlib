@@ -4,7 +4,7 @@ import numpy as np
 from numpy.testing import assert_allclose, assert_almost_equal
 from pyrtlib.atmp import AtmosphericProfiles as atmp
 from pyrtlib.utils import (ppmv2gkg, mr2rh, gas_mass, height_to_pressure, pressure_to_height,
-                           to_kelvin, to_celsius, get_frequencies, eswat_goffgratch, satvap, satmix)
+                           to_kelvin, to_celsius, get_frequencies_sat, eswat_goffgratch, satvap, satmix)
 
 z, p, d, tk, md = atmp.gl_atm(atmp.TROPICAL)
 
@@ -86,14 +86,14 @@ class Test(TestCase):
         t = to_celsius(298.25)
         assert_almost_equal(t, 25, decimal=2)
 
-    def test_get_frequencies(self):
+    def test_get_frequencies_sat(self):
         frequencies = np.array([18.7,  23.8,  31.4,  50.3,  52.61,  53.24,
                                 53.75,  89., 115.5503, 116.6503, 117.3503, 117.5503,
                                 119.9503, 120.1503, 120.8503, 121.9503, 164.775, 166.225,
                                 174.91, 177.21, 178.41, 179.91, 181.31, 185.31,
                                 186.71, 188.21, 189.41, 191.71])
         
-        assert_almost_equal(frequencies, get_frequencies('MWI'), decimal=4)
+        assert_almost_equal(frequencies, get_frequencies_sat('MWI'), decimal=4)
 
     def test_eswat_goffgratch(self):
         eswat = eswat_goffgratch(273.25)

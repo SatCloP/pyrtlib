@@ -686,46 +686,6 @@ def height_to_pressure(height: float) -> float:
         (g / (Rd * gamma)) * np.log(1 - ((height * gamma) / t0)))
 
 
-# TODO: based on metpy calc function
-def virtual_temperature(t: np.ndarray, mr: np.ndarray):
-    r"""Calculate virtual temperature.
-    This calculation must be given an air parcel's temperature and mixing ratio.
-    The implementation uses the formula outlined in [Hobbs2006]_ pg.80.
-
-    Parameters
-    ----------
-    temperature: `pint.Quantity`
-        Air temperature
-    mixing_ratio : `pint.Quantity`
-        Mass mixing ratio (dimensionless)
-    molecular_weight_ratio : `pint.Quantity` or float, optional
-        The ratio of the molecular weight of the constituent gas to that assumed
-        for air. Defaults to the ratio for water vapor to dry air.
-        (:math:`\epsilon\approx0.622`)
-
-    Returns
-    -------
-    `pint.Quantity`
-        Corresponding virtual temperature of the parcel
-
-    Examples
-    --------
-    >>> from metpy.calc import virtual_temperature
-    >>> from metpy.units import units
-    >>> virtual_temperature(283 * units.K, 12 * units('g/kg'))
-    <Quantity(285.039709, 'kelvin')>
-
-    Notes
-    -----
-    .. math:: T_v = T \frac{\text{w} + \epsilon}{\epsilon\,(1 + \text{w})}
-    """
-
-    molecular_weight_ratio = constants("Rdry")[0] / constants("Rwatvap")[0]
-
-    return t * ((mr + molecular_weight_ratio)
-                / (molecular_weight_ratio * (1 + mr)))
-
-
 # TODO: based on metpy calc function, remember to cite package
 def virtual_temperature(t: np.ndarray, mr: np.ndarray) -> np.ndarray:
     r"""Calculate virtual temperature.
@@ -736,10 +696,18 @@ def virtual_temperature(t: np.ndarray, mr: np.ndarray) -> np.ndarray:
 
     Args:
         t (np.ndarray): Air temperature (K)
-        mr (np.ndarray): Mass mixing ratio (g/kg)
+        mr (np.ndarray): Mass mixing ratio (dimensionless kg/kg-1)
 
     Returns:
         np.ndarray: Corresponding virtual temperature of the parcel
+
+    Examples:
+        >>> from pyrtlib.utils import virtual_temperature
+        >>> virtual_temperature(283.2, 12*1e-3)
+        285.2412547754703
+
+    Notes:
+        This function is based on metpy.calc.virtual_temperature method.
     """
 
     molecular_weight_ratio = constants("Rdry")[0] / constants("Rwatvap")[0]
@@ -762,50 +730,25 @@ def thickness_hydrostatic(p: np.ndarray, t: np.ndarray, mr: Optional[np.ndarray]
     Args:
         p (np.ndarray): Atmospheric pressure profile
         t (np.ndarray): Atmospheric temperature profile
-        mr (Optional[np.ndarray], optional): Mass mixing ratio (g/kg). Defaults to None.
+        mr (Optional[np.ndarray], optional): Mass mixing ratio (dimensionless kg/kg-1). Defaults to None.
 
     Returns:
         np.float32: The thickness of the layer in meters
+
+    Notes:
+        This function is based on metpy.calc.thickness_hydrostatic method.
     """
 
     R = 8.314462618
     Md = 28.96546e-3
     Rd = R / Md
     g = 9.80665
-    # if bottom is None and depth is None:
     if mr is None:
         layer_p, layer_virttemp = p, t
     else:
         layer_p = p
         layer_virttemp = virtual_temperature(t, mr)
-    # else:
-    # if mr is None:
-    #     # Note: get_layer works on *args and has arguments that make the function behave
-    #     # differently depending on units, making a unit-free version nontrivial. For now,
-    #     # since optimized path doesn't use this conditional branch at all, we can safely
-    #     # sacrifice performance by reattaching and restripping units to use unit-aware
-    #     # get_layer
-    #     layer_p, layer_virttemp = get_layer(
-    #         units.Quantity(pressure, 'Pa'),
-    #         units.Quantity(temperature, 'K'),
-    #         bottom=units.Quantity(bottom, 'Pa') if bottom is not None else None,
-    #         depth=units.Quantity(depth, 'Pa') if depth is not None else None
-    #     )
-    #     layer_p = layer_p.m_as('Pa')
-    #     layer_virttemp = layer_virttemp.m_as('K')
-    # else:
-    #     layer_p, layer_temp, layer_w = get_layer(
-    #         units.Quantity(pressure, 'Pa'),
-    #         units.Quantity(temperature, 'K'),
-    #         units.Quantity(mixing_ratio, ''),
-    #         bottom=units.Quantity(bottom, 'Pa') if bottom is not None else None,
-    #         depth=units.Quantity(depth, 'Pa') if depth is not None else None
-    #     )
-    #     layer_p = layer_p.m_as('Pa')
-    #     layer_virttemp = virtual_temperature._nounit(
-    #         layer_temp.m_as('K'), layer_w.m_as(''), molecular_weight_ratio
-    #     )
-    # Take the integral
+    
     return (
         -Rd / g * np.trapz(layer_virttemp, np.log(layer_p))
     )

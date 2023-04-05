@@ -48,7 +48,7 @@ extensions = [
     'sphinx_gallery.gen_gallery',
     'sphinx.ext.coverage',
     'sphinx.ext.graphviz',
-    # 'rst2pdf.pdfbuilder',
+    'rst2pdf.pdfbuilder',
 ]
 
 # Configuration of sphinx.ext.coverage
@@ -57,7 +57,7 @@ coverage_show_missing_items = True
 # graphviz configuration output format
 graphviz_output_format = 'svg'
 
-# pdf_documents = [('index', u'rst2pdf', project + u'Documentation', u'Salvatore Larosa'),]
+pdf_documents = [('index', u'rst2pdf', project + u'Documentation', u'Salvatore Larosa'),]
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
