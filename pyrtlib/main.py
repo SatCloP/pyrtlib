@@ -165,10 +165,17 @@ class BTCloudRTE(object):
             self._uncertainty = True
         else:
             # Defines models
-            O2AbsModel.model = absmdl
-            O2AbsModel.o2ll = import_lineshape('o2ll_{}'.format(absmdl))
-            H2OAbsModel.model = absmdl
-            H2OAbsModel.h2oll = import_lineshape('h2oll_{}'.format(absmdl))
+            try:
+                O2AbsModel.model = absmdl
+                O2AbsModel.o2ll = import_lineshape('o2ll_{}'.format(absmdl))
+            except KeyError as e:
+                warnings.warn("The lines list {} was not found. You have to define absorption model manually".format(e))
+            try:
+                H2OAbsModel.model = absmdl
+                H2OAbsModel.h2oll = import_lineshape('h2oll_{}'.format(absmdl))
+            except KeyError as e:
+                warnings.warn("The lines list {} was not found".format(e))
+            
             N2AbsModel.model = absmdl
             LiqAbsModel.model = absmdl
 

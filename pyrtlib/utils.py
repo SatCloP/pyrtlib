@@ -106,7 +106,7 @@ def constants(string: str) -> Tuple[float, str]:
         units = '[J kg-1 K-1]'
         out = np.copy(Rd)
     elif string == 'Rwatvap':
-        Rv = 461.5
+        Rv = 461.52
         units = '[J kg-1 K-1]'
         out = np.copy(Rv)
     elif string == 'Tcosmicbkg':
@@ -686,6 +686,133 @@ def height_to_pressure(height: float) -> float:
         (g / (Rd * gamma)) * np.log(1 - ((height * gamma) / t0)))
 
 
+# TODO: based on metpy calc function
+def virtual_temperature(t: np.ndarray, mr: np.ndarray):
+    r"""Calculate virtual temperature.
+    This calculation must be given an air parcel's temperature and mixing ratio.
+    The implementation uses the formula outlined in [Hobbs2006]_ pg.80.
+
+    Parameters
+    ----------
+    temperature: `pint.Quantity`
+        Air temperature
+    mixing_ratio : `pint.Quantity`
+        Mass mixing ratio (dimensionless)
+    molecular_weight_ratio : `pint.Quantity` or float, optional
+        The ratio of the molecular weight of the constituent gas to that assumed
+        for air. Defaults to the ratio for water vapor to dry air.
+        (:math:`\epsilon\approx0.622`)
+
+    Returns
+    -------
+    `pint.Quantity`
+        Corresponding virtual temperature of the parcel
+
+    Examples
+    --------
+    >>> from metpy.calc import virtual_temperature
+    >>> from metpy.units import units
+    >>> virtual_temperature(283 * units.K, 12 * units('g/kg'))
+    <Quantity(285.039709, 'kelvin')>
+
+    Notes
+    -----
+    .. math:: T_v = T \frac{\text{w} + \epsilon}{\epsilon\,(1 + \text{w})}
+    """
+
+    molecular_weight_ratio = constants("Rdry")[0] / constants("Rwatvap")[0]
+
+    return t * ((mr + molecular_weight_ratio)
+                / (molecular_weight_ratio * (1 + mr)))
+
+
+# TODO: based on metpy calc function, remember to cite package
+def virtual_temperature(t: np.ndarray, mr: np.ndarray):
+    """Calculate virtual temperature.
+    This calculation must be given an air parcel's temperature and mixing ratio.
+    The implementation uses the formula outlined in [Hobbs2006]_ pg.80.
+
+    .. math:: T_v = T \frac{\text{w} + \epsilon}{\epsilon\,(1 + \text{w})}
+
+    Args:
+        t (np.ndarray): Air temperature (K)
+        mr (np.ndarray): Mass mixing ratio (g/kg)
+
+    Returns:
+        _type_: _description_
+    """
+
+    molecular_weight_ratio = constants("Rdry")[0] / constants("Rwatvap")[0]
+
+    return t * ((mr + molecular_weight_ratio)
+                / (molecular_weight_ratio * (1 + mr)))
+
+
+# TODO: based on metpy calc function, remember to cite package
+def thickness_hydrostatic(p: np.ndarray, t: np.ndarray, mr: Optional[np.ndarray] = None) -> np.float32:
+    r"""Calculate the thickness of a layer given pressure, temperature and relative humidity.
+    Similar to ``thickness_hydrostatic``, this thickness calculation uses the pressure,
+    temperature, and relative humidity profiles via the hypsometric equation with virtual
+    temperature adjustment
+    
+    .. math:: Z_2 - Z_1 = -\frac{R_d}{g} \int_{p_1}^{p_2} T_v d\ln p,
+    
+    which is based off of Equation 3.24 in [Hobbs2006]_. Virtual temperature is calculated
+    from the profiles of temperature and relative humidity.
+    This assumes a hydrostatic atmosphere.
+
+    Args:
+        p (np.ndarray): Atmospheric pressure profile
+        t (np.ndarray): Atmospheric temperature profile
+        mr (Optional[np.ndarray], optional): Mass mixing ratio (g/kg). Defaults to None.
+
+    Returns:
+        np.float32: The thickness of the layer in meters
+    """
+
+    R = 8.314462618
+    Md = 28.96546e-3
+    Rd = R / Md
+    g = 9.80665
+    # if bottom is None and depth is None:
+    if mr is None:
+        layer_p, layer_virttemp = p, t
+    else:
+        layer_p = p
+        layer_virttemp = virtual_temperature(t, mr)
+    # else:
+    # if mr is None:
+    #     # Note: get_layer works on *args and has arguments that make the function behave
+    #     # differently depending on units, making a unit-free version nontrivial. For now,
+    #     # since optimized path doesn't use this conditional branch at all, we can safely
+    #     # sacrifice performance by reattaching and restripping units to use unit-aware
+    #     # get_layer
+    #     layer_p, layer_virttemp = get_layer(
+    #         units.Quantity(pressure, 'Pa'),
+    #         units.Quantity(temperature, 'K'),
+    #         bottom=units.Quantity(bottom, 'Pa') if bottom is not None else None,
+    #         depth=units.Quantity(depth, 'Pa') if depth is not None else None
+    #     )
+    #     layer_p = layer_p.m_as('Pa')
+    #     layer_virttemp = layer_virttemp.m_as('K')
+    # else:
+    #     layer_p, layer_temp, layer_w = get_layer(
+    #         units.Quantity(pressure, 'Pa'),
+    #         units.Quantity(temperature, 'K'),
+    #         units.Quantity(mixing_ratio, ''),
+    #         bottom=units.Quantity(bottom, 'Pa') if bottom is not None else None,
+    #         depth=units.Quantity(depth, 'Pa') if depth is not None else None
+    #     )
+    #     layer_p = layer_p.m_as('Pa')
+    #     layer_virttemp = virtual_temperature._nounit(
+    #         layer_temp.m_as('K'), layer_w.m_as(''), molecular_weight_ratio
+    #     )
+    # Take the integral
+    return (
+        -Rd / g * np.trapz(layer_virttemp, np.log(layer_p))
+    )
+
+
 def dewpoint2rh(td: float,
                 t: float,
                 ice: Optional[bool] = False,
@@ -854,7 +981,7 @@ def to_celsius(t: np.ndarray) -> np.ndarray:
     return t_c
 
 
-def get_frequencies(instrument: str) -> np.ndarray:
+def get_frequencies_sat(instrument: str) -> np.ndarray:
     """Get frequencies from main instrument used
 
     Args:

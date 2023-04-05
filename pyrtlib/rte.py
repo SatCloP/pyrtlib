@@ -409,15 +409,16 @@ class RTEquation:
             ###########################################################################
             # Then compute upwelling radiance 
             # Adapted from Planck_xxx.m, but from Satellite i-1 becomes i+1
+            # taulay changed to i+1, debugged by ISMAR project
             ###########################################################################
             Ts = tk[0]
             boft[nl - 1] = tk2b_mod(hvk, tk[nl - 1])
-            for i in range(nl - 2, -1, -1):
+            for i in range(nl - 2, -1, -1): 
                 boft[i] = tk2b_mod(hvk, tk[i])
-                boftlay = (boft[i + 1] + np.dot(boft[i], np.exp(-taulay[i]))) / (1.0 + np.exp(-taulay[i]))
-                batmlay = np.dot(np.dot(boftlay, np.exp(-tauprof[i + 1])), (1.0 - np.exp(-taulay[i])))
+                boftlay = (boft[i + 1] + np.dot(boft[i], np.exp(-taulay[i+1]))) / (1.0 + np.exp(-taulay[i+1]))
+                batmlay = np.dot(np.dot(boftlay, np.exp(-tauprof[i + 1])), (1.0 - np.exp(-taulay[i+1])))
                 boftatm[i] = boftatm[i + 1] + batmlay
-                tauprof[i] = tauprof[i + 1] + taulay[i]
+                tauprof[i] = tauprof[i + 1] + taulay[i+1]
 
             # The background is a combination of surface emission and downwelling 
             # radiance (boftotl) reflected by the surface
@@ -551,7 +552,7 @@ class RTEquation:
             ekpa = e[i] / 10.0
             pdrykpa = p[i] / 10.0 - ekpa
 
-            if H2OAbsModel.model == 'rose21sd':
+            if H2OAbsModel.model in ['rose21sd', 'rose22sd']:
                 npp, ncpp = H2OAbsModel().h2o_rosen21_sd(pdrykpa, v, ekpa, frq)
                 awet[i] = factor * (npp + ncpp) * db2np
             else:
@@ -561,9 +562,9 @@ class RTEquation:
             if O2AbsModel.model in ['rose19sd', 'rose19']:
                 npp, ncpp = O2AbsModel().o2abs_rosen18(pdrykpa, v, ekpa, frq)
                 aO2[i] = factor * npp * db2np
-            if O2AbsModel.model in ['rose03', 'rose16', 'rose17', 'rose18', 'rose20', 'rose20sd', 'rose98', 'makarov11']:
+            if O2AbsModel.model in ['rose03', 'rose16', 'rose17', 'rose18', 'rose20', 'rose20sd', 'rose22', 'rose22sd', 'rose98', 'makarov11']:
                 npp, ncpp = O2AbsModel().o2abs_rosen19(pdrykpa, v, ekpa, frq)
-                ncpp = 0 if O2AbsModel.model in ['rose20', 'rose20sd'] else ncpp
+                ncpp = 0 if O2AbsModel.model in ['rose20', 'rose20sd', 'rose22', 'rose22sd'] else ncpp
                 aO2[i] = factor * (npp + ncpp) * db2np
             # add N2 term
             if N2AbsModel.model not in ['rose03', 'rose16', 'rose17', 'rose18', 'rose98', 'makarov11']:
@@ -572,7 +573,7 @@ class RTEquation:
             if not N2AbsModel.model:
                 raise ValueError('No model avalaible with this name: {} . Sorry...'.format('model'))
 
-            if not o3n is None and O3AbsModel.model in ['rose18', 'rose21', 'rose21sd']:
+            if not o3n is None and O3AbsModel.model in ['rose18', 'rose21', 'rose21sd', 'rose22', 'rose22sd']:
                 aO3[i] = O3AbsModel().o3abs_rose21(tk[i], p[i], frq, o3n[i])
 
             adry[i] = aO2[i] + aN2[i] + aO3[i]
