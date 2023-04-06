@@ -202,7 +202,7 @@ class H2OAbsModel(AbsModel):
                     _, _ = H2OAbsModel().h2o_rosen19_sd(pdrykpa, v, ekpa, frq[j])
 
         """
-        # nico: the best-fit voigt are given in koshelev et al. 2018, table 2 (rad,
+        # the best-fit voigt are given in koshelev et al. 2018, table 2 (rad,
         # mhz/torr). these correspond to w3(1) and ws(1) in h2o_list_r18 (mhz/mb)
 
         # cyh ***********************************************
@@ -237,7 +237,7 @@ class H2OAbsModel(AbsModel):
         else:
             con = (self.h2oll.cf * pda * ti ** self.h2oll.xcf + self.h2oll.cs * pvap * ti ** self.h2oll.xcs) * \
                   pvap * f * f
-        # nico 2019/03/18 *********************************************************
+        # 2019/03/18 *********************************************************
         # add resonances
         nlines = len(self.h2oll.fl)
         ti = self.h2oll.reftline / t
@@ -255,7 +255,7 @@ class H2OAbsModel(AbsModel):
                 shiftf = self.h2oll.sh[i] * pda * (1. - self.h2oll.aair[i] * tiln) * ti ** self.h2oll.xh[i]
                 shifts = self.h2oll.shs[i] * pvap * (1. - self.h2oll.aself[i] * tiln) * ti ** self.h2oll.xhs[i]
                 shift = shiftf + shifts
-                # nico: thus using the best-fit voigt (shift instead of shift0 and shift2)
+                # thus using the best-fit voigt (shift instead of shift0 and shift2)
                 wsq = width0 ** 2
                 s = self.h2oll.s1[i] * ti2 * np.exp(self.h2oll.b2[i] * (1. - ti))
                 df[0] = f - self.h2oll.fl[i] - shift
@@ -353,7 +353,7 @@ class H2OAbsModel(AbsModel):
                     if np.abs(df[j]) < 750.0:
                         res += width / (df[j] ** 2 + wsq) - base
                 summ += s * res * (f / self.h2oll.fl[i]) ** 2
-        # nico 2019/03/18 *********************************************************
+        # 2019/03/18 *********************************************************
         # cyh **************************************************************
         # separate the following original equ. into line and continuum
         # terms, and change the units from np/km to ppm
@@ -415,7 +415,7 @@ class H2OAbsModel(AbsModel):
                     _, _ = H2OAbsModel().h2o_rosen21_sd(pdrykpa, v, ekpa, frq[j])
 
         """
-        # nico: the best-fit voigt are given in koshelev et al. 2018, table 2 (rad,
+        # the best-fit voigt are given in koshelev et al. 2018, table 2 (rad,
         # mhz/torr). these correspond to w3(1) and ws(1) in h2o_list_r18 (mhz/mb)
 
         # cyh ***********************************************
@@ -442,7 +442,7 @@ class H2OAbsModel(AbsModel):
             ti = self.h2oll.reftcon / t
             con = (self.h2oll.cf * pda * ti ** self.h2oll.xcf + self.h2oll.cs * pvap * ti ** self.h2oll.xcs) * \
                 pvap * f * f
-            # nico 2019/03/18 *********************************************************
+            # 2019/03/18 *********************************************************
             # add resonances
             nlines = len(self.h2oll.fl)
             ti = self.h2oll.reftline / t
@@ -693,7 +693,7 @@ class O2AbsModel(AbsModel):
             * The same temperature dependence (X) is used for submillimeter line widths as in the 60 GHz band: (1/T)**X
 
         .. note::
-            Nico: the only differences wrt to o2n2_rosen17_xxx are:
+            : the only differences wrt to o2n2_rosen17_xxx are:
 
             * PRESWV = VAPDEN*TEMP/217. -> PRESWV = VAPDEN*TEMP/216.68 - this is now consistent with h2o
             * ABSN2_ros16(TEMP,PRES,FREQ) -> ABSN2_ros18(TEMP,PRESDA,FREQ) - since absn2.f takes in input P = DRY AIR PRESSURE (MB)
@@ -719,7 +719,7 @@ class O2AbsModel(AbsModel):
         den = 0.001 * (presda * b + 1.2 * preswv * th)
         dfnr = self.o2ll.wb300 * den
 
-        # nico intensities of the non-resonant transitions for o16-o16 and o16-o18, from jpl's line compilation
+        # intensities of the non-resonant transitions for o16-o16 and o16-o18, from jpl's line compilation
         # 1.571e-17 (o16-o16) + 1.3e-19 (o16-o18) = 1.584e-17
         # 1.584e-17*freq*freq*dfnr/(th*(freq*freq + dfnr*dfnr))
         summ = 1.584e-17 * freq * freq * dfnr / (th * (freq * freq + dfnr * dfnr))
@@ -737,12 +737,12 @@ class O2AbsModel(AbsModel):
 
         # o2abs = .5034e12*sum*presda*th^3/3.14159;
         # .20946e-4/(3.14159*1.38065e-19*300) = 1.6097e11
-        # nico the following computes n/pi*sum*th^2 (see notes)
-        # nico n/pi = a/(pi*k*t_0) * pda * th
-        # nico a/(pi*k*t_0) = 0.20946/(3.14159*1.38065e-23*300) = 1.6097e19  - then it needs a factor 1e-8 to accont
+        # the following computes n/pi*sum*th^2 (see notes)
+        # n/pi = a/(pi*k*t_0) * pda * th
+        # a/(pi*k*t_0) = 0.20946/(3.14159*1.38065e-23*300) = 1.6097e19  - then it needs a factor 1e-8 to accont
         # for units conversion (pa->hpa, hz->ghz, m->km)
-        # nico pa2hpa=1e-2; hz2ghz=1e-9; m2cm=1e2; m2km=1e-3; pa2hpa^-1 * hz2ghz * m2cm^-2 * m2km^-1 = 1e-8
-        # nico th^3 = th(from ideal gas law 2.13) * th(from the mw approx of stimulated emission 2.16 vs. 2.14) *
+        # pa2hpa=1e-2; hz2ghz=1e-9; m2cm=1e2; m2km=1e-3; pa2hpa^-1 * hz2ghz * m2cm^-2 * m2km^-1 = 1e-8
+        # th^3 = th(from ideal gas law 2.13) * th(from the mw approx of stimulated emission 2.16 vs. 2.14) *
         # th(from the partition sum 2.20)
 
         o2abs = 1.6097e+11 * summ * presda * th ** 3
@@ -751,15 +751,15 @@ class O2AbsModel(AbsModel):
         # separate the equ. into line and continuum
         # terms, and change the units from np/km to ppm
 
-        # nico intensities of the non-resonant transitions for o16-o16 and o16-o18, from jpl's line compilation
+        # intensities of the non-resonant transitions for o16-o16 and o16-o18, from jpl's line compilation
         # 1.571e-17 (o16-o16) + 1.3e-19 (o16-o18) = 1.584e-17
 
         ncpp = 1.584e-17 * freq * freq * dfnr / (th * (freq * freq + dfnr * dfnr))
         # 20946e-4/(3.14159*1.38065e-19*300) = 1.6097e11
-        # nico a/(pi*k*t_0) = 0.20946/(3.14159*1.38065e-23*300) = 1.6097e19  - then it needs a factor 1e-8 to accont
+        # a/(pi*k*t_0) = 0.20946/(3.14159*1.38065e-23*300) = 1.6097e19  - then it needs a factor 1e-8 to accont
         # for units conversion (pa->hpa, hz->ghz)
-        # nico pa2hpa=1e-2; hz2ghz=1e-9; m2cm=1e2; m2km=1e-3; pa2hpa^-1 * hz2ghz * m2cm^-2 * m2km^-1 = 1e-8
-        # nico th^3 = th(from ideal gas law 2.13) * th(from the mw approx of stimulated emission 2.16 vs. 2.14)
+        # pa2hpa=1e-2; hz2ghz=1e-9; m2cm=1e2; m2km=1e-3; pa2hpa^-1 * hz2ghz * m2cm^-2 * m2km^-1 = 1e-8
+        # th^3 = th(from ideal gas law 2.13) * th(from the mw approx of stimulated emission 2.16 vs. 2.14)
         # * th(from the partition sum 2.20)
         ncpp = 1.6097e+11 * ncpp * presda * th ** 3
 
@@ -855,7 +855,7 @@ class O2AbsModel(AbsModel):
         dfnr = self.o2ll.wb300 * den
         pe2 = den * den
 
-        # nico intensities of the non-resonant transitions for o16-o16 and o16-o18, from jpl's line compilation
+        # intensities of the non-resonant transitions for o16-o16 and o16-o18, from jpl's line compilation
         # 1.571e-17 (o16-o16) + 1.3e-19 (o16-o18) = 1.584e-17
         summ = 1.584e-17 * freq * freq * dfnr / (th * (freq * freq + dfnr * dfnr))
         if O2AbsModel.model in ['rose03', 'rose16', 'rose17', 'rose18', 'rose98', 'makarov11']:
@@ -909,21 +909,21 @@ class O2AbsModel(AbsModel):
         # separate the equ. into line and continuum
         # terms, and change the units from np/km to ppm
 
-        # nico intensities of the non-resonant transitions for o16-o16 and o16-o18, from jpl's line compilation
+        # intensities of the non-resonant transitions for o16-o16 and o16-o18, from jpl's line compilation
         # 1.571e-17 (o16-o16) + 1.3e-19 (o16-o18) = 1.584e-17
 
         ncpp = 1.584e-17 * freq * freq * dfnr / (th * (freq * freq + dfnr * dfnr))
         #  .20946e-4/(3.14159*1.38065e-19*300) = 1.6097e11
-        # nico a/(pi*k*t_0) = 0.20946/(3.14159*1.38065e-23*300) = 1.6097e19  - then it needs a factor 1e-8 to accont
+        # a/(pi*k*t_0) = 0.20946/(3.14159*1.38065e-23*300) = 1.6097e19  - then it needs a factor 1e-8 to accont
         # for units conversion (pa->hpa, hz->ghz)
-        # nico pa2hpa=1e-2; hz2ghz=1e-9; m2cm=1e2; m2km=1e-3; pa2hpa^-1 * hz2ghz * m2cm^-2 * m2km^-1 = 1e-8
-        # nico th^3 = th(from ideal gas law 2.13) * th(from the mw approx of stimulated emission 2.16 vs. 2.14) *
+        # pa2hpa=1e-2; hz2ghz=1e-9; m2cm=1e2; m2km=1e-3; pa2hpa^-1 * hz2ghz * m2cm^-2 * m2km^-1 = 1e-8
+        # th^3 = th(from ideal gas law 2.13) * th(from the mw approx of stimulated emission 2.16 vs. 2.14) *
         # th(from the partition sum 2.20)
         if O2AbsModel.model in ['rose03', 'rose98']:
             ncpp = 1.6e-17 * freq * freq * dfnr / (th * (freq * freq + dfnr * dfnr))
             ncpp *= 5.034e+11 * presda * th ** 3 / 3.14159
         else:
-            ncpp *= 1.6097e11 * presda * th ** 3  # nico: n/pi*sum0
+            ncpp *= 1.6097e11 * presda * th ** 3  # n/pi*sum0
         if O2AbsModel.model in ['rose03', 'rose16', 'rose17', 'rose18', 'rose98', 'makarov11']:
             ncpp += N2AbsModel.n2_absorption(temp, pres, freq)
         # change the units from np/km to ppm

@@ -263,8 +263,8 @@ def mr2rho(mr: np.ndarray, tk: np.ndarray, p: np.ndarray) -> np.ndarray:
 
     Equations were provided by Holger Linne' from Max Planck Institute.
 
-    Nico 2002/05/09 (Looking at rho2mr.email.m from DCT)
-    Nico 2018/06/20
+     2002/05/09 (Looking at rho2mr.email.m from DCT)
+     2018/06/20
 
     Args:
         mr ([type], optional): [description]. Defaults to None.
@@ -558,7 +558,7 @@ def dcerror(x: np.ndarray, y: np.ndarray) -> np.ndarray:
     This version is double precision and valid in all quadrants.
 
     P. Rosenkranz  12/11/2018
-    2018/12/19 - Nico: first created from dcerror.f
+    2018/12/19 - : first created from dcerror.f
 
     Args:
         x ([type], optional): [description]. Defaults to None.

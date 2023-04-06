@@ -63,9 +63,9 @@ array([0.   , 0.   , 0.   , 0.   , 0.   , 0.   , 0.   , 0.   , 0.   ,
 'Rosenkranz, pers. comm., 2017'
 
 Hystory:
-    * 2016/12/05 - Nico - First created
-    * 2018/12/19 - Nico - Modified for adding 658 GHz line as in Rosenkranz 2018 (see if strcmp(mdl,'r18') at the end of WV parameters)
-    * 2020/06/25 - Nico - Modified to account SD 183 parameters only (see if strcmp(mdl,'r20sd'))
+    * 2016/12/05 -  - First created
+    * 2018/12/19 -  - Modified for adding 658 GHz line as in Rosenkranz 2018 (see if strcmp(mdl,'r18') at the end of WV parameters)
+    * 2020/06/25 -  - Modified to account SD 183 parameters only (see if strcmp(mdl,'r20sd'))
 
 .. note:: *Phil* The parameters that contribute most uncertainty are related to pressure-broadening: widths, mixing, & their T dependence. The intensities and their temperature dependence are obtained (at least in my model) from HITRAN2012. B2=(Ef+Ei)/2kTo,
     where Ef, Ei=upper and lower energy levels of the line; k=Boltzmann const; To=296K. Although HITRAN has uncertainties for six parameters, the energy level is not among them.  
