@@ -1,3 +1,4 @@
+==========
 References
 ==========
 
@@ -17,7 +18,7 @@ References
 
 .. [Bean-Dutton] Bradford R. Bean, E. J. Dutton: Radio Meteorology - Superintendentof Documents, U.S.GovernmentPrint.Office, 1966 - 435 pagine, https://books.google.it/books?id=Jw9RAAAAMAAJ&printsec=frontcover&hl=it&source=gbs_ge_summary_r&cad=0#v=onepage&q&f=false.
 
-.. [Jacobson] M. Z. Jacobson. Fundamentals of atmospheric modelling. Cambridge Eds., 2005. http://www.dca.ufcg.edu.br/mna/jacobson.pdf
+.. [Jacobson] Jacobson, M. Z. Fundamentals of atmospheric modelling. Cambridge Eds., 2005. http://www.dca.ufcg.edu.br/mna/jacobson.pdf
 
 .. [Cimini-2018] Cimini, D., Rosenkranz, P. W., Tretyakov, M. Y., Koshelev, M. A., and Romano, F.: Uncertainty of atmospheric microwave absorption model: impact on ground-based radiometer simulations and retrievals, Atmos. Chem. Phys., 18, 15231–15259, https://doi.org/10.5194/acp-18-15231-2018, 2018.
 

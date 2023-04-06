@@ -1,6 +1,6 @@
-##############
+==============
 API references
-##############
+==============
 
 Main class
 ====================
@@ -130,12 +130,12 @@ The utils module contains funtions of general utility used in multiple places th
  
 .. autosummary::
     :toctree: generated/
-    :template: custom-module-template.rst   
+    :template: custom-module-template.rst
 
     pyrtlib.utils
 
 
-Line Shape
+Uncertainty
 ===========
 
 .. autosummary::

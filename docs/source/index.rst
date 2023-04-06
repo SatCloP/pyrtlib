@@ -24,7 +24,6 @@ The source code for pyrtlib python package is hosted on `github
 .. image:: ../../resources/spectrum_r22.jpeg
 .. image:: ../../resources/r98_r22.jpeg
 
-
 Example:
 --------
 Atmospheric profile definition:
@@ -52,7 +51,7 @@ Set absorption model:
 
 >>> rte.init_absmdl('rose16')
 
-Execute model:
+Execute model by computing upwelling radiances:
 
 >>> df = rte.execute()
 >>> df.tbtotal
@@ -130,10 +129,15 @@ Preview of the output dataframe (see :py:meth:`pyrtlib.main.BTCloudRTE.execute` 
 
 .. toctree::
    :maxdepth: 3
-   :caption: Examples:
+   :caption: Notebook:
    
    notebook/index
-   auto_examples/index
+
+.. toctree::
+   :maxdepth: 3
+   :caption: Examples:
+   
+   examples/index
 
 .. toctree::
    :maxdepth: 1

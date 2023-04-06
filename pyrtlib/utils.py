@@ -6,13 +6,15 @@ __author__ = ''
 __date__ = 'March 2021'
 __copyright__ = '(C) 2021, CNR-IMAA'
 
-from typing import Tuple, Optional
+from typing import Tuple, Optional, Union, List
 
 import numpy as np
 
 
 def import_lineshape(name):
     """ Import a named object from a module in the context of this function.
+
+    :meta private:
     """
     try:
         module = __import__('pyrtlib.lineshape', globals(), locals(), [name])
@@ -21,21 +23,13 @@ def import_lineshape(name):
     return vars(module)[name]
 
 
-def constants(string: str) -> Tuple[float, str]:
+def constants(name: Optional[str] = None) -> Union[Tuple[float, str], List]:
     """
     This routine will provide values and units for all the
     universal constants that I needed in my work.
 
-    Nico, 2000
-
-    History
-    2003/06/06 - Added 'Rdry' and 'Rwatvap'
-    2005/12/10 - Added 'Tcosmicbkg'
-    2021/03/09 - Added 'avogadro', 'gravity'
-
     Args:
         string (str): String specifying which constant is needed. Defaults to None.
-
     +---------------+-------------------------------------------+
     | string        | description                               |
     +---------------+-------------------------------------------+
@@ -71,60 +65,36 @@ def constants(string: str) -> Tuple[float, str]:
     .. [1] P.J. Mohr, B.N. Taylor, and D.B. Newell (2015), "The 2014 CODATA Recommended
             Values of the Fundamental Physical Constants" (Web Version 7.0), http://physics.nist.gov/cuu/index.html
             Values as of 11/12/2015
+    .. [2] Janssen, Atmospheric Remote Sensing by Microwave Radiometry, pag.12
+
+    Notes:  
+        Tcosmicbkg = 2.736; # +/- 0.017 [K] Cosmic Background Temperature (see ref. 2)
     """
+    constants_dict = {
+        'avogadro': [6.022140857e+23, '[mol-1]'],
+        'boltzmann': [1.3806579999999998e-23, '[J K-1]'],
+        'EarthRadius': [6370.949, '[Km]'],
+        'gravity': [9.80665, '[m s-2]'],
+        'light': [299792458.0, '[m s-1]'],
+        'Np2dB': [4.342944819032518, '[dB/Np]'],
+        'planck': [6.626075499999999e-34, '[J Hz-1]'],
+        'Rdry': [287.04, '[J kg-1 K-1]'],
+        'Rwatvap': [461.52, '[J kg-1 K-1]'],
+        'Tcosmicbkg': [2.728, '[K]'],
+        'R': [8.31446261815324, '[J mol-1 K-1]']
+    }
 
-    if string == 'avogadro':
-        nA = 6.022140857e+23
-        units = '[mol-1]'
-        out = np.copy(nA)
-    elif string == 'boltzmann':
-        K = np.dot(1.380658, 1e-23)
-        units = '[J K-1]'
-        out = np.copy(K)
-    elif string == 'EarthRadius':
-        R = 6370.949
-        units = '[Km]'
-        out = np.copy(R)
-    elif string == 'gravity':
-        g = 9.80665
-        units = '[m s-2]'
-        out = np.copy(g)
-    elif string == 'light':
-        c = 299792458
-        units = '[m s-1]'
-        out = np.copy(c)
-    elif string == 'Np2dB':
-        Np2dB = np.dot(10, np.log10(np.exp(1)))
-        units = '[dB/Np]'
-        out = np.copy(Np2dB)
-    elif string == 'planck':
-        h = np.dot(6.6260755, 1e-34)
-        units = '[J Hz-1]'
-        out = np.copy(h)
-    elif string == 'Rdry':
-        Rd = 287.04
-        units = '[J kg-1 K-1]'
-        out = np.copy(Rd)
-    elif string == 'Rwatvap':
-        Rv = 461.52
-        units = '[J kg-1 K-1]'
-        out = np.copy(Rv)
-    elif string == 'Tcosmicbkg':
-        # Tcos = 2.736; # +/- 0.017 [K] Cosmic Background Temperature,
-        # from Janssen, Atmospheric Remote Sensing by Microwave Radiometry, pag.12
-        Tcos = 2.728
-        units = '[K]'
-        out = np.copy(Tcos)
-    elif string == 'R':
-        Rgas = 8.31446261815324
-        units = '[J mol-1 K-1]'
-        out = np.copy(Rgas)
+    if not name:
+        cs = list(constants_dict.keys())
     else:
-        raise ValueError(
-            'No constant avalaible with this name: {} . Sorry...'.format(
-                string))
+        try:
+            cs = constants_dict[name]
+        except KeyError as e:
+            raise ValueError(
+                'No constant avalaible with this name: {} . Type constants() without argument to get the list of constants'.format(
+                    name))
 
-    return out, units
+    return cs
 
 
 def gas_mass(gasid: int) -> float:
@@ -507,9 +477,7 @@ def esice_goffgratch(T: np.ndarray) -> np.ndarray:
 def tk2b_mod(hvk: np.ndarray, T: np.ndarray) -> np.ndarray:
     r"""[summary]
 
-    .. math::
-
-        Btilde=\frac{1}{e^\frac{hvk}{T}-1}
+    .. math:: Btilde=\frac{1}{e^\frac{hvk}{T}-1}
 
     Args:
         hvk ([type], optional): [description]. Defaults to None.
@@ -721,9 +689,9 @@ def thickness_hydrostatic(p: np.ndarray, t: np.ndarray, mr: Optional[np.ndarray]
     r"""Calculate the thickness of a layer via the hypsometric equation.
     This thickness calculation uses the pressure and temperature profiles (and optionally
     mixing ratio) via the hypsometric equation with virtual temperature adjustment.
-    
+
     .. math:: Z_2 - Z_1 = -\frac{R_d}{g} \int_{p_1}^{p_2} T_v d\ln p,
-    
+
     Which is based off of Equation 3.24 in [Hobbs2006]_.
     This assumes a hydrostatic atmosphere.
 
@@ -748,7 +716,7 @@ def thickness_hydrostatic(p: np.ndarray, t: np.ndarray, mr: Optional[np.ndarray]
     else:
         layer_p = p
         layer_virttemp = virtual_temperature(t, mr)
-    
+
     return (
         -Rd / g * np.trapz(layer_virttemp, np.log(layer_p))
     )
@@ -865,11 +833,11 @@ def ppmv_to_moleculesm3(mr: np.ndarray, p: np.ndarray,
     return nr_molm3
 
 
-def get_frequencies(instr: Optional[str] = 'hat'):
+def get_frequencies(instrument: Optional[str] = 'hat'):
     """[summary]
 
     Args:
-        instr (str, optional): [description]. Defaults to 'hat'.
+        instrument (str, optional): [description]. Defaults to 'hat'.
 
     Returns:
         [type]: [description]
@@ -891,7 +859,7 @@ def get_frequencies(instr: Optional[str] = 'hat'):
         'k2w': [23.8400, 31.4000, 72.5000, 82.5000, 90.0000, 150.000]
     }
 
-    return frequencies.get(instr)
+    return frequencies.get(instrument)
 
 
 def to_kelvin(t: np.ndarray) -> np.ndarray:
@@ -931,9 +899,12 @@ def get_frequencies_sat(instrument: str) -> np.ndarray:
     Returns:
         np.ndarray: Frequencies of the instrument selected
 
+    See Also:
+        :py:meth:`pyrtlib.utils.get_frequencies`
+
     Example:
-        >>> from pyrtlib.utils import get_frequencies
-        >>> mwi = get_frequencies("MWI")
+        >>> from pyrtlib.utils import get_frequencies_sat
+        >>> mwi = get_frequencies_sat("MWI")
         >>> print(mwi)
     """
     cf = 183.31

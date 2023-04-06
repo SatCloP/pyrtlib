@@ -214,77 +214,77 @@ class BTCloudRTE(object):
         
         Returns a pandas dataframe containing:
         
-        tbtotal:
-            brightness temperature (K) includes cosmic background; 
-            indexed by frequency and elevation angle
-        
-        tbatm:
-            atmospheric brightness temperature (K), no cosmic; 
-            background;indexed by frequency and elevation angle
-        
-        tmr:
-            mean radiating temperature of the atmosphere (K);
-            indexed by frequency and elevation angle
-        
-        tmrcld:
-            mean radiating temperature (K) of the lowest cloud layer;
-            indexed by frequency and elevation angle
-        
-        taudry:
-            dry air absorption integrated over each ray path (Np);
-            indexed by frequency and elevation angle
-        
-        tauwet:
-            water vapor absorption integrated over each ray path (Np);
-            indexed by frequency and elevation angle
-        
-        tauliq:
-            cloud liquid absorption integrated over each ray path (Np);
-            indexed by frequency and elevation angle
-        
-        tauice:
-            cloud ice absorption integrated over each ray path (Np);
-            indexed by frequency and elevation angle
+            tbtotal:
+                brightness temperature (K) includes cosmic background; 
+                indexed by frequency and elevation angle
+            
+            tbatm:
+                atmospheric brightness temperature (K), no cosmic; 
+                background;indexed by frequency and elevation angle
+            
+            tmr:
+                mean radiating temperature of the atmosphere (K);
+                indexed by frequency and elevation angle
+            
+            tmrcld:
+                mean radiating temperature (K) of the lowest cloud layer;
+                indexed by frequency and elevation angle
+            
+            taudry:
+                dry air absorption integrated over each ray path (Np);
+                indexed by frequency and elevation angle
+            
+            tauwet:
+                water vapor absorption integrated over each ray path (Np);
+                indexed by frequency and elevation angle
+            
+            tauliq:
+                cloud liquid absorption integrated over each ray path (Np);
+                indexed by frequency and elevation angle
+            
+            tauice:
+                cloud ice absorption integrated over each ray path (Np);
+                indexed by frequency and elevation angle
 
-        and a dictionary containing:
+            and a dictionary containing:
 
-        taulaydry:
-            dry air absorption integrated over each ray path (Np);
-            indexed by frequency, elevation angle and height profile
+            taulaydry:
+                dry air absorption integrated over each ray path (Np);
+                indexed by frequency, elevation angle and height profile
 
-        taulaywet:
-            water vapor absorption integrated over each ray path (Np);
-            indexed by frequency, elevation angle and height profile
+            taulaywet:
+                water vapor absorption integrated over each ray path (Np);
+                indexed by frequency, elevation angle and height profile
 
-        taulayliq:
-            cloud liquid absorption integrated over each ray path (Np);
-            indexed by frequency, elevation angle and height profile
+            taulayliq:
+                cloud liquid absorption integrated over each ray path (Np);
+                indexed by frequency, elevation angle and height profile
 
-        taulayice:
-            cloud ice absorption integrated over each ray path (Np);
-            indexed by frequency, elevation angle and height profile
+            taulayice:
+                cloud ice absorption integrated over each ray path (Np);
+                indexed by frequency, elevation angle and height profile
 
-        srho:
-            water vapor density integrated along each ray path (cm);
-            indexed by elevation angle
-        
-        swet:
-            wet refractivity integrated along each ray path (cm);
-            indexed by elevation angle
-        
-        sdry:
-            dry refractivity integrated along each ray path (cm);
-            indexed by elevation angle
-        
-        sliq:
-            cloud ice density integrated along each ray path (cm);
-            indexed by elevation angle
-        
-        sice:
-            cloud liquid density integrated along each ray path (cm);
-            indexed by elevation angle
+            srho:
+                water vapor density integrated along each ray path (cm);
+                indexed by elevation angle
+            
+            swet:
+                wet refractivity integrated along each ray path (cm);
+                indexed by elevation angle
+            
+            sdry:
+                dry refractivity integrated along each ray path (cm);
+                indexed by elevation angle
+            
+            sliq:
+                cloud ice density integrated along each ray path (cm);
+                indexed by elevation angle
+            
+            sice:
+                cloud liquid density integrated along each ray path (cm);
+                indexed by elevation angle
 
-        :rtype:
+        Returns:
             Union[pandas.DataFrame, Tuple[pandas.DataFrame, Dict[str, numpy.ndarray]]]: [description]
         """
 

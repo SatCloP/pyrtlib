@@ -3,7 +3,7 @@ from unittest import TestCase
 import numpy as np
 from numpy.testing import assert_allclose, assert_almost_equal
 from pyrtlib.atmp import AtmosphericProfiles as atmp
-from pyrtlib.utils import (ppmv2gkg, mr2rh, gas_mass, height_to_pressure, pressure_to_height,
+from pyrtlib.utils import (ppmv2gkg, mr2rh, gas_mass, height_to_pressure, pressure_to_height, constants,
                            to_kelvin, to_celsius, get_frequencies_sat, eswat_goffgratch, satvap, satmix)
 
 z, p, d, tk, md = atmp.gl_atm(atmp.TROPICAL)
@@ -112,3 +112,7 @@ class Test(TestCase):
         assert_almost_equal(sat_mix, 3.8474392877771995, decimal=10)
         sat_mix = satmix(np.array([1000, 950, 850]), np.array([273.25, 260.34, 258.36]))
         assert_almost_equal(sat_mix, np.array([3.84743929, 1.4993625 , 1.42541609]), decimal=5)
+
+    def test_constants(self):
+        cs = constants('R')[0]
+        assert_almost_equal(cs, 8.31446261815324, decimal=5)
