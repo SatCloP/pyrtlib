@@ -32,7 +32,7 @@ class BTCloudRTE(object):
                  cloudy: Optional[bool] = False):
         """User interface which computes brightness temperatures (Tb), mean
         radiating temperature (Tmr), and integrated absorption (Tau) for 
-        clear or cloudy conditions,  Also returns all integrated quantities
+        clear or cloudy conditions.  Also returns all integrated quantities
         that the original TBMODEL, Cyber Version, returned.  The input
         profiles are not modified within this subroutine.  It is assumed
         that the input profiles start at the antenna height (zX(1)).  The
