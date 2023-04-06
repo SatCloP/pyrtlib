@@ -4,9 +4,10 @@ import numpy as np
 from numpy.testing import assert_allclose, assert_almost_equal
 from pyrtlib.atmp import AtmosphericProfiles as atmp
 from pyrtlib.utils import (ppmv2gkg, mr2rh, gas_mass, height_to_pressure, pressure_to_height, constants,
-                           to_kelvin, to_celsius, get_frequencies_sat, eswat_goffgratch, satvap, satmix)
+                           to_kelvin, to_celsius, get_frequencies_sat, eswat_goffgratch, satvap, satmix,
+                           import_lineshape)
 
-z, p, d, tk, md = atmp.gl_atm(atmp.TROPICAL)
+z, p, d, t, md = atmp.gl_atm(atmp.TROPICAL)
 
 
 class Test(TestCase):
@@ -23,7 +24,7 @@ class Test(TestCase):
 
     def test_mr2rh(self):
         gkg = ppmv2gkg(md[:, atmp.H2O], atmp.H2O)
-        rh, rh_wmo = mr2rh(p, tk, gkg)
+        rh, rh_wmo = mr2rh(p, t, gkg)
         rh_ex = np.array([7.37904947e-01, 7.15135305e-01, 7.35076661e-01, 4.79160577e-01,
                           3.48167127e-01, 3.76644483e-01, 3.48042202e-01, 3.20269720e-01,
                           2.95282900e-01, 2.54125093e-01, 1.95488576e-01, 1.31680781e-01,
@@ -92,27 +93,38 @@ class Test(TestCase):
                                 119.9503, 120.1503, 120.8503, 121.9503, 164.775, 166.225,
                                 174.91, 177.21, 178.41, 179.91, 181.31, 185.31,
                                 186.71, 188.21, 189.41, 191.71])
-        
+
         assert_almost_equal(frequencies, get_frequencies_sat('MWI'), decimal=4)
 
     def test_eswat_goffgratch(self):
         eswat = eswat_goffgratch(273.25)
         assert_almost_equal(eswat, 6.147856307200233, decimal=10)
         eswat = eswat_goffgratch(np.array([273.25, 280.5]))
-        assert_almost_equal(eswat, np.array([ 6.14785631, 10.24931596]), decimal=5)
+        assert_almost_equal(eswat, np.array(
+            [6.14785631, 10.24931596]), decimal=5)
 
     def test_satvap(self):
         sat_vap = satvap(273.25)
         assert_almost_equal(sat_vap, 6.147856307200233, decimal=10)
         sat_vap = satvap(np.array([273.25, 280.5]))
-        assert_almost_equal(sat_vap, np.array([ 6.14785631, 10.24931596]), decimal=5)
+        assert_almost_equal(sat_vap, np.array(
+            [6.14785631, 10.24931596]), decimal=5)
 
     def test_satmix(self):
         sat_mix = satmix(1000, 273.25)
         assert_almost_equal(sat_mix, 3.8474392877771995, decimal=10)
-        sat_mix = satmix(np.array([1000, 950, 850]), np.array([273.25, 260.34, 258.36]))
-        assert_almost_equal(sat_mix, np.array([3.84743929, 1.4993625 , 1.42541609]), decimal=5)
+        sat_mix = satmix(np.array([1000, 950, 850]),
+                         np.array([273.25, 260.34, 258.36]))
+        assert_almost_equal(sat_mix, np.array(
+            [3.84743929, 1.4993625, 1.42541609]), decimal=5)
 
     def test_constants(self):
         cs = constants('R')[0]
         assert_almost_equal(cs, 8.31446261815324, decimal=5)
+
+    def test_import_linelist(self):
+        model = 'rose21sd'
+        h2oll = import_lineshape('h2oll_{}'.format(model))
+        aself = np.array([0., 12.6,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,
+                          0.,  0.,  0.,  0.,  0.])
+        assert_almost_equal(h2oll.aself, aself, decimal=5)

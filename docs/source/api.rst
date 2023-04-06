@@ -142,7 +142,6 @@ Uncertainty
     :toctree: generated/
     :template: custom-module-template.rst
 
-    pyrtlib.lineshape
     pyrtlib.absmod_uncertainty
 
 

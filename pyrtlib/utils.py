@@ -6,15 +6,30 @@ __author__ = ''
 __date__ = 'March 2021'
 __copyright__ = '(C) 2021, CNR-IMAA'
 
-from typing import Tuple, Optional, Union, List
+from typing import Tuple, Optional, Union, List, Dict
 
 import numpy as np
 
 
-def import_lineshape(name):
-    """ Import a named object from a module in the context of this function.
+def import_lineshape(name: str) -> Dict:
+    """Import a named object from a module in the context of this function.
+    Used to import line list for absorption models.
 
     :meta private:
+
+    Args:
+        name (str): Absorption model name.
+
+    Returns:
+        Dict: Dictionary of line list of the absorption model chose.
+
+    Examples:
+        >>> from pyrtlib.utils import import_lineshape
+        >>> H2OAbsModel.model = 'rose21sd'
+        >>> H2OAbsModel.h2oll = import_lineshape('h2oll_{}'.format(H2OAbsModel.model))
+        >>> H2OAbsModel.h2oll.aself
+        array([0., 12.6,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,
+        0.,  0.,  0.,  0.,  0.])
     """
     try:
         module = __import__('pyrtlib.lineshape', globals(), locals(), [name])
@@ -26,10 +41,11 @@ def import_lineshape(name):
 def constants(name: Optional[str] = None) -> Union[Tuple[float, str], List]:
     """
     This routine will provide values and units for all the
-    universal constants that I needed in my work.
+    universal constants necessary to pyrtlib.
 
     Args:
-        string (str): String specifying which constant is needed. Defaults to None.
+        name (Optional[str], optional): String specifying which constant is needed. Defaults to None.
+
     +---------------+-------------------------------------------+
     | string        | description                               |
     +---------------+-------------------------------------------+
@@ -58,7 +74,7 @@ def constants(name: Optional[str] = None) -> Union[Tuple[float, str], List]:
         ValueError: [description]
 
     Returns:
-        (tuple) : Numerical Value of the asked constant and string specifying which units are used
+        Union[Tuple[float, str], List] Numerical Value of the asked constant and string specifying which units are used
 
     References
     ----------
@@ -100,7 +116,6 @@ def constants(name: Optional[str] = None) -> Union[Tuple[float, str], List]:
 def gas_mass(gasid: int) -> float:
     """
     Returns the mass of the HITRAN gas ID
-    DCT 3/2/1996
 
     Args:
         gasid (int): The gas ID defined in :py:class:`~pyrtlib.atmp.AtmosphericProfiles`
@@ -109,7 +124,7 @@ def gas_mass(gasid: int) -> float:
         float: The mass of the HITRAN gas ID
 
     .. note::
-        Results are not accurate because amu values need more significant figures.
+        TODO: Results are not accurate because amu values need more significant figures.
 
     """
 
@@ -197,7 +212,6 @@ def ppmv2gkg(ppmv: np.ndarray, gasid: int) -> np.ndarray:
         np.ndarray: Mass mixing ratio in g/kg
 
     See also:
-
         :py:meth:`gas_mass` 
     """
 
@@ -215,25 +229,20 @@ def mr2rh(p: np.ndarray,
           t: np.ndarray,
           w: np.ndarray,
           Tconvert: np.ndarray = None) -> np.ndarray:
-    """Determine relative humidity (#) given
-    reference pressure (mbar), temperature (t,K), and
-    water vapor mass mixing ratio (w,g/kg)
+    """Determine relative humidity (rh) givenvreference pressure (mbar), temperature (K), and
+    water vapor mass mixing ratio (g/kg)
 
-    Two RHs are returned: rh1 is with RH defined as the ratio 
-    of water vapor partial pressure to saturation vapor pressure and
-    rh2 is with RH defined as the ratio of water vapor mixing ratio to 
+    Two RHs are returned: rh1 is with RH defined as the ratio of water vapor partial pressure 
+    to saturation vapor pressure and rh2 is with RH defined as the ratio of water vapor mixing ratio to 
     saturation mixing ratio.
 
     if input, Tconvert is used as the temperature point to switch
     from using saturation vapor pressure over water to over ice.
 
-    DCT 3/5/00
-
-
     Args:
-        p (np.ndarray): [description].
-        t (np.ndarray): [description].
-        w (np.ndarray): [description].
+        p (np.ndarray): Pressure profile (mb).
+        t (np.ndarray): Temperature profile (K).
+        w (np.ndarray): Water Vapor Mixing ratio (g/kg).
         Tconvert (np.ndarray, optional): [description]. Defaults to None.
 
     Returns:
@@ -256,25 +265,22 @@ def mr2rh(p: np.ndarray,
     return rh1, rh2
 
 
-def mr2rho(mr: np.ndarray, tk: np.ndarray, p: np.ndarray) -> np.ndarray:
-    """Determine water vapor density (g/m3) given
-    reference pressure (mbar), temperature (t,K), and
+def mr2rho(mr: np.ndarray, t: np.ndarray, p: np.ndarray) -> np.ndarray:
+    """Determine water vapor density (g/m3) given reference pressure (mbar), temperature (K), and
     water vapor mass mixing ratio (g/kg)
 
     Equations were provided by Holger Linne' from Max Planck Institute.
 
-     2002/05/09 (Looking at rho2mr.email.m from DCT)
-     2018/06/20
-
     Args:
-        mr ([type], optional): [description]. Defaults to None.
-        tk ([type], optional): [description]. Defaults to None.
-        p ([type], optional): [description]. Defaults to None.
+        mr (np.ndarray): Mixing ratio (g/kg)
+        t (np.ndarray): Temperature profiles (K)
+        p (np.ndarray): Pressure profiles (mb).
 
     Returns:
-        [type]: [description]
+        np.ndarray: Water Vapor Density (g/m3)
     """
-    rho = np.multiply(np.multiply(mr, p), 0.3477) / (tk)
+
+    rho = np.multiply(np.multiply(mr, p), 0.3477) / t
 
     # I think the above is an approximation valid within ~1#.
     # To be consistent with Vapor_xxx.m and mr2rh.m (see
@@ -283,23 +289,23 @@ def mr2rho(mr: np.ndarray, tk: np.ndarray, p: np.ndarray) -> np.ndarray:
 
     eps = 0.621970585
     rho = np.multiply(np.multiply(mr, p), 1.0) / (np.dot(
-        (np.dot(1000.0, eps) + mr), rvap)) / (tk)
+        (np.dot(1000.0, eps) + mr), rvap)) / t
 
     return rho
 
 
 def mr2e(p: np.ndarray, mr: np.ndarray) -> np.ndarray:
-    """Compute H2O partial pressure (e,mbar) given
-    pressure (p,mbar) and H2O mass mixing ratio (mr,g/kg)
+    """Compute H2O partial pressure (mbar) given pressure (mbar) 
+    and H2O mass mixing ratio (g/kg)
 
     DCT 3/6/00
 
     Args:
-        p ([type], optional): [description]. Defaults to None.
-        mr ([type], optional): [description]. Defaults to None.
+        p (np.ndarray): Pressure profile (mb).
+        mr (np.ndarray): Mixing Ratio (g/kg).
 
     Returns:
-        [type]: [description]
+        np.ndarray: H2O partial pressure (mb).
     """
 
     # ratio of water mass to dry air mass
@@ -310,17 +316,15 @@ def mr2e(p: np.ndarray, mr: np.ndarray) -> np.ndarray:
 
 
 def e2mr(p: np.ndarray, e: np.ndarray) -> np.ndarray:
-    """Compute H2O mass mixing ratio (mr,g/kg) given
-    pressure (p,mbar) and H2O partial pressure (e,mbar)
-
-    DCT 3/6/00
+    """Compute H2O mass mixing ratio (g/kg) given pressure (mbar) 
+    and H2O partial pressure (mbar)
 
     Args:
-        p ([type], optional): [description]. Defaults to None.
-        e ([type], optional): [description]. Defaults to None.
+        p (np.ndarray): Pressure (mb).
+        e (np.ndarray): H2O partial pressure (mb).
 
     Returns:
-        [type]: [description]
+        np.ndarray: H2= Mass Mixing Ratio (g/kg)
     """
 
     # ratio of water mass to dry air mass
@@ -331,29 +335,29 @@ def e2mr(p: np.ndarray, e: np.ndarray) -> np.ndarray:
 
 
 def satmix(p: np.ndarray,
-           T: np.ndarray,
+           t: np.ndarray,
            Tconvert: Optional[np.ndarray] = None) -> np.ndarray:
-    """Compute saturation mixing ratio [g/kg] given reference pressure, 
-    p [mbar] and temperature, T [K].  If Tconvert input, the calculation uses 
+    """Compute saturation mixing ratio (g/kg) given reference pressure, 
+    p (mbar]) and temperature, T (K).  If Tconvert input, the calculation uses 
     the saturation vapor pressure over ice (opposed to over water) 
     for temperatures less than Tconvert [K].
 
     DCT, updated 3/5/00
 
     Args:
-        p ([type], optional): [description]. Defaults to None.
-        T ([type], optional): [description]. Defaults to None.
-        Tconvert ([type], optional): [description]. Defaults to None.
+        p (np.ndarray): Pressure profile (mb).
+        t (np.ndarray): Temperature profile (K).
+        Tconvert (Optional[np.ndarray], optional): _description_. Defaults to None.
 
     Returns:
-        [type]: [description]
+        np.ndarray: Saturation mixing ratio (g/kg).
     """
     # warning('off')
 
     # saturation pressure
-    esat = satvap(T)
+    esat = satvap(t)
     if Tconvert:
-        esat = satvap(T, Tconvert)
+        esat = satvap(t, Tconvert)
 
     # saturation mixing ratio
     wsat = e2mr(p, esat)
@@ -361,61 +365,52 @@ def satmix(p: np.ndarray,
     return wsat
 
 
-def satvap(T, Tconvert: Optional[np.ndarray] = None) -> np.ndarray:
-    """compute saturation vapor pressure [mbar] given temperature, T [K].
+def satvap(t: np.ndarray, Tconvert: Optional[np.ndarray] = None) -> np.ndarray:
+    """Compute saturation vapor pressure (mbar) given temperature, T (K).
     If Tconvert is input, the calculation uses the saturation vapor 
     pressure over ice (opposed to over water) for temperatures less than 
-    Tconvert [K].
-
-    DCT, updated 3/5/00
+    Tconvert (K).
 
     Args:
-        T ([type], optional): [description]. Defaults to None.
-        Tconvert ([type], optional): [description]. Defaults to None.
+        t (np.ndarray): Temperature profile (K).
+        Tconvert (Optional[np.ndarray], optional): _description_. Defaults to None.
 
     Returns:
-        [type]: [description]
+        np.ndarray: Saturation vapor pressure (mbar).
 
     """
     # saturation pressure over water
     # Goff Gratch formulation, over water
-    esat = eswat_goffgratch(T)
+    esat = eswat_goffgratch(t)
 
     # saturation pressure over ice if needed
     if Tconvert:
-        ind = np.nonzero(T <= Tconvert)
+        ind = np.nonzero(t <= Tconvert)
         # Goff Gratch formulation, over ice
-        esat[ind] = esice_goffgratch(T(ind))
+        esat[ind] = esice_goffgratch(t(ind))
 
     return esat
 
 
-def eswat_goffgratch(T: np.ndarray) -> np.ndarray:
-    """Compute water vapor saturation pressure over water
-    using Goff-Gratch formulation.  Adopted from PvD's 
-    svp_water.pro.
-
-    DCT 8/22/00
+def eswat_goffgratch(t: np.ndarray) -> np.ndarray:
+    """Compute water vapor saturation pressure over water using Goff-Gratch formulation. 
 
     Args:
-        T ([type], optional): temperature [Kelvin]. Defaults to None.
+        t (np.ndarray): Temperature profile (K).
 
     Returns:
-        svp [type]: saturation pressure [mbar]
+        np.ndarray: Water vapor saturation pressure over water (mb).
 
     References
     ----------
-    .. [1] Goff-Gratch formulation from sixth revised 
-            edition of Smithsonian Meteorology Tables.
+    .. [1] Goff-Gratch formulation from sixth revised edition of Smithsonian Meteorology Tables.
 
     .. note::
-        svp returned for all values of input T,
-        but results not valid for T >= 370 K and 
-        T <= 160 K.
+        svp returned for all values of input T, but results not valid for T >= 370 K and T <= 160 K.
     """
 
     t_sat = 373.16
-    t_ratio = t_sat / T
+    t_ratio = t_sat / t
     rt_ratio = 1.0 / t_ratio
     sl_pressure = 1013.246
     c1 = 7.90298
@@ -436,35 +431,28 @@ def eswat_goffgratch(T: np.ndarray) -> np.ndarray:
     return svp
 
 
-def esice_goffgratch(T: np.ndarray) -> np.ndarray:
-    """Compute water vapor saturation pressure over ice
-    using Goff-Gratch formulation.  Adopted from PvD's 
-    svp_ice.pro.
-
-    DCT 8/22/00
-
+def esice_goffgratch(t: np.ndarray) -> np.ndarray:
+    """Compute water vapor saturation pressure over ice using Goff-Gratch formulation. 
+    
     Args:
-        T ([type], optional): [description]. Defaults to None.
+        t (numpy.ndarray): Temperature profile (K).
 
     Returns:
-        svp [type]: [description]
+        numpy.ndarray: Water vapor saturation pressure over ice (mb).
 
     References
     ----------
-    .. [1] Goff-Gratch formulation from sixth revised 
-            edition of Smithsonian Meteorology Tables.
+    .. [1] Goff-Gratch formulation from sixth revised edition of Smithsonian Meteorology Tables.
 
     .. note::
-        svp returned for all values of input T,
-        but results not valid for T >= 370 K and 
-        T <= 160 K.
+        svp returned for all values of input T, but results not valid for T >= 370 K and T <= 160 K.
     """
 
     ewi = 6.1071
     c1 = 9.09718
     c2 = 3.56654
     c3 = 0.876793
-    ratio = 273.15 / T
+    ratio = 273.15 / t
     tmp = (np.dot(-c1,
                   (ratio - 1.0))) - (np.dot(c2, np.log10(ratio))) + (np.dot(
                       c3, (1.0 - (1.0 / ratio)))) + np.log10(ewi)
@@ -474,41 +462,38 @@ def esice_goffgratch(T: np.ndarray) -> np.ndarray:
     return svp
 
 
-def tk2b_mod(hvk: np.ndarray, T: np.ndarray) -> np.ndarray:
+def tk2b_mod(hvk: np.ndarray, t: np.ndarray) -> np.ndarray:
     r"""[summary]
 
-    .. math:: Btilde=\frac{1}{e^\frac{hvk}{T}-1}
+    .. math:: B_tilde=\frac{1}{e^\frac{hvk}{T}-1}
 
     Args:
-        hvk ([type], optional): [description]. Defaults to None.
-        T ([type], optional): [description]. Defaults to None.
-
+        hvk (np.ndarray): _description_
+        t (np.ndarray): _description_
+    
     Returns:
-        [type]: [description]
+        np.ndarray: _description_
 
     .. warning:: add docstring to function
     """
-    Btilde = 1.0 / (np.exp(hvk / T) - 1.0)
+    Btilde = 1.0 / (np.exp(hvk / t) - 1.0)
 
     return Btilde
 
 
-def dilec12(f: np.ndarray, tk: np.ndarray) -> np.ndarray:
-    """Computes the complex dielectric constant for liquid water,
-    with a negative imaginary part representing dissipation.
+def dilec12(f: np.ndarray, t: np.ndarray) -> np.ndarray:
+    """Computes the complex dielectric constant for liquid water, with a 
+    negative imaginary part representing dissipation.
 
     Complex logarithm is used here. It should be defined with
     imaginary part in the range -pi to +pi.
 
-    Copyright ? P.W. Rosenkranz  Apr. 15, 2014
-    Creative Commons license CC BY-SA
-
     Args:
-        f ([type], optional): frequency in GHz. Defaults to None.
-        tk ([type], optional): Kelvin temperature. Defaults to None.
+        f (np.ndarray): Frequency (GHz)
+        t (np.ndarray): Temeprature (K)
 
     Returns:
-        kappa [type]: complex dielectric constant
+        np.ndarray: Dielectric constant for liquid water.
 
     References
     ----------
@@ -520,9 +505,9 @@ def dilec12(f: np.ndarray, tk: np.ndarray) -> np.ndarray:
     .. note:: validated for 20<f<220 GHz at 248<tk<273; 1<f<1000 GHz at 273<tk<330.
     """
 
-    tc = tk - 273.15
+    tc = t - 273.15
     z = np.complex(0.0, f)
-    theta = 300.0 / tk
+    theta = 300.0 / t
     # static dielectric constant model from
     # Patek et al. (J.Phys.Chem.Ref.Data. v.38(1), 21 (2009).
     kappa = -43.7527 * theta ** 0.05 + 299.504 * theta ** 1.47 - \
@@ -553,19 +538,19 @@ def dilec12(f: np.ndarray, tk: np.ndarray) -> np.ndarray:
 
 
 def dcerror(x: np.ndarray, y: np.ndarray) -> np.ndarray:
-    """Csixth-Order Approx To The Complex Error Function Of z=x+iy.
-    cerror = exp(-z^2)erfc(-iz)
+    r"""Sixth-Order Approx To The Complex Error Function of
+
+    .. math:: z = x+iy
+    .. math:: cerror = \exp(z^2)\times erfc(-iz)
+
     This version is double precision and valid in all quadrants.
 
-    P. Rosenkranz  12/11/2018
-    2018/12/19 - : first created from dcerror.f
-
     Args:
-        x ([type], optional): [description]. Defaults to None.
-        y ([type], optional): [description]. Defaults to None.
+        x (np.ndarray): _description_
+        y (np.ndarray): _description_
 
     Returns:
-        [type]: [description]
+        np.ndarray: _description_
 
     References
     ----------
@@ -654,7 +639,6 @@ def height_to_pressure(height: float) -> float:
         (g / (Rd * gamma)) * np.log(1 - ((height * gamma) / t0)))
 
 
-# TODO: based on metpy calc function, remember to cite package
 def virtual_temperature(t: np.ndarray, mr: np.ndarray) -> np.ndarray:
     r"""Calculate virtual temperature.
     This calculation must be given an air parcel's temperature and mixing ratio.
@@ -684,7 +668,6 @@ def virtual_temperature(t: np.ndarray, mr: np.ndarray) -> np.ndarray:
                 / (molecular_weight_ratio * (1 + mr)))
 
 
-# TODO: based on metpy calc function, remember to cite package
 def thickness_hydrostatic(p: np.ndarray, t: np.ndarray, mr: Optional[np.ndarray] = None) -> np.float32:
     r"""Calculate the thickness of a layer via the hypsometric equation.
     This thickness calculation uses the pressure and temperature profiles (and optionally
@@ -833,14 +816,14 @@ def ppmv_to_moleculesm3(mr: np.ndarray, p: np.ndarray,
     return nr_molm3
 
 
-def get_frequencies(instrument: Optional[str] = 'hat'):
-    """[summary]
+def get_frequencies(instrument: Optional[str] = 'hat') -> List:
+    """Get frequencies list from main ground instrument.
 
     Args:
-        instrument (str, optional): [description]. Defaults to 'hat'.
+        instrument (Optional[str], optional): Abbreviation of radiometer name. Defaults to 'hat'.
 
     Returns:
-        [type]: [description]
+        List: Frequencies list (GHz) of the radiometer chosen.
     """
     frequencies = {
         'hat': [
@@ -891,13 +874,13 @@ def to_celsius(t: np.ndarray) -> np.ndarray:
 
 
 def get_frequencies_sat(instrument: str) -> np.ndarray:
-    """Get frequencies from main instrument used
+    """Get frequencies list from main satellite sensors.
 
     Args:
         instrument (str): Instrument from which getting frequencies
 
     Returns:
-        np.ndarray: Frequencies of the instrument selected
+        np.ndarray: Frequencies (GHz) of the instrument selected
 
     See Also:
         :py:meth:`pyrtlib.utils.get_frequencies`

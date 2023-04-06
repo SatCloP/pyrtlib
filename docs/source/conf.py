@@ -60,6 +60,7 @@ extensions = [
     'nbsphinx',
     'sphinx_gallery.gen_gallery',
     'sphinx.ext.coverage',
+    'sphinx_panels',
     # 'sphinx.ext.graphviz',
     'rst2pdf.pdfbuilder',
     # "sphinx.ext.linkcode",
@@ -104,7 +105,7 @@ html_show_sourcelink = False
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
 
-html_favicon = str(Path('_static') / 'pyrtlib_32x32.ico')
+html_favicon = str(Path('_static') / 'thumb_logo.svg')
 # html_logo = "../../resources/logo/logo_white_large_new.png"
 html_theme_options = {
     "external_links": [],
@@ -161,6 +162,10 @@ texinfo_documents = [
      'Miscellaneous'),
 ]
 
+panels_add_bootstrap_css = False
+html_css_files = [
+    "pyrtlib.css",
+]
 # # == Disable search functionality for html
 # def on_builder_inited(app):
 #     if app.builder.name == 'html':

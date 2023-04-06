@@ -1,28 +1,60 @@
-.. image:: ../../resources/logo/logo_large_new.png
-  :width: 600
+.. .. image:: ../../resources/logo/logo_large_new.png
+..   :width: 600
 
 .. pyrtlib documentation master file, created by sphinx-quickstart on Fri Mar 19 09:49:16 2021. 
    You can adapt this file completely to your liking, but it should at least contain the root `toctree` directive.
 
 
-Welcome to pyrtlib's documentation!
-====================================================
+PyRTLib documentation
+=====================
 
-pyrtlib allows to simulate and calculate radiometric parameters and estimting propogation parameters using as input meteorological data.
-Some meteorological dataset are built-in in pyrtlib which can be download and used directly in pyrtlib. It considers atmospheric profiles from both radiosounding observations (RAOB) and model reanalysis (ERA5).
+PyRTLib allows to simulate and calculate radiometric parameters and estimting propogation parameters using as input meteorological data.
+Some meteorological dataset are built-in in PyRTLib which can be download and used directly in PyRTLib. It considers atmospheric profiles from both radiosounding observations (RAOB) and model reanalysis (ERA5).
 RAOB profiles come from Wyoming Upper Air Archive (University of Wyoming) and NCEI’s Integrated Radiosonde Archive version 2 by the National Climatic Data Center (NCDC) of the National Oceanic and Atmospheric Administration (NOAA).
 
-pyrtlib also allows to quantify absorption model uncertainty due to uncertainty in the underlying spectroscopic parameters. [Cimini-2018]_
-The approach is applied to a widely used microwave absorption model [Rosenkranz-2017]_, on which pyrtlib is based, and radiative transfer calculations at any frequencies range, 
+PyRTLib also allows to quantify absorption model uncertainty due to uncertainty in the underlying spectroscopic parameters. [Cimini-2018]_
+The approach is applied to a widely used microwave absorption model [Rosenkranz-2017]_, on which PyRTLib is based, and radiative transfer calculations at any frequencies range, 
 which are commonly exploited for atmospheric sounding by microwave radiometer (MWR).  
+
+.. panels::
+   :card: + intro-card text-center
+   :column: col-lg-6 col-md-6 col-sm-6 col-xs-12 d-flex
+   
+   ---
+   :img-top: _static/gallery_panels.svg
+   
+   Gallery example
+
+   +++
+
+   .. link-button:: examples/index
+      :type: ref
+      :text: Go To Reference
+      :classes: btn-outline-primary btn-block
+   
+   ---
+   :img-top: _static/gallery_panels.svg
+
+   Jupyter notebook example
+
+   +++
+
+   .. link-button:: notebook/index
+      :type: ref
+      :text: Go To Reference
+      :classes: btn-block btn-outline-primary 
 
 .. pyrtlib is a python tool that provides a set of calsses and methods for simulating ........
 
 The source code for pyrtlib python package is hosted on `github
 <https://github.com/slarosa/pyrtlib>`_.
 
-.. image:: ../../resources/spectrum_r22.jpeg
-.. image:: ../../resources/r98_r22.jpeg
+.. cssclass:: image-pyrtlib
+   
+   .. image:: ../../resources/spectrum_r22.jpeg
+      :width: 600
+   .. image:: ../../resources/r98_r22.jpeg
+      :width: 600
 
 Example:
 --------

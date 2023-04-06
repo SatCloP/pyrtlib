@@ -43,13 +43,13 @@ dry air absorption profile using ``rose16`` model.
     from pyrtlib.atmp import AtmosphericProfiles as atmp
     from pyrtlib.utils import ppmv2gkg, mr2rh, import_lineshape, height_to_pressure
 
-    z, p, d, tk, md = atmp.gl_atm(atmp.TROPICAL)
+    z, p, d, t, md = atmp.gl_atm(atmp.TROPICAL)
     frq = np.arange(20, 61, 1)
     ice = 0
     gkg = ppmv2gkg(md[:, atmp.H2O], atmp.H2O)
-    rh = mr2rh(p, tk, gkg)[0] / 100
+    rh = mr2rh(p, t, gkg)[0] / 100
 
-    e, rho = RTEquation.vapor(tk, rh, ice)
+    e, rho = RTEquation.vapor(t, rh, ice)
 
     mdl = 'rose19sd'
     AbsModel.model = mdl
@@ -60,7 +60,7 @@ dry air absorption profile using ``rose16`` model.
     adry = np.zeros((len(frq), len(z)))
 
     for j in range(0, len(frq)):
-        awet[j, :], adry[j, :] = RTEquation.clearsky_absorption(p, tk, e, frq[j])
+        awet[j, :], adry[j, :] = RTEquation.clearsky_absorption(p, t, e, frq[j])
 
     fig, ax = plt.subplots(1, 2, figsize=(12, 12))
     axis_lim = [0, 7]
@@ -124,7 +124,7 @@ dry air absorption profile using ``rose16`` model.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.803 seconds)
+   **Total running time of the script:** ( 0 minutes  0.789 seconds)
 
 
 .. _sphx_glr_download_examples_plot_water_vapour_profile.py:
