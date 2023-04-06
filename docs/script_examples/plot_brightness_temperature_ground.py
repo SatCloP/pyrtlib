@@ -5,7 +5,7 @@ Performing Brightness Temperature calculation from ground
 
 # %%
 # This example shows how to use the
-# :py:class:`pyrtlib.main.BTCloudRTE` method to calculate brightness temperature from ground
+# :py:class:`pyrtlib.tb_spectrum.TbCloudRTE` method to calculate brightness temperature from ground
 
 import matplotlib.pyplot as plt
 
@@ -13,7 +13,7 @@ plt.rcParams.update({'font.size': 15})
 import numpy as np
 
 from pyrtlib.atmospheric_profiles import AtmosphericProfiles as atmp
-from pyrtlib.main import BTCloudRTE
+from pyrtlib.tb_spectrum import TbCloudRTE
 from pyrtlib.utils import ppmv2gkg, mr2rh
 
 atm = ['Tropical',
@@ -39,7 +39,7 @@ for i in range(0, 6):
     ax.set_xlabel('Frequency (GHz)')
     ax.set_ylabel('BT (K)')
 
-    rte = BTCloudRTE(z, p, t, rh, frq, ang)
+    rte = TbCloudRTE(z, p, t, rh, frq, ang)
     rte.satellite = False
     rte.init_absmdl(mdl)
     df = rte.execute()

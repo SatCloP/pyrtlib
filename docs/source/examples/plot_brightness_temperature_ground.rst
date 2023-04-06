@@ -24,7 +24,7 @@ Performing Brightness Temperature calculation from ground
 .. GENERATED FROM PYTHON SOURCE LINES 7-9
 
 This example shows how to use the
-:py:class:`pyrtlib.main.BTCloudRTE` method to calculate brightness temperature from ground
+:py:class:`pyrtlib.tb_spectrum.TbCloudRTE` method to calculate brightness temperature from ground
 
 .. GENERATED FROM PYTHON SOURCE LINES 9-52
 
@@ -37,7 +37,7 @@ This example shows how to use the
     import numpy as np
 
     from pyrtlib.atmospheric_profiles import AtmosphericProfiles as atmp
-    from pyrtlib.main import BTCloudRTE
+    from pyrtlib.tb_spectrum import TbCloudRTE
     from pyrtlib.utils import ppmv2gkg, mr2rh
 
     atm = ['Tropical',
@@ -63,7 +63,7 @@ This example shows how to use the
         ax.set_xlabel('Frequency (GHz)')
         ax.set_ylabel('BT (K)')
 
-        rte = BTCloudRTE(z, p, t, rh, frq, ang)
+        rte = TbCloudRTE(z, p, t, rh, frq, ang)
         rte.satellite = False
         rte.init_absmdl(mdl)
         df = rte.execute()
@@ -88,7 +88,7 @@ This example shows how to use the
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  3.956 seconds)
+   **Total running time of the script:** ( 0 minutes  3.932 seconds)
 
 
 .. _sphx_glr_download_examples_plot_brightness_temperature_ground.py:

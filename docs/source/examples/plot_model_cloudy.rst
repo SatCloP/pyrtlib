@@ -24,7 +24,7 @@ Performing Brightness Temperature calculation in cloudy condition
 .. GENERATED FROM PYTHON SOURCE LINES 7-9
 
 This example shows how to use the
-:py:class:`pyrtlib.main.BTCloudRTE` method to calculate brightness temperature from Satellite in cloudy condition
+:py:class:`pyrtlib.tb_spectrum.TbCloudRTE` method to calculate brightness temperature from Satellite in cloudy condition
 
 .. GENERATED FROM PYTHON SOURCE LINES 9-73
 
@@ -38,7 +38,7 @@ This example shows how to use the
     np.seterr('raise')
 
     from pyrtlib.atmospheric_profiles import AtmosphericProfiles as atmp
-    from pyrtlib.main import BTCloudRTE
+    from pyrtlib.tb_spectrum import TbCloudRTE
     from pyrtlib.utils import ppmv2gkg, mr2rh
 
     atm = ['Tropical',
@@ -82,7 +82,7 @@ This example shows how to use the
         ax.set_xlabel('Frequency (GHz)')
         ax.set_ylabel('BT (K)')
 
-        rte = BTCloudRTE(z, p, t, rh, frq, ang)
+        rte = TbCloudRTE(z, p, t, rh, frq, ang)
         rte.cloudy = i
         rte.init_cloudy(cldh, denice, denliq)
         rte.init_absmdl(mdl)
@@ -107,8 +107,8 @@ This example shows how to use the
 
  .. code-block:: none
 
-    /Users/slarosa/dev/pyrtlib/pyrtlib/main.py:205: UserWarning: It seems that BTCloudRTE.cloudy attribute is not set to True. Sets it to True for running model in cloudy condition.
-      warnings.warn("It seems that BTCloudRTE.cloudy attribute is not set to True. "
+    /Users/slarosa/dev/pyrtlib/pyrtlib/tb_spectrum.py:205: UserWarning: It seems that TbCloudRTE.cloudy attribute is not set to True. Sets it to True for running model in cloudy condition.
+      warnings.warn("It seems that TbCloudRTE.cloudy attribute is not set to True. "
 
 
 
@@ -116,7 +116,7 @@ This example shows how to use the
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  1.495 seconds)
+   **Total running time of the script:** ( 0 minutes  1.543 seconds)
 
 
 .. _sphx_glr_download_examples_plot_model_cloudy.py:

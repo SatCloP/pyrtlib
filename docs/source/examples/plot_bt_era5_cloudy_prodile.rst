@@ -24,7 +24,7 @@ Performing BT calculation from satellite using ERA5 Reanalysis Observations in c
 .. GENERATED FROM PYTHON SOURCE LINES 7-10
 
 This example shows how to use the
-:py:class:`pyrtlib.main.BTCloudRTE` method to calculate brightness temperature from satellite using
+:py:class:`pyrtlib.tb_spectrum.TbCloudRTE` method to calculate brightness temperature from satellite using
 observations from ERA5 Reanalysis hourly pressure levels dataset in cloudy condition.
 
 .. GENERATED FROM PYTHON SOURCE LINES 10-79
@@ -37,7 +37,7 @@ observations from ERA5 Reanalysis hourly pressure levels dataset in cloudy condi
 
     plt.rcParams.update({'font.size': 15})
     import numpy as np
-    from pyrtlib.main import BTCloudRTE
+    from pyrtlib.tb_spectrum import TbCloudRTE
     from pyrtlib.utils import import_lineshape, kgkg_to_kgm3
     from pyrtlib.absorption_model import H2OAbsModel
     from pyrtlib.apiwebservices import ERA5Reanalysis
@@ -77,7 +77,7 @@ observations from ERA5 Reanalysis hourly pressure levels dataset in cloudy condi
     ax1.set_xlabel('Frequency [GHz]')
     ax1.set_ylabel('${T_B}$ [K]')
 
-    rte = BTCloudRTE(df_era5.z.values, df_era5.p.values, df_era5.t.values, df_era5.rh.values, frq, ang)
+    rte = TbCloudRTE(df_era5.z.values, df_era5.p.values, df_era5.t.values, df_era5.rh.values, frq, ang)
     rte.init_absmdl('rose20')
     H2OAbsModel.model = 'rose21sd'
     H2OAbsModel.h2oll = import_lineshape('h2oll_{}'.format(H2OAbsModel.model))
@@ -113,8 +113,8 @@ observations from ERA5 Reanalysis hourly pressure levels dataset in cloudy condi
 
  .. code-block:: none
 
-    /Users/slarosa/dev/pyrtlib/pyrtlib/main.py:205: UserWarning: It seems that BTCloudRTE.cloudy attribute is not set to True. Sets it to True for running model in cloudy condition.
-      warnings.warn("It seems that BTCloudRTE.cloudy attribute is not set to True. "
+    /Users/slarosa/dev/pyrtlib/pyrtlib/tb_spectrum.py:205: UserWarning: It seems that TbCloudRTE.cloudy attribute is not set to True. Sets it to True for running model in cloudy condition.
+      warnings.warn("It seems that TbCloudRTE.cloudy attribute is not set to True. "
 
 
 
@@ -122,7 +122,7 @@ observations from ERA5 Reanalysis hourly pressure levels dataset in cloudy condi
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  4.772 seconds)
+   **Total running time of the script:** ( 0 minutes  4.673 seconds)
 
 
 .. _sphx_glr_download_examples_plot_bt_era5_cloudy_prodile.py:

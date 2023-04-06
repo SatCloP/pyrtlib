@@ -17,9 +17,9 @@ from .rt_equation import RTEquation
 from .utils import import_lineshape
 
 
-class BTCloudRTE(object):
+class TbCloudRTE(object):
     """
-    Initialize BTCloudRTE
+    Initialize TbCloudRTE
     """
 
     def __init__(self, z: np.ndarray, p: np.ndarray, tk: np.ndarray, rh: np.ndarray, frq: np.ndarray,
@@ -202,7 +202,7 @@ class BTCloudRTE(object):
             self.denice = denice
             self.denliq = denliq
         else:
-            warnings.warn("It seems that BTCloudRTE.cloudy attribute is not set to True. "
+            warnings.warn("It seems that TbCloudRTE.cloudy attribute is not set to True. "
                           "Sets it to True for running model in cloudy condition.")
             # raise AttributeError("Set cloudy to True before running init_cloudy()")
 

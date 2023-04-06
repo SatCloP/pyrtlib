@@ -5,7 +5,7 @@ Performing BT calculation from satellite using IGRA2 Upper Air Observations
 
 # %%
 # This example shows how to use the
-# :py:class:`pyrtlib.main.BTCloudRTE` method to calculate brightness temperature from satellite using
+# :py:class:`pyrtlib.tb_spectrum.TbCloudRTE` method to calculate brightness temperature from satellite using
 # observations from IGRA2 Upper Air Archive.
 
 import matplotlib.pyplot as plt
@@ -14,7 +14,7 @@ plt.rcParams.update({'font.size': 15})
 import numpy as np
 from datetime import datetime
 
-from pyrtlib.main import BTCloudRTE
+from pyrtlib.tb_spectrum import TbCloudRTE
 from pyrtlib.utils import dewpoint2rh, import_lineshape, to_kelvin
 from pyrtlib.absorption_model import H2OAbsModel
 from pyrtlib.apiwebservices import IGRAUpperAir
@@ -37,7 +37,7 @@ ang = np.array([90.])
 frq = np.arange(20, 201, 1)
 nf = len(frq)
 
-rte = BTCloudRTE(z, p, t, rh, frq, ang)
+rte = TbCloudRTE(z, p, t, rh, frq, ang)
 rte.init_absmdl('rose20')
 rte.emissivity = 0.6
 H2OAbsModel.model = 'rose21sd'

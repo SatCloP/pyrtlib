@@ -13,16 +13,16 @@ that the original TBMODEL, Cyber Version, returned.
 .. autosummary::
     :toctree: generated/
 
-    pyrtlib.main.BTCloudRTE
+    pyrtlib.tb_spectrum.TbCloudRTE
 
 Example
 .......
 
 .. code-block:: python
 
-    from pyrtlib.main import BTCloudRTE
+    from pyrtlib.tb_spectrum import TbCloudRTE
 
-    rte = BTCloudRTE(z, p, t, rh, frq, ang)
+    rte = TbCloudRTE(z, p, t, rh, frq, ang)
     rte.init_absmdl('rose19sd')
     rte.satellite = True
     rte.emissivity = 0.6
@@ -33,11 +33,11 @@ Also, it is possible to execute a combination of absorption models. The followin
 
 .. code-block:: python
 
-    from pyrtlib.main import BTCloudRTE
+    from pyrtlib.tb_spectrum import TbCloudRTE
     from pyrtlib.utils import import_lineshape
     from pyrtlib.absorption_model import H2OAbsModel, O2AbsModel
 
-    rte = BTCloudRTE(z, p, t, rh, frq, ang)
+    rte = TbCloudRTE(z, p, t, rh, frq, ang)
     rte.init_absmdl('rose19sd')
     H2OAbsModel.model = 'rose16'
     H2OAbsModel.h2oll = import_lineshape('h2oll_{}'.format(H2OAbsModel.model))

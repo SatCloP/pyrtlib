@@ -77,7 +77,7 @@ Deifinition of angles and frequencies:
 
 Initialize parameters for main execution:
 
->>> rte = BTCloudRTE(z, p, t, rh, frq, ang)
+>>> rte = TbCloudRTE(z, p, t, rh, frq, ang)
 
 Set absorption model:
 
@@ -100,7 +100,7 @@ Execute model by computing upwelling radiances:
 180    277.936645
 Name: tbtotal, Length: 181, dtype: float64
 
-Preview of the output dataframe (see :py:meth:`pyrtlib.main.BTCloudRTE.execute` for more info):
+Preview of the output dataframe (see :py:meth:`pyrtlib.tb_spectrum.TbCloudRTE.execute` for more info):
 
 .. list-table::
    :widths: 25 25 25 25 25 25 25 25

@@ -39,7 +39,7 @@ Deifinition of angles and frequencies:
 ```
 Initialize parameters:
 ```python
->>> rte = BTCloudRTE(z, p, t, rh, frq, ang)
+>>> rte = TbCloudRTE(z, p, t, rh, frq, ang)
 ```
 Set absorption mofel:
 ```python

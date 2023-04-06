@@ -6,28 +6,28 @@
 
 Computation times
 =================
-**01:23.085** total execution time for **examples** files:
+**01:23.015** total execution time for **examples** files:
 
 +--------------------------------------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_examples_plot_brightness_temperature_uncertainties.py` (``plot_brightness_temperature_uncertainties.py``) | 00:33.280 | 0.0 MB |
+| :ref:`sphx_glr_examples_plot_brightness_temperature_uncertainties.py` (``plot_brightness_temperature_uncertainties.py``) | 00:32.928 | 0.0 MB |
 +--------------------------------------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_examples_plot_bt_igra2.py` (``plot_bt_igra2.py``)                                                         | 00:17.766 | 0.0 MB |
+| :ref:`sphx_glr_examples_plot_bt_igra2.py` (``plot_bt_igra2.py``)                                                         | 00:18.126 | 0.0 MB |
 +--------------------------------------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_examples_plot_bt_wyoming.py` (``plot_bt_wyoming.py``)                                                     | 00:07.848 | 0.0 MB |
+| :ref:`sphx_glr_examples_plot_bt_wyoming.py` (``plot_bt_wyoming.py``)                                                     | 00:07.974 | 0.0 MB |
 +--------------------------------------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_examples_plot_brightness_temperature_wO3.py` (``plot_brightness_temperature_wO3.py``)                     | 00:06.385 | 0.0 MB |
+| :ref:`sphx_glr_examples_plot_brightness_temperature_wO3.py` (``plot_brightness_temperature_wO3.py``)                     | 00:06.201 | 0.0 MB |
 +--------------------------------------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_examples_plot_bt_era5_cloudy_prodile.py` (``plot_bt_era5_cloudy_prodile.py``)                             | 00:04.772 | 0.0 MB |
+| :ref:`sphx_glr_examples_plot_bt_era5_cloudy_prodile.py` (``plot_bt_era5_cloudy_prodile.py``)                             | 00:04.673 | 0.0 MB |
 +--------------------------------------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_examples_plot_brightness_temperature.py` (``plot_brightness_temperature.py``)                             | 00:04.002 | 0.0 MB |
+| :ref:`sphx_glr_examples_plot_brightness_temperature.py` (``plot_brightness_temperature.py``)                             | 00:04.112 | 0.0 MB |
 +--------------------------------------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_examples_plot_brightness_temperature_ground.py` (``plot_brightness_temperature_ground.py``)               | 00:03.956 | 0.0 MB |
+| :ref:`sphx_glr_examples_plot_brightness_temperature_ground.py` (``plot_brightness_temperature_ground.py``)               | 00:03.932 | 0.0 MB |
 +--------------------------------------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_examples_plot_bt_era5.py` (``plot_bt_era5.py``)                                                           | 00:02.506 | 0.0 MB |
+| :ref:`sphx_glr_examples_plot_bt_era5.py` (``plot_bt_era5.py``)                                                           | 00:02.424 | 0.0 MB |
 +--------------------------------------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_examples_plot_model_cloudy.py` (``plot_model_cloudy.py``)                                                 | 00:01.495 | 0.0 MB |
+| :ref:`sphx_glr_examples_plot_model_cloudy.py` (``plot_model_cloudy.py``)                                                 | 00:01.543 | 0.0 MB |
 +--------------------------------------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_examples_plot_water_vapour_profile.py` (``plot_water_vapour_profile.py``)                                 | 00:00.919 | 0.0 MB |
+| :ref:`sphx_glr_examples_plot_water_vapour_profile.py` (``plot_water_vapour_profile.py``)                                 | 00:00.947 | 0.0 MB |
 +--------------------------------------------------------------------------------------------------------------------------+-----------+--------+
 | :ref:`sphx_glr_examples_plot_atmosphere.py` (``plot_atmosphere.py``)                                                     | 00:00.155 | 0.0 MB |
 +--------------------------------------------------------------------------------------------------------------------------+-----------+--------+

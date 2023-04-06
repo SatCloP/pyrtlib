@@ -6,7 +6,7 @@ import pandas as pd
 from numpy.testing import assert_allclose, assert_equal
 from pyrtlib.absorption_model_uncertainty import absmod_uncertainties_perturb
 from pyrtlib.atmospheric_profiles import AtmosphericProfiles as atmp
-from pyrtlib.main import BTCloudRTE
+from pyrtlib.tb_spectrum import TbCloudRTE
 from pyrtlib.utils import ppmv2gkg, mr2rh
 
 THIS_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -44,7 +44,7 @@ class Test(TestCase):
 
         amu = absmod_uncertainties_perturb(['gamma_a'], 'min', index=1)
 
-        rte = BTCloudRTE(z, p, t, rh, frq, amu=amu)
+        rte = TbCloudRTE(z, p, t, rh, frq, amu=amu)
         rte.init_absmdl('uncertainty')
         df = rte.execute()
 

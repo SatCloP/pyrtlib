@@ -5,14 +5,14 @@ Performing BT calculation from satellite using ERA5 Reanalysis Observations
 
 # %%
 # This example shows how to use the
-# :py:class:`pyrtlib.main.BTCloudRTE` method to calculate brightness temperature from satellite using
+# :py:class:`pyrtlib.tb_spectrum.TbCloudRTE` method to calculate brightness temperature from satellite using
 # observations from ERA5 Reanalysis hourly pressure levels dataset.
 
 import matplotlib.pyplot as plt
 
 plt.rcParams.update({'font.size': 15})
 import numpy as np
-from pyrtlib.main import BTCloudRTE
+from pyrtlib.tb_spectrum import TbCloudRTE
 from pyrtlib.utils import import_lineshape
 from pyrtlib.absorption_model import H2OAbsModel
 from pyrtlib.apiwebservices import ERA5Reanalysis
@@ -31,7 +31,7 @@ ang = np.array([90.])
 frq = np.arange(20, 201, 1)
 nf = len(frq)
 
-rte = BTCloudRTE(df_era5.z.values, df_era5.p.values, df_era5.t.values, df_era5.rh.values, frq, ang)
+rte = TbCloudRTE(df_era5.z.values, df_era5.p.values, df_era5.t.values, df_era5.rh.values, frq, ang)
 rte.init_absmdl('rose20')
 H2OAbsModel.model = 'rose21sd'
 H2OAbsModel.h2oll = import_lineshape('h2oll_{}'.format(H2OAbsModel.model))

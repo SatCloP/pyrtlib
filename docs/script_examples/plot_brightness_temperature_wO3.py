@@ -5,7 +5,7 @@ Performing Brightness Temperature calculation from ground with Ozone
 
 # %%
 # This example shows how to use the
-# :py:class:`pyrtlib.main.BTCloudRTE` method to calculate brightness temperature from ground with ozone.
+# :py:class:`pyrtlib.tb_spectrum.TbCloudRTE` method to calculate brightness temperature from ground with ozone.
 
 import matplotlib.pyplot as plt
 
@@ -13,7 +13,7 @@ plt.rcParams.update({'font.size': 15})
 import numpy as np
 
 from pyrtlib.atmospheric_profiles import AtmosphericProfiles as atmp
-from pyrtlib.main import BTCloudRTE
+from pyrtlib.tb_spectrum import TbCloudRTE
 from pyrtlib.absorption_model import H2OAbsModel, O3AbsModel
 from pyrtlib.utils import ppmv2gkg, mr2rh, ppmv_to_moleculesm3, import_lineshape, constants
 
@@ -44,7 +44,7 @@ rh = mr2rh(p, t, gkg)[0] / 100
 ang = np.array([90.])
 frq = np.arange(20, 201, 1)
 
-rte = BTCloudRTE(z, p, t, rh, frq, ang, o3n)
+rte = TbCloudRTE(z, p, t, rh, frq, ang, o3n)
 rte.init_absmdl('rose20')
 rte.satellite = False
 H2OAbsModel.model = 'rose21sd'

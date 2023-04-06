@@ -5,7 +5,7 @@ Performing uncertainty on Brightness Temperature
 
 # %%
 # This example shows how to use the
-# :py:class:`pyrtlib.main.BTCloudRTE` method to calculate uncertainty on brightness temperature
+# :py:class:`pyrtlib.tb_spectrum.TbCloudRTE` method to calculate uncertainty on brightness temperature
 # with gamma_a as perturbation sptectroscopic parameter
 
 import matplotlib.pyplot as plt
@@ -14,7 +14,7 @@ plt.rcParams.update({'font.size': 15})
 import numpy as np
 
 from pyrtlib.atmospheric_profiles import AtmosphericProfiles as atmp
-from pyrtlib.main import BTCloudRTE
+from pyrtlib.tb_spectrum import TbCloudRTE
 from pyrtlib.absorption_model import H2OAbsModel, O3AbsModel
 from pyrtlib.absorption_model_uncertainty import absmod_uncertainties_perturb
 from pyrtlib.utils import ppmv2gkg, mr2rh
@@ -42,14 +42,14 @@ for i in range(0, 6):
 
     amu = absmod_uncertainties_perturb()
 
-    rte = BTCloudRTE(z, p, t, rh, frq, ang, amu=amu)
+    rte = TbCloudRTE(z, p, t, rh, frq, ang, amu=amu)
     rte.init_absmdl('uncertainty')
     df = rte.execute()
     df = df.set_index(frq)
 
     amu = absmod_uncertainties_perturb(['gamma_a'], 'max', index=1)
 
-    rte = BTCloudRTE(z, p, t, rh, frq, ang, amu=amu)
+    rte = TbCloudRTE(z, p, t, rh, frq, ang, amu=amu)
     rte.init_absmdl('uncertainty')
     df_gamma = rte.execute()
     df_gamma = df_gamma.set_index(frq)
@@ -58,7 +58,7 @@ for i in range(0, 6):
 
     amu = absmod_uncertainties_perturb(['gamma_a'], 'min', index=1)
 
-    rte = BTCloudRTE(z, p, t, rh, frq, ang, amu=amu)
+    rte = TbCloudRTE(z, p, t, rh, frq, ang, amu=amu)
     rte.init_absmdl('uncertainty')
     df_gamma = rte.execute()
     df_gamma = df_gamma.set_index(frq)

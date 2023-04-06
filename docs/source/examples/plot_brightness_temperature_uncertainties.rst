@@ -24,7 +24,7 @@ Performing uncertainty on Brightness Temperature
 .. GENERATED FROM PYTHON SOURCE LINES 7-10
 
 This example shows how to use the
-:py:class:`pyrtlib.main.BTCloudRTE` method to calculate uncertainty on brightness temperature
+:py:class:`pyrtlib.tb_spectrum.TbCloudRTE` method to calculate uncertainty on brightness temperature
 with gamma_a as perturbation sptectroscopic parameter
 
 .. GENERATED FROM PYTHON SOURCE LINES 10-74
@@ -38,7 +38,7 @@ with gamma_a as perturbation sptectroscopic parameter
     import numpy as np
 
     from pyrtlib.atmospheric_profiles import AtmosphericProfiles as atmp
-    from pyrtlib.main import BTCloudRTE
+    from pyrtlib.tb_spectrum import TbCloudRTE
     from pyrtlib.absorption_model import H2OAbsModel, O3AbsModel
     from pyrtlib.absorption_model_uncertainty import absmod_uncertainties_perturb
     from pyrtlib.utils import ppmv2gkg, mr2rh
@@ -66,14 +66,14 @@ with gamma_a as perturbation sptectroscopic parameter
 
         amu = absmod_uncertainties_perturb()
 
-        rte = BTCloudRTE(z, p, t, rh, frq, ang, amu=amu)
+        rte = TbCloudRTE(z, p, t, rh, frq, ang, amu=amu)
         rte.init_absmdl('uncertainty')
         df = rte.execute()
         df = df.set_index(frq)
 
         amu = absmod_uncertainties_perturb(['gamma_a'], 'max', index=1)
 
-        rte = BTCloudRTE(z, p, t, rh, frq, ang, amu=amu)
+        rte = TbCloudRTE(z, p, t, rh, frq, ang, amu=amu)
         rte.init_absmdl('uncertainty')
         df_gamma = rte.execute()
         df_gamma = df_gamma.set_index(frq)
@@ -82,7 +82,7 @@ with gamma_a as perturbation sptectroscopic parameter
 
         amu = absmod_uncertainties_perturb(['gamma_a'], 'min', index=1)
 
-        rte = BTCloudRTE(z, p, t, rh, frq, ang, amu=amu)
+        rte = TbCloudRTE(z, p, t, rh, frq, ang, amu=amu)
         rte.init_absmdl('uncertainty')
         df_gamma = rte.execute()
         df_gamma = df_gamma.set_index(frq)
@@ -110,7 +110,7 @@ with gamma_a as perturbation sptectroscopic parameter
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  33.280 seconds)
+   **Total running time of the script:** ( 0 minutes  32.928 seconds)
 
 
 .. _sphx_glr_download_examples_plot_brightness_temperature_uncertainties.py:

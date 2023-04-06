@@ -8,7 +8,7 @@ from datetime import datetime
 from numpy.testing import assert_allclose
 from pyrtlib.absorption_model import H2OAbsModel, LiqAbsModel, O2AbsModel, O3AbsModel
 from pyrtlib.atmospheric_profiles import AtmosphericProfiles as atmp
-from pyrtlib.main import BTCloudRTE
+from pyrtlib.tb_spectrum import TbCloudRTE
 from pyrtlib.apiwebservices import WyomingUpperAir, ERA5Reanalysis, IGRAUpperAir
 from pyrtlib.utils import ppmv2gkg, ppmv_to_moleculesm3, mr2rh, import_lineshape, dewpoint2rh, kgkg_to_kgm3, pressure_to_height, to_kelvin
 
@@ -37,7 +37,7 @@ class Test(TestCase):
             ang = np.array([90.])
             frq = np.arange(20, 201, 1)
 
-            rte = BTCloudRTE(z, p, t, rh, frq, ang)
+            rte = TbCloudRTE(z, p, t, rh, frq, ang)
             rte.init_absmdl('rose19sd')
             df = rte.execute()
 
@@ -54,7 +54,7 @@ class Test(TestCase):
         ang = np.array([90.])
         frq = np.arange(20, 201, 1)
 
-        rte = BTCloudRTE(z, p, t, rh, frq, ang)
+        rte = TbCloudRTE(z, p, t, rh, frq, ang)
         rte.init_absmdl('rose19sd')
         df = rte.execute()
 
@@ -72,7 +72,7 @@ class Test(TestCase):
         ang = np.array([90.])
         frq = np.arange(20, 201, 1)
 
-        rte = BTCloudRTE(z, p, t, rh, frq, ang)
+        rte = TbCloudRTE(z, p, t, rh, frq, ang)
         rte.init_absmdl('rose19')
         df = rte.execute()
 
@@ -90,7 +90,7 @@ class Test(TestCase):
         ang = np.array([90.])
         frq = np.arange(20, 201, 1)
 
-        rte = BTCloudRTE(z, p, t, rh, frq, ang)
+        rte = TbCloudRTE(z, p, t, rh, frq, ang)
         rte.init_absmdl('rose16')
         df = rte.execute()
 
@@ -108,7 +108,7 @@ class Test(TestCase):
         ang = np.array([90.])
         frq = np.arange(20, 201, 1)
 
-        rte = BTCloudRTE(z, p, t, rh, frq, ang)
+        rte = TbCloudRTE(z, p, t, rh, frq, ang)
         rte.init_absmdl('rose16')
         O2AbsModel.model = 'makarov11'
         O2AbsModel.o2ll = import_lineshape('o2ll_{}'.format(O2AbsModel.model))
@@ -129,7 +129,7 @@ class Test(TestCase):
         ang = np.array([90.])
         frq = np.arange(20, 201, 1)
 
-        rte = BTCloudRTE(z, p, t, rh, frq, ang)
+        rte = TbCloudRTE(z, p, t, rh, frq, ang)
         rte.init_absmdl('rose03')
         df = rte.execute()
 
@@ -147,7 +147,7 @@ class Test(TestCase):
         ang = np.array([90.])
         frq = np.arange(20, 201, 1)
 
-        rte = BTCloudRTE(z, p, t, rh, frq, ang)
+        rte = TbCloudRTE(z, p, t, rh, frq, ang)
         rte.init_absmdl('rose17')
         df = rte.execute()
 
@@ -165,7 +165,7 @@ class Test(TestCase):
         ang = np.array([90.])
         frq = np.arange(20, 201, 1)
 
-        rte = BTCloudRTE(z, p, t, rh, frq, ang)
+        rte = TbCloudRTE(z, p, t, rh, frq, ang)
         rte.init_absmdl('rose20')
         df = rte.execute()
 
@@ -183,7 +183,7 @@ class Test(TestCase):
         ang = np.array([90.])
         frq = np.arange(20, 201, 1)
 
-        rte = BTCloudRTE(z, p, t, rh, frq, ang)
+        rte = TbCloudRTE(z, p, t, rh, frq, ang)
         rte.init_absmdl('rose20sd')
         df = rte.execute()
 
@@ -200,7 +200,7 @@ class Test(TestCase):
 
         frq = np.arange(20, 201, 1)
 
-        rte = BTCloudRTE(z, p, t, rh, frq)
+        rte = TbCloudRTE(z, p, t, rh, frq)
         rte.init_absmdl('rose20')
         H2OAbsModel.model = 'rose21sd'
         H2OAbsModel.h2oll = import_lineshape('h2oll_{}'.format(H2OAbsModel.model))
@@ -220,7 +220,7 @@ class Test(TestCase):
         ang = np.array([90.])
         frq = np.arange(20, 201, 1)
 
-        rte = BTCloudRTE(z, p, t, rh, frq, ang)
+        rte = TbCloudRTE(z, p, t, rh, frq, ang)
         rte.init_absmdl('rose18')
         df = rte.execute()
 
@@ -238,7 +238,7 @@ class Test(TestCase):
         ang = np.array([90.])
         frq = np.arange(20, 201, 1)
 
-        rte = BTCloudRTE(z, p, t, rh, frq, ang)
+        rte = TbCloudRTE(z, p, t, rh, frq, ang)
         rte.init_absmdl('rose98')
         df = rte.execute()
 
@@ -269,7 +269,7 @@ class Test(TestCase):
         denice[ib:it + 1] = 0.1 * np.ones((it - ib + 1))
         cldh[:, 1] = np.array([z[ib], z[it]])
 
-        rte = BTCloudRTE(z, p, t, rh, frq, ang)
+        rte = TbCloudRTE(z, p, t, rh, frq, ang)
         rte.init_absmdl('rose98')
         rte.cloudy = True
         rte.init_cloudy(cldh, denice, denliq)
@@ -287,7 +287,7 @@ class Test(TestCase):
         ang = np.array([90.])
         frq = np.arange(20, 201, 1)
 
-        rte = BTCloudRTE(z, p, t, rh, frq, ang)
+        rte = TbCloudRTE(z, p, t, rh, frq, ang)
         rte.ray_tracing = False
         rte.init_absmdl('rose19sd')
 
@@ -313,7 +313,7 @@ class Test(TestCase):
         ang = np.array([90.])
         frq = np.arange(20, 201, 1)
 
-        rte = BTCloudRTE(z, p, t, rh, frq, ang, o3n)
+        rte = TbCloudRTE(z, p, t, rh, frq, ang, o3n)
         rte.init_absmdl('rose20')
         H2OAbsModel.model = 'rose21sd'
         H2OAbsModel.h2oll = import_lineshape('h2oll_{}'.format(H2OAbsModel.model))
@@ -340,7 +340,7 @@ class Test(TestCase):
         ang = np.array([90.])
         frq = np.arange(20, 201, 1)
 
-        rte = BTCloudRTE(z, p, t, rh, frq, ang)
+        rte = TbCloudRTE(z, p, t, rh, frq, ang)
         rte.emissivity = 0.6
         rte.init_absmdl('rose20')
         H2OAbsModel.model = 'rose21sd'
@@ -368,7 +368,7 @@ class Test(TestCase):
         ang = np.array([90.])
         frq = np.arange(20, 201, 1)
 
-        rte = BTCloudRTE(z, p, t, rh, frq, ang)
+        rte = TbCloudRTE(z, p, t, rh, frq, ang)
         rte.emissivity = 0.6
         rte.init_absmdl('rose20')
         H2OAbsModel.model = 'rose21sd'
@@ -396,7 +396,7 @@ class Test(TestCase):
         ang = np.array([90.])
         frq = np.arange(20, 201, 1)
 
-        rte = BTCloudRTE(z, p, t, rh, frq, ang)
+        rte = TbCloudRTE(z, p, t, rh, frq, ang)
         rte.emissivity = 0.6
         rte.init_absmdl('rose20')
         H2OAbsModel.model = 'rose21sd'
@@ -425,7 +425,7 @@ class Test(TestCase):
                                                     df_era5.p.values, df_era5.t.values) * 1000
 
 
-        rte = BTCloudRTE(df_era5.z.values, df_era5.p.values, df_era5.t.values, df_era5.rh.values, frq, ang)
+        rte = TbCloudRTE(df_era5.z.values, df_era5.p.values, df_era5.t.values, df_era5.rh.values, frq, ang)
         rte.init_absmdl('rose20')
         rte.init_cloudy(cldh, denice, denliq)
         H2OAbsModel.model = 'rose21sd'
