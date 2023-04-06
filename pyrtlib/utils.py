@@ -32,7 +32,7 @@ def import_lineshape(name: str) -> Dict:
         0.,  0.,  0.,  0.,  0.])
     """
     try:
-        module = __import__('pyrtlib.lineshape', globals(), locals(), [name])
+        module = __import__('pyrtlib._lineshape', globals(), locals(), [name])
     except ImportError:
         return None
     return vars(module)[name]

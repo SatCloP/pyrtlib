@@ -104,12 +104,12 @@ USEKOSHELEV2017_WHAT = 'rad'
 C_CM = 29979245800.0
 
 PATH = os.path.dirname(os.path.abspath(__file__))
-U = np.loadtxt(open(os.path.join(PATH, "lineshape", "u.csv"), "rb"), delimiter=",")
-SIGMA = np.loadtxt(open(os.path.join(PATH, "lineshape", "sigma_widths_revised.csv"), "rb"), delimiter=",")
-TVEC = np.loadtxt(open(os.path.join(PATH, "lineshape", "Tvec.csv"), "rb"), delimiter=",")
-PVEC = np.loadtxt(open(os.path.join(PATH, "lineshape", "Pvec.csv"), "rb"), delimiter=",")
-FVEC = np.loadtxt(open(os.path.join(PATH, "lineshape", "Fvec.csv"), "rb"), delimiter=",")
-PR_EXT = np.loadtxt(open(os.path.join(PATH, "lineshape", "PR_ext.csv"), "rb"), delimiter=",")
+U = np.loadtxt(open(os.path.join(PATH, "_lineshape", "u.csv"), "rb"), delimiter=",")
+SIGMA = np.loadtxt(open(os.path.join(PATH, "_lineshape", "sigma_widths_revised.csv"), "rb"), delimiter=",")
+TVEC = np.loadtxt(open(os.path.join(PATH, "_lineshape", "Tvec.csv"), "rb"), delimiter=",")
+PVEC = np.loadtxt(open(os.path.join(PATH, "_lineshape", "Pvec.csv"), "rb"), delimiter=",")
+FVEC = np.loadtxt(open(os.path.join(PATH, "_lineshape", "Fvec.csv"), "rb"), delimiter=",")
+PR_EXT = np.loadtxt(open(os.path.join(PATH, "_lineshape", "PR_ext.csv"), "rb"), delimiter=",")
 
 # FIELDS = (
 #     'value',
