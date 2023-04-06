@@ -12,8 +12,8 @@ from typing import Dict, Tuple, Union, Optional
 import numpy as np
 import pandas as pd
 
-from .absmodel import O2AbsModel, H2OAbsModel, N2AbsModel, LiqAbsModel
-from .rte import RTEquation
+from .absorption_model import O2AbsModel, H2OAbsModel, N2AbsModel, LiqAbsModel
+from .rt_equation import RTEquation
 from .utils import import_lineshape
 
 

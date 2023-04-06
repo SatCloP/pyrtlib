@@ -36,9 +36,9 @@ This example shows how to use the
     plt.rcParams.update({'font.size': 15})
     import numpy as np
 
-    from pyrtlib.atmp import AtmosphericProfiles as atmp
+    from pyrtlib.atmospheric_profiles import AtmosphericProfiles as atmp
     from pyrtlib.main import BTCloudRTE
-    from pyrtlib.absmodel import H2OAbsModel, O3AbsModel
+    from pyrtlib.absorption_model import H2OAbsModel, O3AbsModel
     from pyrtlib.utils import ppmv2gkg, mr2rh, ppmv_to_moleculesm3, import_lineshape, constants
 
     atm = ['Tropical',
@@ -149,7 +149,7 @@ Compute rose21sd model without Ozone and plotting difference
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  6.112 seconds)
+   **Total running time of the script:** ( 0 minutes  6.385 seconds)
 
 
 .. _sphx_glr_download_examples_plot_brightness_temperature_wO3.py:

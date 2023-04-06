@@ -14,7 +14,7 @@ plt.rcParams.update({'font.size': 15})
 import numpy as np
 from pyrtlib.main import BTCloudRTE
 from pyrtlib.utils import import_lineshape
-from pyrtlib.absmodel import H2OAbsModel
+from pyrtlib.absorption_model import H2OAbsModel
 from pyrtlib.apiwebservices import ERA5Reanalysis
 
 # To request dataset via CDS API

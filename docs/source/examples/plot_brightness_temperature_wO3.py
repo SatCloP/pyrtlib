@@ -12,9 +12,9 @@ import matplotlib.pyplot as plt
 plt.rcParams.update({'font.size': 15})
 import numpy as np
 
-from pyrtlib.atmp import AtmosphericProfiles as atmp
+from pyrtlib.atmospheric_profiles import AtmosphericProfiles as atmp
 from pyrtlib.main import BTCloudRTE
-from pyrtlib.absmodel import H2OAbsModel, O3AbsModel
+from pyrtlib.absorption_model import H2OAbsModel, O3AbsModel
 from pyrtlib.utils import ppmv2gkg, mr2rh, ppmv_to_moleculesm3, import_lineshape, constants
 
 atm = ['Tropical',

@@ -36,7 +36,7 @@ This example shows how to use the
     plt.rcParams.update({'font.size': 15})
     import numpy as np
 
-    from pyrtlib.atmp import AtmosphericProfiles as atmp
+    from pyrtlib.atmospheric_profiles import AtmosphericProfiles as atmp
     from pyrtlib.main import BTCloudRTE
     from pyrtlib.utils import ppmv2gkg, mr2rh
 
@@ -88,7 +88,7 @@ This example shows how to use the
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  3.749 seconds)
+   **Total running time of the script:** ( 0 minutes  3.956 seconds)
 
 
 .. _sphx_glr_download_examples_plot_brightness_temperature_ground.py:

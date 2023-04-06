@@ -2,4 +2,4 @@
 
 """
 
-from ..absmod_uncertainty import uncertainty_propagation
+from ..absorption_model_uncertainty import uncertainty_propagation

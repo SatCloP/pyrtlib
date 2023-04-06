@@ -2,7 +2,7 @@ from unittest import TestCase
 
 import numpy as np
 from numpy.testing import assert_allclose, assert_almost_equal
-from pyrtlib.atmp import AtmosphericProfiles as atmp
+from pyrtlib.atmospheric_profiles import AtmosphericProfiles as atmp
 from pyrtlib.utils import (ppmv2gkg, mr2rh, gas_mass, height_to_pressure, pressure_to_height, constants,
                            to_kelvin, to_celsius, get_frequencies_sat, eswat_goffgratch, satvap, satmix,
                            import_lineshape)

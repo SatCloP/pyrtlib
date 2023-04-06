@@ -38,7 +38,7 @@ observations from ERA5 Reanalysis hourly pressure levels dataset.
     import numpy as np
     from pyrtlib.main import BTCloudRTE
     from pyrtlib.utils import import_lineshape
-    from pyrtlib.absmodel import H2OAbsModel
+    from pyrtlib.absorption_model import H2OAbsModel
     from pyrtlib.apiwebservices import ERA5Reanalysis
 
     # To request dataset via CDS API
@@ -86,7 +86,7 @@ observations from ERA5 Reanalysis hourly pressure levels dataset.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  2.348 seconds)
+   **Total running time of the script:** ( 0 minutes  2.506 seconds)
 
 
 .. _sphx_glr_download_examples_plot_bt_era5.py:

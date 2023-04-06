@@ -13,7 +13,7 @@ plt.rcParams.update({'font.size': 15})
 import numpy as np
 np.seterr('raise')
 
-from pyrtlib.atmp import AtmosphericProfiles as atmp
+from pyrtlib.atmospheric_profiles import AtmosphericProfiles as atmp
 from pyrtlib.main import BTCloudRTE
 from pyrtlib.utils import ppmv2gkg, mr2rh
 

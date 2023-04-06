@@ -37,10 +37,10 @@ with gamma_a as perturbation sptectroscopic parameter
     plt.rcParams.update({'font.size': 15})
     import numpy as np
 
-    from pyrtlib.atmp import AtmosphericProfiles as atmp
+    from pyrtlib.atmospheric_profiles import AtmosphericProfiles as atmp
     from pyrtlib.main import BTCloudRTE
-    from pyrtlib.absmodel import H2OAbsModel, O3AbsModel
-    from pyrtlib.absmod_uncertainty import absmod_uncertainties_perturb
+    from pyrtlib.absorption_model import H2OAbsModel, O3AbsModel
+    from pyrtlib.absorption_model_uncertainty import absmod_uncertainties_perturb
     from pyrtlib.utils import ppmv2gkg, mr2rh
 
     atm = ['Tropical',
@@ -110,7 +110,7 @@ with gamma_a as perturbation sptectroscopic parameter
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  32.537 seconds)
+   **Total running time of the script:** ( 0 minutes  33.280 seconds)
 
 
 .. _sphx_glr_download_examples_plot_brightness_temperature_uncertainties.py:

@@ -16,14 +16,14 @@ from datetime import datetime
 
 from pyrtlib.main import BTCloudRTE
 from pyrtlib.utils import dewpoint2rh, import_lineshape, to_kelvin
-from pyrtlib.absmodel import H2OAbsModel
+from pyrtlib.absorption_model import H2OAbsModel
 from pyrtlib.apiwebservices import WyomingUpperAir
 
 date = datetime(2021, 4, 22, 12)
 station = 'LIRE'
 df_w = WyomingUpperAir.request_data(date, station)
 
-z, p, t, gkg = df_w.height.values / 1000, \
+z, p, t, q = df_w.height.values / 1000, \
                df_w.pressure.values, \
                to_kelvin(df_w.temperature.values), \
                df_w.mixr.values

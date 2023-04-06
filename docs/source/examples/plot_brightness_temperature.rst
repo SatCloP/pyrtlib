@@ -37,7 +37,7 @@ Set emissivity to 0.6 used by [PAYNE]_ et al, 2011 (Figure 11)
     plt.rcParams.update({'font.size': 15})
     import numpy as np
 
-    from pyrtlib.atmp import AtmosphericProfiles as atmp
+    from pyrtlib.atmospheric_profiles import AtmosphericProfiles as atmp
     from pyrtlib.main import BTCloudRTE
     from pyrtlib.utils import ppmv2gkg, mr2rh
 
@@ -89,7 +89,7 @@ Set emissivity to 0.6 used by [PAYNE]_ et al, 2011 (Figure 11)
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  3.804 seconds)
+   **Total running time of the script:** ( 0 minutes  4.002 seconds)
 
 
 .. _sphx_glr_download_examples_plot_brightness_temperature.py:

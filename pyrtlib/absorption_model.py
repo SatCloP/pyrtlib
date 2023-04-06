@@ -8,7 +8,7 @@ from typing import Tuple, Union
 
 import numpy as np
 
-from pyrtlib.atmp import AtmosphericProfiles as atmp
+from pyrtlib.atmospheric_profiles import AtmosphericProfiles as atmp
 from .utils import dilec12, dcerror, constants, gas_mass
 
 
@@ -179,9 +179,9 @@ class H2OAbsModel(AbsModel):
         .. code-block:: python
 
             import numpy as np
-            from pyrtlib.rte import RTEquation
-            from pyrtlib.absmodel import H2OAbsModel, AbsModel
-            from pyrtlib.atmp import AtmosphericProfiles as atmp
+            from pyrtlib.rt_equation import RTEquation
+            from pyrtlib.absorption_model import H2OAbsModel, AbsModel
+            from pyrtlib.atmospheric_profiles import AtmosphericProfiles as atmp
             from pyrtlib.utils import ppmv2gkg, mr2rh, import_lineshape
 
             z, p, d, tk, md = atmp.gl_atm(atmp.TROPICAL)
@@ -392,9 +392,9 @@ class H2OAbsModel(AbsModel):
         .. code-block:: python
 
             import numpy as np
-            from pyrtlib.rte import RTEquation
-            from pyrtlib.absmodel import H2OAbsModel, AbsModel
-            from pyrtlib.atmp import AtmosphericProfiles as atmp
+            from pyrtlib.rt_equation import RTEquation
+            from pyrtlib.absorption_model import H2OAbsModel, AbsModel
+            from pyrtlib.atmospheric_profiles import AtmosphericProfiles as atmp
             from pyrtlib.utils import ppmv2gkg, mr2rh, import_lineshape
 
             z, p, d, tk, md = atmp.gl_atm(atmp.TROPICAL)

@@ -24,7 +24,7 @@ Water Vapour Absorption Profiles
 .. GENERATED FROM PYTHON SOURCE LINES 7-10
 
 This example shows how to use the
-:py:meth:`pyrtlib.rte.RTEquation.clearsky_absorption` method to generate water vapor absorption profil and
+:py:meth:`pyrtlib.rt_equation.RTEquation.clearsky_absorption` method to generate water vapor absorption profil and
 dry air absorption profile using ``rose16`` model.
 
 .. GENERATED FROM PYTHON SOURCE LINES 12-90
@@ -38,9 +38,9 @@ dry air absorption profile using ``rose16`` model.
     from matplotlib.ticker import ScalarFormatter
     import numpy as np
 
-    from pyrtlib.rte import RTEquation
-    from pyrtlib.absmodel import H2OAbsModel, O2AbsModel, AbsModel
-    from pyrtlib.atmp import AtmosphericProfiles as atmp
+    from pyrtlib.rt_equation import RTEquation
+    from pyrtlib.absorption_model import H2OAbsModel, O2AbsModel, AbsModel
+    from pyrtlib.atmospheric_profiles import AtmosphericProfiles as atmp
     from pyrtlib.utils import ppmv2gkg, mr2rh, import_lineshape, height_to_pressure
 
     z, p, d, t, md = atmp.gl_atm(atmp.TROPICAL)
@@ -124,7 +124,7 @@ dry air absorption profile using ``rose16`` model.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.789 seconds)
+   **Total running time of the script:** ( 0 minutes  0.919 seconds)
 
 
 .. _sphx_glr_download_examples_plot_water_vapour_profile.py:

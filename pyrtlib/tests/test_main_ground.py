@@ -5,9 +5,9 @@ from unittest import TestCase
 import numpy as np
 import pandas as pd
 from numpy.testing import assert_allclose, assert_equal
-from pyrtlib.atmp import AtmosphericProfiles as atmp
+from pyrtlib.atmospheric_profiles import AtmosphericProfiles as atmp
 from pyrtlib.main import BTCloudRTE
-from pyrtlib.absmodel import H2OAbsModel
+from pyrtlib.absorption_model import H2OAbsModel
 from pyrtlib.apiwebservices import ERA5Reanalysis
 from pyrtlib.utils import ppmv2gkg, mr2rh, import_lineshape
 
@@ -69,5 +69,5 @@ class Test(TestCase):
         H2OAbsModel.h2oll = import_lineshape('h2oll_{}'.format(H2OAbsModel.model))
         df = rte.execute()
 
-        df_expected = pd.read_csv(os.path.join(THIS_DIR, "data", "tb_tot_ground_ros03_19sd_21sdera5.csv"))
+        df_expected = pd.read_csv(os.path.join(THIS_DIR, "data", "tb_tot_ground_ros03_19sd_21sd_era5.csv"))
         assert_allclose(df.tbtotal, df_expected.rose21sd_era5, atol=0)

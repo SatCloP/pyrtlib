@@ -16,7 +16,7 @@ from datetime import datetime
 
 from pyrtlib.main import BTCloudRTE
 from pyrtlib.utils import dewpoint2rh, import_lineshape, to_kelvin
-from pyrtlib.absmodel import H2OAbsModel
+from pyrtlib.absorption_model import H2OAbsModel
 from pyrtlib.apiwebservices import IGRAUpperAir
 
 date = datetime(2020, 6, 1, 12)

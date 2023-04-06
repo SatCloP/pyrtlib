@@ -118,7 +118,7 @@ def gas_mass(gasid: int) -> float:
     Returns the mass of the HITRAN gas ID
 
     Args:
-        gasid (int): The gas ID defined in :py:class:`~pyrtlib.atmp.AtmosphericProfiles`
+        gasid (int): The gas ID defined in :py:class:`~pyrtlib.atmospheric_profiles.AtmosphericProfiles`
 
     Returns:
         float: The mass of the HITRAN gas ID

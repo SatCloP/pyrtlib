@@ -42,7 +42,7 @@ The baseline are the routines of Rosenkranz 2016 + modification to water-2-air b
 
 Example:
 
->>> from pyrtlib.absmod_uncertainty import amu
+>>> from pyrtlib.absorption_model_uncertainty import amu
 >>> amu['O2gamma_WL'].value
 array([1.688, 1.703, 1.513, 1.491, 1.415, 1.408, 1.353, 1.339, 1.295,
        1.292, 1.262, 1.263, 1.223, 1.217, 1.189, 1.174, 1.134, 1.134,

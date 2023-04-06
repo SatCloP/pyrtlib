@@ -40,7 +40,7 @@ observations from IGRA2 Upper Air Archive.
 
     from pyrtlib.main import BTCloudRTE
     from pyrtlib.utils import dewpoint2rh, import_lineshape, to_kelvin
-    from pyrtlib.absmodel import H2OAbsModel
+    from pyrtlib.absorption_model import H2OAbsModel
     from pyrtlib.apiwebservices import IGRAUpperAir
 
     date = datetime(2020, 6, 1, 12)
@@ -101,7 +101,7 @@ observations from IGRA2 Upper Air Archive.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  19.690 seconds)
+   **Total running time of the script:** ( 0 minutes  17.766 seconds)
 
 
 .. _sphx_glr_download_examples_plot_bt_igra2.py:

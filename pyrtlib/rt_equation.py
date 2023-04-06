@@ -12,9 +12,9 @@ from typing import Tuple, Optional, Union
 
 import numpy as np
 
-from .absmodel import O2AbsModel, H2OAbsModel, N2AbsModel, LiqAbsModel, O3AbsModel
+from .absorption_model import O2AbsModel, H2OAbsModel, N2AbsModel, LiqAbsModel, O3AbsModel
 from .utils import constants, tk2b_mod
-from .absmod_uncertainty import absmod_uncertainties_perturb
+from .absorption_model_uncertainty import absmod_uncertainties_perturb
 
 
 class RTEquation:
@@ -475,7 +475,7 @@ class RTEquation:
                 * aice [type]: ice absorption profile (np/km)
 
         See also:
-            :py:func:`~pyrtlib.absmodel.LiqAbsModel.liquid_water_absorption`
+            :py:func:`~pyrtlib.absorption_model.LiqAbsModel.liquid_water_absorption`
 
         .. warning::
             * ic light speed in cm s-1????
@@ -530,8 +530,8 @@ class RTEquation:
                 * adry [type]: dry air absorption profile (np/km)
 
         See also:
-            :py:class:`~pyrtlib.absmodel.H2OAbsModel`
-            :py:class:`~pyrtlib.absmodel.O2AbsModel`
+            :py:class:`~pyrtlib.absorption_model.H2OAbsModel`
+            :py:class:`~pyrtlib.absorption_model.O2AbsModel`
 
         .. warning::
                 * h2o_rosen03_xxx and o2n2_rosen03_xxx functions are missing!!!!!

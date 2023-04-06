@@ -24,7 +24,7 @@ from sklearn.neighbors import BallTree, KDTree
 import pandas as pd
 from netCDF4 import Dataset
 
-from ..utils import pressure_to_height
+from ..utils import thickness_hydrostatic
 
 
 class ERA5Reanalysis:
@@ -50,7 +50,7 @@ class ERA5Reanalysis:
         lons = nc.variables['longitude'][:]
         # idx_lat = ERAFIVE.find_nearest(lats, lonlat[1])
         # idx_lon = ERAFIVE.find_nearest(lons, lonlat[0])
-        idx, dist = ERAFIVE.find_nearest(lons, lats, lonlat)
+        idx, dist = ERAFIVE._find_nearest(lons, lats, lonlat)
 
         pres = np.asarray(nc.variables['level'][:])
         temp = np.asarray(nc.variables['t'][:, :, idx, idx])
@@ -61,11 +61,10 @@ class ERA5Reanalysis:
         cswc = np.asarray(nc.variables['cswc'][:, :, idx, idx])
         q = np.asarray(nc.variables['q'][:, :, idx, idx])
 
-        z = pressure_to_height(pres) / 1000 # Altitude in km
         date = pd.to_datetime(nc.variables['time'][:], origin='1900-01-01 00:00:00.0', unit='h')
 
         df = pd.DataFrame({'p': np.flip(pres),
-                           'z': np.flip(z),
+                           # 'z': np.flip(z),
                            't': np.flip(temp[0]),
                            'rh': np.flip(rh[0]),
                            'clwc': np.flip(clwc[0]),
@@ -73,12 +72,26 @@ class ERA5Reanalysis:
                            'crwc': np.flip(crwc[0]),
                            'cswc': np.flip(cswc[0]),
                            'q': np.flip(q[0]),
-                           'time': np.repeat(date, len(z))
+                           'time': np.repeat(date, len(pres))
                            })
+        z = ERAFIVE._z_from_p(df.t, df.p, df.q) / 1000 # Altitude in km
+        df['z'] = z
 
         return df #, (idx, dist), np.stack((lons, lats))
+    
+    def _z_from_p(self, t, p, q):
+        h = []
+        for i in range(len(p)):
+            if i > len(p):
+                break
+            if i == 0:
+                h.append(0)
+                continue
+            h.append(thickness_hydrostatic(p[0:i+1], t[0:i+1], q[0:i+1]))
 
-    def find_nearest(self, lons, lats, point):
+        return np.array(h)
+
+    def _find_nearest(self, lons, lats, point):
         """Find index of nearest coordinate
 
         Args:

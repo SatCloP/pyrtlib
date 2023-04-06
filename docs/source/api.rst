@@ -35,7 +35,7 @@ Also, it is possible to execute a combination of absorption models. The followin
 
     from pyrtlib.main import BTCloudRTE
     from pyrtlib.utils import import_lineshape
-    from pyrtlib.absmodel import H2OAbsModel, O2AbsModel
+    from pyrtlib.absorption_model import H2OAbsModel, O2AbsModel
 
     rte = BTCloudRTE(z, p, t, rh, frq, ang)
     rte.init_absmdl('rose19sd')
@@ -67,7 +67,7 @@ Plus suplimental profiles where available.
 .. autosummary::
     :toctree: generated/
 
-    pyrtlib.atmp.AtmosphericProfiles
+    pyrtlib.atmospheric_profiles.AtmosphericProfiles
 
 
 Example
@@ -75,7 +75,7 @@ Example
 
 .. code-block:: python
 
-    from pyrtlib.atmp import AtmosphericProfiles as atmp
+    from pyrtlib.atmospheric_profiles import AtmosphericProfiles as atmp
 
     z, p, d, tk, md = atmp.gl_atm(atmp.TROPICAL)
     # index of available profiles
@@ -85,7 +85,7 @@ Example
 Radiative Transfer Equation
 ===========================
 
-RTE functions called from :py:class:`pyrtlib.rte.RTEquation`:
+RTE functions called from :py:class:`pyrtlib.rt_equation.RTEquation`:
 
 * :code:`bright` = compute temperature for the modified Planck radiance 
 * :code:`cloudy_absorption`   = computes cloud (liquid and ice) absorption profiles
@@ -102,7 +102,7 @@ RTE functions called from :py:class:`pyrtlib.rte.RTEquation`:
 .. autosummary::
     :toctree: generated/
 
-    pyrtlib.rte.RTEquation
+    pyrtlib.rt_equation.RTEquation
 
 
 Absorption Models
@@ -115,12 +115,12 @@ collision-induced power absorption coefficient (neper/km) in air ("dry continuum
     :toctree: generated/
     :template: custom-class-template.rst
 
-    pyrtlib.absmodel.AbsModel
-    pyrtlib.absmodel.H2OAbsModel
-    pyrtlib.absmodel.O2AbsModel
-    pyrtlib.absmodel.O3AbsModel
-    pyrtlib.absmodel.N2AbsModel
-    pyrtlib.absmodel.LiqAbsModel
+    pyrtlib.absorption_model.AbsModel
+    pyrtlib.absorption_model.H2OAbsModel
+    pyrtlib.absorption_model.O2AbsModel
+    pyrtlib.absorption_model.O3AbsModel
+    pyrtlib.absorption_model.N2AbsModel
+    pyrtlib.absorption_model.LiqAbsModel
 
 
 Utility Functions
@@ -142,7 +142,7 @@ Uncertainty
     :toctree: generated/
     :template: custom-module-template.rst
 
-    pyrtlib.absmod_uncertainty
+    pyrtlib.absorption_model_uncertainty
 
 
 API Web Services

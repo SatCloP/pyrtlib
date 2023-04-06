@@ -24,7 +24,7 @@ Atmospheric Profiles
 .. GENERATED FROM PYTHON SOURCE LINES 7-9
 
 This example shows how to use the
-:py:class:`pyrtlib.atmp.AtmosphericProfiles` method to generate temperature and relative humidity profiles
+:py:class:`pyrtlib.atmospheric_profiles.AtmosphericProfiles` method to generate temperature and relative humidity profiles
 
 .. GENERATED FROM PYTHON SOURCE LINES 11-96
 
@@ -37,7 +37,7 @@ This example shows how to use the
     from matplotlib.ticker import ScalarFormatter
     import numpy as np
 
-    from pyrtlib.atmp import AtmosphericProfiles as atmp
+    from pyrtlib.atmospheric_profiles import AtmosphericProfiles as atmp
     from pyrtlib.utils import ppmv2gkg, mr2rh, height_to_pressure
 
 

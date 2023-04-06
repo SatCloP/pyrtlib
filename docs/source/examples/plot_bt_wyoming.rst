@@ -40,14 +40,14 @@ observations from Wyoming Upper Air Archive.
 
     from pyrtlib.main import BTCloudRTE
     from pyrtlib.utils import dewpoint2rh, import_lineshape, to_kelvin
-    from pyrtlib.absmodel import H2OAbsModel
+    from pyrtlib.absorption_model import H2OAbsModel
     from pyrtlib.apiwebservices import WyomingUpperAir
 
     date = datetime(2021, 4, 22, 12)
     station = 'LIRE'
     df_w = WyomingUpperAir.request_data(date, station)
 
-    z, p, t, gkg = df_w.height.values / 1000, \
+    z, p, t, q = df_w.height.values / 1000, \
                    df_w.pressure.values, \
                    to_kelvin(df_w.temperature.values), \
                    df_w.mixr.values
@@ -96,7 +96,7 @@ observations from Wyoming Upper Air Archive.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  7.743 seconds)
+   **Total running time of the script:** ( 0 minutes  7.848 seconds)
 
 
 .. _sphx_glr_download_examples_plot_bt_wyoming.py:
