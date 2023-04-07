@@ -32,7 +32,7 @@ class TbCloudRTE(object):
                  cloudy: Optional[bool] = False):
         """Main class which computes brightness temperatures (Tb), mean
         radiating temperature (Tmr), and integrated absorption (Tau) for 
-        clear or cloudy conditions.  Also returns all integrated quantities
+        clear or cloudy conditions. Also returns all integrated quantities
         that the original TBMODEL, Cyber Version, returned.  The input
         profiles are not modified within this subroutine.  It is assumed
         that the input profiles start at the antenna height (zX(1)).  The
@@ -45,7 +45,7 @@ class TbCloudRTE(object):
             tk (np.ndarray): Temperature profile (K).
             rh (np.ndarray): Relative humidity profile (fraction).
             frq (np.ndarray): Channel frequencies (GHz).
-            angles (Optional[np.ndarray], optional): Elevation anglesX (deg).. Defaults to np.array([90.]).
+            angles (Optional[np.ndarray], optional): Elevation anglesX (deg).. Defaults to 90.
             o3n (Optional[np.ndarray], optional): _description_. Defaults to None.
             amu (Optional[Tuple], optional): _description_. Defaults to None.
             absmdl (Optional[str], optional): Absorption model. Defaults to ''.

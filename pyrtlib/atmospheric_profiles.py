@@ -3,7 +3,7 @@
 This calss contains the AFGL Atmospheric Constituent Profiles (0-120km).
 """
 
-from typing import List, Tuple
+from typing import Tuple, Dict
 import numpy as np
 
 
@@ -12,6 +12,7 @@ class AtmosphericProfiles:
 
     Each of these profile contains data at 50 atmospheric levels.
     Altitude (km), Pressure (mb), Density (cm-3), Molec. densities (ppmv):
+    
     * 0 (H2O),
     * 1 (CO2),
     * 2 (O3),
@@ -22,6 +23,7 @@ class AtmosphericProfiles:
     Plus suplimental profiles where available.
     The last set of data sets are constituent profiles of molecular
     densities (ppmv) for the minor absorbing atmospheric gases:
+    
     * 7 (NO),
     * 8 (SO4),
     * 9 (NO2),
@@ -47,21 +49,23 @@ class AtmosphericProfiles:
     * 29 (SF6),
     * 30 (H2S),
     * 31 (HCOOH)
-    Plus suplimental profiles where available.
-
-    Keywords for reading:
-    'MODEL N' (A7) where N is the model number
-    'MINGAS ' for reading minor gas profile.
-    
-    Other records either contain data in arrays of 50 by level
-    or begin with a comment card '#'.
 
     References
     ----------
 
-    .. [1] REF. ANDERSON et al. 1986 AFGL-TR-86-0110
+    .. [1] [ANDERSON]_
     
-    .. note:: This file was partly copied from FASCOD2 routine MLATMB 10/11/87
+    Examples:
+        >>> from pyrtlib.atmospheric_profiles import AtmosphericProfiles as atmp
+        >>> atmp.atm_profiles()
+        {0: 'Tropical',
+         1: 'Midlatitude Summer',
+         2: 'Midlatitude Winter',
+         3: 'Subarctic Summer',
+         4: 'Subarctic Winter',
+         5: 'US Standard'}
+        >>> atmp.TROPICAL, atmp.H2O
+        (0, 0)
     """
 
     TROPICAL = 0
@@ -106,23 +110,24 @@ class AtmosphericProfiles:
     AIR = 99
 
     @staticmethod
-    def atm_profiles() -> List[int]:
-        """[summary]
+    def atm_profiles() -> Dict[int, str]:
+        """Convenient function to ger the list of the buolt-in  Atmospheric profiles.
 
         Returns:
-            List[int]: A list of standard profiles atmospheric
+            Dict[int, str]: A dictionary of standard profiles atmospheric.
         """
-        return [AtmosphericProfiles.TROPICAL,
-                AtmosphericProfiles.MIDLATITUDE_SUMMER,
-                AtmosphericProfiles.MIDLATITUDE_WINTER,
-                AtmosphericProfiles.SUBARCTIC_SUMMER,
-                AtmosphericProfiles.SUBARCTIC_WINTER,
-                AtmosphericProfiles.US_STANDARD]
+        return {AtmosphericProfiles.TROPICAL: 'Tropical',
+                AtmosphericProfiles.MIDLATITUDE_SUMMER: 'Midlatitude Summer',
+                AtmosphericProfiles.MIDLATITUDE_WINTER: 'Midlatitude Winter',
+                AtmosphericProfiles.SUBARCTIC_SUMMER: 'Subarctic Summer',
+                AtmosphericProfiles.SUBARCTIC_WINTER: 'Subarctic Winter',
+                AtmosphericProfiles.US_STANDARD: 'US Standard'}
 
 
     @staticmethod
     def gl_atm(atm: int) -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
-        """Returns the Atmopshere profile
+        """Returns the Atmopshere profile.
+        
         This method contains 6 model profiles:
         
         +--------+---------------------+
@@ -145,11 +150,12 @@ class AtmosphericProfiles:
             option (int): the atmosphere profile.
 
         Returns:
-            Tuple[numpy.ndarray, numpy.ndarray, numpy.ndarray, numpy.ndarray, numpy.ndarray]: * a np.ndarray: altitudes (km) (50x1)
-            * p np.ndarray: pressure (mbar) (50x1)
-            * d np.ndarray: total density (cm-3) (50x1)
-            * t np.ndarray: temperature (K) (50x1)
-            * md np.ndarray: molecular densities (ppmv) (50x #gases)
+            Tuple[numpy.ndarray, numpy.ndarray, numpy.ndarray, numpy.ndarray, numpy.ndarray]: 
+            * a (numpy.ndarray): Altitudes (km) (50x1)
+            * p (numpy.ndarray): Pressure (mbar)
+            * d (numpy.ndarray): Total density (cm-3)
+            * t (numpy.ndarray): Temperature (K)
+            * md (numpy.ndarray): Molecular densities (ppmv)
 
         .. note:: adapted from glatm.dat.  DCT 3/26/97
         """
@@ -891,14 +897,14 @@ class AtmosphericProfiles:
         return a, p, d, t, md
 
     @staticmethod
-    def gl_atm_minor():
+    def gl_atm_minor() -> np.ndarray:
         """Returns the minor gas profiles (gas ID's 8-28)
 
         Returns:
-            (tuple):
+            (numpy.ndarray):
 
-            * md [type]: molecular densities (ppmv) (50x #gases)
-            * gasids [type]: HITRAN gas ID #'s (#gases x 1)
+            * md (numpy.ndarray): molecular densities (ppmv) (50x #gases)
+            * gasids (numpy.ndarray): HITRAN gas ID #'s (#gases x 1)
         """
         # CONSTITUENT PROFILES FOR THE MINOR ABSORBING ATMOSPHERIC GASES
         #
@@ -1182,14 +1188,14 @@ class AtmosphericProfiles:
         return md
 
     @staticmethod
-    def gl_atm_trace():
+    def gl_atm_trace() -> np.ndarray:
         """Returns the trace gas and xsection profiles (ID's 29-31,51-63)
 
         Returns:
-            (tuple):
+            (numpy.ndarray):
 
-            * md [type]: molecular densities (ppmv) (50x #gases)
-            * gasids [type]: HITRAN gas ID #'s (#gases x 1)
+            * md (numpy.ndarray:) molecular densities (ppmv) (50x #gases)
+            * gasids (numpy.ndarray): HITRAN gas ID #'s (#gases x 1)
         """
         # ************************************************************************
         # ATMOSPHERIC PROFILES OF THE MINOR GASES (ID>28)
