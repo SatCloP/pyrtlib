@@ -30,7 +30,7 @@ class TbCloudRTE(object):
                  ray_tracing: Optional[bool] = True,
                  from_sat: Optional[bool] = True,
                  cloudy: Optional[bool] = False):
-        """User interface which computes brightness temperatures (Tb), mean
+        """Main class which computes brightness temperatures (Tb), mean
         radiating temperature (Tmr), and integrated absorption (Tau) for 
         clear or cloudy conditions.  Also returns all integrated quantities
         that the original TBMODEL, Cyber Version, returned.  The input
@@ -40,18 +40,21 @@ class TbCloudRTE(object):
         algorithms described in Schroeder and Westwater (1991).
 
         Args:
-            z (numpy.ndarray): height profile (km MSL).
-            p (numpy.ndarray): pressure profile (mb).
-            tk (numpy.ndarray): temperature profile (K).
-            rh (numpy.ndarray): relative humidity profile (fraction).
-            frq (numpy.ndarray): channel frequencies (GHz).
-            angles (numpy.ndarray): elevation anglesX (deg).
-            absmdl (str, optional): absorption model for WV. Defaults to ''.
-            ray_tracing (bool, optional):   if True (default) it computes ray tracing (RayTrac_xxx) for
-                                            distance between layers; otherwise use simple plane
-                                            parallel assumption (i.e. ds = diff(z)*airmass;. Defaults to True.
-            from_sat (bool, optional): [description]. Defaults to True.
-            cloudy (bool, optional): [description]. Defaults to True.
+            z (np.ndarray): Height profile (km).
+            p (np.ndarray): Pressure profile (mb).
+            tk (np.ndarray): Temperature profile (K).
+            rh (np.ndarray): Relative humidity profile (fraction).
+            frq (np.ndarray): Channel frequencies (GHz).
+            angles (Optional[np.ndarray], optional): Elevation anglesX (deg).. Defaults to np.array([90.]).
+            o3n (Optional[np.ndarray], optional): _description_. Defaults to None.
+            amu (Optional[Tuple], optional): _description_. Defaults to None.
+            absmdl (Optional[str], optional): Absorption model. Defaults to ''.
+            ray_tracing (Optional[bool], optional): Wether True (default) it computes ray tracing for
+                                            distance between layers, otherwise use simple plane
+                                            parallel assumption. Defaults to True.
+            from_sat (Optional[bool], optional): Wether True (default) compute upwelling Tb, 
+                                            otherwise downwelling Tb are computed. Defaults to True.
+            cloudy (Optional[bool], optional): Wether True CLW must be passed. Defaults to False.
         """
 
         self.z = z
@@ -76,7 +79,7 @@ class TbCloudRTE(object):
         # set emissivity
         self._es = np.repeat(1.0, self.nf)
 
-        # ... convert height profile to (km above antenna height) ...
+        # convert height profile to (km above antenna height)
         self.z0 = self.z[0]
         self.z -= self.z0
 
@@ -153,7 +156,7 @@ class TbCloudRTE(object):
         """Initialize absorption models.
 
         Args:
-            absmdl (str): Absorption model for WV
+            absmdl (str): Absorption model.
         """
         if absmdl == 'uncertainty':
             O2AbsModel.model = 'rose18'
@@ -183,12 +186,12 @@ class TbCloudRTE(object):
         """Initialize cloudy conditions parameters.
 
         Args:
-            cldh (numpy.ndarray): cloud base/top heights (km MSL
-            denice (numpy.ndarray): ice density profile (g/m**3); density fraction = 1.0
-            denliq (numpy.ndarray): liquid density profile (g/m**3); density fraction = 1.0
+            cldh (numpy.ndarray): Cloud base/top heights (km MSL)
+            denice (numpy.ndarray): Ice density profile (g/m3).
+            denliq (numpy.ndarray): Liquid density profile (g/m3).
         """
-        # ... convert cloud base and cloud top to (km above antenna height) ...
-        # ... compute (beglev) and (endlev) ...
+        # convert cloud base and cloud top to (km above antenna height)
+        # compute (beglev) and (endlev)
         ncld = cldh.shape[1]
         self.cldh = cldh - self.z0
         self.beglev = np.zeros((ncld,))
@@ -207,7 +210,7 @@ class TbCloudRTE(object):
             # raise AttributeError("Set cloudy to True before running init_cloudy()")
 
     def execute(self, only_bt: bool = True) -> Union[pd.DataFrame, Tuple[pd.DataFrame, Dict[str, np.ndarray]]]:
-        """Execution of main script.
+        """Comopute Tb.
 
         Args:
             only_bt (bool): If True (default) returns only brightness temperature. Default to True.
@@ -291,12 +294,12 @@ class TbCloudRTE(object):
         # Set RTE
         RTEquation.from_sat = self._satellite
 
-        # ... compute vapor pressure and vapor density ...
+        # compute vapor pressure and vapor density
         e, rho = RTEquation.vapor(self.tk, self.rh, self.ice)
-        # ... compute refractivity ...
+        # compute refractivity
         dryn, wetn, refindx = RTEquation.refractivity(self.p, self.tk, e)
         for k in range(0, self.nang):
-            # ... Compute distance between each level (ds) ...
+            # Compute distance between each level (ds)
             if self.ray_tracing:
                 ds = RTEquation.ray_tracing(self.z, refindx, self.angles[k], self.z0)
             else:
@@ -304,7 +307,7 @@ class TbCloudRTE(object):
                 ds = np.append([0], np.diff(self.z) * amass)
             # ds = [0; diff(z)]; # in alternative simple diff of z
 
-            # ... Integrate over path (ds) ...
+            # Integrate over path (ds)
             self.srho[k], _ = RTEquation.exponential_integration(True, rho, ds, 0, self.nl, 0.1)
             self.swet[k], _ = RTEquation.exponential_integration(True, wetn, ds, 0, self.nl, 0.1)
             self.sdry[k], _ = RTEquation.exponential_integration(True, dryn, ds, 0, self.nl, 0.1)
@@ -312,7 +315,7 @@ class TbCloudRTE(object):
                 self.sliq[k] = RTEquation.cloud_integrated_density(self.denliq, ds, self.beglev, self.endlev)
                 self.sice[k] = RTEquation.cloud_integrated_density(self.denice, ds, self.beglev, self.endlev)
 
-            # ... handle each frequency ...
+            # handle each frequency
             # this are based on NOAA RTE fortran routines
             for j in range(0, self.nf):
                 RTEquation.emissivity = self._es[j]
@@ -343,7 +346,7 @@ class TbCloudRTE(object):
                     self.tmrcld[j, k] = RTEquation.cloud_radiating_temperature(self.beglev[0], self.endlev[0], hvk,
                                                                                psp_tauprof,
                                                                                boftatm)
-                # ... assign output values ...
+                # assign output values
                 self.tbtotal[j, k] = RTEquation.bright(hvk, boftotl)
                 self.tbatm[j, k] = RTEquation.bright(hvk, boftatm[self.nl - 1])
                 self.tmr[j, k] = RTEquation.bright(hvk, boftmr)
