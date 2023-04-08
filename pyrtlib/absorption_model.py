@@ -121,7 +121,7 @@ class N2AbsModel(AbsModel):
         fdepen = 0.5 + 0.5 / (1.0 + (f / 450.0) ** 2)
         if N2AbsModel.model in ['rose16', 'rose17', 'rose18', 'rose19', 'rose19sd', 'makarov11']:
             l, m, n = 6.5e-14, 3.6, 1.34
-        elif N2AbsModel.model in ['rose20', 'rose20sd', 'rose21sd', 'rose22sd']:
+        elif N2AbsModel.model in ['rose20', 'rose20sd', 'rose21sd', 'rose22', 'rose22sd']:
             l, m, n = 9.95e-14, 3.22, 1
         elif N2AbsModel.model == 'rose03':
             l, m, n = 6.5e-14, 3.6, 1.29
@@ -160,7 +160,7 @@ class H2OAbsModel(AbsModel):
         else:
             raise ValueError("Please enter a valid absorption model")
 
-    def h2o_rosen19_sd(self, pdrykpa: np.ndarray, vx: np.ndarray, ekpa: np.ndarray, frq: np.ndarray) -> Union[
+    def h2o_absorption(self, pdrykpa: np.ndarray, vx: np.ndarray, ekpa: np.ndarray, frq: np.ndarray) -> Union[
             Tuple[np.ndarray, np.ndarray], None]:
         """Compute absorption coefficients in atmosphere due to water vapor for all models excepts rose21sd. 
         This version should not be used with a line list older than june 2018,
@@ -231,6 +231,8 @@ class H2OAbsModel(AbsModel):
         pvap = (rho * t) / 216.68
         if H2OAbsModel.model in ['rose03', 'rose16', 'rose17', 'rose98', 'makarov11']:
             pvap = (rho * t) / 217.0
+        if H2OAbsModel.model in ['rose22sd']:
+            pvap = (constants("Rwatvap")[0] * 1e-05) * rho * t
         pda = p - pvap
         if H2OAbsModel.model in ['rose03', 'rose16', 'rose98', 'makarov11']:
             den = 3.335e+16 * rho
@@ -251,14 +253,20 @@ class H2OAbsModel(AbsModel):
         ti = self.h2oll.reftline / t
         df = np.zeros((2, 1))
 
-        if H2OAbsModel.model.startswith(('rose19sd', 'rose20sd')):
+        if H2OAbsModel.model.startswith(('rose19sd', 'rose20sd', 'rose21sd', 'rose22sd')):
             tiln = np.log(ti)
             ti2 = np.exp(2.5 * tiln)
             summ = 0.0
             for i in range(0, nlines):
-                width0 = self.h2oll.w0[i] * pda * ti ** self.h2oll.x[i] + self.h2oll.w0s[i] * pvap * ti ** \
-                    self.h2oll.xs[i]
+                width0 = self.h2oll.w0[i] * pda * ti ** self.h2oll.x[i] + \
+                    self.h2oll.w0s[i] * pvap * ti ** self.h2oll.xs[i]
                 width2 = self.h2oll.w2[i] * pda + self.h2oll.w2s[i] * pvap
+                if H2OAbsModel.model in ['rose21sd', 'rose22sd']:
+                    if self.h2oll.w2[i] > 0:
+                        width2 = self.h2oll.w2[i] * pda * ti ** self.h2oll.xw2[i] + self.h2oll.w2s[i] * pvap * ti ** \
+                            self.h2oll.xw2s[i]
+                    else:
+                        width2 = 0
 
                 shiftf = self.h2oll.sh[i] * pda * \
                     (1. - self.h2oll.aair[i] * tiln) * ti ** self.h2oll.xh[i]
@@ -272,14 +280,12 @@ class H2OAbsModel(AbsModel):
                 df[0] = f - self.h2oll.fl[i] - shift
                 df[1] = f + self.h2oll.fl[i] + shift
                 base = width0 / (562500.0 + wsq)
+                if H2OAbsModel.model in ["rose21sd", 'rose22sd']:
+                    delta2 = self.h2oll.d2[i] * pda + self.h2oll.d2s[i] * pvap
                 res = 0.0
                 for j in range(0, 2):
-                    # if(i.eq.1 .and. j.eq.1 .and. abs(df(j)).lt.10.*width0) then
-                    # WIDTH2>0.0 & J==1 & abs(DF(J)) < 10*WIDTH0
-                    # width2 > 0 and j == 1 and abs(df[j]) < np.dot(10, width0)
                     if width2 > 0 and j == 0 and np.abs(df[j]) < (10 * width0):
-                        # speed-dependent resonant shape factor
-                        # double complex dcerror,xc,xrt,pxw,a
+                        # speed-dependent resonant shape factor, minus base
                         xc = np.complex(
                             (width0 - np.dot(1.5, width2)), df[j]) / width2
                         if H2OAbsModel.model == 'rose20sd':
@@ -290,13 +296,15 @@ class H2OAbsModel(AbsModel):
                                 delta2 = 0.0
                             xc = np.complex((width0 - np.dot(1.5, width2)), df[j] + np.dot(1.5, delta2)) / np.complex(
                                 width2, -delta2)
+                        elif H2OAbsModel.model in ["rose21sd", 'rose22sd']:
+                            xc = complex(
+                            (width0 - 1.5 * width2), df[j] + 1.5 * delta2) / complex(width2, -delta2)
 
                         xrt = np.sqrt(xc)
-
                         pxw = 1.77245385090551603 * xrt * \
                             dcerror(-np.imag(xrt), np.real(xrt))
                         sd = 2.0 * (1.0 - pxw) / (
-                            width2 if H2OAbsModel.model != 'rose20sd' else np.complex(width2, -delta2))
+                            width2 if H2OAbsModel.model not in ['rose20sd', 'rose21sd', 'rose22sd'] else complex(width2, -delta2))
                         res += np.real(sd) - base
                     else:
                         if np.abs(df[j]) < 750.0:
@@ -373,15 +381,16 @@ class H2OAbsModel(AbsModel):
                     if np.abs(df[j]) < 750.0:
                         res += width / (df[j] ** 2 + wsq) - base
                 summ += s * res * (f / self.h2oll.fl[i]) ** 2
-        # 2019/03/18 *********************************************************
-        # cyh **************************************************************
         # separate the following original equ. into line and continuum
         # terms, and change the units from np/km to ppm
         # abh2o = .3183e-4*den*sum + con
-
-        npp = (3.183e-05 * den * summ / db2np) / factor
-        ncpp = (con / db2np) / factor
-        # cyh *************************************************************
+        if H2OAbsModel == 'rose22sd':
+            npp = (1.e-10 * rho * summ / (np.pi * gas_mass(atmp.H2O)
+                   * 1000) / db2np) / factor 
+            ncpp = (con / db2np) / factor
+        else:
+            npp = (3.183e-05 * den * summ / db2np) / factor
+            ncpp = (con / db2np) / factor
 
         return npp, ncpp
 
@@ -455,22 +464,22 @@ class H2OAbsModel(AbsModel):
                 # ncpp = 0
                 return
 
-            pvap = (rho * t) / 216.68
-            pda = p - pvap
-            den = 3.344e+16 * rho
+            pvap = (rho * t) / 216.68 # 1
+            pda = p - pvap # 1
+            den = 3.344e+16 * rho # 1
             # continuum terms
-            ti = self.h2oll.reftcon / t
+            ti = self.h2oll.reftcon / t # 1
             con = (self.h2oll.cf * pda * ti ** self.h2oll.xcf + self.h2oll.cs * pvap * ti ** self.h2oll.xcs) * \
-                pvap * f * f
+                pvap * f * f # 1
             # 2019/03/18 *********************************************************
             # add resonances
-            nlines = len(self.h2oll.fl)
-            ti = self.h2oll.reftline / t
-            df = np.zeros((2, 1))
+            nlines = len(self.h2oll.fl) # 1
+            ti = self.h2oll.reftline / t # 1
+            df = np.zeros((2, 1)) # 1
 
-            tiln = np.log(ti)
-            ti2 = np.exp(2.5 * tiln)
-            summ = 0.0
+            tiln = np.log(ti) # 1
+            ti2 = np.exp(2.5 * tiln) # 1
+            summ = 0.0 # 1
             for i in range(0, nlines):
                 width0 = self.h2oll.w0[i] * pda * ti ** self.h2oll.x[i] + \
                     self.h2oll.w0s[i] * pvap * ti ** self.h2oll.xs[i]
@@ -480,21 +489,21 @@ class H2OAbsModel(AbsModel):
                 else:
                     width2 = 0
 
-                # delta2 assumed independent of t
-                delta2 = self.h2oll.d2[i] * pda + self.h2oll.d2s[i] * pvap
-
                 shiftf = self.h2oll.sh[i] * pda * \
                     (1. - self.h2oll.aair[i] * tiln) * ti ** self.h2oll.xh[i]
                 shifts = self.h2oll.shs[i] * pvap * \
                     (1. - self.h2oll.aself[i] * tiln) * ti ** self.h2oll.xhs[i]
                 shift = shiftf + shifts
-
                 wsq = width0 ** 2
                 s = self.h2oll.s1[i] * ti2 * \
                     np.exp(self.h2oll.b2[i] * (1. - ti))
                 df[0] = f - self.h2oll.fl[i] - shift
                 df[1] = f + self.h2oll.fl[i] + shift
                 base = width0 / (562500.0 + wsq)
+                # delta2 assumed independent of t
+                delta2 = self.h2oll.d2[i] * pda + self.h2oll.d2s[i] * pvap
+
+                
                 res = 0.0
                 for j in range(0, 2):
                     if width2 > 0 and j == 0 and np.abs(df[j]) < (10 * width0):
@@ -771,7 +780,9 @@ class O2AbsModel(AbsModel):
         for k in range(0, nlines):
             df = self.o2ll.w300[k] * den
             fcen = self.o2ll.f[k]
+            
             y = den * (self.o2ll.y300[k] + self.o2ll.v[k] * th1)
+            
             strr = self.o2ll.s300[k] * np.exp(-self.o2ll.be[k] * th1)
             sf1 = (df + (freq - fcen) * y) / ((freq - fcen) ** 2 + df * df)
             sf2 = (df - (freq + fcen) * y) / ((freq + fcen) ** 2 + df * df)
@@ -814,7 +825,7 @@ class O2AbsModel(AbsModel):
 
         return npp, ncpp
 
-    def o2abs_rosen19(self, pdrykpa: float, vx: float, ekpa: float, frq: float) -> Tuple[np.ndarray, np.ndarray]:
+    def o2_absorption(self, pdrykpa: float, vx: float, ekpa: float, frq: float) -> Tuple[np.ndarray, np.ndarray]:
         """Returns power absorption coefficient due to oxygen in air,
         in nepers/km. multiply o2abs2 by 4.343 to convert to db/km.
 
@@ -919,7 +930,7 @@ class O2AbsModel(AbsModel):
                 sf2 = (df - (freq + self.o2ll.f[k]) * y) / \
                     ((freq + self.o2ll.f[k]) ** 2 + df * df)
                 summ += strr * (sf1 + sf2) * (freq / self.o2ll.f[k]) ** 2
-        elif O2AbsModel.model in ['rose17', 'rose18']:
+        elif O2AbsModel.model in ['rose17', 'rose18', 'rose19', 'rose19sd']:
             for k in range(0, nlines):
                 df = self.o2ll.w300[k] * den
                 fcen = self.o2ll.f[k]
@@ -980,6 +991,7 @@ class O2AbsModel(AbsModel):
         # change the units from np/km to ppm
         npp = (o2abs / db2np) / factor
         ncpp = (ncpp / db2np) / factor
+        ncpp = 0 if O2AbsModel.model in ['rose19', 'rose19sd', 'rose20', 'rose20sd', 'rose22', 'rose22sd'] else ncpp
         # ************************************************************
 
         return npp, ncpp
