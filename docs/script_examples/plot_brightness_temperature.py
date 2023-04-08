@@ -5,7 +5,7 @@ Performing Brightness Temperature calculation from satellite
 
 # %%
 # This example shows how to use the
-# :py:class:`pyrtlib.tb_spectrum.TbCloudRTE` method to calculate brightness temperature from satellite.
+# :py:class:`pyrtlib.tb_spectrum.TbCloudRTE` method to calculate brightness temperature from satellite (upwelling).
 # Set emissivity to 0.6 used by [PAYNE]_ et al, 2011 (Figure 11)
 
 import matplotlib.pyplot as plt

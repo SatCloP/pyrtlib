@@ -5,7 +5,7 @@ Performing BT calculation from satellite using IGRA2 Upper Air Observations
 
 # %%
 # This example shows how to use the
-# :py:class:`pyrtlib.tb_spectrum.TbCloudRTE` method to calculate brightness temperature from satellite using
+# :py:class:`pyrtlib.tb_spectrum.TbCloudRTE` method to calculate brightness temperature from satellite (upwelling) using
 # observations from IGRA2 Upper Air Archive.
 
 import matplotlib.pyplot as plt

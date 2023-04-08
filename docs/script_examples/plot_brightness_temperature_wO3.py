@@ -5,7 +5,7 @@ Performing Brightness Temperature calculation from ground with Ozone
 
 # %%
 # This example shows how to use the
-# :py:class:`pyrtlib.tb_spectrum.TbCloudRTE` method to calculate brightness temperature from ground with ozone.
+# :py:class:`pyrtlib.tb_spectrum.TbCloudRTE` method to calculate brightness temperature from ground (downwelling) with ozone.
 
 import matplotlib.pyplot as plt
 

@@ -5,7 +5,7 @@ Performing BT calculation from satellite using ERA5 Reanalysis Observations
 
 # %%
 # This example shows how to use the
-# :py:class:`pyrtlib.tb_spectrum.TbCloudRTE` method to calculate brightness temperature from satellite using
+# :py:class:`pyrtlib.tb_spectrum.TbCloudRTE` method to calculate brightness temperature from satellite (upwelling) using
 # observations from ERA5 Reanalysis hourly pressure levels dataset.
 
 import matplotlib.pyplot as plt
