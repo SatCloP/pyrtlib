@@ -306,9 +306,8 @@ class H2OAbsModel(AbsModel):
                         sd = 2.0 * (1.0 - pxw) / (
                             width2 if H2OAbsModel.model not in ['rose20sd', 'rose21sd', 'rose22sd'] else complex(width2, -delta2))
                         res += np.real(sd) - base
-                    else:
-                        if np.abs(df[j]) < 750.0:
-                            res += width0 / (df[j] ** 2 + wsq) - base
+                    elif np.abs(df[j]) < 750.0:
+                        res += width0 / (df[j] ** 2 + wsq) - base
 
                 summ += s * res * (f / self.h2oll.fl[i]) ** 2
         elif H2OAbsModel.model in ['rose16', 'rose03', 'rose17', 'rose98', 'makarov11']:
@@ -387,10 +386,10 @@ class H2OAbsModel(AbsModel):
         if H2OAbsModel == 'rose22sd':
             npp = (1.e-10 * rho * summ / (np.pi * gas_mass(atmp.H2O)
                    * 1000) / db2np) / factor 
-            ncpp = (con / db2np) / factor
         else:
-            npp = (3.183e-05 * den * summ / db2np) / factor
-            ncpp = (con / db2np) / factor
+            npp = (3.1831e-05 * den * summ / db2np) / factor
+        
+        ncpp = (con / db2np) / factor
 
         return npp, ncpp
 
@@ -502,8 +501,6 @@ class H2OAbsModel(AbsModel):
                 base = width0 / (562500.0 + wsq)
                 # delta2 assumed independent of t
                 delta2 = self.h2oll.d2[i] * pda + self.h2oll.d2s[i] * pvap
-
-                
                 res = 0.0
                 for j in range(0, 2):
                     if width2 > 0 and j == 0 and np.abs(df[j]) < (10 * width0):
