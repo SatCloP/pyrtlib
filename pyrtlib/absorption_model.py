@@ -298,7 +298,7 @@ class H2OAbsModel(AbsModel):
                                 width2, -delta2)
                         elif H2OAbsModel.model in ["rose21sd", 'rose22sd']:
                             xc = complex(
-                            (width0 - 1.5 * width2), df[j] + 1.5 * delta2) / complex(width2, -delta2)
+                                (width0 - 1.5 * width2), df[j] + 1.5 * delta2) / complex(width2, -delta2)
 
                         xrt = np.sqrt(xc)
                         pxw = 1.77245385090551603 * xrt * \
@@ -385,207 +385,11 @@ class H2OAbsModel(AbsModel):
         # abh2o = .3183e-4*den*sum + con
         if H2OAbsModel == 'rose22sd':
             npp = (1.e-10 * rho * summ / (np.pi * gas_mass(atmp.H2O)
-                   * 1000) / db2np) / factor 
+                   * 1000) / db2np) / factor
         else:
             npp = (3.1831e-05 * den * summ / db2np) / factor
-        
+
         ncpp = (con / db2np) / factor
-
-        return npp, ncpp
-
-    def h2o_rosen21_sd(self, pdrykpa: np.ndarray, vx: np.ndarray, ekpa: np.ndarray, frq: np.ndarray) -> Union[
-            Tuple[np.ndarray, np.ndarray], None]:
-        """Compute absorption coefficients in atmosphere due to water vapor.
-        This version should not be used with a line list older than Dec.31, 2020,
-        nor the new list with an older version of this subroutine.
-        Line parameters will be read from file h2o_list.asc; intensities
-        should include the isotope abundance factors.
-        this version uses a line-shape cutoff.
-
-        Args:
-            pdrykpa (numpy.ndarray): [description]
-            vx (numpy.ndarray): [description]
-            ekpa (numpy.ndarray): [description]
-            frq (numpy.ndarray): [description]
-
-        Returns:
-            Union[ Tuple[numpy.ndarray, numpy.ndarray], None]: [description]
-
-        References
-        ----------
-        .. [1] Rosenkranz, P.W.: Line-By-Line Microwave Radiative Transfer (Non-Scattering), Remote Sens. Code Library, Doi:10.21982/M81013, 2017
-
-        Example:
-
-        .. code-block:: python
-
-            import numpy as np
-            from pyrtlib.rt_equation import RTEquation
-            from pyrtlib.absorption_model import H2OAbsModel, AbsModel
-            from pyrtlib.atmospheric_profiles import AtmosphericProfiles as atmp
-            from pyrtlib.utils import ppmv2gkg, mr2rh, import_lineshape
-
-            z, p, d, tk, md = atmp.gl_atm(atmp.TROPICAL)
-            frq = np.arange(20, 201, 1)
-            ice = 0
-            gkg = ppmv2gkg(md[:, atmp.H2O], atmp.H2O)
-            rh = mr2rh(p, tk, gkg)[0] / 100
-
-            e, rho = RTEquation.vapor(tk, rh, ice)
-
-            AbsModel.model = 'rose16'
-            H2OAbsModel.h2oll = import_lineshape('h2oll_{}'.format('rose21sd'))
-            for i in range(0, len(z)):
-                v = 300.0 / tk[i]
-                ekpa = e[i] / 10.0
-                pdrykpa = p[i] / 10.0 - ekpa
-                for j in range(0, len(frq)):
-                    _, _ = H2OAbsModel().h2o_rosen21_sd(pdrykpa, v, ekpa, frq[j])
-
-        """
-        # the best-fit voigt are given in koshelev et al. 2018, table 2 (rad,
-        # mhz/torr). these correspond to w3(1) and ws(1) in h2o_list_r18 (mhz/mb)
-
-        # cyh ***********************************************
-        db2np = np.log(10.0) * 0.1
-        rvap = (0.01 * 8.31451) / 18.01528
-        factor = 0.182 * frq
-        t = 300.0 / vx
-        p = (pdrykpa + ekpa) * 10.0
-        rho = ekpa * 10.0 / (rvap * t)
-        f = frq
-        # cyh ***********************************************
-
-        if H2OAbsModel.model == 'rose21sd':
-            if rho.any() <= 0.0:
-                # abh2o = 0.0
-                # npp = 0
-                # ncpp = 0
-                return
-
-            pvap = (rho * t) / 216.68 # 1
-            pda = p - pvap # 1
-            den = 3.344e+16 * rho # 1
-            # continuum terms
-            ti = self.h2oll.reftcon / t # 1
-            con = (self.h2oll.cf * pda * ti ** self.h2oll.xcf + self.h2oll.cs * pvap * ti ** self.h2oll.xcs) * \
-                pvap * f * f # 1
-            # 2019/03/18 *********************************************************
-            # add resonances
-            nlines = len(self.h2oll.fl) # 1
-            ti = self.h2oll.reftline / t # 1
-            df = np.zeros((2, 1)) # 1
-
-            tiln = np.log(ti) # 1
-            ti2 = np.exp(2.5 * tiln) # 1
-            summ = 0.0 # 1
-            for i in range(0, nlines):
-                width0 = self.h2oll.w0[i] * pda * ti ** self.h2oll.x[i] + \
-                    self.h2oll.w0s[i] * pvap * ti ** self.h2oll.xs[i]
-                if self.h2oll.w2[i] > 0:
-                    width2 = self.h2oll.w2[i] * pda * ti ** self.h2oll.xw2[i] + self.h2oll.w2s[i] * pvap * ti ** \
-                        self.h2oll.xw2s[i]
-                else:
-                    width2 = 0
-
-                shiftf = self.h2oll.sh[i] * pda * \
-                    (1. - self.h2oll.aair[i] * tiln) * ti ** self.h2oll.xh[i]
-                shifts = self.h2oll.shs[i] * pvap * \
-                    (1. - self.h2oll.aself[i] * tiln) * ti ** self.h2oll.xhs[i]
-                shift = shiftf + shifts
-                wsq = width0 ** 2
-                s = self.h2oll.s1[i] * ti2 * \
-                    np.exp(self.h2oll.b2[i] * (1. - ti))
-                df[0] = f - self.h2oll.fl[i] - shift
-                df[1] = f + self.h2oll.fl[i] + shift
-                base = width0 / (562500.0 + wsq)
-                # delta2 assumed independent of t
-                delta2 = self.h2oll.d2[i] * pda + self.h2oll.d2s[i] * pvap
-                res = 0.0
-                for j in range(0, 2):
-                    if width2 > 0 and j == 0 and np.abs(df[j]) < (10 * width0):
-                        # speed-dependent resonant shape factor
-                        # double complex dcerror,xc,xrt,pxw,a
-                        xc = complex(
-                            (width0 - 1.5 * width2), df[j] + 1.5 * delta2) / complex(width2, -delta2)
-                        xrt = np.sqrt(xc)
-                        pxw = 1.77245385090551603 * xrt * \
-                            dcerror(-np.imag(xrt), np.real(xrt))
-                        sd = 2.0 * (1.0 - pxw) / (complex(width2, -delta2))
-                        res += np.real(sd) - base
-                    elif np.abs(df[j]) < 750.0:
-                        res += width0 / (df[j] ** 2 + wsq) - base
-
-                summ += s * res * (f / self.h2oll.fl[i]) ** 2
-
-            npp = (3.1831e-05 * den * summ / db2np) / factor
-            ncpp = (con / db2np) / factor
-
-        if H2OAbsModel.model == 'rose22sd':
-            # TODO: check units for costant
-            pvap = (constants("Rwatvap")[0] * 1e-05) * rho * t
-            pda = p - pvap
-            # den = 3.344e+16 * rho
-            # continuum terms
-            ti = self.h2oll.reftcon / t
-            con = (self.h2oll.cf * pda * ti ** self.h2oll.xcf +
-                   self.h2oll.cs * pvap * ti ** self.h2oll.xcs) * pvap * f * f
-
-            ti = self.h2oll.reftline / t
-            tiln = np.log(ti)
-            ti2 = np.exp(2.5 * tiln)
-
-            df = np.zeros((2, 1))
-            nlines = len(self.h2oll.fl)
-
-            summ = 0.0
-            for i in range(0, nlines):
-                # skip if F is outside the truncated l.s.
-                if np.abs(f-self.h2oll.fl[i] > 750.1):
-                    continue
-                width0 = self.h2oll.w0[i] * pda * ti ** self.h2oll.x[i] + \
-                    self.h2oll.w0s[i] * pvap * ti ** self.h2oll.xs[i]
-
-                if self.h2oll.w2[i] > 0:
-                    width2 = self.h2oll.w2[i] * pda * ti ** self.h2oll.xw2[i] + self.h2oll.w2s[i] * pvap * ti ** \
-                        self.h2oll.xw2s[i]
-                else:
-                    width2 = 0
-
-                # delta2 assumed independent of t
-                delta2 = self.h2oll.d2[i] * pda + self.h2oll.d2s[i] * pvap
-
-                shiftf = self.h2oll.sh[i] * pda * \
-                    (1. - self.h2oll.aair[i] * tiln) * ti ** self.h2oll.xh[i]
-                shifts = self.h2oll.shs[i] * pvap * \
-                    (1. - self.h2oll.aself[i] * tiln) * ti ** self.h2oll.xhs[i]
-                shift = shiftf + shifts
-
-                wsq = width0 ** 2
-                s = self.h2oll.s1[i] * ti2 * \
-                    np.exp(self.h2oll.b2[i] * (1. - ti))
-                df[0] = f - self.h2oll.fl[i] - shift
-                df[1] = f + self.h2oll.fl[i] + shift
-                base = width0 / (562500.0 + wsq)
-                res = 0.0
-                for j in range(0, 2):
-                    if width2 > 0 and j == 0 and np.abs(df[j]) < (10 * width0):
-                        # speed-dependent resonant shape factor, minus base
-                        xc = complex(
-                            (width0 - 1.5 * width2), df[j] + 1.5 * delta2) / complex(width2, -delta2)
-                        xrt = np.sqrt(xc)
-                        pxw = 1.77245385090551603 * xrt * \
-                            dcerror(-np.imag(xrt), np.real(xrt))
-                        sd = 2.0 * (1.0 - pxw) / (complex(width2, -delta2))
-                        res += np.real(sd) - base
-                    elif np.abs(df[j]) < 750.0:
-                        res += width0 / (df[j] ** 2 + wsq) - base
-
-                summ += s * res * (f / self.h2oll.fl[i]) ** 2
-
-            npp = (1.e-10 * rho * summ / (np.pi * gas_mass(atmp.H2O)
-                   * 1000) / db2np) / factor 
-            ncpp = (con / db2np) / factor
 
         return npp, ncpp
 
@@ -671,7 +475,7 @@ class H2OAbsModel(AbsModel):
                     res += width / (df[j] ** 2 + wsq) - base
             summ += s * res * (f / self.h2oll.fl[i]) ** 2
 
-        npp = (3.183e-05 * den * summ / db2np) / factor
+        npp = (3.1831e-05 * den * summ / db2np) / factor
         ncpp = (con / db2np) / factor
 
         return npp, ncpp
@@ -697,130 +501,6 @@ class O2AbsModel(AbsModel):
             self._o2ll = o2ll
         else:
             raise ValueError("Please enter a valid absorption model")
-
-    def o2abs_rosen18(self, pdrykpa: float, vx: float, ekpa: float, frq: float) -> Tuple[np.ndarray, np.ndarray]:
-        """Returns power absorption coefficient due to oxygen in air,
-        in nepers/km.  Multiply o2abs by 4.343 to convert to db/km.
-
-        History:
-
-        * 5/1/95  P. Rosenkranz
-        * 11/5/97  P. Rosenkranz - 1- line modification.
-        * 12/16/98 pwr - updated submm freq's and intensities from HITRAN96
-        * 8/21/02  pwr - revised width at 425
-        * 3/20/03  pwr - 1- line mixing and width revised
-        * 9/29/04  pwr - new widths and mixing, using HITRAN intensities for all lines
-        * 6/12/06  pwr - chg. T dependence of 1- line to 0.8
-        * 10/14/08 pwr - moved isotope abundance back into intensities; added selected O16O18 lines.
-        * 5/30/09  pwr - remove common block, add weak lines.
-        * 12/18/14 pwr - adjust line broadening due to water vapor.
-
-        Args:
-            pdrykpa ([type], optional): [description]. Defaults to None.
-            vx ([type], optional): [description]. Defaults to None.
-            ekpa ([type], optional): [description]. Defaults to None.
-            frq ([type], optional): [description]. Defaults to None.
-
-        Returns:
-            np.ndarray: [description]
-            np.ndarray: [description]
-
-        References
-        ----------
-        .. [1] P.W. Rosenkranz, CHAP. 2 in ATMOSPHERIC REMOTE SENSING BY MICROWAVE RADIOMETRY (M.A. Janssen, ed., 1993) (http://hdl.handle.net/1721.1/68611).
-        .. [3] G.Yu. Golubiatnikov & A.F. Krupnov, J. Mol. Spect. v.217, pp.282-287 (2003).
-        .. [4] M.Yu. Tretyakov et al, J. Mol. Spect. v.223, pp.31-38 (2004).
-        .. [5] M.Yu. Tretyakov et al, J. Mol. Spect. v.231, pp.1-14 (2005).
-        .. [6] B.J. Drouin, JQSRT v.105, pp.450-458 (2007).
-        .. [7] D.S. Makarov et al, J. Mol. Spect. v.252, pp.242-243 (2008).
-        .. [8] M.A. Koshelev et al, JQSRT, in press (2015). line intensities from HITRAN2004. non-resonant intensity from JPL catalog.
-
-        .. note::
-            * The mm line-width and mixing coefficients are from Tretyakov et al submm line-widths from Golubiatnikov & Krupnov (except 234 GHz from Drouin)
-            * The same temperature dependence (X) is used for submillimeter line widths as in the 60 GHz band: (1/T)**X
-
-        .. note::
-            : the only differences wrt to o2n2_rosen17_xxx are:
-
-            * PRESWV = VAPDEN*TEMP/217. -> PRESWV = VAPDEN*TEMP/216.68 - this is now consistent with h2o
-            * ABSN2_ros16(TEMP,PRES,FREQ) -> ABSN2_ros18(TEMP,PRESDA,FREQ) - since absn2.f takes in input P = DRY AIR PRESSURE (MB)
-            * ABSN2 is now external
-            * The continuum term is summed BEFORE O2ABS = max(O2ABS,0.)
-        """
-
-        # cyh*** add the following lines *************************
-        db2np = np.log(10.0) * 0.1
-        rvap = (0.01 * 8.31451) / 18.01528
-        factor = 0.182 * frq
-        temp = 300.0 / vx
-        pres = (pdrykpa + ekpa) * 10.0
-        vapden = ekpa * 10.0 / (rvap * temp)
-        freq = frq
-        # cyh*****************************************************
-
-        th = 300.0 / temp
-        th1 = th - 1.0
-        b = th ** self.o2ll.x
-        preswv = (vapden * temp) / 216.68
-        presda = pres - preswv
-        den = 0.001 * (presda * b + 1.2 * preswv * th)
-        dfnr = self.o2ll.wb300 * den
-
-        # intensities of the non-resonant transitions for o16-o16 and o16-o18, from jpl's line compilation
-        # 1.571e-17 (o16-o16) + 1.3e-19 (o16-o18) = 1.584e-17
-        # 1.584e-17*freq*freq*dfnr/(th*(freq*freq + dfnr*dfnr))
-        summ = 1.584e-17 * freq * freq * dfnr / \
-            (th * (freq * freq + dfnr * dfnr))
-        # cyh **************************************************************
-
-        nlines = len(self.o2ll.f)
-        for k in range(0, nlines):
-            df = self.o2ll.w300[k] * den
-            fcen = self.o2ll.f[k]
-            
-            y = den * (self.o2ll.y300[k] + self.o2ll.v[k] * th1)
-            
-            strr = self.o2ll.s300[k] * np.exp(-self.o2ll.be[k] * th1)
-            sf1 = (df + (freq - fcen) * y) / ((freq - fcen) ** 2 + df * df)
-            sf2 = (df - (freq + fcen) * y) / ((freq + fcen) ** 2 + df * df)
-            summ += strr * (sf1 + sf2) * (freq / self.o2ll.f[k]) ** 2
-
-        # o2abs = .5034e12*sum*presda*th^3/3.14159;
-        # .20946e-4/(3.14159*1.38065e-19*300) = 1.6097e11
-        # the following computes n/pi*sum*th^2 (see notes)
-        # n/pi = a/(pi*k*t_0) * pda * th
-        # a/(pi*k*t_0) = 0.20946/(3.14159*1.38065e-23*300) = 1.6097e19  - then it needs a factor 1e-8 to accont
-        # for units conversion (pa->hpa, hz->ghz, m->km)
-        # pa2hpa=1e-2; hz2ghz=1e-9; m2cm=1e2; m2km=1e-3; pa2hpa^-1 * hz2ghz * m2cm^-2 * m2km^-1 = 1e-8
-        # th^3 = th(from ideal gas law 2.13) * th(from the mw approx of stimulated emission 2.16 vs. 2.14) *
-        # th(from the partition sum 2.20)
-
-        o2abs = 1.6097e+11 * summ * presda * th ** 3
-        o2abs = np.maximum(o2abs, 0.0)
-        # cyh *** ********************************************************
-        # separate the equ. into line and continuum
-        # terms, and change the units from np/km to ppm
-
-        # intensities of the non-resonant transitions for o16-o16 and o16-o18, from jpl's line compilation
-        # 1.571e-17 (o16-o16) + 1.3e-19 (o16-o18) = 1.584e-17
-
-        ncpp = 1.584e-17 * freq * freq * dfnr / \
-            (th * (freq * freq + dfnr * dfnr))
-        # 20946e-4/(3.14159*1.38065e-19*300) = 1.6097e11
-        # a/(pi*k*t_0) = 0.20946/(3.14159*1.38065e-23*300) = 1.6097e19  - then it needs a factor 1e-8 to accont
-        # for units conversion (pa->hpa, hz->ghz)
-        # pa2hpa=1e-2; hz2ghz=1e-9; m2cm=1e2; m2km=1e-3; pa2hpa^-1 * hz2ghz * m2cm^-2 * m2km^-1 = 1e-8
-        # th^3 = th(from ideal gas law 2.13) * th(from the mw approx of stimulated emission 2.16 vs. 2.14)
-        # * th(from the partition sum 2.20)
-        ncpp = 1.6097e+11 * ncpp * presda * th ** 3
-
-        # change the units from np/km to ppm
-        npp = (o2abs / db2np) / factor
-
-        ncpp = (ncpp / db2np) / factor
-        # cyh ************************************************************
-
-        return npp, ncpp
 
     def o2_absorption(self, pdrykpa: float, vx: float, ekpa: float, frq: float) -> Tuple[np.ndarray, np.ndarray]:
         """Returns power absorption coefficient due to oxygen in air,
@@ -988,7 +668,8 @@ class O2AbsModel(AbsModel):
         # change the units from np/km to ppm
         npp = (o2abs / db2np) / factor
         ncpp = (ncpp / db2np) / factor
-        ncpp = 0 if O2AbsModel.model in ['rose19', 'rose19sd', 'rose20', 'rose20sd', 'rose22', 'rose22sd'] else ncpp
+        ncpp = 0 if O2AbsModel.model in [
+            'rose19', 'rose19sd', 'rose20', 'rose20sd', 'rose22', 'rose22sd'] else ncpp
         # ************************************************************
 
         return npp, ncpp
