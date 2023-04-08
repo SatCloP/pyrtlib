@@ -1,5 +1,5 @@
 """
-Main script !!!(right now only for testing)!!!.
+Main class to compute Tb.
 """
 
 __author__ = ''

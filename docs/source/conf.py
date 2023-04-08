@@ -63,8 +63,11 @@ extensions = [
     'sphinx_panels',
     # 'sphinx.ext.graphviz',
     'rst2pdf.pdfbuilder',
+    # 'autoapi.extension'
     # "sphinx.ext.linkcode",
 ]
+# autoapi_dirs = ['../../pyrtlib']
+# autoapi_type = "python"
 
 toggleprompt_offset_right = 35
 

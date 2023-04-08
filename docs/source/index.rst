@@ -148,25 +148,25 @@ Preview of the output dataframe (see :py:meth:`pyrtlib.tb_spectrum.TbCloudRTE.ex
      -  0.0 
   
 .. toctree::
-   :maxdepth: 3
+   :maxdepth: 2
    :caption: Installation:
 
    installation
 
 .. toctree::
-   :maxdepth: 3
+   :maxdepth: 2
    :caption: API References:
    
    api
 
 .. toctree::
-   :maxdepth: 3
+   :maxdepth: 2
    :caption: Notebook:
    
    notebook/index
 
 .. toctree::
-   :maxdepth: 3
+   :maxdepth: 2
    :caption: Examples:
    
    examples/index

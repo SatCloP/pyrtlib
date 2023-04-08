@@ -113,7 +113,6 @@ collision-induced power absorption coefficient (neper/km) in air ("dry continuum
 
 .. autosummary::
     :toctree: generated/
-    :template: custom-class-template.rst
 
     pyrtlib.absorption_model.AbsModel
     pyrtlib.absorption_model.H2OAbsModel
