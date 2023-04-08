@@ -465,11 +465,11 @@ def esice_goffgratch(t: np.ndarray) -> np.ndarray:
 def tk2b_mod(hvk: np.ndarray, t: np.ndarray) -> np.ndarray:
     r"""[summary]
 
-    .. math:: B_tilde=\frac{1}{e^\frac{hvk}{T}-1}
+    .. math:: B_{tilde}=\frac{1}{e^\frac{hvk}{T}-1}
 
     Args:
-        hvk (np.ndarray): _description_
-        t (np.ndarray): _description_
+        hvk (np.ndarray): [Planck constant * frequency] / Boltzmann constant
+        t (np.ndarray): Temperature (K)
     
     Returns:
         np.ndarray: _description_

@@ -206,7 +206,7 @@ class H2OAbsModel(AbsModel):
                 ekpa = e[i] / 10.0
                 pdrykpa = p[i] / 10.0 - ekpa
                 for j in range(0, len(frq)):
-                    _, _ = H2OAbsModel().h2o_rosen19_sd(pdrykpa, v, ekpa, frq[j])
+                    _, _ = H2OAbsModel().h2o_absorption(pdrykpa, v, ekpa, frq[j])
 
         """
         # the best-fit voigt are given in koshelev et al. 2018, table 2 (rad,
@@ -776,7 +776,7 @@ class O3AbsModel(AbsModel):
         else:
             raise ValueError("Please enter a valid absorption model")
 
-    def o3abs_rose21(self, t: np.ndarray, p: np.ndarray, f: np.ndarray, o3n: np.ndarray) -> np.ndarray:
+    def o3_absorption(self, t: np.ndarray, p: np.ndarray, f: np.ndarray, o3n: np.ndarray) -> np.ndarray:
         """This function computes power absorption coeff (Np/km) in the atmosphere 
         due to selcted lines of ozone (O3).
 

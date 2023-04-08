@@ -18,10 +18,33 @@ which are commonly exploited for atmospheric sounding by microwave radiometer (M
 
 .. panels::
    :card: + intro-card text-center
-   :column: col-lg-6 col-md-6 col-sm-6 col-xs-12 d-flex
+
+   ---
+   :img-top: _static/shuttle.svg
+
+   Getting started
+
+   +++
+
+   .. link-button:: installation
+      :type: ref
+      :text: Go To Reference
+      :classes: btn-block btn-outline-primary 
+
+   ---
+   :img-top: _static/api.svg
+
+   API references
+
+   +++
+
+   .. link-button:: api
+      :type: ref
+      :text: Go To Reference
+      :classes: btn-block btn-outline-primary 
    
    ---
-   :img-top: _static/gallery_panels.svg
+   :img-top: _static/code.svg
    
    Gallery example
 
@@ -33,7 +56,7 @@ which are commonly exploited for atmospheric sounding by microwave radiometer (M
       :classes: btn-outline-primary btn-block
    
    ---
-   :img-top: _static/gallery_panels.svg
+   :img-top: _static/code.svg
 
    Jupyter notebook example
 
@@ -177,11 +200,11 @@ Preview of the output dataframe (see :py:meth:`pyrtlib.tb_spectrum.TbCloudRTE.ex
    
    references
 
-Indices and tables
+Indices and search
 ==================
 
 * :ref:`genindex`
-* :ref:`modindex`
+.. * :ref:`modindex`
 * :ref:`search`
 
 .. |build-docs-action| image:: https://github.com/slarosa/pyrtlib/workflows/build-docs-action/badge.svg
