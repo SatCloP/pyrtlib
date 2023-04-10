@@ -45,10 +45,11 @@ exclude_patterns = [
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
+    'matplotlib.sphinxext.plot_directive',
     'sphinx.ext.autodoc',
     "sphinx_copybutton",
     'sphinx.ext.mathjax',
-    # 'sphinx.ext.viewcode',
+    #'sphinx.ext.viewcode',
     'sphinx.ext.intersphinx',
     'sphinx.ext.extlinks',
     'sphinx.ext.napoleon',
@@ -108,6 +109,8 @@ html_show_sourcelink = False
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
 
+# add_module_names = False
+
 html_favicon = str(Path('_static') / 'thumb_logo.svg')
 # html_logo = "../../resources/logo/logo_white_large_new.png"
 html_theme_options = {
@@ -165,10 +168,9 @@ texinfo_documents = [
      'Miscellaneous'),
 ]
 
-panels_add_bootstrap_css = False
-html_css_files = [
-    "pyrtlib.css",
-]
+# html_css_files = [
+#     "pyrtlib.css",
+# ]
 # # == Disable search functionality for html
 # def on_builder_inited(app):
 #     if app.builder.name == 'html':
@@ -181,6 +183,7 @@ def setup(app):
     #    app.connect('builder-inited', on_builder_inited)   
     # A workaround for the responsive tables always having annoying scrollbars.
     app.add_css_file("noscrollbar.css")
+    app.add_css_file("pyrtlib.css")
     # Override footnote callout CSS to be normal text instead of superscript
     # In-line links to references as numbers in brackets.
     app.add_css_file("refs_format.css")

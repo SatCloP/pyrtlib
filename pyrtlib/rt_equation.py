@@ -25,22 +25,20 @@ class RTEquation:
     emissivity = 1.0
 
     @staticmethod
-    def vapor(tk: np.ndarray, rh: np.ndarray, ice: bool):
+    def vapor(t: np.ndarray, rh: np.ndarray, ice: Optional[bool] = False) -> Tuple[np.ndarray, np.ndarray]:
         """Compute saturation vapor pressure (es,in mb) over water or ice at
         temperature tk (kelvins), using the Goff-Gratch formulation (List,1963).
 
         Args:
-            tk (numpy.ndarray): temperature (K).
-            rh (numpy.ndarray): relative humidity (fraction).
-            ice (bool): switch to calculate saturation vapor pressure over
-                        water only (0) or water and ice, depending on tk (1). Defaults to False.
+            t (numpy.ndarray): Temperature (K).
+            rh (numpy.ndarray): Relative Humidity (fraction).
+            ice (Optional[bool], optional): Switch to calculate saturation vapor pressure over
+                        water only (True) or water and ice, depending on T. Defaults to False.
 
         Returns:
-            (tuple):
-
-            * e [type]: vapor pressure (mb)
-            * rho [type]: vapor density (g/m3)
-
+            Tuple[numpy.ndarray, numpy.ndarray]: 
+            * e (np.ndarray): Vapor pressure (mb)
+            * rho (np.ndarray): Vapor density (g/m3)
         """
 
         rvap = constants('Rwatvap')[0]
@@ -62,14 +60,14 @@ class RTEquation:
         # end
 
         # over water...
-        y = 373.16 / tk
+        y = 373.16 / t
         es = np.dot(-7.90298, (y - 1.0)) + np.dot(5.02808, np.log10(y)) - np.dot(1.3816e-07, (
-                10 ** (np.dot(11.344, (1.0 - (1.0 / y)))) - 1.0)) + np.dot(0.0081328, (
+            10 ** (np.dot(11.344, (1.0 - (1.0 / y)))) - 1.0)) + np.dot(0.0081328, (
                 10 ** (np.dot(-3.49149, (y - 1.0))) - 1.0)) + np.log10(1013.246)
         if ice:
             # over ice if tk < 263.16
-            indx = np.nonzero(tk < 263.16)
-            y = 273.16 / tk(indx)
+            indx = np.nonzero(t < 263.16)
+            y = 273.16 / t(indx)
             es[indx] = np.dot(-9.09718, (y - 1.0)) - np.dot(
                 3.56654, np.log10(y)) + np.dot(0.876793, (1.0 - (1.0 / y))) + np.log10(6.1071)
 
@@ -79,21 +77,23 @@ class RTEquation:
         # vapor pressure = vapor density * rvapor * tk
 
         e = np.multiply(rh, es)
-        rho = e / (np.dot(rvap, tk))
+        rho = e / (np.dot(rvap, t))
 
         return e, rho
 
     @staticmethod
-    def bright(hvk: np.ndarray, boft: np.ndarray) -> Union[np.ndarray, None]:
-        """Function to compute temperature from the modified Planck
-        radiance (Planck function without the constants 2h(v^3)/(c^2).
+    def bright(hvk: np.ndarray, boft: np.ndarray) -> np.ndarray:
+        r"""Function to compute temperature from the modified Planck
+        radiance (Planck function without the constants :math:`\frac{2h\nu^3}{c^2}`.
+
+        .. math:: B_{\nu}(\nu,T) = \frac{1}{ e^{\frac{h\nu}{k_{B}T}}-1}\implies T_b = \frac{h\nu}{k_{B}}\times\frac{1}{\ln(1+\frac{1}{B_{\nu}(\nu,T)})}
 
         Args:
-            hvk ([type], optional): [Planck constant (J*S)] * [frequency (Hz)] / [Boltzmann constant (J/K)]. Defaults to None.
-            boft ([type], optional): modified Planck radiance - (equation (4) from Schroeder & Westwater, 1991). Defaults to None.
+            hvk (numpy.ndarray): (Planck constant (J*S)] * [frequency (Hz)) / [Boltzmann constant (J/K)].
+            boft (numpy.ndarray): Modified Planck radiance - (equation (4) from [Schroeder-Westwater-1991]_).
 
         Returns:
-            [type]: [description]
+            numpy.ndarray: Temperature (K)
         """
 
         if boft != 0:
@@ -104,24 +104,23 @@ class RTEquation:
         return Tb
 
     @staticmethod
-    def refractivity(p: np.ndarray, tk: np.ndarray, e: np.ndarray) -> Tuple[np.ndarray]:
-        """Computes profiles of wet refractivity, dry refractivity,
-        refractive index.  Refractivity equations were taken from G.D.
-        Thayer, 1974:  An improved equation for the radio refractive
-        index of air. Radio Science, vol.9,no.10, 803-807.
+    def refractivity(p: np.ndarray, t: np.ndarray, e: np.ndarray) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
+        """Computes profiles of wet refractivity, dry refractivity, refractive index. 
+        Refractivity equations were taken from [Thayer-1974]_.
+
         These equations were intended for frequencies under 20 GHz
 
         Args:
-            p ([type], optional): pressure profile (mb). Defaults to None.
-            tk ([type], optional): temperature profile (K). Defaults to None.
-            e ([type], optional): vapor pressure profile (mb). Defaults to None.
+            p (numpy.ndarray): Pressure profile (mb). 
+            t (numpy.ndarray): Temperature profile (K).
+            e (numpy.ndarray): Vapor pressure profile (mb).
 
         Returns:
-            (tuple):
+            Tuple[numpy.ndarray, numpy.ndarray, numpy.ndarray]:
 
-            * dryn [type]: dry refractivity profile
-            * wetn [type]: wet refractivity profile
-            * refindx [type]: refractive index profile
+            * dryn (numpy.ndarray): Dry refractivity profile
+            * wetn (numpy.ndarray): Wet refractivity profile
+            * refindx (numpy.ndarray): Refractive index profile
         """
 
         nl = len(p)
@@ -132,33 +131,36 @@ class RTEquation:
         for i in range(0, nl):
             # Calculate dry air pressure (pa) and celsius temperature (tc).
             pa = p[i] - e[i]
-            tc = tk[i] - 273.16
-            tk2 = np.dot(tk[i], tk[i])
+            tc = t[i] - 273.16
+            tk2 = np.dot(t[i], t[i])
             tc2 = np.dot(tc, tc)
-            rza = 1.0 + np.dot(pa, (np.dot(5.79e-07, (1.0 + 0.52 / tk[i])) - np.dot(0.00094611, tc) / tk2))
-            rzw = 1.0 + np.dot(np.dot(1650.0, (e[i] / (np.dot(tk[i], tk2)))),
+            rza = 1.0 + \
+                np.dot(
+                    pa, (np.dot(5.79e-07, (1.0 + 0.52 / t[i])) - np.dot(0.00094611, tc) / tk2))
+            rzw = 1.0 + np.dot(np.dot(1650.0, (e[i] / (np.dot(t[i], tk2)))),
                                (1.0 - np.dot(0.01317, tc) + np.dot(0.000175, tc2) + np.dot(1.44e-06,
                                                                                            (np.dot(tc2, tc)))))
-            wetn[i] = np.dot((np.dot(64.79, (e[i] / tk[i])) + np.dot((377600.0), (e[i] / tk2))), rzw)
-            dryn[i] = np.dot(np.dot(77.6036, (pa / tk[i])), rza)
+            wetn[i] = np.dot((np.dot(64.79, (e[i] / t[i])) +
+                             np.dot((377600.0), (e[i] / tk2))), rzw)
+            dryn[i] = np.dot(np.dot(77.6036, (pa / t[i])), rza)
             refindx[i] = 1.0 + np.dot((dryn[i] + wetn[i]), 1e-06)
 
         return dryn, wetn, refindx
 
     @staticmethod
-    def ray_tracing(z: np.ndarray, refindx: np.ndarray, angle: float, z0: float) -> np.ndarray:
-        """Ray-tracing algorithm of Dutton, Thayer, and Westwater, rewritten for
-        readability & attempted documentation.  Based on the technique shown in
-        Radio Meteorology by Bean and Dutton (Fig. 3.20 and surrounding text) [Bean-Dutton]_.
+    def ray_tracing(z: np.ndarray, refindx: np.ndarray, angle: float, z0: float) -> np.ndarray | None:
+        """Ray-tracing algorithm of Dutton, Thayer, and Westwater, rewritten for 
+        readability & attempted documentation. Based on the technique shown in Radio Meteorology 
+        by Bean and Dutton (Fig. 3.20 and surrounding text) [Bean-Dutton]_.
 
         Args:
-            z ([type], optional): eight profile (km above observation height, z0). Defaults to None.
-            refindx ([type], optional): refractive index profile. Defaults to None.
-            angle ([type], optional): elevation angle (degrees). Defaults to None.
-            z0 ([type], optional): observation height (km msl). Defaults to None.
+            z (numpy.ndarray): Eight profile (km above observation height, z0).
+            refindx (numpy.ndarray): Refractive index profile.
+            angle (float): Elevation angle (degrees).
+            z0 (float): Observation height (km msl).
 
         Returns:
-            [type]: array containing slant path length profiles (km)
+            numpy.ndarray: Array containing slant path length profiles (km)
 
         .. note::
             The algorithm assumes that x decays exponentially over each layer.
@@ -172,7 +174,7 @@ class RTEquation:
         # Check for refractive index values that will blow up calculations.
         for i in range(0, nl):
             if refindx[i] < 1:
-                warnings.warn('RayTrac_xxx: Negative rafractive index')
+                warnings.warn('ray_tracing: Negative rafractive index')
                 return
 
         # If angle is close to 90 degrees, make ds a height difference profile.
@@ -200,17 +202,21 @@ class RTEquation:
             if refindx[i] == refindx[i - 1] or refindx[i] == 1. or refindx[i - 1] == 1.:
                 refbar = np.dot((refindx[i] + refindx[i - 1]), 0.5)
             else:
-                refbar = 1.0 + (refindx[i - 1] - refindx[i]) / (np.log((refindx[i - 1] - 1.0) / (refindx[i] - 1.0)))
-            argdth = z[i] / rs - (np.dot((refindx[0] - refindx[i]), costh0) / refindx[i])
+                refbar = 1.0 + (refindx[i - 1] - refindx[i]) / \
+                    (np.log((refindx[i - 1] - 1.0) / (refindx[i] - 1.0)))
+            argdth = z[i] / rs - \
+                (np.dot((refindx[0] - refindx[i]), costh0) / refindx[i])
             argth = np.dot(0.5, (a0 + argdth)) / r
             if argth <= 0:
-                warnings.warn('RayTrac_xxx: Ducting at {} degrees'.format(angle))
+                warnings.warn(
+                    'ray_tracing: Ducting at {} degrees'.format(angle))
                 return ds
             # Compute d-theta for this layer.
             sint = np.sqrt(np.dot(r, argth))
             theta = np.dot(2.0, np.arcsin(sint))
             if (theta - np.dot(2.0, theta0)) <= 0.0:
-                dendth = np.dot(np.dot(2.0, (sint + sina)), np.cos(np.dot((theta + theta0), 0.25)))
+                dendth = np.dot(np.dot(2.0, (sint + sina)),
+                                np.cos(np.dot((theta + theta0), 0.25)))
                 sind4 = (np.dot(0.5, argdth) - np.dot(z[i], argth)) / dendth
                 dtheta = np.dot(4.0, np.arcsin(sind4))
                 theta = theta0 + dtheta
@@ -226,7 +232,8 @@ class RTEquation:
                 (z[i] - z[i - 1]) ** 2 + np.dot(np.dot(np.dot(4.0, r), rl), ((np.sin(np.dot((phi - phil), 0.5))) ** 2)))
             if dtau != 0.0:
                 dtaua = np.abs(tau - taul)
-                ds[i] = np.dot(ds[i], (dtaua / (np.dot(2.0, np.sin(np.dot(dtaua, 0.5))))))
+                ds[i] = np.dot(
+                    ds[i], (dtaua / (np.dot(2.0, np.sin(np.dot(dtaua, 0.5))))))
             # Make upper boundary into lower boundary for next layer.
             phil = np.copy(phi)
             taul = np.copy(tau)
@@ -236,23 +243,22 @@ class RTEquation:
             return np.asarray(ds)
 
     @staticmethod
-    def exponential_integration(zeroflg: bool, x: np.ndarray, ds: np.ndarray, ibeg: int, iend: int, factor: float):
-        """ EXPonential INTegration: Integrate the profile in array x over the layers defined in
+    def exponential_integration(zeroflg: bool, x: np.ndarray, ds: np.ndarray, ibeg: int, iend: int, factor: float) -> Tuple[np.ndarray, np.ndarray]:
+        """EXPonential INTegration: Integrate the profile in array x over the layers defined in
         array ds, saving the integrals over each layer.
 
         Args:
-            zeroflg ([type], optional): flag to handle zero values (0:layer=0, 1:layer=avg). Defaults to None.
-            x ([type], optional): profile array. Defaults to None.
-            ds ([type], optional): array of layer depths (km). Defaults to None.
-            ibeg ([type], optional): lower integration limit (profile level number). Defaults to None.
-            iend ([type], optional): upper integration limit (profile level number). Defaults to None.
-            factor ([type], optional): factor by which result is multiplied (e.g., unit change). Defaults to None.
+            zeroflg (bool): Flag to handle zero values (0:layer=0, 1:layer=avg).
+            x (numpy.ndarray): Profile array.
+            ds (numpy.ndarray): Array of layer depths (km).
+            ibeg (int): Lower integration limit (profile level number).
+            iend (int): Upper integration limit (profile level number).
+            factor (float): Factor by which result is multiplied (e.g., unit change).
 
         Returns:
-                (tuple):
-
-                * xds [type]: array containing integrals over each layer ds
-                * sxds [type]: integral of x*ds over levels ibeg to iend
+            Tuple[numpy.ndarray, numpy.ndarray]: 
+            * xds (numpy.ndarray): Array containing integrals over each layer ds
+            * sxds (numpy.ndarray): Integral of x*ds over levels ibeg to iend
         """
 
         sxds = 0.0
@@ -261,7 +267,7 @@ class RTEquation:
         for i in range(ibeg, iend):
             # Check for negative x value. If found, output message and return.
             if x[i - 1] < 0.0 or x[i] < 0.0:
-                warnings.warn('Error encountered in ExpInt_xxx.m')
+                warnings.warn('Error encountered in exponential_integration')
                 return sxds, xds
                 # Find a layer value for x in cases where integration algorithm fails.
             elif np.abs(x[i] - x[i - 1]) < 1e-09:
@@ -284,22 +290,22 @@ class RTEquation:
         return sxds, xds.reshape(iend)
 
     @staticmethod
-    def cloud_radiating_temperature(ibase: float, itop: float, hvk: np.ndarray, tauprof: np.ndarray, boftatm: np.ndarray):
+    def cloud_radiating_temperature(ibase: float, itop: float, hvk: np.ndarray, tauprof: np.ndarray, boftatm: np.ndarray) -> np.ndarray | None:
         """Computes the mean radiating temperature of a cloud with base and top at
-        profile levels ibase and itop, respectively.  The algorithm assumes that
+        profile levels ibase and itop, respectively. The algorithm assumes that
         the input cloud is the lowest (or only) cloud layer observed.
         If absorption is not too big, compute tmr of lowest cloud layer (base
         at level ibase, top at level itop). Otherwise, set error flag and return.
 
         Args:
-            ibase ([type], optional): profile level at base of lowest cloud. Defaults to None.
-            itop ([type], optional): profile level at top of lowest cloud. Defaults to None.
-            hvk ([type], optional): (planck constant * frequency) / boltzmann constant. Defaults to None.
-            tauprof ([type], optional): integral profile of absorption (np; i = integral (0,i)). Defaults to None.
-            boftatm ([type], optional): integral profile of atmospheric planck radiance. Defaults to None.
+            ibase (float): Profile level at base of lowest cloud.
+            itop (float): Profile level at top of lowest cloud.
+            hvk (np.ndarray): (Planck constant * frequency) / Boltzmann constant.
+            tauprof (np.ndarray): Integral profile of absorption (np; i = integral (0,i)).
+            boftatm (np.ndarray): Integral profile of atmospheric planck radiance.
 
         Returns:
-            [type]: tmr of lowest cloud layer (k)
+            np.ndarray | None: tmr of lowest cloud layer (k)
 
         .. note::
             This algorithm is not designed for multiple cloud layers
@@ -312,9 +318,10 @@ class RTEquation:
         expmax = 125.0
         ibase = int(ibase)
         itop = int(itop)
-        # ... check if absorption too large to exponentiate...
+        # check if absorption too large to exponentiate
         if tauprof[ibase] > expmax:
-            warnings.warn('from CldTmr_xxx: absorption too large to exponentiate for tmr of lowest cloud layer')
+            warnings.warn(
+                'from cloud_radiating_temperature: absorption too large to exponentiate for tmr of lowest cloud layer')
             return
 
         # compute radiance (batmcld) and absorption (taucld) for cloud layer.
@@ -324,7 +331,8 @@ class RTEquation:
         if taucld > expmax:
             boftcld = np.dot(batmcld, np.exp(tauprof[ibase]))
         else:
-            boftcld = (batmcld * np.exp(tauprof[ibase])) / (1.0 - np.exp(-taucld))
+            boftcld = (
+                batmcld * np.exp(tauprof[ibase])) / (1.0 - np.exp(-taucld))
 
         # compute cloud mean radiating temperature (tmrcld)
         tmrcld = RTEquation.bright(hvk, boftcld)
@@ -332,26 +340,24 @@ class RTEquation:
         return tmrcld
 
     @staticmethod
-    def cloud_integrated_density(dencld: np.ndarray, ds: np.ndarray, lbase: np.ndarray, ltop: np.ndarray):
+    def cloud_integrated_density(dencld: np.ndarray, ds: np.ndarray, lbase: np.ndarray, ltop: np.ndarray) -> np.ndarray:
         """Integrates cloud water density over path ds (linear algorithm).
 
         Args:
-            dencld ([type], optional): cloud cloud water density profile (g/m3). Defaults to None.
-            ds ([type], optional): vector containing layer depth profiles (km). Defaults to None.
-            nlay ([type], optional): number of cloud layers in the profile. Defaults to None.
-            lbase ([type], optional): array containing profile levels corresponding to cloud bases. Defaults to None.
-            ltop ([type], optional): array containing profile levels corresponding to cloud tops . Defaults to None.
+            dencld (np.ndarray): Cloud cloud water density profile (g/m3)
+            ds (np.ndarray): Vector containing layer depth profiles (km)
+            lbase (np.ndarray): Array containing profile levels corresponding to cloud bases.
+            ltop (np.ndarray): Array containing profile levels corresponding to cloud tops.
 
         Returns:
-            [type]: integrated cloud water density (cm)
-
-        .. warning:: nlay arg is not defined ??
+            np.ndarray: integrated cloud water density (cm)
         """
+
         ncld = len(lbase)
         scld = 0.0
         for i in range(0, ncld):
             for j in range(int(lbase[i]) + 1, int(ltop[i])):
-                scld = scld + np.dot(ds[j], (np.dot(0.5, (dencld[j] + dencld[j - 1]))))
+                scld += np.dot(ds[j], (np.dot(0.5, (dencld[j] + dencld[j - 1]))))
 
         # convert the integrated value to cm.
         scld = np.dot(scld, 0.1)
@@ -359,11 +365,10 @@ class RTEquation:
         return scld
 
     @staticmethod
-    def planck(frq: np.ndarray, tk: np.ndarray, taulay: np.ndarray, es: Optional[float] = 1.0) -> Tuple[
-        np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
-        """  Computes the modified planck function (equation (4) in schroeder and
-        westwater, 1992: guide to passive microwave weighting function
-        calculations) for the cosmic background temperature, the mean radiating
+    def planck(frq: np.ndarray, tk: np.ndarray, taulay: np.ndarray) -> Tuple[
+            np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
+        """Computes the modified planck function (equation (4) in [Schroeder-Westwater-1992]_ 
+        for the cosmic background temperature, the mean radiating
         temperature, and a profile of the atmospheric integral with and without
         the cosmic background. Also computes an integral profile of atmospheric
         absorption. For the integral profiles, the value at profile level i
@@ -371,24 +376,20 @@ class RTEquation:
         Also returns the cosmic background term for the rte.
 
         Args:
-            frq (numpy.ndarray): channel frequency (GHz).
-            nl (numpy.ndarray): number of profile levels.
-            tk (numpy.ndarray): temperature profile (K).
-            taulay (numpy.ndarray): profile of absorption integrated over each layer (np).
-            es (float, optional): profile of absorption integrated over each layer (np). Defaults to 1.0.
+            frq (numpy.ndarray): Channel frequency (GHz).
+            tk (numpy.ndarray): Temperature profile (K).
+            taulay (numpy.ndarray): Number of profile levels.
 
         Returns:
-            (tuple):
-            
-            :hvk: [planck constant * frequency] / boltzmann constant
-            :boft: modified planck function for raob temperature profile
-            :bakgrnd: background term of radiative transfer equation
-            :boftatm: array of atmospheric planck radiance integrated (0,i)
-            :boftotl: total planck radiance from the atmosphere plus bakgrnd
-            :boftmr: modified planck function for mean radiating temperature
-            :tauprof: array of integrated absorption (np; 0,i)
+            Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
 
-        .. warning:: nl arg is missing ??
+            * hvk: (Planck constant * frequency) / Boltzmann constant.
+            * boft: Modified planck function for raob temperature profile.
+            * bakgrnd: Background term of radiative transfer equation.
+            * boftatm: Array of atmospheric planck radiance integrated (0,i).
+            * boftotl: Total planck radiance from the atmosphere plus bakgrnd.
+            * boftmr: Modified planck function for mean radiating temperature.
+            * tauprof: Array of integrated absorption (np; 0,i).
         """
 
         Tc = constants('Tcosmicbkg')[0]
@@ -407,23 +408,26 @@ class RTEquation:
         if RTEquation.from_sat:
             boftotl = 0.0
             ###########################################################################
-            # Then compute upwelling radiance 
+            # Then compute upwelling radiance
             # Adapted from Planck_xxx.m, but from Satellite i-1 becomes i+1
             # taulay changed to i+1, debugged by ISMAR project
             ###########################################################################
             Ts = tk[0]
             boft[nl - 1] = tk2b_mod(hvk, tk[nl - 1])
-            for i in range(nl - 2, -1, -1): 
+            for i in range(nl - 2, -1, -1):
                 boft[i] = tk2b_mod(hvk, tk[i])
-                boftlay = (boft[i + 1] + np.dot(boft[i], np.exp(-taulay[i+1]))) / (1.0 + np.exp(-taulay[i+1]))
-                batmlay = np.dot(np.dot(boftlay, np.exp(-tauprof[i + 1])), (1.0 - np.exp(-taulay[i+1])))
+                boftlay = (boft[i + 1] + np.dot(boft[i],
+                           np.exp(-taulay[i+1]))) / (1.0 + np.exp(-taulay[i+1]))
+                batmlay = np.dot(
+                    np.dot(boftlay, np.exp(-tauprof[i + 1])), (1.0 - np.exp(-taulay[i+1])))
                 boftatm[i] = boftatm[i + 1] + batmlay
                 tauprof[i] = tauprof[i + 1] + taulay[i+1]
 
-            # The background is a combination of surface emission and downwelling 
+            # The background is a combination of surface emission and downwelling
             # radiance (boftotl) reflected by the surface
             if tauprof[0] < expmax:
-                boftbg = np.dot(RTEquation.emissivity, tk2b_mod(hvk, Ts)) + np.dot((1 - RTEquation.emissivity), boftotl)
+                boftbg = np.dot(RTEquation.emissivity, tk2b_mod(
+                    hvk, Ts)) + np.dot((1 - RTEquation.emissivity), boftotl)
                 # boftbg_sat  = es * TK2B_mod(hvk,Ts); # SAT: eps * B(Tsrf) + (1-eps) B_dw
                 bakgrnd = np.dot(boftbg, np.exp(-tauprof[0]))
                 boftotl = bakgrnd + boftatm[0]
@@ -436,8 +440,10 @@ class RTEquation:
             boft[0] = tk2b_mod(hvk, tk[0])
             for i in range(1, nl):
                 boft[i] = tk2b_mod(hvk, tk[i])
-                boftlay = (boft[i - 1] + boft[i] * np.exp(-taulay[i])) / (1.0 + np.exp(-taulay[i]))
-                batmlay = boftlay * np.exp(- tauprof[i - 1]) * (1.0 - np.exp(-taulay[i]))
+                boftlay = (boft[i - 1] + boft[i] *
+                           np.exp(-taulay[i])) / (1.0 + np.exp(-taulay[i]))
+                batmlay = boftlay * \
+                    np.exp(- tauprof[i - 1]) * (1.0 - np.exp(-taulay[i]))
                 boftatm[i] = boftatm[i - 1] + batmlay
                 tauprof[i] = tauprof[i - 1] + taulay[i]
             # compute the cosmic background term of the rte; compute total planck
@@ -456,33 +462,34 @@ class RTEquation:
         return boftotl, boftatm, boftmr, tauprof, hvk, boft, bakgrnd
 
     @staticmethod
-    def cloudy_absorption(tk: np.ndarray, denl: np.ndarray, deni: np.ndarray, frq: np.ndarray):
+    def cloudy_absorption(t: np.ndarray, denl: np.ndarray, deni: np.ndarray, frq: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
         """Multiplies cloud density profiles by a given fraction and computes the
         corresponding cloud liquid and ice absorption profiles, using Rosenkranz's
-        cloud liquid absorption routine ABLIQ and ice absorption of Westwater
-        [1972: Microwave Emission from Clouds,13-14]. - Yong Han, 4/20/2000
+        cloud liquid absorption and ice absorption by [Westwater-1972]_.
 
         Args:
-            tk ([type], optional): temperature profile (k). Defaults to None.
-            denl ([type], optional): liquid density profile (g/m3) . Defaults to None.
-            deni ([type], optional): ice density profile (g/m3). Defaults to None.
-            frq ([type], optional): frequency array (GHz). Defaults to None.
+            t (numpy.ndarray): Temperature profile (k).
+            denl (numpy.ndarray): Liquid density profile (g/m3).
+            deni (numpy.ndarray): Ice density profile (g/m3).
+            frq (numpy.ndarray): Frequency array (GHz).
 
         Returns:
-            (tuple):
-
-                * aliq [type]: liquid absorption profile (np/km)
-                * aice [type]: ice absorption profile (np/km)
+            Tuple[numpy.ndarray, numpy.ndarray]: 
+            * aliq: Liquid absorption profile (np/km)
+            * aice: Ice absorption profile (np/km)
 
         See also:
             :py:func:`~pyrtlib.absorption_model.LiqAbsModel.liquid_water_absorption`
+
+        .. note::
+            Yong Han, 4/20/2000, ???
 
         .. warning::
             * ic light speed in cm s-1????
             * ab_liq function is missing!!!!!
         """
 
-        nl = len(tk)
+        nl = len(t)
         c = np.dot(constants('light')[0], 100)
 
         ghz2hz = 1e9
@@ -495,47 +502,41 @@ class RTEquation:
         for i in range(0, nl):
             # Compute liquid absorption np/km.
             if denl[i] > 0:
-                aliq[i] = LiqAbsModel.liquid_water_absorption(denl[i], frq, tk[i])
+                aliq[i] = LiqAbsModel.liquid_water_absorption(
+                    denl[i], frq, t[i])
             # compute ice absorption (db/km); convert non-zero value to np/km.
             if deni[i] > 0:
-                aice[i] = np.dot(np.dot((8.18645 / wave), deni[i]), 0.000959553)
+                aice[i] = np.dot(
+                    np.dot((8.18645 / wave), deni[i]), 0.000959553)
                 aice[i] = np.dot(aice[i], db2np)
 
         return aliq, aice
 
     @staticmethod
-    def clearsky_absorption(p: np.ndarray, tk: np.ndarray, e: np.ndarray, frq: np.ndarray, o3n: np.ndarray = None):
-        """  Computes profiles of water vapor and dry air absorption for
-        a given set of frequencies.  Subroutines H2O_xxx and O2_xxx
-        contain the absorption model of Leibe and Layton [1987:
-        Millimeter-wave properties of the atmosphere: laboratory studies
-        and propagation modeling. NTIA Report 87-224, 74pp.] with oxygen
-        interference coefficients from Rosenkranz [1988: Interference
-        coefficients for overlapping oxygen lines in air.
-        J. Quant. Spectrosc. Radiat. Transfer, 39, 287-97.]
+    def clearsky_absorption(p: np.ndarray, t: np.ndarray, e: np.ndarray, frq: np.ndarray, o3n: np.ndarray = None) -> Tuple[np.ndarray, np.ndarray]:
+        """Computes profiles of water vapor and dry air absorption 
+        for a given set of frequencies. Subroutines :math:`H_2O` and :math:`O_2` 
+        contain the absorption model of [Liebe-Layton]_ with oxygen 
+        interference coefficients from [Rosenkranz-1988]_.
 
         Args:
-            p ([type], optional): pressure profile (mb). Defaults to None.
-            tk ([type], optional): temperature profile (K). Defaults to None.
-            e ([type], optional): vapor pressure profile (mb). Defaults to None.
-            frq ([type], optional): frequency (GHz). Defaults to None.
-            absmdl ([type], optional): Absorption model for WV (default 'ROS98')
-            absmdl.wvres ([type], optional): wv resonant absorption
-            absmdl.wvcnt ([type], optional): wv continuuum absorption
+            p (numpy.ndarray): Pressure profile (mb).
+            t (numpy.ndarray): Temperature profile (K).
+            e (numpy.ndarray): Vapor pressure profile (mb).
+            frq (numpy.ndarray): Frequency (GHz).
+            o3n (numpy.ndarray, optional): Ozone Number Density (molecules/m3). Defaults to None.
+
+        Raises:
+            ValueError: Raises error if absorption model is not defined.
 
         Returns:
-            (tuple):
-
-                * awet [type]: water vapor absorption profile (np/km)
-                * adry [type]: dry air absorption profile (np/km)
+            Tuple[numpy.ndarray, numpy.ndarray]:
+            * awet: Water vapor absorption profile (np/km).
+            * adry: Dry air absorption profile (np/km).
 
         See also:
-            :py:class:`~pyrtlib.absorption_model.H2OAbsModel`
-            :py:class:`~pyrtlib.absorption_model.O2AbsModel`
-
-        .. warning::
-                * h2o_rosen03_xxx and o2n2_rosen03_xxx functions are missing!!!!!
-                * rho, absmdl, absmdl.wvres and absmdl.wvcnt arguments are missing!!!!!!
+            :py:func:`~pyrtlib.absorption_model.H2OAbsModel.h2o_absorption`
+            :py:func:`~pyrtlib.absorption_model.O2AbsModel.o2_absorption`
         """
 
         nl = len(p)
@@ -548,7 +549,7 @@ class RTEquation:
         db2np = np.dot(np.log(10.0), 0.1)
         for i in range(0, nl):
             # Compute inverse temperature parameter; convert wet and dry p to kpa.
-            v = 300.0 / tk[i]
+            v = 300.0 / t[i]
             ekpa = e[i] / 10.0
             pdrykpa = p[i] / 10.0 - ekpa
             # add H2O term
@@ -559,13 +560,15 @@ class RTEquation:
             aO2[i] = factor * (npp + ncpp) * db2np
             # add N2 term
             if N2AbsModel.model not in ['rose03', 'rose16', 'rose17', 'rose18', 'rose98', 'makarov11']:
-                aN2[i] = N2AbsModel.n2_absorption(tk[i], np.dot(pdrykpa, 10), frq)
+                aN2[i] = N2AbsModel.n2_absorption(
+                    t[i], np.dot(pdrykpa, 10), frq)
 
             if not N2AbsModel.model:
-                raise ValueError('No model avalaible with this name: {} . Sorry...'.format('model'))
+                raise ValueError(
+                    'No model avalaible with this name: {} . Sorry...'.format('model'))
 
             if not o3n is None and O3AbsModel.model in ['rose18', 'rose21', 'rose21sd', 'rose22', 'rose22sd']:
-                aO3[i] = O3AbsModel().o3abs_rose21(tk[i], p[i], frq, o3n[i])
+                aO3[i] = O3AbsModel().o3_absorption(t[i], p[i], frq, o3n[i])
 
             adry[i] = aO2[i] + aN2[i] + aO3[i]
 

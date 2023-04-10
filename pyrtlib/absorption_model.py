@@ -778,7 +778,7 @@ class O3AbsModel(AbsModel):
 
     def o3_absorption(self, t: np.ndarray, p: np.ndarray, f: np.ndarray, o3n: np.ndarray) -> np.ndarray:
         """This function computes power absorption coeff (Np/km) in the atmosphere 
-        due to selcted lines of ozone (O3).
+        due to selcted lines of ozone (:math:`O_3`).
 
         Args:
             t (np.ndarray): Temperature (K)

@@ -463,18 +463,17 @@ def esice_goffgratch(t: np.ndarray) -> np.ndarray:
 
 
 def tk2b_mod(hvk: np.ndarray, t: np.ndarray) -> np.ndarray:
-    r"""[summary]
+    r"""Get modified Planck function (Planck function without the constants :math:`\frac{2h\nu^3}{c^2}`)
+    by T and hvk (Planck constant * frequency) / Boltzmann constant, (equation (4) from [Schroeder-Westwater-1991]_)
 
-    .. math:: B_{tilde}=\frac{1}{e^\frac{hvk}{T}-1}
+    .. math:: \tilde{B} = \frac{1}{ e^{\frac{h\nu}{k_{B}T}}-1}
 
     Args:
-        hvk (np.ndarray): [Planck constant * frequency] / Boltzmann constant
+        hvk (np.ndarray): (Planck constant * frequency) / Boltzmann constant.
         t (np.ndarray): Temperature (K)
     
     Returns:
-        np.ndarray: _description_
-
-    .. warning:: add docstring to function
+        np.ndarray: Modified Planck function.
     """
     Btilde = 1.0 / (np.exp(hvk / t) - 1.0)
 

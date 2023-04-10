@@ -79,49 +79,71 @@ The source code for pyrtlib python package is hosted on `github
    .. image:: ../../resources/r98_r22.jpeg
       :width: 600
 
-Example:
---------
+Quick start
+-----------
+
+.. code-block:: python
+   
+   from pyrtlib.tb_spectrum import TbCloudRTE
+   from pyrtlib.atmospheric_profiles import AtmosphericProfiles as atmp
+   from pyrtlib.utils import mr2rh, ppmv2gkg
+
 Atmospheric profile definition:
 
->>> z, p, _, t, md = atmp.gl_atm(atmp.TROPICAL)
+.. code-block:: python
+   
+   z, p, _, t, md = atmp.gl_atm(atmp.TROPICAL)
+
 
 Units conversion:
 
->>> gkg = ppmv2gkg(md[:, atmp.H2O], atmp.H2O)
+.. code-block:: python
+   
+   gkg = ppmv2gkg(md[:, atmp.H2O], atmp.H2O)
 
-Relative humidity of H2O (water vapor)
+Relative humidity of :math:`H_2O` (water vapor)
 
->>> rh = mr2rh(p, t, gkg)[0] / 100
+.. code-block:: python
+
+   rh = mr2rh(p, t, gkg)[0] / 100
 
 Deifinition of angles and frequencies:
 
->>> ang = np.array([90.])
->>> frq = np.arange(20, 201, 1)
+.. code-block:: python
+
+   ang = np.array([90.])
+   frq = np.arange(20, 201, 1)
 
 Initialize parameters for main execution:
 
->>> rte = TbCloudRTE(z, p, t, rh, frq, ang)
+.. code-block:: python
+
+   rte = TbCloudRTE(z, p, t, rh, frq, ang)
 
 Set absorption model:
 
->>> rte.init_absmdl('rose16')
+.. code-block:: python
+
+   rte.init_absmdl('rose16')
 
 Execute model by computing upwelling radiances:
 
->>> df = rte.execute()
->>> df.tbtotal
-0      297.391838
-1      296.186240
-2      294.748245
-3      294.953483
-4      296.027799
-         ...
-176    275.997899
-177    276.611319
-178    277.129218
-179    277.566840
-180    277.936645
-Name: tbtotal, Length: 181, dtype: float64
+.. code-block:: python
+
+   df = rte.execute()
+   df.tbtotal
+   0      297.391838
+   1      296.186240
+   2      294.748245
+   3      294.953483
+   4      296.027799
+            ...
+   176    275.997899
+   177    276.611319
+   178    277.129218
+   179    277.566840
+   180    277.936645
+   Name: tbtotal, Length: 181, dtype: float64
 
 Preview of the output dataframe (see :py:meth:`pyrtlib.tb_spectrum.TbCloudRTE.execute` for more info):
 
@@ -204,7 +226,6 @@ Indices and search
 ==================
 
 * :ref:`genindex`
-.. * :ref:`modindex`
 * :ref:`search`
 
 .. |build-docs-action| image:: https://github.com/slarosa/pyrtlib/workflows/build-docs-action/badge.svg
