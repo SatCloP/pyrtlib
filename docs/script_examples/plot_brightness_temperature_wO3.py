@@ -48,9 +48,9 @@ rte = TbCloudRTE(z, p, t, rh, frq, ang, o3n)
 rte.init_absmdl('rose20')
 rte.satellite = False
 H2OAbsModel.model = 'rose21sd'
-H2OAbsModel.h2oll = import_lineshape('h2oll_{}'.format(H2OAbsModel.model))
+H2OAbsModel.set_ll()
 O3AbsModel.model = 'rose18'
-O3AbsModel.o3ll = import_lineshape('o3ll_{}'.format(O3AbsModel.model))
+O3AbsModel.set_ll()
 df = rte.execute()
 
 df = df.set_index(frq)

@@ -36,3 +36,14 @@ References
 
 .. [Rosenkranz-1988] P.W. Rosenkranz, Interference coefficients for overlapping oxygen lines in air, Journal of Quantitative Spectroscopy and Radiative Transfer, Volume 39, Issue 4, 1988, Pages 287-297, https://doi.org/10.1016/0022-4073(88)90004-0.
 
+.. [Liebe-Hufford-Manabe] Liebe H.J., G.A. Hufford and T. Manabe, “A model fo r the complex permittivity of water at frequenciesbelow 1 THz”, Internat. J. Infrared and mm Waves, Vol. 12, pp. 659-675 (1991). 
+
+.. [Liebe-Hufford-Cotton] Liebe, H.J., G.A. Hufford, and M.G. Cotton, Propagation Modeling of Moist Air and SuspendedWater/Ice Particles at Frequencies Below 1000 GH z. AGARD Conference Proc. 542, AtmosphericPropagation Effects through Natural and Man-Made Obscurants for Visible to MM-Wave Radiation,pp.3.1-3.10 (1993). 
+
+.. [Boissoles-2003] J. Boissoles, C. Boulet, R.H. Tipping, Alex Brown, Q. Ma, Theoretical calculation of the translation-rotation collision-induced absorption in N2–N2, O2–O2, and N2–O2 pairs, Journal of Quantitative Spectroscopy and Radiative Transfer, Volume 82, Issues 1–4, 2003, Pages 505-516, https://doi.org/10.1016/S0022-4073(03)00174-2.
+
+.. [Borysow-Frommhold-1986] Borysow, A., Frommhold, L., 1986, Collision-induced Rototranslational Absorption Spectra of N 2--N 2 Pairs for Temperatures from 50 to 300 K. The Astrophysical Journal 311, 1043. doi:10.1086/164841.
+
+.. [Mätzler-Rosenkranz-2006] Mätzler, C., Rosenkranz, P. W., Battaglia, A., and Wigneron, J. P.:Thermal microwave radiation – applications for remote sensing,no. 52 in IET, Electromagnetic Waves, London, UK, 2006. 
+
+.. [Rosenkranz-2017] Rosenkranz, P.W.: Line-By-Line Microwave Radiative Transfer (Non-Scattering), Remote Sens. Code Library, Doi:10.21982/M81013, 2017

@@ -23,7 +23,11 @@ def import_lineshape(name: str) -> Dict:
     Returns:
         Dict: Dictionary of line list of the absorption model chose.
 
+    See also:
+        :py:func:`~pyrtlib.absorption_model.H2OAbsModel.set_ll`
+
     Examples:
+        >>> from pyrtlib.absorption_model import H2OAbsModel
         >>> from pyrtlib.utils import import_lineshape
         >>> H2OAbsModel.model = 'rose21sd'
         >>> H2OAbsModel.h2oll = import_lineshape('h2oll_{}'.format(H2OAbsModel.model))
@@ -83,7 +87,7 @@ def constants(name: Optional[str] = None) -> Union[Tuple[float, str], List]:
             Values as of 11/12/2015
     .. [2] Janssen, Atmospheric Remote Sensing by Microwave Radiometry, pag.12
 
-    Notes:  
+    .. note::  
         Tcosmicbkg = 2.736; # +/- 0.017 [K] Cosmic Background Temperature (see ref. 2)
     """
     constants_dict = {
@@ -657,7 +661,7 @@ def virtual_temperature(t: np.ndarray, mr: np.ndarray) -> np.ndarray:
         >>> virtual_temperature(283.2, 12*1e-3)
         285.2412547754703
 
-    Notes:
+    .. note::
         This function is based on metpy.calc.virtual_temperature method.
     """
 
@@ -685,7 +689,7 @@ def thickness_hydrostatic(p: np.ndarray, t: np.ndarray, mr: Optional[np.ndarray]
     Returns:
         np.float32: The thickness of the layer in meters
 
-    Notes:
+    .. note::
         This function is based on metpy.calc.thickness_hydrostatic method.
     """
 

@@ -108,11 +108,9 @@ class TbCloudRTE(object):
 
     @property
     def satellite(self) -> bool:
-        """If :code:`True` performing model calculation from satellite otherwise from ground
-
-        Returns:
-            bool: If True performing calculation from satellite 
-                    otherwise from ground. Default to True.
+        """If :code:`True` computes an upward-propagating brightness-temperature spectrum
+        otherwise a downward-propagating brightness-temperature 
+        spectrum at the bottom of the atmosphere will be performed.
         """
         return self._satellite
 
@@ -126,9 +124,6 @@ class TbCloudRTE(object):
     @property
     def emissivity(self) -> Union[float, np.ndarray]:
         """Surface emissivity. Default to 1.0
-
-        Returns:
-            np.float: The surface emissivity.
         """
         return self._es
 

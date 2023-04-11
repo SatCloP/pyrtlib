@@ -9,7 +9,7 @@ from typing import Tuple, Union
 import numpy as np
 
 from pyrtlib.atmospheric_profiles import AtmosphericProfiles as atmp
-from .utils import dilec12, dcerror, constants, gas_mass
+from .utils import dilec12, dcerror, constants, gas_mass, import_lineshape
 
 
 class AbsModel:
@@ -33,6 +33,22 @@ class AbsModel:
         else:
             raise ValueError("Please enter a valid absorption model")
 
+    @staticmethod
+    def set_ll() -> None:
+        """Set the linelist to the absorption model.
+
+        See also:
+            :py:func:`~pyrtlib.utils.import_lineshape`
+
+        Examples:
+            >>> from pyrtlib.absorption_model import H2OAbsModel
+            >>> H2OAbsModel.model = 'rose21sd'
+            >>> H2OAbsModel.set_ll()
+
+        .. note::
+            Model must be set with `model` property before calling this method (see Example).
+        """
+        pass
 
 class LiqAbsModel(AbsModel):
     """This class contains the absorption model used in pyrtlib.
@@ -40,28 +56,26 @@ class LiqAbsModel(AbsModel):
 
     @staticmethod
     def liquid_water_absorption(water: np.ndarray, freq: np.ndarray, temp: np.ndarray) -> np.ndarray:
-        """Computes Absorption In Nepers/Km By Suspended Water Droplets.
+        """Computes Absorption In Nepers/Km by Suspended Water Droplets.
 
         Args:
-            water (np.ndarray): water in g/m3. Defaults to None.
-            freq (np.ndarray): frequency in GHz (Valid From 0 To 1000 Ghz). Defaults to None.
-            temp (np.ndarray): temperature in K. Defaults to None.
+            water (numpy.ndarray): Water in g/m3.
+            freq (numpy.ndarray): Frequency in GHz (Valid From 0 To 1000 Ghz).
+            temp (numpy.ndarray): Temperature in K.
 
         Returns:
             np.ndarray: [description]
 
         References
         ----------
-        .. [1] Liebe, Hufford And Manabe, Int. J. Ir & Mm Waves V.12, Pp.659-675 (1991).
-        .. [2] Liebe Et Al, Agard Conf. Proc. 542, May 1993.
+        .. [1] [Liebe-Hufford-Manabe]_.
+        .. [2] [Liebe-Hufford-Cotton]_.
 
         .. note::
             Revision history:
 
             * Pwr 8/3/92   Original Version
             * Pwr 12/14/98 Temp. Dependence Of Eps2 Eliminated To Agree With Mpm93 
-
-        .. warning:: conversion of complex() function is missing
         """
         if water <= 0:
             abliq = 0
@@ -96,25 +110,24 @@ class N2AbsModel(AbsModel):
     @staticmethod
     def n2_absorption(t: np.ndarray, p: np.ndarray, f: np.ndarray) -> np.ndarray:
         """Collision-Induced Power Absorption Coefficient (Neper/Km) in air
-        with modification of 1.34 to account for O2-O2 and O2-N2 collisions, as calculated by [3]
-
-        5/22/02, 4/14/05 P.Rosenkranz
-
-        Copyright (c) 2002 Massachusetts Institute of Technology
+        with modification of 1.34 to account for O2-O2 and O2-N2 collisions, as calculated by [Boissoles-2003]_.
 
         Args:
-            t ([type], optional): Temperature (K). Defaults to None.
-            p ([type], optional): Dry Air Pressure (mb). Defaults to None.
-            f ([type], optional): Frequency (Ghz)(Valid 0-2000 Ghz). Defaults to None.
+            t (numpy.ndarray): Temperature (K).
+            p (numpy.ndarray): Dry Air Pressure (mb).
+            f (numpy.ndarray): Frequency (Ghz)(Valid 0-2000 Ghz).
+
+        Raises:
+            ValueError: _description_
 
         Returns:
-            [type]: [description]
+            np.ndarray: _description_
 
         References
         ----------
-        .. [1] See eq. 2.6 in Thermal Microwave Radiation - Applications for Remote Sensing (C. Maetzler, ed.) London, IET, 2006.
-        .. [2] Borysow, A, and L. Frommhold, Astrophysical Journal, v.311, pp.1043-1057 (1986)
-        .. [3] J.Boissoles, C.Boulet, R.H.Tipping, A.Brown, and Q.Ma, J. Quant. Spectros. Radiat. Trans. v.82, 505-516 (2003).
+        .. [1] See eq. 2.6 in [Mätzler-Rosenkranz-2006]_.
+        .. [2] [Borysow-Frommhold-1986]_.
+        .. [3] [Boissoles-2003]_.
         """
 
         th = 300.0 / t
@@ -160,13 +173,13 @@ class H2OAbsModel(AbsModel):
         else:
             raise ValueError("Please enter a valid absorption model")
 
+    @staticmethod
+    def set_ll() -> None:
+        H2OAbsModel.h2oll = import_lineshape(f"h2oll_{H2OAbsModel.model}")
+
     def h2o_absorption(self, pdrykpa: np.ndarray, vx: np.ndarray, ekpa: np.ndarray, frq: np.ndarray) -> Union[
             Tuple[np.ndarray, np.ndarray], None]:
-        """Compute absorption coefficients in atmosphere due to water vapor for all models excepts rose21sd. 
-        This version should not be used with a line list older than june 2018,
-        nor the new list with an older version of this subroutine. 
-        Line parameters will be read from file h2o_list.asc; intensities
-        should include the isotope abundance factors. This version uses a line-shape cutoff.
+        """Compute absorption coefficients in atmosphere due to water vapor for all models.
 
         Args:
             pdrykpa (numpy.ndarray): [description]
@@ -179,7 +192,7 @@ class H2OAbsModel(AbsModel):
 
         References
         ----------
-        .. [1] Rosenkranz, P.W.: Line-By-Line Microwave Radiative Transfer (Non-Scattering), Remote Sens. Code Library, Doi:10.21982/M81013, 2017
+        .. [1] [Rosenkranz-2017]_.
 
         Example:
 
@@ -501,10 +514,13 @@ class O2AbsModel(AbsModel):
             self._o2ll = o2ll
         else:
             raise ValueError("Please enter a valid absorption model")
+        
+    @staticmethod
+    def set_ll() -> None:
+        O2AbsModel.o2ll = import_lineshape(f"o2ll_{O2AbsModel.model}")
 
     def o2_absorption(self, pdrykpa: float, vx: float, ekpa: float, frq: float) -> Tuple[np.ndarray, np.ndarray]:
-        """Returns power absorption coefficient due to oxygen in air,
-        in nepers/km. multiply o2abs2 by 4.343 to convert to db/km.
+        """Returns power absorption coefficient due to oxygen in air in nepers/km.
 
         History:
 
@@ -775,6 +791,10 @@ class O3AbsModel(AbsModel):
             self._o3ll = o3ll
         else:
             raise ValueError("Please enter a valid absorption model")
+        
+    @staticmethod
+    def set_ll() -> None:
+        O3AbsModel.o3ll = import_lineshape(f"o3ll_{O3AbsModel.model}")
 
     def o3_absorption(self, t: np.ndarray, p: np.ndarray, f: np.ndarray, o3n: np.ndarray) -> np.ndarray:
         """This function computes power absorption coeff (Np/km) in the atmosphere 

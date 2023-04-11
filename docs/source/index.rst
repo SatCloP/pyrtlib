@@ -10,7 +10,7 @@ PyRTLib documentation
 
 PyRTLib allows to simulate and calculate radiometric parameters and estimting propogation parameters using as input meteorological data.
 Some meteorological dataset are built-in in PyRTLib which can be download and used directly in PyRTLib. It considers atmospheric profiles from both radiosounding observations (RAOB) and model reanalysis (ERA5).
-RAOB profiles come from Wyoming Upper Air Archive (University of Wyoming) and NCEI’s Integrated Radiosonde Archive version 2 by the National Climatic Data Center (NCDC) of the National Oceanic and Atmospheric Administration (NOAA).
+RAOB profiles come from Wyoming Upper Air Archive (University of Wyoming) and NCEI’s Integrated Radiosonde Archive version 2 (IGRA2) by the National Climatic Data Center (NCDC) of the National Oceanic and Atmospheric Administration (NOAA).
 
 PyRTLib also allows to quantify absorption model uncertainty due to uncertainty in the underlying spectroscopic parameters. [Cimini-2018]_
 The approach is applied to a widely used microwave absorption model [Rosenkranz-2017]_, on which PyRTLib is based, and radiative transfer calculations at any frequencies range, 
@@ -71,6 +71,10 @@ which are commonly exploited for atmospheric sounding by microwave radiometer (M
 
 The source code for pyrtlib python package is hosted on `github
 <https://github.com/slarosa/pyrtlib>`_.
+
+.. note::
+   The software is intended as an educational tool with limited ranges of 
+   applicability, so no guarantees are attached to any of the codes. 
 
 .. cssclass:: image-pyrtlib
    

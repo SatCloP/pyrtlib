@@ -66,7 +66,7 @@ class Test(TestCase):
         rte.satellite = False
         rte.init_absmdl('rose20')
         H2OAbsModel.model = 'rose21sd'
-        H2OAbsModel.h2oll = import_lineshape('h2oll_{}'.format(H2OAbsModel.model))
+        H2OAbsModel.set_ll()
         df = rte.execute()
 
         df_expected = pd.read_csv(os.path.join(THIS_DIR, "data", "tb_tot_ground_ros03_19sd_21sd_era5.csv"))

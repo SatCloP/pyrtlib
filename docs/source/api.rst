@@ -18,30 +18,55 @@ that the original TBMODEL, Cyber Version, returned.
 Example
 .......
 
-.. code-block:: python
+Compute downwelling (:code:`rte.satellite == False`) brightness temperature for a typical Tropical Atmosphere, using emissivity surface.
+
+.. plot::
+    :include-source: true
 
     from pyrtlib.tb_spectrum import TbCloudRTE
+    from pyrtlib.atmospheric_profiles import AtmosphericProfiles as atmp
+    from pyrtlib.utils import ppmv2gkg, mr2rh
+
+    z, p, _, t, md = atmp.gl_atm(atmp.TROPICAL)
+    gkg = ppmv2gkg(md[:, atmp.H2O], atmp.H2O)
+    rh = mr2rh(p, t, gkg)[0] / 100
+
+    ang = np.array([90.])
+    frq = np.arange(20, 201, 1)
 
     rte = TbCloudRTE(z, p, t, rh, frq, ang)
     rte.init_absmdl('rose19sd')
-    rte.satellite = True
-    rte.emissivity = 0.6
+    rte.satellite = False
+    rte.emissivity = 0.8
     df = rte.execute()
+    df = df.set_index(frq)
+    df.tbtotal.plot(figsize=(12,8), xlabel="Frequency [GHz]", ylabel="Brightness Temperature [K]")
 
 Also, it is possible to execute a combination of absorption models. The following example use :code:`rose19sd` model for :math:`O_2` and
-:code:`rose16` for :math:`H_2O`:
+:code:`rose16` for :math:`H_2O`: to compute upwelling brightness temperature.
 
-.. code-block:: python
+.. plot::
+    :include-source: true
 
     from pyrtlib.tb_spectrum import TbCloudRTE
-    from pyrtlib.utils import import_lineshape
-    from pyrtlib.absorption_model import H2OAbsModel, O2AbsModel
+    from pyrtlib.absorption_model import H2OAbsModel
+    from pyrtlib.atmospheric_profiles import AtmosphericProfiles as atmp
+    from pyrtlib.utils import ppmv2gkg, mr2rh
+
+    z, p, _, t, md = atmp.gl_atm(atmp.TROPICAL)
+    gkg = ppmv2gkg(md[:, atmp.H2O], atmp.H2O)
+    rh = mr2rh(p, t, gkg)[0] / 100
+
+    ang = np.array([90.])
+    frq = np.arange(20, 201, 1)
 
     rte = TbCloudRTE(z, p, t, rh, frq, ang)
     rte.init_absmdl('rose19sd')
     H2OAbsModel.model = 'rose16'
-    H2OAbsModel.h2oll = import_lineshape('h2oll_{}'.format(H2OAbsModel.model))
+    H2OAbsModel.set_ll()
     df = rte.execute()
+    df = df.set_index(frq)
+    df.tbtotal.plot(figsize=(12,8), xlabel="Frequency [GHz]", ylabel="Brightness Temperature [K]")
 
 
 Standard Atmospheric Profiles
@@ -147,8 +172,11 @@ Uncertainty
 API Web Services
 ================
 Observations dataset web services which may be used in pyrtlib. 
-Available datasets are the Wyoming Upper Air Archive (University of Wyoming), NCEI’s Integrated Radiosonde Archive version 2 or the 
+Available datasets are the Wyoming Upper Air Archive (University of Wyoming), NCEI’s Integrated Radiosonde Archive version 2 (IGRA2) or the 
 ERA5 Reanalysis model data (Copernicus Climate Change Service). See examples to get started to use these services.
+
+.. note::
+    Parts of the code have been reused from the `Siphon <https://github.com/Unidata/siphon>`_ library.
 
 .. autosummary::
     :toctree: generated/
