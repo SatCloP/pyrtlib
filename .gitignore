@@ -143,7 +143,7 @@ console*
 # Spinx doc
 *.swp
 docs/_build
-docs/build/doctrees
-docs/source/_build
-docs/source/generated
-docs/source/examples
+docs/build/doctrees/
+docs/source/_build/
+docs/source/generated/
+docs/source/examples/
