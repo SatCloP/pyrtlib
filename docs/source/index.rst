@@ -76,11 +76,11 @@ The source code for pyrtlib python package is hosted on `github
    The software is intended as an educational tool with limited ranges of 
    applicability, so no guarantees are attached to any of the codes. 
 
-.. cssclass:: image-pyrtlib
+.. .. cssclass:: image-pyrtlib
    
-   .. image:: ../../resources/spectrum_r22.jpeg
+..   .. image:: ../../resources/spectrum_r22.jpeg
       :width: 600
-   .. image:: ../../resources/r98_r22.jpeg
+..   .. image:: ../../resources/r98_r22.jpeg
       :width: 600
 
 Quick start
@@ -96,7 +96,7 @@ Atmospheric profile definition:
 
 .. code-block:: python
    
-   z, p, _, t, md = atmp.gl_atm(atmp.TROPICAL)
+   z, p, _, t, md = atmp.gl_atm(atmp.MIDLATITUDE_SUMMER)
 
 
 Units conversion:
@@ -116,7 +116,7 @@ Deifinition of angles and frequencies:
 .. code-block:: python
 
    ang = np.array([90.])
-   frq = np.arange(20, 201, 1)
+   frq = np.arange(20, 1001, 1)
 
 Initialize parameters for main execution:
 
@@ -128,7 +128,7 @@ Set absorption model:
 
 .. code-block:: python
 
-   rte.init_absmdl('rose16')
+   rte.init_absmdl('rose22sd')
 
 Execute model by computing upwelling radiances:
 
@@ -136,18 +136,18 @@ Execute model by computing upwelling radiances:
 
    df = rte.execute()
    df.tbtotal
-   0      297.391838
-   1      296.186240
-   2      294.748245
-   3      294.953483
-   4      296.027799
-            ...
-   176    275.997899
-   177    276.611319
-   178    277.129218
-   179    277.566840
-   180    277.936645
-   Name: tbtotal, Length: 181, dtype: float64
+   0      293.119811
+   1      292.538088
+   2      291.736672
+   3      291.913658
+   4      292.493971
+            ...    
+   976    230.179993
+   977    231.435965
+   978    232.592915
+   979    233.666322
+   980    234.667522
+   Name: tbtotal, Length: 981, dtype: float64
 
 Preview of the output dataframe (see :py:meth:`pyrtlib.tb_spectrum.TbCloudRTE.execute` for more info):
 
@@ -163,20 +163,20 @@ Preview of the output dataframe (see :py:meth:`pyrtlib.tb_spectrum.TbCloudRTE.ex
      - taudry
      - tauliq
      - tauice
-   * - 297.391838 
+   * - 293.119811	 
      - 0.0 
-     - 281.191287
+     - 282.644145
      - 0.0
-     - 0.120341 
-     - 0.012855
+     - 0.085189
+     - 0.012949
      - 0.0
      - 0.0
-   * - 296.186240    
+   * - 292.538088	    
      - 0.0      
-     - 280.517137    
+     - 282.188067    
      - 0.0       
-     - 0.188802    
-     - 0.013524    
+     - 0.135297    
+     - 0.013615   
      - 0.0       
      - 0.0
    * - ...
@@ -187,47 +187,61 @@ Preview of the output dataframe (see :py:meth:`pyrtlib.tb_spectrum.TbCloudRTE.ex
      - ...
      - ...
      - ...
-   * - 277.936645    
+   * - 234.667522    
      - 0.0      
-     - 276.874793    
+     - 234.667522    
      - 0.0       
-     - 3.041382    
-     - 0.026476    
+     - 474.835275   
+     - 0.329120   
      - 0.0      
-     -  0.0 
+     - 0.0 
+
+Plotting result:
+
+.. image:: ../../resources/spectrum_r22.jpeg
   
+Installation
+------------
+
 .. toctree::
    :maxdepth: 2
-   :caption: Installation:
 
    installation
 
+API References
+--------------
+
 .. toctree::
    :maxdepth: 2
-   :caption: API References:
    
    api
 
+Notebook Example
+----------------
+
 .. toctree::
    :maxdepth: 2
-   :caption: Notebook:
    
    notebook/index
 
+Gallery Example
+---------------
+
 .. toctree::
    :maxdepth: 2
-   :caption: Examples:
    
    examples/index
 
+References
+----------
+
 .. toctree::
    :maxdepth: 1
-   :caption: References:
    
    references
 
 Indices and search
-==================
+------------------
 
 * :ref:`genindex`
 * :ref:`search`

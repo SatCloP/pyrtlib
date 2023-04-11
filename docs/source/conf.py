@@ -153,7 +153,7 @@ autosummary_generate = True
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
     ('index', 'pyrtlib.tex', 'pyrtlib Documentation',
-     'Salvatore Larosa and contributors', 'manual'),
+     'Salvatore Larosa, Doemnico Cimini and contributors', 'manual'),
 ]
 latex_engine = 'xelatex'
 

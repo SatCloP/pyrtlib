@@ -3,43 +3,6 @@ This module provides the uncertainties affecting absorption model
 coefficients found in the litterature.
 The baseline are the routines of Rosenkranz 2016 + modification to water-2-air by Koshelev et al 2015.
 
-# .. graphviz::
-#     :caption: Perturbation of spectroscopic parameters
-#     :align: center
-
-#         digraph process {
-#             size="8,6";
-#             # rankdir="TB";
-#             graph [fontname="Verdana", fontsize="12"];
-#             node [fontname="Verdana", fontsize="12"];
-#             edge [fontname="Sans", fontsize="10"];
-
-#             ClrAbs_uncertainty [label="ClrAbs_uncertainty()", shape="component"];
-#             absmod_uncertainties_perturb [label="Perturbation", shape="component"];
-#             H2O [label="h2o_uncertainty()", shape="component",
-#                 style=filled];
-#             O2N2 [label="o2n2_uncertainty()", shape="component",
-#                 style=filled];
-#             APU [label="APU_line_mixing()", shape="component",
-#                     style=filled];
-#             F1 [label="Residual Makarov", shape="note"];
-#             F2 [label="Residual Tetryakov", shape="note"];
-#             F3 [label="Slope Ratio", shape="note"];
-#             USEKOSHELEV2017 [label=" USEKOSHELEV2017 ", shape="note"];
-
-#             ClrAbs_uncertainty -> absmod_uncertainties_perturb [label=" what, mode "];
-#             absmod_uncertainties_perturb -> USEKOSHELEV2017_WHAT [label=" amu ", dir="back"];
-#             USEKOSHELEV2017 -> USEKOSHELEV2017_WHAT [label=" ", shape="circle"];
-            
-#             absmod_uncertainties_perturb -> ABSMDL [label=" amu ", shape="circle", dir="back"];
-#             absmod_uncertainties_perturb -> H2O [label=" amu "];
-#             absmod_uncertainties_perturb -> O2N2 [label=" amu "];
-#             O2N2 -> APU [label=" APU ", rankdir=" TB "];
-#             APU -> F1;
-#             APU -> F2;
-#             APU -> F3 [label ="method 3"];
-#      }
-
 Example:
 
 >>> from pyrtlib.absorption_model_uncertainty import amu

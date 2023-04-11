@@ -3,7 +3,7 @@ API references
 ==============
 
 Main class
-====================
+==========
 
 The main class which computes brightness temperatures (Tb), mean
 radiating temperature (Tmr), and integrated absorption (Tau) for 
