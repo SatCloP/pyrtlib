@@ -124,11 +124,11 @@ class Test(TestCase):
         assert_almost_equal(cs, 8.31446261815324, decimal=5)
 
     def test_import_linelist(self):
-        model = 'rose21sd'
+        model = 'R21SD'
         h2oll = import_lineshape('h2oll_{}'.format(model))
         aself = np.array([0., 12.6,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,
                           0.,  0.,  0.,  0.,  0.])
         assert_almost_equal(h2oll.aself, aself, decimal=5)
-        H2OAbsModel.model = 'rose21sd'
+        H2OAbsModel.model = 'R21SD'
         H2OAbsModel.set_ll()
         assert_almost_equal(H2OAbsModel.h2oll.aself, aself, decimal=5)

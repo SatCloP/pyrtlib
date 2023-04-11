@@ -19,7 +19,7 @@ THIS_DIR = os.path.dirname(os.path.abspath(__file__))
 class Test(TestCase):
 
     # @pytest.mark.datafiles(DATA_DIR)
-    def test_pyrtlib_ground_rose19sd(self):
+    def test_pyrtlib_ground_R19SD(self):
         z, p, _, t, md = atmp.gl_atm(atmp.TROPICAL)
 
         gkg = ppmv2gkg(md[:, atmp.H2O], atmp.H2O)
@@ -30,15 +30,15 @@ class Test(TestCase):
 
         rte = TbCloudRTE(z, p, t, rh, frq, ang)
         rte.satellite = False
-        rte.init_absmdl('rose19sd')
+        rte.init_absmdl('R19SD')
         df = rte.execute()
 
         df_expected = pd.read_csv(os.path.join(THIS_DIR, "data", "tb_tot_ground_ros03_19sd_21sd_era5.csv"))
         assert_allclose(df.tbtotal, df_expected.ros19sd, atol=0)
 
     # @pytest.mark.datafiles(DATA_DIR)
-    # @pytest.mark.skip(reason="rose03 not completly implemented yet")
-    def test_pyrtlib_ground_rose03(self):
+    # @pytest.mark.skip(reason="R03 not completly implemented yet")
+    def test_pyrtlib_ground_R03(self):
         z, p, _, t, md = atmp.gl_atm(atmp.TROPICAL)
 
         gkg = ppmv2gkg(md[:, atmp.H2O], atmp.H2O)
@@ -48,13 +48,13 @@ class Test(TestCase):
 
         rte = TbCloudRTE(z, p, t, rh, frq)
         rte.satellite = False
-        rte.init_absmdl('rose03')
+        rte.init_absmdl('R03')
         df = rte.execute()
 
         df_expected = pd.read_csv(os.path.join(THIS_DIR, "data", "tb_tot_ground_ros03_19sd_21sd_era5.csv"))
         assert_allclose(df.tbtotal.values, df_expected.ros03)
 
-    def test_pyrtlib_ground_rose21sd_ERA5(self):
+    def test_pyrtlib_ground_R21SD_ERA5(self):
         lonlat = (15.8158, 38.2663)
         nc_file = os.path.join(THIS_DIR, "data", "era5_reanalysis-2019-06-25T12:00:00.nc")
         df_era5 = ERA5Reanalysis.read_data(nc_file, lonlat)
@@ -64,10 +64,10 @@ class Test(TestCase):
 
         rte = TbCloudRTE(df_era5.z.values, df_era5.p.values, df_era5.t.values, df_era5.rh.values, frq, ang)
         rte.satellite = False
-        rte.init_absmdl('rose20')
-        H2OAbsModel.model = 'rose21sd'
+        rte.init_absmdl('R20')
+        H2OAbsModel.model = 'R21SD'
         H2OAbsModel.set_ll()
         df = rte.execute()
 
         df_expected = pd.read_csv(os.path.join(THIS_DIR, "data", "tb_tot_ground_ros03_19sd_21sd_era5.csv"))
-        assert_allclose(df.tbtotal, df_expected.rose21sd_era5, atol=0)
+        assert_allclose(df.tbtotal, df_expected.R21SD_era5, atol=0)

@@ -130,7 +130,7 @@ This example shows how to use the
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.155 seconds)
+   **Total running time of the script:** ( 0 minutes  0.163 seconds)
 
 
 .. _sphx_glr_download_examples_plot_atmosphere.py:

@@ -32,15 +32,15 @@ z, p, t = df_igra2.height.values / 1000, df_igra2.pressure.values, to_kelvin(df_
 
 rh = dewpoint2rh(df_igra2.dewpoint, df_igra2.temperature).values
 
-mdl = 'rose21sd'
+mdl = 'R21SD'
 ang = np.array([90.])
 frq = np.arange(20, 201, 1)
 nf = len(frq)
 
 rte = TbCloudRTE(z, p, t, rh, frq, ang)
-rte.init_absmdl('rose20')
+rte.init_absmdl('R20')
 rte.emissivity = 0.6
-H2OAbsModel.model = 'rose21sd'
+H2OAbsModel.model = 'R21SD'
 H2OAbsModel.h2oll = import_lineshape('h2oll_{}'.format(H2OAbsModel.model))
 df = rte.execute()
 df = df.set_index(frq)

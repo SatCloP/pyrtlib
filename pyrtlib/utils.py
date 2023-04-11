@@ -29,17 +29,17 @@ def import_lineshape(name: str) -> Dict:
     Examples:
         >>> from pyrtlib.absorption_model import H2OAbsModel
         >>> from pyrtlib.utils import import_lineshape
-        >>> H2OAbsModel.model = 'rose21sd'
+        >>> H2OAbsModel.model = 'R21SD'
         >>> H2OAbsModel.h2oll = import_lineshape('h2oll_{}'.format(H2OAbsModel.model))
         >>> H2OAbsModel.h2oll.aself
         array([0., 12.6,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,
         0.,  0.,  0.,  0.,  0.])
     """
     try:
-        module = __import__('pyrtlib._lineshape', globals(), locals(), [name])
+        module = __import__('pyrtlib._lineshape', globals(), locals(), [name.lower()])
     except ImportError:
         return None
-    return vars(module)[name]
+    return vars(module)[name.lower()]
 
 
 def constants(name: Optional[str] = None) -> Union[Tuple[float, str], List]:

@@ -5,7 +5,7 @@ Performing Brightness Temperature calculation from ground with Ozone
 
 # %%
 # This example shows how to use the
-# :py:class:`pyrtlib.tb_spectrum.TbCloudRTE` method to calculate brightness temperature from ground with ozone.
+# :py:class:`pyrtlib.tb_spectrum.TbCloudRTE` method to calculate brightness temperature from ground (downwelling) with ozone.
 
 import matplotlib.pyplot as plt
 
@@ -45,16 +45,16 @@ ang = np.array([90.])
 frq = np.arange(20, 201, 1)
 
 rte = TbCloudRTE(z, p, t, rh, frq, ang, o3n)
-rte.init_absmdl('rose20')
+rte.init_absmdl('R20')
 rte.satellite = False
-H2OAbsModel.model = 'rose21sd'
-H2OAbsModel.h2oll = import_lineshape('h2oll_{}'.format(H2OAbsModel.model))
-O3AbsModel.model = 'rose18'
-O3AbsModel.o3ll = import_lineshape('o3ll_{}'.format(O3AbsModel.model))
+H2OAbsModel.model = 'R21SD'
+H2OAbsModel.set_ll()
+O3AbsModel.model = 'R18'
+O3AbsModel.set_ll()
 df = rte.execute()
 
 df = df.set_index(frq)
-df.tbtotal.plot(ax=ax, linewidth=1, label='{} - {}'.format(atm[atmp.US_STANDARD], 'rose21sd'))
+df.tbtotal.plot(ax=ax, linewidth=1, label='{} - {}'.format(atm[atmp.US_STANDARD], 'R21SD'))
 
 style = dict(size=20, color='gray', ha='center')
 ax.text(22, 45, "${H_2O}$", **style)
@@ -80,7 +80,7 @@ ax.legend()
 plt.show()
 
 # %%
-# Compute rose21sd model without Ozone and plotting difference
+# Compute R21SD model without Ozone and plotting difference
 O3AbsModel.model = ''
 df_no_o3 = rte.execute()
 df_no_o3 = df_no_o3.set_index(frq)
@@ -89,6 +89,6 @@ df['delta'] = df.tbtotal - df_no_o3.tbtotal
 fig, ax = plt.subplots(1, 1, figsize=(12,8))
 ax.set_xlabel('Frequency [GHz]')
 ax.set_ylabel('$\Delta {T_B}$ [K]')
-df.delta.plot(ax=ax, figsize=(12,8), label='$\Delta {T_B}$ (rose21sd-rose21sd_w03)')
+df.delta.plot(ax=ax, figsize=(12,8), label='$\Delta {T_B}$ (R21SD-R21SD_w03)')
 ax.legend()
 plt.show()

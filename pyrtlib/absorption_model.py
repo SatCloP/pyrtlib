@@ -4,7 +4,7 @@ This class contains the absorption model used in pyrtlib.
 """
 
 import types
-from typing import Tuple, Union
+from typing import Tuple, Union, List
 
 import numpy as np
 
@@ -40,15 +40,56 @@ class AbsModel:
         See also:
             :py:func:`~pyrtlib.utils.import_lineshape`
 
-        Examples:
+        Example:
+
+        .. code-block:: python
+        
             >>> from pyrtlib.absorption_model import H2OAbsModel
-            >>> H2OAbsModel.model = 'rose21sd'
+            >>> H2OAbsModel.model = 'R21SD'
             >>> H2OAbsModel.set_ll()
 
         .. note::
             Model must be set with `model` property before calling this method (see Example).
         """
         pass
+
+    @staticmethod
+    def implemented_models() -> List[str]:
+        """Return all the implemented absorption models.
+
+        Returns:
+            List[str]: The list the implemented absorption models
+
+        Example:
+
+        .. code-block:: python
+
+            >>> from pyrtlib.absorption_model import AbsModel
+            >>> AbsModel.implemented_models()
+            ['R98',
+            'R03',
+            'R16',
+            'R17',
+            'R19',
+            'R19SD',
+            'R20',
+            'R20SD',
+            'R21SD',
+            'R22SD',
+            'MAKAROV11']
+        """
+        return list(['R98', 
+                     'R03', 
+                     'R16', 
+                     'R17', 
+                     'R19', 
+                     'R19SD', 
+                     'R20', 
+                     'R20SD', 
+                     'R21SD', 
+                     'R22SD', 
+                     'MAKAROV11'])
+
 
 class LiqAbsModel(AbsModel):
     """This class contains the absorption model used in pyrtlib.
@@ -81,7 +122,7 @@ class LiqAbsModel(AbsModel):
             abliq = 0
             return abliq
 
-        if LiqAbsModel.model in ['rose03', 'rose98']:
+        if LiqAbsModel.model in ['R03', 'R98']:
             theta1 = 1.0 - 300.0 / temp
             eps0 = 77.66 - np.dot(103.3, theta1)
             eps1 = np.dot(0.0671, eps0)
@@ -90,7 +131,7 @@ class LiqAbsModel(AbsModel):
             fs = np.dot(39.8, fp)
             eps = (eps0 - eps1) / np.complex(1.0, freq / fp) + \
                 (eps1 - eps2) / complex(1.0, freq / fs) + eps2
-        elif LiqAbsModel.model in ['rose17', 'rose16', 'rose19', 'rose20', 'rose19sd', 'rose22sd', 'makarov11']:
+        elif LiqAbsModel.model in ['R17', 'R16', 'R19', 'R20', 'R19SD', 'R22SD', 'makarov11']:
             eps = dilec12(freq, temp)
         else:
             raise ValueError(
@@ -132,13 +173,13 @@ class N2AbsModel(AbsModel):
 
         th = 300.0 / t
         fdepen = 0.5 + 0.5 / (1.0 + (f / 450.0) ** 2)
-        if N2AbsModel.model in ['rose16', 'rose17', 'rose18', 'rose19', 'rose19sd', 'makarov11']:
+        if N2AbsModel.model in ['R16', 'R17', 'R18', 'R19', 'R19SD', 'makarov11']:
             l, m, n = 6.5e-14, 3.6, 1.34
-        elif N2AbsModel.model in ['rose20', 'rose20sd', 'rose21sd', 'rose22', 'rose22sd']:
+        elif N2AbsModel.model in ['R20', 'R20SD', 'R21SD', 'rose22', 'R22SD']:
             l, m, n = 9.95e-14, 3.22, 1
-        elif N2AbsModel.model == 'rose03':
+        elif N2AbsModel.model == 'R03':
             l, m, n = 6.5e-14, 3.6, 1.29
-        elif N2AbsModel.model in ['rose98']:
+        elif N2AbsModel.model in ['R98']:
             l, m, n = 6.4e-14, 3.55, 1
             fdepen = 1
         else:
@@ -212,8 +253,8 @@ class H2OAbsModel(AbsModel):
 
             e, rho = RTEquation.vapor(tk, rh, ice)
 
-            AbsModel.model = 'rose16'
-            H2OAbsModel.h2oll = import_lineshape('h2oll_{}'.format('rose16'))
+            AbsModel.model = 'R16'
+            H2OAbsModel.h2oll = import_lineshape('h2oll_{}'.format('R16'))
             for i in range(0, len(z)):
                 v = 300.0 / tk[i]
                 ekpa = e[i] / 10.0
@@ -242,19 +283,19 @@ class H2OAbsModel(AbsModel):
             return
 
         pvap = (rho * t) / 216.68
-        if H2OAbsModel.model in ['rose03', 'rose16', 'rose17', 'rose98', 'makarov11']:
+        if H2OAbsModel.model in ['R03', 'R16', 'R17', 'R98', 'makarov11']:
             pvap = (rho * t) / 217.0
-        if H2OAbsModel.model in ['rose22sd']:
+        if H2OAbsModel.model in ['R22SD']:
             pvap = (constants("Rwatvap")[0] * 1e-05) * rho * t
         pda = p - pvap
-        if H2OAbsModel.model in ['rose03', 'rose16', 'rose98', 'makarov11']:
+        if H2OAbsModel.model in ['R03', 'R16', 'R98', 'makarov11']:
             den = 3.335e+16 * rho
         else:
             den = 3.344e+16 * rho
         # continuum terms
         ti = self.h2oll.reftcon / t
         # xcf and xcs include 3 for conv. to density & stimulated emission
-        if H2OAbsModel.model in ['rose03', 'rose98']:
+        if H2OAbsModel.model in ['R03', 'R98']:
             con = (5.43e-10 * pda * ti ** 3 + 1.8e-08 *
                    pvap * ti ** 7.5) * pvap * f * f
         else:
@@ -266,7 +307,7 @@ class H2OAbsModel(AbsModel):
         ti = self.h2oll.reftline / t
         df = np.zeros((2, 1))
 
-        if H2OAbsModel.model.startswith(('rose19sd', 'rose20sd', 'rose21sd', 'rose22sd')):
+        if H2OAbsModel.model.startswith(('R19SD', 'R20SD', 'R21SD', 'R22SD')):
             tiln = np.log(ti)
             ti2 = np.exp(2.5 * tiln)
             summ = 0.0
@@ -274,7 +315,7 @@ class H2OAbsModel(AbsModel):
                 width0 = self.h2oll.w0[i] * pda * ti ** self.h2oll.x[i] + \
                     self.h2oll.w0s[i] * pvap * ti ** self.h2oll.xs[i]
                 width2 = self.h2oll.w2[i] * pda + self.h2oll.w2s[i] * pvap
-                if H2OAbsModel.model in ['rose21sd', 'rose22sd']:
+                if H2OAbsModel.model in ['R21SD', 'R22SD']:
                     if self.h2oll.w2[i] > 0:
                         width2 = self.h2oll.w2[i] * pda * ti ** self.h2oll.xw2[i] + self.h2oll.w2s[i] * pvap * ti ** \
                             self.h2oll.xw2s[i]
@@ -293,7 +334,7 @@ class H2OAbsModel(AbsModel):
                 df[0] = f - self.h2oll.fl[i] - shift
                 df[1] = f + self.h2oll.fl[i] + shift
                 base = width0 / (562500.0 + wsq)
-                if H2OAbsModel.model in ["rose21sd", 'rose22sd']:
+                if H2OAbsModel.model in ["R21SD", 'R22SD']:
                     delta2 = self.h2oll.d2[i] * pda + self.h2oll.d2s[i] * pvap
                 res = 0.0
                 for j in range(0, 2):
@@ -301,7 +342,7 @@ class H2OAbsModel(AbsModel):
                         # speed-dependent resonant shape factor, minus base
                         xc = np.complex(
                             (width0 - np.dot(1.5, width2)), df[j]) / width2
-                        if H2OAbsModel.model == 'rose20sd':
+                        if H2OAbsModel.model == 'R20SD':
                             if i == 1:
                                 delta2 = (self.h2oll.d2air * pda) + \
                                     (self.h2oll.d2self * pvap)
@@ -309,7 +350,7 @@ class H2OAbsModel(AbsModel):
                                 delta2 = 0.0
                             xc = np.complex((width0 - np.dot(1.5, width2)), df[j] + np.dot(1.5, delta2)) / np.complex(
                                 width2, -delta2)
-                        elif H2OAbsModel.model in ["rose21sd", 'rose22sd']:
+                        elif H2OAbsModel.model in ["R21SD", 'R22SD']:
                             xc = complex(
                                 (width0 - 1.5 * width2), df[j] + 1.5 * delta2) / complex(width2, -delta2)
 
@@ -317,24 +358,24 @@ class H2OAbsModel(AbsModel):
                         pxw = 1.77245385090551603 * xrt * \
                             dcerror(-np.imag(xrt), np.real(xrt))
                         sd = 2.0 * (1.0 - pxw) / (
-                            width2 if H2OAbsModel.model not in ['rose20sd', 'rose21sd', 'rose22sd'] else complex(width2, -delta2))
+                            width2 if H2OAbsModel.model not in ['R20SD', 'R21SD', 'R22SD'] else complex(width2, -delta2))
                         res += np.real(sd) - base
                     elif np.abs(df[j]) < 750.0:
                         res += width0 / (df[j] ** 2 + wsq) - base
 
                 summ += s * res * (f / self.h2oll.fl[i]) ** 2
-        elif H2OAbsModel.model in ['rose16', 'rose03', 'rose17', 'rose98', 'makarov11']:
+        elif H2OAbsModel.model in ['R16', 'R03', 'R17', 'R98', 'makarov11']:
             ti2 = ti ** 2.5
             summ = 0.0
             for i in range(0, nlines):
                 widthf = self.h2oll.w0[i] * pda * ti ** self.h2oll.x[i]
                 widths = self.h2oll.w0s[i] * pvap * ti ** self.h2oll.xs[i]
                 width = widthf + widths
-                if H2OAbsModel.model == 'rose98':
+                if H2OAbsModel.model == 'R98':
                     shift = 0.0
                 else:
                     shift = self.h2oll.sr[i] * \
-                        (width if H2OAbsModel.model == 'rose03' else widthf)
+                        (width if H2OAbsModel.model == 'R03' else widthf)
                 wsq = width ** 2
                 s = self.h2oll.s1[i] * ti2 * \
                     np.exp(self.h2oll.b2[i] * (1.0 - ti))
@@ -348,7 +389,7 @@ class H2OAbsModel(AbsModel):
                     if np.abs(df[j]) <= 750.0:
                         res += width / (df[j] ** 2 + wsq) - base
                 summ += s * res * (f / self.h2oll.fl[i]) ** 2
-        elif H2OAbsModel.model in ['rose19', 'rose20']:
+        elif H2OAbsModel.model in ['R19', 'R20']:
             tiln = np.log(ti)
             ti2 = np.exp(2.5 * tiln)
             summ = 0.0
@@ -372,7 +413,7 @@ class H2OAbsModel(AbsModel):
                     if np.abs(df[j]) < 750.0:
                         res += width / (df[j] ** 2 + wsq) - base
                 summ += s * res * (f / self.h2oll.fl[i]) ** 2
-        elif H2OAbsModel.model == 'rose18':
+        elif H2OAbsModel.model == 'R18':
             ti2 = ti ** 2.5
             summ = 0.0
             for i in range(0, nlines):
@@ -396,7 +437,7 @@ class H2OAbsModel(AbsModel):
         # separate the following original equ. into line and continuum
         # terms, and change the units from np/km to ppm
         # abh2o = .3183e-4*den*sum + con
-        if H2OAbsModel == 'rose22sd':
+        if H2OAbsModel == 'R22SD':
             npp = (1.e-10 * rho * summ / (np.pi * gas_mass(atmp.H2O)
                    * 1000) / db2np) / factor
         else:
@@ -514,7 +555,7 @@ class O2AbsModel(AbsModel):
             self._o2ll = o2ll
         else:
             raise ValueError("Please enter a valid absorption model")
-        
+
     @staticmethod
     def set_ll() -> None:
         O2AbsModel.o2ll = import_lineshape(f"o2ll_{O2AbsModel.model}")
@@ -587,17 +628,17 @@ class O2AbsModel(AbsModel):
         th1 = th - 1.0
         b = th ** self.o2ll.x
         preswv = vapden * temp / 216.68
-        if O2AbsModel.model in ['rose03', 'rose16', 'rose17', 'rose18', 'rose98', 'makarov11']:
+        if O2AbsModel.model in ['R03', 'R16', 'R17', 'R18', 'R98', 'makarov11']:
             preswv = vapden * temp / 217.0
-        if O2AbsModel.model in ['rose22', 'rose22sd']:
+        if O2AbsModel.model in ['rose22', 'R22SD']:
             preswv = 4.615228e-3 * vapden * temp
         presda = pres - preswv
         den = 0.001 * (presda * b + 1.2 * preswv * th)
-        if O2AbsModel.model in ['rose03', 'rose16', 'rose98', 'makarov11']:
+        if O2AbsModel.model in ['R03', 'R16', 'R98', 'makarov11']:
             den = 0.001 * (presda * b + 1.1 * preswv * th)
-        if O2AbsModel.model == 'rose03':
+        if O2AbsModel.model == 'R03':
             dens = 0.001 * (presda * th ** 0.9 + 1.1 * preswv * th)
-        if O2AbsModel.model == 'rose98':
+        if O2AbsModel.model == 'R98':
             dens = 0.001 * (presda + 1.1 * preswv) * th
         dfnr = self.o2ll.wb300 * den
         pe2 = den * den
@@ -606,10 +647,10 @@ class O2AbsModel(AbsModel):
         # 1.571e-17 (o16-o16) + 1.3e-19 (o16-o18) = 1.584e-17
         summ = 1.584e-17 * freq * freq * dfnr / \
             (th * (freq * freq + dfnr * dfnr))
-        if O2AbsModel.model in ['rose03', 'rose16', 'rose17', 'rose18', 'rose98', 'makarov11']:
+        if O2AbsModel.model in ['R03', 'R16', 'R17', 'R18', 'R98', 'makarov11']:
             summ = 0.0
         nlines = len(self.o2ll.f)
-        if O2AbsModel.model in ['rose03', 'rose98']:
+        if O2AbsModel.model in ['R03', 'R98']:
             for k in range(0, nlines):
                 if k == 0:
                     df = self.o2ll.w300[0] * dens
@@ -623,7 +664,7 @@ class O2AbsModel(AbsModel):
                 sf2 = (df - (freq + self.o2ll.f[k]) * y) / \
                     ((freq + self.o2ll.f[k]) ** 2 + df * df)
                 summ += strr * (sf1 + sf2) * (freq / self.o2ll.f[k]) ** 2
-        elif O2AbsModel.model in ['rose17', 'rose18', 'rose19', 'rose19sd']:
+        elif O2AbsModel.model in ['R17', 'R18', 'R19', 'R19SD']:
             for k in range(0, nlines):
                 df = self.o2ll.w300[k] * den
                 fcen = self.o2ll.f[k]
@@ -650,12 +691,12 @@ class O2AbsModel(AbsModel):
                 summ += strr * (sf1 + sf2) * (freq / self.o2ll.f[k]) ** 2
 
         o2abs = 1.6097e+11 * summ * presda * th ** 3
-        if O2AbsModel.model in ['rose03', 'rose98']:
+        if O2AbsModel.model in ['R03', 'R98']:
             o2abs = 5.034e+11 * summ * presda * th ** 3 / 3.14159
         # o2abs = 1.004 * np.maximum(o2abs, 0.0)
-        if O2AbsModel.model != 'rose98':
+        if O2AbsModel.model != 'R98':
             o2abs = np.maximum(o2abs, 0.0)
-        if O2AbsModel.model in ['rose20', 'rose20sd', 'rose22', 'rose22sd']:
+        if O2AbsModel.model in ['R20', 'R20SD', 'rose22', 'R22SD']:
             o2abs = 1.004 * np.maximum(o2abs, 0.0)
 
         # *** ********************************************************
@@ -673,19 +714,19 @@ class O2AbsModel(AbsModel):
         # pa2hpa=1e-2; hz2ghz=1e-9; m2cm=1e2; m2km=1e-3; pa2hpa^-1 * hz2ghz * m2cm^-2 * m2km^-1 = 1e-8
         # th^3 = th(from ideal gas law 2.13) * th(from the mw approx of stimulated emission 2.16 vs. 2.14) *
         # th(from the partition sum 2.20)
-        if O2AbsModel.model in ['rose03', 'rose98']:
+        if O2AbsModel.model in ['R03', 'R98']:
             ncpp = 1.6e-17 * freq * freq * dfnr / \
                 (th * (freq * freq + dfnr * dfnr))
             ncpp *= 5.034e+11 * presda * th ** 3 / 3.14159
         else:
             ncpp *= 1.6097e11 * presda * th ** 3  # n/pi*sum0
-        if O2AbsModel.model in ['rose03', 'rose16', 'rose17', 'rose18', 'rose98', 'makarov11']:
+        if O2AbsModel.model in ['R03', 'R16', 'R17', 'R18', 'R98', 'makarov11']:
             ncpp += N2AbsModel.n2_absorption(temp, pres, freq)
         # change the units from np/km to ppm
         npp = (o2abs / db2np) / factor
         ncpp = (ncpp / db2np) / factor
         ncpp = 0 if O2AbsModel.model in [
-            'rose19', 'rose19sd', 'rose20', 'rose20sd', 'rose22', 'rose22sd'] else ncpp
+            'R19', 'R19SD', 'R20', 'R20SD', 'rose22', 'R22SD'] else ncpp
         # ************************************************************
 
         return npp, ncpp
@@ -791,7 +832,7 @@ class O3AbsModel(AbsModel):
             self._o3ll = o3ll
         else:
             raise ValueError("Please enter a valid absorption model")
-        
+
     @staticmethod
     def set_ll() -> None:
         O3AbsModel.o3ll = import_lineshape(f"o3ll_{O3AbsModel.model}")

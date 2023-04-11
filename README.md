@@ -43,7 +43,7 @@ Initialize parameters:
 ```
 Set absorption mofel:
 ```python
->>> rte.init_absmdl('rose16')
+>>> rte.init_absmdl('R16')
 ```
 Execute model:
 ```python

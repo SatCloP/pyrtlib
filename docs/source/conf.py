@@ -125,11 +125,22 @@ html_theme_options = {
         "image_dark": str(Path('_static') / 'thumb_white_logo.png'),
         "text": "PyRTLib",
     },
+    "show_prev_next": False,
+    "navbar_start": ["navbar-logo"],
+    # "navbar_align": "content",
     "navbar_end": ["version-switcher", "theme-switcher", "navbar-icon-links"],
     "github_url": "https://github.com/slarosa/pyrtlib",
+    "secondary_sidebar_items": "page-toc.html",
     "footer_start": ["copyright"],
     "footer_end": ["sphinx-version"],
 }
+
+# html_sidebars = {
+#     "index": [
+#         "sidebar_versions.html",
+#     ],
+#     # '**': ['localtoc.html', 'pagesource.html']
+# }
 
 # A list of files that should not be packed into the epub file.
 epub_exclude_files = ['search.html']
@@ -156,6 +167,121 @@ latex_documents = [
      'Salvatore Larosa, Doemnico Cimini and contributors', 'manual'),
 ]
 latex_engine = 'xelatex'
+# The name of an image file (relative to this directory) to place at the top of
+# the title page.
+latex_logo = None
+
+# Use Unicode aware LaTeX engine
+latex_engine = 'xelatex'  # or 'lualatex'
+
+latex_elements = {}
+
+# Keep babel usage also with xelatex (Sphinx default is polyglossia)
+# If this key is removed or changed, latex build directory must be cleaned
+latex_elements['babel'] = r'\usepackage{babel}'
+
+# Font configuration
+# Fix fontspec converting " into right curly quotes in PDF
+# cf https://github.com/sphinx-doc/sphinx/pull/6888/
+latex_elements['fontenc'] = r'''
+\usepackage{fontspec}
+\defaultfontfeatures[\rmfamily,\sffamily,\ttfamily]{}
+'''
+
+# Sphinx 2.0 adopts GNU FreeFont by default, but it does not have all
+# the Unicode codepoints needed for the section about Mathtext
+# "Writing mathematical expressions"
+latex_elements['fontpkg'] = r"""
+\IfFontExistsTF{XITS}{
+ \setmainfont{XITS}
+}{
+ \setmainfont{XITS}[
+  Extension      = .otf,
+  UprightFont    = *-Regular,
+  ItalicFont     = *-Italic,
+  BoldFont       = *-Bold,
+  BoldItalicFont = *-BoldItalic,
+]}
+\IfFontExistsTF{FreeSans}{
+ \setsansfont{FreeSans}
+}{
+ \setsansfont{FreeSans}[
+  Extension      = .otf,
+  UprightFont    = *,
+  ItalicFont     = *Oblique,
+  BoldFont       = *Bold,
+  BoldItalicFont = *BoldOblique,
+]}
+\IfFontExistsTF{FreeMono}{
+ \setmonofont{FreeMono}
+}{
+ \setmonofont{FreeMono}[
+  Extension      = .otf,
+  UprightFont    = *,
+  ItalicFont     = *Oblique,
+  BoldFont       = *Bold,
+  BoldItalicFont = *BoldOblique,
+]}
+% needed for \mathbb (blackboard alphabet) to actually work
+\usepackage{unicode-math}
+\IfFontExistsTF{XITS Math}{
+ \setmathfont{XITS Math}
+}{
+ \setmathfont{XITSMath-Regular}[
+  Extension      = .otf,
+]}
+"""
+
+# Fix fancyhdr complaining about \headheight being too small
+latex_elements['passoptionstopackages'] = r"""
+    \PassOptionsToPackage{headheight=14pt}{geometry}
+"""
+
+# Additional stuff for the LaTeX preamble.
+latex_elements['preamble'] = r"""
+   % Show Parts and Chapters in Table of Contents
+   \setcounter{tocdepth}{0}
+   % One line per author on title page
+   \DeclareRobustCommand{\and}%
+     {\end{tabular}\kern-\tabcolsep\\\begin{tabular}[t]{c}}%
+   \usepackage{etoolbox}
+   \AtBeginEnvironment{sphinxthebibliography}{\appendix\part{Appendices}}
+   \usepackage{expdlist}
+   \let\latexdescription=\description
+   \def\description{\latexdescription{}{} \breaklabel}
+   % But expdlist old LaTeX package requires fixes:
+   % 1) remove extra space
+   \makeatletter
+   \patchcmd\@item{{\@breaklabel} }{{\@breaklabel}}{}{}
+   \makeatother
+   % 2) fix bug in expdlist's way of breaking the line after long item label
+   \makeatletter
+   \def\breaklabel{%
+       \def\@breaklabel{%
+           \leavevmode\par
+           % now a hack because Sphinx inserts \leavevmode after term node
+           \def\leavevmode{\def\leavevmode{\unhbox\voidb@x}}%
+      }%
+   }
+   \makeatother
+"""
+# Sphinx 1.5 provides this to avoid "too deeply nested" LaTeX error
+# and usage of "enumitem" LaTeX package is unneeded.
+# Value can be increased but do not set it to something such as 2048
+# which needlessly would trigger creation of thousands of TeX macros
+latex_elements['maxlistdepth'] = '10'
+latex_elements['pointsize'] = '11pt'
+
+# Better looking general index in PDF
+latex_elements['printindex'] = r'\footnotesize\raggedright\printindex'
+
+# Documents to append as an appendix to all manuals.
+latex_appendices = []
+
+# If false, no module index is generated.
+latex_use_modindex = True
+
+latex_toplevel_sectioning = 'part'
 
 # -- Options for Texinfo output -------------------------------------------
 
@@ -183,10 +309,10 @@ def setup(app):
     #    app.connect('builder-inited', on_builder_inited)   
     # A workaround for the responsive tables always having annoying scrollbars.
     app.add_css_file("noscrollbar.css")
-    app.add_css_file("pyrtlib.css")
     # Override footnote callout CSS to be normal text instead of superscript
     # In-line links to references as numbers in brackets.
     app.add_css_file("refs_format.css")
+    app.add_css_file("pyrtlib.css")
     app.registry.source_suffix.pop(".ipynb", None)
 
 # suppress "WARNING: Footnote [1] is not referenced." messages

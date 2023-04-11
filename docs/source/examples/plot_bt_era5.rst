@@ -24,7 +24,7 @@ Performing BT calculation from satellite using ERA5 Reanalysis Observations
 .. GENERATED FROM PYTHON SOURCE LINES 7-10
 
 This example shows how to use the
-:py:class:`pyrtlib.tb_spectrum.TbCloudRTE` method to calculate brightness temperature from satellite using
+:py:class:`pyrtlib.tb_spectrum.TbCloudRTE` method to calculate brightness temperature from satellite (upwelling) using
 observations from ERA5 Reanalysis hourly pressure levels dataset.
 
 .. GENERATED FROM PYTHON SOURCE LINES 10-50
@@ -50,14 +50,14 @@ observations from ERA5 Reanalysis hourly pressure levels dataset.
     nc_file = 'era5_reanalysis-2019-06-25T12:00:00.nc'
     df_era5 = ERA5Reanalysis.read_data(nc_file, lonlat)
 
-    mdl = 'rose21sd'
+    mdl = 'R21SD'
     ang = np.array([90.])
     frq = np.arange(20, 201, 1)
     nf = len(frq)
 
     rte = TbCloudRTE(df_era5.z.values, df_era5.p.values, df_era5.t.values, df_era5.rh.values, frq, ang)
-    rte.init_absmdl('rose20')
-    H2OAbsModel.model = 'rose21sd'
+    rte.init_absmdl('R20')
+    H2OAbsModel.model = 'R21SD'
     H2OAbsModel.h2oll = import_lineshape('h2oll_{}'.format(H2OAbsModel.model))
     df = rte.execute()
     df = df.set_index(frq)
@@ -86,7 +86,7 @@ observations from ERA5 Reanalysis hourly pressure levels dataset.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  2.424 seconds)
+   **Total running time of the script:** ( 0 minutes  2.575 seconds)
 
 
 .. _sphx_glr_download_examples_plot_bt_era5.py:

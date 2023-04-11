@@ -35,15 +35,15 @@ Compute downwelling (:code:`rte.satellite == False`) brightness temperature for 
     frq = np.arange(20, 201, 1)
 
     rte = TbCloudRTE(z, p, t, rh, frq, ang)
-    rte.init_absmdl('rose19sd')
+    rte.init_absmdl('R19SD')
     rte.satellite = False
     rte.emissivity = 0.8
     df = rte.execute()
     df = df.set_index(frq)
     df.tbtotal.plot(figsize=(12,8), xlabel="Frequency [GHz]", ylabel="Brightness Temperature [K]")
 
-Also, it is possible to execute a combination of absorption models. The following example use :code:`rose19sd` model for :math:`O_2` and
-:code:`rose16` for :math:`H_2O`: to compute upwelling brightness temperature.
+Also, it is possible to execute a combination of absorption models. The following example use :code:`R19SD` model for :math:`O_2` and
+:code:`R16` for :math:`H_2O`: to compute upwelling brightness temperature.
 
 .. plot::
     :include-source: true
@@ -61,8 +61,8 @@ Also, it is possible to execute a combination of absorption models. The followin
     frq = np.arange(20, 201, 1)
 
     rte = TbCloudRTE(z, p, t, rh, frq, ang)
-    rte.init_absmdl('rose19sd')
-    H2OAbsModel.model = 'rose16'
+    rte.init_absmdl('R19SD')
+    H2OAbsModel.model = 'R16'
     H2OAbsModel.set_ll()
     df = rte.execute()
     df = df.set_index(frq)
@@ -146,6 +146,24 @@ collision-induced power absorption coefficient (neper/km) in air ("dry continuum
     pyrtlib.absorption_model.N2AbsModel
     pyrtlib.absorption_model.LiqAbsModel
 
+To get all implemented models use the following code:
+
+.. code-block:: python
+
+    from pyrtlib.absorption_model import AbsModel
+
+    AbsModel.implemented_models()
+    ['R98',
+     'R03',
+     'R16',
+     'R17',
+     'R19',
+     'R19SD',
+     'R20',
+     'R20SD',
+     'R21SD',
+     'R22SD',
+     'MAKAROV11']
 
 Utility Functions
 =================

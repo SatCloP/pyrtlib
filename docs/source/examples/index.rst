@@ -30,35 +30,18 @@ This gallery shows examples of pyrtlib functionality.  Community contributions a
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="Performing Brightness Temperature calculation from satellite">
+    <div class="sphx-glr-thumbcontainer" tooltip="Performing Downwelling Brightness Temperature calculation">
 
 .. only:: html
 
-  .. image:: /examples/images/thumb/sphx_glr_plot_brightness_temperature_thumb.png
+  .. image:: /examples/images/thumb/sphx_glr_plot_brightness_temperature_down_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_plot_brightness_temperature.py`
+  :ref:`sphx_glr_examples_plot_brightness_temperature_down.py`
 
 .. raw:: html
 
-      <div class="sphx-glr-thumbnail-title">Performing Brightness Temperature calculation from satellite</div>
-    </div>
-
-
-.. raw:: html
-
-    <div class="sphx-glr-thumbcontainer" tooltip="Performing Brightness Temperature calculation from ground">
-
-.. only:: html
-
-  .. image:: /examples/images/thumb/sphx_glr_plot_brightness_temperature_ground_thumb.png
-    :alt:
-
-  :ref:`sphx_glr_examples_plot_brightness_temperature_ground.py`
-
-.. raw:: html
-
-      <div class="sphx-glr-thumbnail-title">Performing Brightness Temperature calculation from ground</div>
+      <div class="sphx-glr-thumbnail-title">Performing Downwelling Brightness Temperature calculation</div>
     </div>
 
 
@@ -76,6 +59,23 @@ This gallery shows examples of pyrtlib functionality.  Community contributions a
 .. raw:: html
 
       <div class="sphx-glr-thumbnail-title">Performing uncertainty on Brightness Temperature</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Performing Upwelling Brightness Temperature calculation">
+
+.. only:: html
+
+  .. image:: /examples/images/thumb/sphx_glr_plot_brightness_temperature_up_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_plot_brightness_temperature_up.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Performing Upwelling Brightness Temperature calculation</div>
     </div>
 
 
@@ -119,10 +119,10 @@ This gallery shows examples of pyrtlib functionality.  Community contributions a
 
 .. only:: html
 
-  .. image:: /examples/images/thumb/sphx_glr_plot_bt_era5_cloudy_prodile_thumb.png
+  .. image:: /examples/images/thumb/sphx_glr_plot_bt_era5_cloudy_profile_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_plot_bt_era5_cloudy_prodile.py`
+  :ref:`sphx_glr_examples_plot_bt_era5_cloudy_profile.py`
 
 .. raw:: html
 
@@ -207,12 +207,12 @@ This gallery shows examples of pyrtlib functionality.  Community contributions a
    :hidden:
 
    /examples/plot_atmosphere
-   /examples/plot_brightness_temperature
-   /examples/plot_brightness_temperature_ground
+   /examples/plot_brightness_temperature_down
    /examples/plot_brightness_temperature_uncertainties
+   /examples/plot_brightness_temperature_up
    /examples/plot_brightness_temperature_wO3
    /examples/plot_bt_era5
-   /examples/plot_bt_era5_cloudy_prodile
+   /examples/plot_bt_era5_cloudy_profile
    /examples/plot_bt_igra2
    /examples/plot_bt_wyoming
    /examples/plot_model_cloudy

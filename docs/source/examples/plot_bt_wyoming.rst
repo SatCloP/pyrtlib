@@ -24,7 +24,7 @@ Performing BT calculation from satellite using Wyoming Upper Air Observations
 .. GENERATED FROM PYTHON SOURCE LINES 7-10
 
 This example shows how to use the
-:py:class:`pyrtlib.tb_spectrum.TbCloudRTE` method to calculate brightness temperature from satellite using
+:py:class:`pyrtlib.tb_spectrum.TbCloudRTE` method to calculate brightness temperature from satellite (upwelling) using
 observations from Wyoming Upper Air Archive.
 
 .. GENERATED FROM PYTHON SOURCE LINES 10-53
@@ -54,14 +54,14 @@ observations from Wyoming Upper Air Archive.
 
     rh = dewpoint2rh(df_w.dewpoint, df_w.temperature).values
 
-    mdl = 'rose21sd'
+    mdl = 'R21SD'
     ang = np.array([90.])
     frq = np.arange(20, 201, 1)
     nf = len(frq)
 
     rte = TbCloudRTE(z, p, t, rh, frq, ang)
-    rte.init_absmdl('rose20')
-    H2OAbsModel.model = 'rose21sd'
+    rte.init_absmdl('R20')
+    H2OAbsModel.model = 'R21SD'
     H2OAbsModel.h2oll = import_lineshape('h2oll_{}'.format(H2OAbsModel.model))
     df = rte.execute()
     df = df.set_index(frq)
@@ -96,7 +96,7 @@ observations from Wyoming Upper Air Archive.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  7.974 seconds)
+   **Total running time of the script:** ( 0 minutes  8.070 seconds)
 
 
 .. _sphx_glr_download_examples_plot_bt_wyoming.py:

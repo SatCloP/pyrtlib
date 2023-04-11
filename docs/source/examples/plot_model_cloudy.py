@@ -5,7 +5,7 @@ Performing Brightness Temperature calculation in cloudy condition
 
 # %%
 # This example shows how to use the
-# :py:class:`pyrtlib.tb_spectrum.TbCloudRTE` method to calculate brightness temperature from Satellite in cloudy condition
+# :py:class:`pyrtlib.tb_spectrum.TbCloudRTE` method to calculate brightness temperature from satellite (upwelling) in cloudy condition
 
 import matplotlib.pyplot as plt
 from matplotlib.ticker import FixedLocator, FormatStrFormatter
@@ -30,7 +30,7 @@ z, p, d, t, md = atmp.gl_atm(atmp.MIDLATITUDE_SUMMER)
 gkg = ppmv2gkg(md[:, atmp.H2O], atmp.H2O)
 rh = mr2rh(p, t, gkg)[0] / 100
 
-mdl = 'rose19sd'
+mdl = 'R19SD'
 
 ang = np.array([90.])
 frq = np.arange(20, 61, 1)

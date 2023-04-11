@@ -1,11 +1,12 @@
 """
-Performing Brightness Temperature calculation from ground
-=========================================================
+Performing Downwelling Brightness Temperature calculation
+==============================================================
 """
 
 # %%
 # This example shows how to use the
-# :py:class:`pyrtlib.tb_spectrum.TbCloudRTE` method to calculate brightness temperature from ground (downwelling)
+# :py:class:`pyrtlib.tb_spectrum.TbCloudRTE` method to calculate zenith downwelling brightness temperature
+# for six reference atmosphere climatology with the R17 model.
 
 import matplotlib.pyplot as plt
 
@@ -30,10 +31,10 @@ for i in range(0, 6):
     gkg = ppmv2gkg(md[:, atmp.H2O], atmp.H2O)
     rh = mr2rh(p, t, gkg)[0] / 100
 
-    mdl = 'rose19sd'
+    mdl = 'R17'
 
     ang = np.array([90.])
-    frq = np.arange(20, 61, 1)
+    frq = np.arange(20, 61, 0.5)
     nf = len(frq)
 
     ax.set_xlabel('Frequency (GHz)')
@@ -45,7 +46,9 @@ for i in range(0, 6):
     df = rte.execute()
 
     df = df.set_index(frq)
-    df.tbtotal.plot(ax=ax, linewidth=1, label='{} - {}'.format(atm[i], mdl))
+    df.tbtotal.plot(ax=ax, linewidth=1, label='{}'.format(atm[i]))
 
+ax.grid(True, 'both')
 ax.legend()
+ax.set_box_aspect(0.8)
 plt.show()

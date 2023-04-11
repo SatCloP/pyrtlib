@@ -24,7 +24,7 @@ Performing Brightness Temperature calculation in cloudy condition
 .. GENERATED FROM PYTHON SOURCE LINES 7-9
 
 This example shows how to use the
-:py:class:`pyrtlib.tb_spectrum.TbCloudRTE` method to calculate brightness temperature from Satellite in cloudy condition
+:py:class:`pyrtlib.tb_spectrum.TbCloudRTE` method to calculate brightness temperature from satellite (upwelling) in cloudy condition
 
 .. GENERATED FROM PYTHON SOURCE LINES 9-73
 
@@ -54,7 +54,7 @@ This example shows how to use the
     gkg = ppmv2gkg(md[:, atmp.H2O], atmp.H2O)
     rh = mr2rh(p, t, gkg)[0] / 100
 
-    mdl = 'rose19sd'
+    mdl = 'R19SD'
 
     ang = np.array([90.])
     frq = np.arange(20, 61, 1)
@@ -107,7 +107,7 @@ This example shows how to use the
 
  .. code-block:: none
 
-    /Users/slarosa/dev/pyrtlib/pyrtlib/tb_spectrum.py:205: UserWarning: It seems that TbCloudRTE.cloudy attribute is not set to True. Sets it to True for running model in cloudy condition.
+    /Users/slarosa/dev/pyrtlib/pyrtlib/tb_spectrum.py:203: UserWarning: It seems that TbCloudRTE.cloudy attribute is not set to True. Sets it to True for running model in cloudy condition.
       warnings.warn("It seems that TbCloudRTE.cloudy attribute is not set to True. "
 
 
@@ -116,7 +116,7 @@ This example shows how to use the
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  1.543 seconds)
+   **Total running time of the script:** ( 0 minutes  1.670 seconds)
 
 
 .. _sphx_glr_download_examples_plot_model_cloudy.py:

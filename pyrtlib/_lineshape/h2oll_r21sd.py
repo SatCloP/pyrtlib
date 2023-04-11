@@ -2,7 +2,7 @@ import numpy as np
 import os
 
 PATH = os.path.dirname(os.path.abspath(__file__))
-mtx = np.loadtxt(os.path.join(PATH, "h2o_list_rose21.txt"))
+mtx = np.loadtxt(os.path.join(PATH, "h2o_list_r21.txt"))
 # continuum terms
 ctr = np.array([300.0, 5.919e-10, 3.0, 1.416e-08, 7.5])
 

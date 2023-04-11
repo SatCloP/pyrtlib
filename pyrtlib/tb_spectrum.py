@@ -154,12 +154,12 @@ class TbCloudRTE(object):
             absmdl (str): Absorption model.
         """
         if absmdl == 'uncertainty':
-            O2AbsModel.model = 'rose18'
-            O2AbsModel.o2ll = import_lineshape('o2ll_{}'.format('rose18'))
-            H2OAbsModel.model = 'rose17'
-            H2OAbsModel.h2oll = import_lineshape('h2oll_{}'.format('rose17'))
-            N2AbsModel.model = 'rose03'
-            LiqAbsModel.model = 'rose16'
+            O2AbsModel.model = 'R18'
+            O2AbsModel.o2ll = import_lineshape('o2ll_{}'.format('R18'))
+            H2OAbsModel.model = 'R17'
+            H2OAbsModel.h2oll = import_lineshape('h2oll_{}'.format('R17'))
+            N2AbsModel.model = 'R03'
+            LiqAbsModel.model = 'R16'
             self._uncertainty = True
         else:
             # Defines models

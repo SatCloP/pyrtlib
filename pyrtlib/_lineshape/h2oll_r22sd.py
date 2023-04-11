@@ -31,7 +31,7 @@ import numpy as np
 import os
 
 PATH = os.path.dirname(os.path.abspath(__file__))
-mtx = np.loadtxt(os.path.join(PATH, "h2o_list_rose22.txt"))
+mtx = np.loadtxt(os.path.join(PATH, "h2o_list_r22.txt"))
 
 # import numpy as np
 

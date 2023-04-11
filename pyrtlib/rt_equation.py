@@ -559,7 +559,7 @@ class RTEquation:
             npp, ncpp = O2AbsModel().o2_absorption(pdrykpa, v, ekpa, frq)
             aO2[i] = factor * (npp + ncpp) * db2np
             # add N2 term
-            if N2AbsModel.model not in ['rose03', 'rose16', 'rose17', 'rose18', 'rose98', 'makarov11']:
+            if N2AbsModel.model not in ['R03', 'R16', 'R17', 'R18', 'R98', 'makarov11']:
                 aN2[i] = N2AbsModel.n2_absorption(
                     t[i], np.dot(pdrykpa, 10), frq)
 
@@ -567,7 +567,7 @@ class RTEquation:
                 raise ValueError(
                     'No model avalaible with this name: {} . Sorry...'.format('model'))
 
-            if not o3n is None and O3AbsModel.model in ['rose18', 'rose21', 'rose21sd', 'rose22', 'rose22sd']:
+            if not o3n is None and O3AbsModel.model in ['R18', 'rose21', 'R21SD', 'rose22', 'R22SD']:
                 aO3[i] = O3AbsModel().o3_absorption(t[i], p[i], frq, o3n[i])
 
             adry[i] = aO2[i] + aN2[i] + aO3[i]

@@ -26,7 +26,7 @@ lonlat = (15.13, 37.87)
 nc_file = 'era5_reanalysis-2018-08-20T11:00:00.nc'
 df_era5 = ERA5Reanalysis.read_data(nc_file, lonlat)
 
-mdl = 'rose21sd'
+mdl = 'R21SD'
 ang = np.array([90.])
 frq = np.arange(20, 201, 1)
 nf = len(frq)
@@ -54,8 +54,8 @@ ax1.set_xlabel('Frequency [GHz]')
 ax1.set_ylabel('${T_B}$ [K]')
 
 rte = TbCloudRTE(df_era5.z.values, df_era5.p.values, df_era5.t.values, df_era5.rh.values, frq, ang)
-rte.init_absmdl('rose20')
-H2OAbsModel.model = 'rose21sd'
+rte.init_absmdl('R20')
+H2OAbsModel.model = 'R21SD'
 H2OAbsModel.h2oll = import_lineshape('h2oll_{}'.format(H2OAbsModel.model))
 for cloudy in [False, True]:
     rte.cloudy = cloudy

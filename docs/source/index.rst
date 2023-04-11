@@ -128,7 +128,7 @@ Set absorption model:
 
 .. code-block:: python
 
-   rte.init_absmdl('rose22sd')
+   rte.init_absmdl('R22SD')
 
 Execute model by computing upwelling radiances:
 

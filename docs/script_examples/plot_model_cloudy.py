@@ -30,7 +30,7 @@ z, p, d, t, md = atmp.gl_atm(atmp.MIDLATITUDE_SUMMER)
 gkg = ppmv2gkg(md[:, atmp.H2O], atmp.H2O)
 rh = mr2rh(p, t, gkg)[0] / 100
 
-mdl = 'rose19sd'
+mdl = 'R19SD'
 
 ang = np.array([90.])
 frq = np.arange(20, 61, 1)

@@ -45,5 +45,3 @@ References
 .. [Borysow-Frommhold-1986] Borysow, A., Frommhold, L., 1986, Collision-induced Rototranslational Absorption Spectra of N 2--N 2 Pairs for Temperatures from 50 to 300 K. The Astrophysical Journal 311, 1043. doi:10.1086/164841.
 
 .. [Mätzler-Rosenkranz-2006] Mätzler, C., Rosenkranz, P. W., Battaglia, A., and Wigneron, J. P.:Thermal microwave radiation – applications for remote sensing,no. 52 in IET, Electromagnetic Waves, London, UK, 2006. 
-
-.. [Rosenkranz-2017] Rosenkranz, P.W.: Line-By-Line Microwave Radiative Transfer (Non-Scattering), Remote Sens. Code Library, Doi:10.21982/M81013, 2017

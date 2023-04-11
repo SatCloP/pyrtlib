@@ -6,7 +6,7 @@ Water Vapour Absorption Profiles
 # %%
 # This example shows how to use the
 # :py:meth:`pyrtlib.rt_equation.RTEquation.clearsky_absorption` method to generate water vapor absorption profil and
-# dry air absorption profile using ``rose16`` model.
+# dry air absorption profile using ``R16`` model.
 
 # %%
 import matplotlib.pyplot as plt
@@ -29,7 +29,7 @@ rh = mr2rh(p, t, gkg)[0] / 100
 
 e, rho = RTEquation.vapor(t, rh, ice)
 
-mdl = 'rose19sd'
+mdl = 'R19SD'
 AbsModel.model = mdl
 H2OAbsModel.h2oll = import_lineshape('h2oll_{}'.format(mdl))
 O2AbsModel.o2ll = import_lineshape('o2ll_{}'.format(mdl))

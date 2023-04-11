@@ -110,7 +110,7 @@ with gamma_a as perturbation sptectroscopic parameter
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  32.928 seconds)
+   **Total running time of the script:** ( 0 minutes  33.232 seconds)
 
 
 .. _sphx_glr_download_examples_plot_brightness_temperature_uncertainties.py:
