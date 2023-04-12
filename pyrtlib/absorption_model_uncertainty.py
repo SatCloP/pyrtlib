@@ -1,7 +1,7 @@
 """
 This module provides the uncertainties affecting absorption model
 coefficients found in the litterature.
-The baseline are the routines of Rosenkranz 2016 + modification to water-2-air by Koshelev et al 2015.
+The baseline are the routines of Rosenkranz 2016 + modification to water-2-air by [Koshelev-2015]_.
 
 Example:
 
@@ -25,10 +25,7 @@ array([0.   , 0.   , 0.   , 0.   , 0.   , 0.   , 0.   , 0.   , 0.   ,
 >>> amu['O2gamma_WL'].refer
 'Rosenkranz, pers. comm., 2017'
 
-Hystory:
-    * 2016/12/05 -  - First created
-    * 2018/12/19 -  - Modified for adding 658 GHz line as in Rosenkranz 2018 (see if strcmp(mdl,'r18') at the end of WV parameters)
-    * 2020/06/25 -  - Modified to account SD 183 parameters only (see if strcmp(mdl,'R20SD'))
+For a more exaustive example on how uncertainty work look at :ref:`uncert_example`.
 
 .. note:: *Phil* The parameters that contribute most uncertainty are related to pressure-broadening: widths, mixing, & their T dependence. The intensities and their temperature dependence are obtained (at least in my model) from HITRAN2012. B2=(Ef+Ei)/2kTo,
     where Ef, Ei=upper and lower energy levels of the line; k=Boltzmann const; To=296K. Although HITRAN has uncertainties for six parameters, the energy level is not among them.  
@@ -44,12 +41,12 @@ Hystory:
 
 References
 ----------
-.. [1] Koshelev et al., JQSRT, 112, 2704?2712, 2011
-.. [2] Koshelev et al., JQSRT, 154, 24-27, 2015
-.. [3] Koshelev et al., in preparation, 2018 (22 GHz)
-.. [4] Koshelev et al., JQSRT, 196, 78?86, 2017 (118 GHz)
-.. [5] Turner et al., TGRSS, 47, 10, 3326-37, 2009
-.. [6] Tretyakov, JMS, 2016
+.. [1] [Koshelev-2011]_
+.. [2] [Koshelev-2015]_
+.. [3] [Koshelev-2018]_
+.. [4] [Koshelev-2017]_
+.. [5] [Turner-2009]_
+.. [6] [Tretyakov-2016]_
 """
 
 import os

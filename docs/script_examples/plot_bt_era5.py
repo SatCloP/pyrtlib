@@ -45,5 +45,6 @@ plt.title(
 ax.set_xlabel('Frequency [GHz]')
 ax.set_ylabel('${T_B}$ [K]')
 df.tbtotal.plot(ax=ax, linewidth=2, label='{} - {}'.format(lonlat, mdl))
+ax.grid(True, 'both')
 ax.legend()
 plt.show()

@@ -15,8 +15,8 @@ that the original TBMODEL, Cyber Version, returned.
 
     pyrtlib.tb_spectrum.TbCloudRTE
 
-Example
-.......
+
+Example:
 
 Compute downwelling (:code:`rte.satellite == False`) brightness temperature for a typical Tropical Atmosphere, using emissivity surface.
 
@@ -95,8 +95,7 @@ Plus suplimental profiles where available.
     pyrtlib.atmospheric_profiles.AtmosphericProfiles
 
 
-Example
-.......
+Example:
 
 .. code-block:: python
 
@@ -105,6 +104,12 @@ Example
     z, p, d, tk, md = atmp.gl_atm(atmp.TROPICAL)
     # index of available profiles
     atmp.atm_profiles()
+    {0: 'Tropical',
+     1: 'Midlatitude Summer',
+     2: 'Midlatitude Winter',
+     3: 'Subarctic Summer',
+     4: 'Subarctic Winter',
+     5: 'US Standard'}
 
 
 Radiative Transfer Equation
@@ -179,6 +184,10 @@ The utils module contains funtions of general utility used in multiple places th
 
 Uncertainty
 ===========
+
+This module has some tool to compute the absorption model sensitivity to the uncertainty of spectroscopic parameters, 
+with the purpose of identifying the most significant contributions to the total uncertainty of modeled upwelling/downwelling
+brightness temperture.
 
 .. autosummary::
     :toctree: generated/

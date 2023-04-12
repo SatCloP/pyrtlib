@@ -40,8 +40,20 @@ References
 
 .. [Liebe-Hufford-Cotton] Liebe, H.J., G.A. Hufford, and M.G. Cotton, Propagation Modeling of Moist Air and SuspendedWater/Ice Particles at Frequencies Below 1000 GH z. AGARD Conference Proc. 542, AtmosphericPropagation Effects through Natural and Man-Made Obscurants for Visible to MM-Wave Radiation,pp.3.1-3.10 (1993). 
 
-.. [Boissoles-2003] J. Boissoles, C. Boulet, R.H. Tipping, Alex Brown, Q. Ma, Theoretical calculation of the translation-rotation collision-induced absorption in N2–N2, O2–O2, and N2–O2 pairs, Journal of Quantitative Spectroscopy and Radiative Transfer, Volume 82, Issues 1–4, 2003, Pages 505-516, https://doi.org/10.1016/S0022-4073(03)00174-2.
+.. [Boissoles-2003] J. Boissoles, C. Boulet, R.H. Tipping, Alex Brown, Q. Ma, Theoretical calculation of the translation-rotation collision-induced absorption in N2–N2, O2–O2, and N2–O2 pairs, Journal of Quantitative Spectroscopy and Radiative Transfer, Volume 82, Issues 1–4, Pages 505-516, https://doi.org/10.1016/S0022-4073(03)00174-2, 2003.
 
 .. [Borysow-Frommhold-1986] Borysow, A., Frommhold, L., 1986, Collision-induced Rototranslational Absorption Spectra of N 2--N 2 Pairs for Temperatures from 50 to 300 K. The Astrophysical Journal 311, 1043. doi:10.1086/164841.
 
 .. [Mätzler-Rosenkranz-2006] Mätzler, C., Rosenkranz, P. W., Battaglia, A., and Wigneron, J. P.:Thermal microwave radiation – applications for remote sensing,no. 52 in IET, Electromagnetic Waves, London, UK, 2006. 
+
+.. [Koshelev-2015] Koshelev, M. A., Vilkov, I. N., and Tretyakov, M. Yu.: Pressure broadening of oxygen fine structure lines by water, J. Quant. Spectrosc. Ra., 154, 24–27, https://doi.org/10.1016/j.jqsrt.2014.11.019, 2015. 
+
+.. [Koshelev-2011] Koshelev, M. A., Serov, E. A., Parshin, V. V., and Tretyakov, M. Yu.: Millimeter wave continuum absorption in moist nitrogen at temperatures 261–328 K, J. Quant. Spectrosc. Ra., 112, 2704–2712, https://doi.org/10.1016/j.jqsrt.2011.08.004, 2011. 
+
+.. [Koshelev-2018] Koshelev, M. A., Golubiatnikov, G. Yu., Vilkov, I. N., and Tretyakov, M. Yu.: Line shape parameters of the 22-GHz water line for accurate modeling in atmospheric applications, J. Quant. Spectrosc. Ra., 205, 51–58, https://doi.org/10.1016/j.jqsrt.2017.09.032, 2018. 
+
+.. [Koshelev-2017] M.A. Koshelev, T. Delahaye, E.A. Serov, I.N. Vilkov, C. Boulet, M.Yu. Tretyakov, Accurate modeling of the diagnostic 118-GHz oxygen line for remote sensing of the atmosphere, Journal of Quantitative Spectroscopy and Radiative Transfer, Volume 196, 2017, Pages 78-86, https://doi.org/10.1016/j.jqsrt.2017.03.043.
+
+.. [Turner-2009] Turner, D. D., Cadeddu, M. P., Löhnert, U., Crewell, S., and Vogelmann, A. M.: Modifications to the Water Vapor Continuum in the Microwave Suggested by Ground-Based 150-GHz Observations, IEEE T. Geosci. Remote, 47, 3326–3337, https://doi.org/10.1109/TGRS.2009.2022262, 2009.
+
+.. [Tretyakov-2016] Tretyakov, M. Yu.: Spectroscopy underlying microwave remote sensing of atmospheric water vapor, J. Mol. Spectrosc., 328, 7–26, https://doi.org/10.1016/j.jms.2016.06.006, 2016. 

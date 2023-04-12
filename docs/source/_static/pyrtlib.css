@@ -21,3 +21,9 @@ table {
     gap: .5rem;
     margin-right: 200px;
 }
+
+@media(max-width: 960px) {
+    .bd-header .navbar-header-items__start {
+        margin-right: auto;
+    }
+}

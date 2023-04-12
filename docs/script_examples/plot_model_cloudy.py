@@ -68,5 +68,6 @@ for i in [False, True]:
     df.tbtotal.plot(x=frq, ax=ax, linewidth=1,
                     label='{} - {} ({})'.format(atm[atmp.MIDLATITUDE_SUMMER], mdl, text_plot))
 
+ax.grid(True, 'both')
 ax.legend()
 plt.show()

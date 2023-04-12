@@ -1,3 +1,5 @@
+.. _uncert_example:
+
 ================
 Notebook Example
 ================

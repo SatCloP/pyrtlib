@@ -5,7 +5,7 @@ Performing Brightness Temperature calculation from ground with Ozone
 
 # %%
 # This example shows how to use the
-# :py:class:`pyrtlib.tb_spectrum.TbCloudRTE` method to calculate brightness temperature from ground (downwelling) with ozone.
+# :py:class:`pyrtlib.tb_spectrum.TbCloudRTE` method to calculate downwelling brightness temperature with ozone.
 
 import matplotlib.pyplot as plt
 
@@ -34,9 +34,6 @@ o3n_ppmv = md[:, atmp.O3]
 o3n = np.zeros(z.shape)
 for k in range(0, len(z)):
     o3n[k] = ppmv_to_moleculesm3(o3n_ppmv[k], p[k] * 100.0, t[k])
-# o3n = np.interp(z,o3n,z)
-# o3n_matlab = np.loadtxt("/Users/slarosa/Downloads/o3.csv", delimiter=',')
-# assert_allclose(o3n, o3n_matlab, atol=0)
 
 gkg = ppmv2gkg(md[:, atmp.H2O], atmp.H2O)
 rh = mr2rh(p, t, gkg)[0] / 100
