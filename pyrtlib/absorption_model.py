@@ -129,7 +129,7 @@ class LiqAbsModel(AbsModel):
             eps2 = 3.52
             fp = np.dot((np.dot(316.0, theta1) + 146.4), theta1) + 20.2
             fs = np.dot(39.8, fp)
-            eps = (eps0 - eps1) / np.complex(1.0, freq / fp) + \
+            eps = (eps0 - eps1) / complex(1.0, freq / fp) + \
                 (eps1 - eps2) / complex(1.0, freq / fs) + eps2
         elif LiqAbsModel.model in ['R17', 'R16', 'R19', 'R20', 'R19SD', 'R22SD', 'makarov11']:
             eps = dilec12(freq, temp)
@@ -340,7 +340,7 @@ class H2OAbsModel(AbsModel):
                 for j in range(0, 2):
                     if width2 > 0 and j == 0 and np.abs(df[j]) < (10 * width0):
                         # speed-dependent resonant shape factor, minus base
-                        xc = np.complex(
+                        xc = complex(
                             (width0 - np.dot(1.5, width2)), df[j]) / width2
                         if H2OAbsModel.model == 'R20SD':
                             if i == 1:
@@ -348,7 +348,7 @@ class H2OAbsModel(AbsModel):
                                     (self.h2oll.d2self * pvap)
                             else:
                                 delta2 = 0.0
-                            xc = np.complex((width0 - np.dot(1.5, width2)), df[j] + np.dot(1.5, delta2)) / np.complex(
+                            xc = complex((width0 - np.dot(1.5, width2)), df[j] + np.dot(1.5, delta2)) / complex(
                                 width2, -delta2)
                         elif H2OAbsModel.model in ["R21SD", 'R22SD']:
                             xc = complex(

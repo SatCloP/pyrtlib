@@ -58,8 +58,8 @@ Deactivate the virtualenv:
    $ deactivate
 
 
-Installing from source
-----------------------
+Installing PyRTLib from source
+------------------------------
 
 Download latest release of pyrtlib source from this `link <https://github.com/slarosa/pyrtlib/releases/latest>`_.
 
@@ -67,9 +67,13 @@ Download latest release of pyrtlib source from this `link <https://github.com/sl
 
     $ tar zxvf pyrtlib.tar.gz
     $ cd pyrtlib
-    $ <desired-path>/bin/python3 setup.py install --user
+    $ <desired-path>/bin/python3 setup.py install
 
 pyrtlib is now ready to be used from that virtual environment.
+
+Installing PyRTLib via PyPi
+----------------------------
+To insert when package is ready to the release
 
 .. note::
 

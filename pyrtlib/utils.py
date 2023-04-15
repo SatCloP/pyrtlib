@@ -509,7 +509,7 @@ def dilec12(f: np.ndarray, t: np.ndarray) -> np.ndarray:
     """
 
     tc = t - 273.15
-    z = np.complex(0.0, f)
+    z = complex(0.0, f)
     theta = 300.0 / t
     # static dielectric constant model from
     # Patek et al. (J.Phys.Chem.Ref.Data. v.38(1), 21 (2009).
@@ -528,8 +528,8 @@ def dilec12(f: np.ndarray, t: np.ndarray) -> np.ndarray:
                                                                   tc ** 3)
     # z1 = (-.75,1.) * f1;
     # z2 = (-4500.,2000.)
-    z1 = np.complex(-0.75, 1.0) * f1
-    z2 = np.complex(-4500.0, 2000.0)
+    z1 = complex(-0.75, 1.0) * f1
+    z2 = complex(-4500.0, 2000.0)
     cnorm = np.log(z2 / z1)
     chip = (hdelta * np.log((z - z2) / (z - z1))) / cnorm
     chij = (hdelta * np.log(
@@ -590,7 +590,7 @@ def dcerror(x: np.ndarray, y: np.ndarray) -> np.ndarray:
         dcerror = w
     else:
         # from eqs.(13), w(z) = 2exp(-z^2)-[w(z*)]*
-        dcerror = 2.0 * np.exp(-np.complex(x, y) ** 2) - w
+        dcerror = 2.0 * np.exp(-complex(x, y) ** 2) - w
 
     return dcerror
 
