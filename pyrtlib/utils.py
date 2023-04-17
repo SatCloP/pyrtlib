@@ -36,7 +36,8 @@ def import_lineshape(name: str) -> Dict:
         0.,  0.,  0.,  0.,  0.])
     """
     try:
-        module = __import__('pyrtlib._lineshape', globals(), locals(), [name.lower()])
+        module = __import__('pyrtlib._lineshape', globals(),
+                            locals(), [name.lower()])
     except ImportError:
         return None
     return vars(module)[name.lower()]
@@ -87,8 +88,9 @@ def constants(name: Optional[str] = None) -> Union[Tuple[float, str], List]:
             Values as of 11/12/2015
     .. [2] Janssen, Atmospheric Remote Sensing by Microwave Radiometry, pag.12
 
-    .. note::  
-        Tcosmicbkg = 2.736; # +/- 0.017 [K] Cosmic Background Temperature (see ref. 2)
+    .. note::
+        # +/- 0.017 [K] Cosmic Background Temperature (see ref. 2)
+        Tcosmicbkg = 2.736;
     """
     constants_dict = {
         'avogadro': [6.022140857e+23, '[mol-1]'],
@@ -216,7 +218,7 @@ def ppmv2gkg(ppmv: np.ndarray, gasid: int) -> np.ndarray:
         np.ndarray: Mass mixing ratio in g/kg
 
     See also:
-        :py:meth:`gas_mass` 
+        :py:meth:`gas_mass`
     """
 
     # convert to parts per volume
@@ -236,8 +238,8 @@ def mr2rh(p: np.ndarray,
     """Determine relative humidity (rh) givenvreference pressure (mbar), temperature (K), and
     water vapor mass mixing ratio (g/kg)
 
-    Two RHs are returned: rh1 is with RH defined as the ratio of water vapor partial pressure 
-    to saturation vapor pressure and rh2 is with RH defined as the ratio of water vapor mixing ratio to 
+    Two RHs are returned: rh1 is with RH defined as the ratio of water vapor partial pressure
+    to saturation vapor pressure and rh2 is with RH defined as the ratio of water vapor mixing ratio to
     saturation mixing ratio.
 
     if input, Tconvert is used as the temperature point to switch
@@ -299,7 +301,7 @@ def mr2rho(mr: np.ndarray, t: np.ndarray, p: np.ndarray) -> np.ndarray:
 
 
 def mr2e(p: np.ndarray, mr: np.ndarray) -> np.ndarray:
-    """Compute H2O partial pressure (mbar) given pressure (mbar) 
+    """Compute H2O partial pressure (mbar) given pressure (mbar)
     and H2O mass mixing ratio (g/kg)
 
     DCT 3/6/00
@@ -320,7 +322,7 @@ def mr2e(p: np.ndarray, mr: np.ndarray) -> np.ndarray:
 
 
 def e2mr(p: np.ndarray, e: np.ndarray) -> np.ndarray:
-    """Compute H2O mass mixing ratio (g/kg) given pressure (mbar) 
+    """Compute H2O mass mixing ratio (g/kg) given pressure (mbar)
     and H2O partial pressure (mbar)
 
     Args:
@@ -341,9 +343,9 @@ def e2mr(p: np.ndarray, e: np.ndarray) -> np.ndarray:
 def satmix(p: np.ndarray,
            t: np.ndarray,
            Tconvert: Optional[np.ndarray] = None) -> np.ndarray:
-    """Compute saturation mixing ratio (g/kg) given reference pressure, 
-    p (mbar]) and temperature, T (K).  If Tconvert input, the calculation uses 
-    the saturation vapor pressure over ice (opposed to over water) 
+    """Compute saturation mixing ratio (g/kg) given reference pressure,
+    p (mbar]) and temperature, T (K).  If Tconvert input, the calculation uses
+    the saturation vapor pressure over ice (opposed to over water)
     for temperatures less than Tconvert [K].
 
     DCT, updated 3/5/00
@@ -371,8 +373,8 @@ def satmix(p: np.ndarray,
 
 def satvap(t: np.ndarray, Tconvert: Optional[np.ndarray] = None) -> np.ndarray:
     """Compute saturation vapor pressure (mbar) given temperature, T (K).
-    If Tconvert is input, the calculation uses the saturation vapor 
-    pressure over ice (opposed to over water) for temperatures less than 
+    If Tconvert is input, the calculation uses the saturation vapor
+    pressure over ice (opposed to over water) for temperatures less than
     Tconvert (K).
 
     Args:
@@ -397,7 +399,7 @@ def satvap(t: np.ndarray, Tconvert: Optional[np.ndarray] = None) -> np.ndarray:
 
 
 def eswat_goffgratch(t: np.ndarray) -> np.ndarray:
-    """Compute water vapor saturation pressure over water using Goff-Gratch formulation. 
+    """Compute water vapor saturation pressure over water using Goff-Gratch formulation.
 
     Args:
         t (np.ndarray): Temperature profile (K).
@@ -436,8 +438,8 @@ def eswat_goffgratch(t: np.ndarray) -> np.ndarray:
 
 
 def esice_goffgratch(t: np.ndarray) -> np.ndarray:
-    """Compute water vapor saturation pressure over ice using Goff-Gratch formulation. 
-    
+    """Compute water vapor saturation pressure over ice using Goff-Gratch formulation.
+
     Args:
         t (numpy.ndarray): Temperature profile (K).
 
@@ -475,7 +477,7 @@ def tk2b_mod(hvk: np.ndarray, t: np.ndarray) -> np.ndarray:
     Args:
         hvk (np.ndarray): (Planck constant * frequency) / Boltzmann constant.
         t (np.ndarray): Temperature (K)
-    
+
     Returns:
         np.ndarray: Modified Planck function.
     """
@@ -485,7 +487,7 @@ def tk2b_mod(hvk: np.ndarray, t: np.ndarray) -> np.ndarray:
 
 
 def dilec12(f: np.ndarray, t: np.ndarray) -> np.ndarray:
-    """Computes the complex dielectric constant for liquid water, with a 
+    """Computes the complex dielectric constant for liquid water, with a
     negative imaginary part representing dissipation.
 
     Complex logarithm is used here. It should be defined with
@@ -671,26 +673,9 @@ def virtual_temperature(t: np.ndarray, mr: np.ndarray) -> np.ndarray:
                 / (molecular_weight_ratio * (1 + mr)))
 
 
-def thickness_hydrostatic(p: np.ndarray, t: np.ndarray, mr: Optional[np.ndarray] = None) -> np.float32:
-    r"""Calculate the thickness of a layer via the hypsometric equation.
-    This thickness calculation uses the pressure and temperature profiles (and optionally
-    mixing ratio) via the hypsometric equation with virtual temperature adjustment.
-
-    .. math:: Z_2 - Z_1 = -\frac{R_d}{g} \int_{p_1}^{p_2} T_v d\ln p,
-
-    Which is based off of Equation 3.24 in [Hobbs2006]_.
-    This assumes a hydrostatic atmosphere.
-
-    Args:
-        p (np.ndarray): Atmospheric pressure profile
-        t (np.ndarray): Atmospheric temperature profile
-        mr (Optional[np.ndarray], optional): Mass mixing ratio (dimensionless kg/kg-1). Defaults to None.
-
-    Returns:
-        np.float32: The thickness of the layer in meters
-
-    .. note::
-        This function is based on metpy.calc.thickness_hydrostatic method.
+def _thickness_hydrostatic(p: np.ndarray, t: np.ndarray, mr: Optional[np.ndarray] = None) -> np.float32:
+    """
+    :meta private:
     """
 
     R = 8.314462618
@@ -706,6 +691,38 @@ def thickness_hydrostatic(p: np.ndarray, t: np.ndarray, mr: Optional[np.ndarray]
     return (
         -Rd / g * np.trapz(layer_virttemp, np.log(layer_p))
     )
+
+
+def atmospheric_tickness(p: np.ndarray, t: np.ndarray, mr: Optional[np.ndarray] = None) -> np.ndarray:
+    r"""Calculate the thickness of a layer via the hypsometric equation.
+    This thickness calculation uses the pressure and temperature profiles (and optionally
+    mixing ratio) via the hypsometric equation with virtual temperature adjustment.
+
+    .. math:: Z_2 - Z_1 = -\frac{R_d}{g} \int_{p_1}^{p_2} T_v d\ln p,
+
+    Which is based off of Equation 3.24 in [Hobbs2006]_.
+    This assumes a hydrostatic atmosphere.
+
+    Args:
+        p (np.ndarray): Atmospheric pressure profile
+        t (np.ndarray): Atmospheric temperature profile
+        mr (Optional[np.ndarray], optional): Mass mixing ratio (dimensionless kg/kg-1). Defaults to None.
+
+    Returns:
+        np.ndarray: The thickness of the layer in kilometers
+
+    .. note::
+        This function is based on metpy.calc.thickness_hydrostatic method.
+    """
+    
+    h = np.zeros(p.shape)
+    for i in range(p.shape[0]):
+        if i == 0:
+            continue
+        hi = _thickness_hydrostatic(p[0:i+1], t[0:i+1], mr[0:i+1] if mr is not None else None)
+        h[i] = hi/1e3
+
+    return h
 
 
 def dewpoint2rh(td: float,
@@ -773,9 +790,9 @@ def kgkg_to_kgm3(q: np.ndarray, p: np.ndarray, t: np.ndarray) -> np.ndarray:
     .. math:: R_{dry} = \frac{R}{M_{dry}}
 
     where:
-    :math:`q_{liq}` is the mass mixing ratio for liquid cloud, :math:`P` is the atmospheric pressure 
-    in hPa, :math:`T` is the atmospheric temperature in K, :math:`R_{moist}` is the moist 
-    air gas constant (in J kg-1 K-1), :math:`R_{dry}` is the gas constant for dry air and :math:`q_{h2o}` is the specific humidity 
+    :math:`q_{liq}` is the mass mixing ratio for liquid cloud, :math:`P` is the atmospheric pressure
+    in hPa, :math:`T` is the atmospheric temperature in K, :math:`R_{moist}` is the moist
+    air gas constant (in J kg-1 K-1), :math:`R_{dry}` is the gas constant for dry air and :math:`q_{h2o}` is the specific humidity
     (given as the ratio between the mass of water vapor and the mass of moist air)
 
     The same equations are used for ice clouds, by replacing LWC by IWC and :math:`q_{liq}` by :math:`q_{ice}`

@@ -25,7 +25,7 @@
 
 # a = pd.read_table("h2o_sdlist.asc", sep=',',header=None, skiprows=1, nrows=19, usecols=range(0, 20))
 # a = np.loadtxt("h2o_sdlist.asc", delimiter=',', skiprows=1, usecols=range(0, 20), max_rows=20)
-# np.savetxt("/Users/slarosa/dev/pyrtlib/pyrtlib/lineshape/h2o_list_rose22.txt", a)
+# np.savetxt("/Users/slarosa/dev/pyrtlib/pyrtlib/lineshape/h2o_list_r22.txt", a)
 
 import numpy as np
 import os

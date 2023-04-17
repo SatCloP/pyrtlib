@@ -175,7 +175,7 @@ class N2AbsModel(AbsModel):
         fdepen = 0.5 + 0.5 / (1.0 + (f / 450.0) ** 2)
         if N2AbsModel.model in ['R16', 'R17', 'R18', 'R19', 'R19SD', 'makarov11']:
             l, m, n = 6.5e-14, 3.6, 1.34
-        elif N2AbsModel.model in ['R20', 'R20SD', 'R21SD', 'rose22', 'R22SD']:
+        elif N2AbsModel.model in ['R20', 'R20SD', 'R21SD', 'R22', 'R22SD']:
             l, m, n = 9.95e-14, 3.22, 1
         elif N2AbsModel.model == 'R03':
             l, m, n = 6.5e-14, 3.6, 1.29
@@ -630,7 +630,7 @@ class O2AbsModel(AbsModel):
         preswv = vapden * temp / 216.68
         if O2AbsModel.model in ['R03', 'R16', 'R17', 'R18', 'R98', 'makarov11']:
             preswv = vapden * temp / 217.0
-        if O2AbsModel.model in ['rose22', 'R22SD']:
+        if O2AbsModel.model in ['R22', 'R22SD']:
             preswv = 4.615228e-3 * vapden * temp
         presda = pres - preswv
         den = 0.001 * (presda * b + 1.2 * preswv * th)
@@ -696,7 +696,7 @@ class O2AbsModel(AbsModel):
         # o2abs = 1.004 * np.maximum(o2abs, 0.0)
         if O2AbsModel.model != 'R98':
             o2abs = np.maximum(o2abs, 0.0)
-        if O2AbsModel.model in ['R20', 'R20SD', 'rose22', 'R22SD']:
+        if O2AbsModel.model in ['R20', 'R20SD', 'R22', 'R22SD']:
             o2abs = 1.004 * np.maximum(o2abs, 0.0)
 
         # *** ********************************************************
@@ -726,8 +726,7 @@ class O2AbsModel(AbsModel):
         npp = (o2abs / db2np) / factor
         ncpp = (ncpp / db2np) / factor
         ncpp = 0 if O2AbsModel.model in [
-            'R19', 'R19SD', 'R20', 'R20SD', 'rose22', 'R22SD'] else ncpp
-        # ************************************************************
+            'R19', 'R19SD', 'R20', 'R20SD', 'R22', 'R22SD'] else ncpp
 
         return npp, ncpp
 
@@ -862,7 +861,7 @@ class O3AbsModel(AbsModel):
         # add resonances within 1 ghz of f.  most of the ozone is in the
         # stratosphere, so lines are relatively narrow, and lorentz shape
         # factor is ok.
-        if O3AbsModel.model in ["rose22", "rose222sd"]:
+        if O3AbsModel.model in ["R22", "R222sd"]:
             sum = 0.0
             nlines = len(self.o3ll.fl)
             for k in range(0, nlines):

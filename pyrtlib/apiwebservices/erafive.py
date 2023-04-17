@@ -17,14 +17,15 @@ from typing import Optional, Tuple
 try:
     import cdsapi
 except ModuleNotFoundError as e:
-    warnings.warn("Module CDSAPI must be installed to download ERA5 Reanalysis dataset.")
+    warnings.warn(
+        "Module CDSAPI must be installed to download ERA5 Reanalysis dataset.")
 import numpy as np
 # from scipy.spatial import cKDTree
 from sklearn.neighbors import BallTree, KDTree
 import pandas as pd
 from netCDF4 import Dataset
 
-from ..utils import thickness_hydrostatic
+from ..utils import atmospheric_tickness
 
 
 class ERA5Reanalysis:
@@ -54,17 +55,21 @@ class ERA5Reanalysis:
 
         pres = np.asarray(nc.variables['level'][:])
         temp = np.asarray(nc.variables['t'][:, :, idx, idx])
-        rh = np.asarray(nc.variables['r'][:, :, idx, idx]) / 100 # RH in decimal
+        # RH in decimal
+        rh = np.asarray(nc.variables['r'][:, :, idx, idx]) / 100
         clwc = np.asarray(nc.variables['clwc'][:, :, idx, idx])
         ciwc = np.asarray(nc.variables['ciwc'][:, :, idx, idx])
         crwc = np.asarray(nc.variables['crwc'][:, :, idx, idx])
         cswc = np.asarray(nc.variables['cswc'][:, :, idx, idx])
         q = np.asarray(nc.variables['q'][:, :, idx, idx])
 
-        date = pd.to_datetime(nc.variables['time'][:], origin='1900-01-01 00:00:00.0', unit='h')
+        z = atmospheric_tickness(np.flip(pres), np.flip(temp[0]), np.flip(q[0]))  # Altitude in km
+
+        date = pd.to_datetime(
+            nc.variables['time'][:], origin='1900-01-01 00:00:00.0', unit='h')
 
         df = pd.DataFrame({'p': np.flip(pres),
-                           # 'z': np.flip(z),
+                           'z': z,
                            't': np.flip(temp[0]),
                            'rh': np.flip(rh[0]),
                            'clwc': np.flip(clwc[0]),
@@ -74,22 +79,8 @@ class ERA5Reanalysis:
                            'q': np.flip(q[0]),
                            'time': np.repeat(date, len(pres))
                            })
-        z = ERAFIVE._z_from_p(df.t, df.p, df.q) / 1000 # Altitude in km
-        df['z'] = z
-
-        return df #, (idx, dist), np.stack((lons, lats))
-    
-    def _z_from_p(self, t, p, q):
-        h = []
-        for i in range(len(p)):
-            if i > len(p):
-                break
-            if i == 0:
-                h.append(0)
-                continue
-            h.append(thickness_hydrostatic(p[0:i+1], t[0:i+1], q[0:i+1]))
-
-        return np.array(h)
+        
+        return df  # , (idx, dist), np.stack((lons, lats))
 
     def _find_nearest(self, lons, lats, point):
         """Find index of nearest coordinate
@@ -116,9 +107,11 @@ class ERA5Reanalysis:
         # mytree = cKDTree(combined_x_y_arrays)
         # dist, indexes = mytree.query(point)
 
-        ball = BallTree(np.radians(np.stack((lats, lons), axis=-1)), metric='haversine')
-        dist, indexes = ball.query(np.radians(np.array(np.flip(point)).reshape(1, 2)), k=1)
-        
+        ball = BallTree(np.radians(
+            np.stack((lats, lons), axis=-1)), metric='haversine')
+        dist, indexes = ball.query(np.radians(
+            np.array(np.flip(point)).reshape(1, 2)), k=1)
+
         return indexes[0][0], dist
 
     @staticmethod
@@ -136,7 +129,8 @@ class ERA5Reanalysis:
             str: The path to downloaded netcdf file
         """
         # North, West, South, Est
-        extent = [lonlat[1] + offset, lonlat[0] - offset, lonlat[1] - offset, lonlat[0] + offset]
+        extent = [lonlat[1] + offset, lonlat[0] - offset,
+                  lonlat[1] - offset, lonlat[0] + offset]
         nc_file_name = 'era5_reanalysis-{}.nc'.format(time.isoformat())
         nc_file = os.path.join(path, nc_file_name)
 
@@ -159,7 +153,7 @@ class ERA5Reanalysis:
                 'day': time.day,
                 'time': '{}:00'.format(time.hour),
                 'area': extent,
-                'grid': [resolution,resolution],
+                'grid': [resolution, resolution],
                 'format': 'netcdf',
             },
             nc_file)

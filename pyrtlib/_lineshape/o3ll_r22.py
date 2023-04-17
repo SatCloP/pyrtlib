@@ -2,8 +2,8 @@ import numpy as np
 import os
 
 PATH = os.path.dirname(os.path.abspath(__file__))
-os.path.join(PATH, "o3_list_rose22.txt")
-mtx = np.loadtxt(os.path.join(PATH, "o3_list_rose22.txt"))
+os.path.join(PATH, "o3_list_r22.txt")
+mtx = np.loadtxt(os.path.join(PATH, "o3_list_r22.txt"))
 
 reftline = 296
 # line intensities from hitran include isotopomer abundance

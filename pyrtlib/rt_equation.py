@@ -148,7 +148,7 @@ class RTEquation:
         return dryn, wetn, refindx
 
     @staticmethod
-    def ray_tracing(z: np.ndarray, refindx: np.ndarray, angle: float, z0: float) -> np.ndarray | None:
+    def ray_tracing(z: np.ndarray, refindx: np.ndarray, angle: float, z0: float) -> Union[np.ndarray,  None]:
         """Ray-tracing algorithm of Dutton, Thayer, and Westwater, rewritten for 
         readability & attempted documentation. Based on the technique shown in Radio Meteorology 
         by Bean and Dutton (Fig. 3.20 and surrounding text) [Bean-Dutton]_.
@@ -290,7 +290,7 @@ class RTEquation:
         return sxds, xds.reshape(iend)
 
     @staticmethod
-    def cloud_radiating_temperature(ibase: float, itop: float, hvk: np.ndarray, tauprof: np.ndarray, boftatm: np.ndarray) -> np.ndarray | None:
+    def cloud_radiating_temperature(ibase: float, itop: float, hvk: np.ndarray, tauprof: np.ndarray, boftatm: np.ndarray) -> Union[np.ndarray, None]:
         """Computes the mean radiating temperature of a cloud with base and top at
         profile levels ibase and itop, respectively. The algorithm assumes that
         the input cloud is the lowest (or only) cloud layer observed.
@@ -567,7 +567,7 @@ class RTEquation:
                 raise ValueError(
                     'No model avalaible with this name: {} . Sorry...'.format('model'))
 
-            if not o3n is None and O3AbsModel.model in ['R18', 'rose21', 'R21SD', 'rose22', 'R22SD']:
+            if not o3n is None and O3AbsModel.model in ['R18', 'R21', 'R21SD', 'R22', 'R22SD']:
                 aO3[i] = O3AbsModel().o3_absorption(t[i], p[i], frq, o3n[i])
 
             adry[i] = aO2[i] + aN2[i] + aO3[i]
