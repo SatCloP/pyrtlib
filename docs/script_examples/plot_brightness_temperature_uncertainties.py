@@ -16,7 +16,7 @@ import numpy as np
 from pyrtlib.atmospheric_profiles import AtmosphericProfiles as atmp
 from pyrtlib.tb_spectrum import TbCloudRTE
 from pyrtlib.absorption_model import H2OAbsModel, O3AbsModel
-from pyrtlib.absorption_model_uncertainty import absmod_uncertainties_perturb
+from pyrtlib.uncertainty.absmod_uncertainty import parameters_perturbation
 from pyrtlib.utils import ppmv2gkg, mr2rh
 
 atm = ['Tropical',
@@ -40,14 +40,14 @@ for i in range(0, 6):
     ang = np.array([90.])
     frq = np.arange(20, 151, 1)
 
-    amu = absmod_uncertainties_perturb()
+    amu = parameters_perturbation()
 
     rte = TbCloudRTE(z, p, t, rh, frq, ang, amu=amu)
     rte.init_absmdl('uncertainty')
     df = rte.execute()
     df = df.set_index(frq)
 
-    amu = absmod_uncertainties_perturb(['gamma_a'], 'max', index=1)
+    amu = parameters_perturbation(['gamma_a'], 'max', index=1)
 
     rte = TbCloudRTE(z, p, t, rh, frq, ang, amu=amu)
     rte.init_absmdl('uncertainty')
@@ -56,7 +56,7 @@ for i in range(0, 6):
 
     df['delta_max_gamma_a'] = df_gamma.tbtotal - df.tbtotal
 
-    amu = absmod_uncertainties_perturb(['gamma_a'], 'min', index=1)
+    amu = parameters_perturbation(['gamma_a'], 'min', index=1)
 
     rte = TbCloudRTE(z, p, t, rh, frq, ang, amu=amu)
     rte.init_absmdl('uncertainty')
@@ -69,5 +69,6 @@ for i in range(0, 6):
     df.delta_min_gamma_a.plot(ax=ax, label='{}'.format(atm[i]))
 
 # ax.legend()
+ax.grid(True, 'both')
 plt.title("Perturbed parameters: $\gamma_a$")
 plt.show()

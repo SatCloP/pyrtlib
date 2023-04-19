@@ -704,22 +704,23 @@ def atmospheric_tickness(p: np.ndarray, t: np.ndarray, mr: Optional[np.ndarray] 
     This assumes a hydrostatic atmosphere.
 
     Args:
-        p (np.ndarray): Atmospheric pressure profile
-        t (np.ndarray): Atmospheric temperature profile
+        p (np.ndarray): Atmospheric pressure profile (mb)
+        t (np.ndarray): Atmospheric temperature profile (K).
         mr (Optional[np.ndarray], optional): Mass mixing ratio (dimensionless kg/kg-1). Defaults to None.
 
     Returns:
-        np.ndarray: The thickness of the layer in kilometers
+        np.ndarray: The thickness of the layers in kilometers
 
     .. note::
         This function is based on metpy.calc.thickness_hydrostatic method.
     """
-    
+
     h = np.zeros(p.shape)
     for i in range(p.shape[0]):
         if i == 0:
             continue
-        hi = _thickness_hydrostatic(p[0:i+1], t[0:i+1], mr[0:i+1] if mr is not None else None)
+        hi = _thickness_hydrostatic(
+            p[0:i+1], t[0:i+1], mr[0:i+1] if mr is not None else None)
         h[i] = hi/1e3
 
     return h
@@ -855,6 +856,8 @@ def get_frequencies(instrument: Optional[str] = 'hat') -> List:
             51.248, 51.760, 52.280, 52.804, 53.336, 53.848, 54.400, 54.940,
             55.500, 56.020, 56.660, 57.288, 57.964, 58.800
         ],
+        'arm': [22.235, 23.035, 23.835, 26.235, 30.000, 51.250, 52.280, 53.850, 54.940,
+                56.660, 57.290, 58.800],
         'tem': [
             51.25, 51.75, 52.25, 52.85, 53.35, 53.85, 54.40, 54.90, 55.40,
             56.00, 56.50, 57.00

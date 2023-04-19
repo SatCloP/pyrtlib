@@ -28,7 +28,8 @@ from netCDF4 import Dataset
 
 PATH = os.path.dirname(os.path.abspath(__file__))
 
+nc = Dataset(os.path.join(PATH, "R17", "Cov_parameters_Cimini_et_al_2018_V1.1.nc"))
+R17_111 = np.asarray(nc.variables['Cov_p'][:])
+
 nc = Dataset(os.path.join(PATH, "R17", "Cov_parameters_Cimini_et_al_2019_V2.0.nc"))
-# R17 = np.loadtxt(os.path.join(PATH, "R17", "Cov_parameters_Cimini_et_al_2019_V2.0.txt"),
-#                     comments=['#', '$', '%'])
-R17 = np.asarray(nc.variables['Cov_p'][:])
+R17_112 = np.asarray(nc.variables['Cov_p'][:])

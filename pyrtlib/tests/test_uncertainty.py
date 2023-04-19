@@ -4,7 +4,7 @@ from unittest import TestCase
 import numpy as np
 import pandas as pd
 from numpy.testing import assert_allclose, assert_equal
-from pyrtlib.absorption_model_uncertainty import absmod_uncertainties_perturb
+from pyrtlib.uncertainty.absmod_uncertainty import parameters_perturbation
 from pyrtlib.atmospheric_profiles import AtmosphericProfiles as atmp
 from pyrtlib.tb_spectrum import TbCloudRTE
 from pyrtlib.utils import ppmv2gkg, mr2rh
@@ -14,7 +14,7 @@ THIS_DIR = os.path.dirname(os.path.abspath(__file__))
 
 class Test(TestCase):
     def test_absmod_uncertainties_perturb_min(self):
-        amu = absmod_uncertainties_perturb(['gamma_a'], 'min', 1)
+        amu = parameters_perturbation(['gamma_a'], 'min', 1)
         expected0 = 0.016501363999999998
         assert_equal(expected0, amu['gamma_a'].uncer[0])
         expected1 = 0.015001240000000
@@ -26,11 +26,11 @@ class Test(TestCase):
         assert_equal(expected1, amu['gamma_a'].value[1])
 
     def test_absmod_uncertainties_perturb_max(self):
-        amu = absmod_uncertainties_perturb(['gamma_a'], 'max', 0)
+        amu = parameters_perturbation(['gamma_a'], 'max', 0)
         expected0 = 2.7152244399999996
         assert_equal(expected0, amu['gamma_a'].value[0])
 
-        amu = absmod_uncertainties_perturb(['gamma_a'], 'max', 1)
+        amu = parameters_perturbation(['gamma_a'], 'max', 1)
         expected1 = 2.9597446520000004
         assert_equal(expected1, amu['gamma_a'].value[1])
 
@@ -42,7 +42,7 @@ class Test(TestCase):
 
         frq = np.arange(20, 201, 1)
 
-        amu = absmod_uncertainties_perturb(['gamma_a'], 'min', index=1)
+        amu = parameters_perturbation(['gamma_a'], 'min', index=1)
 
         rte = TbCloudRTE(z, p, t, rh, frq, amu=amu)
         rte.init_absmdl('uncertainty')

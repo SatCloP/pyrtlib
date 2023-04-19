@@ -22,6 +22,8 @@ References
 
 .. [Cimini-2018] Cimini, D., Rosenkranz, P. W., Tretyakov, M. Y., Koshelev, M. A., and Romano, F.: Uncertainty of atmospheric microwave absorption model: impact on ground-based radiometer simulations and retrievals, Atmos. Chem. Phys., 18, 15231–15259, https://doi.org/10.5194/acp-18-15231-2018, 2018.
 
+.. [Cimini-2019] Cimini, D., Hocking, J., De Angelis, F., Cersosimo, A., Di Paola, F., Gallucci, D., Gentile, S., Geraldi, E., Larosa, S., Nilo, S., Romano, F., Ricciardelli, E., Ripepi, E., Viggiano, M., Luini, L., Riva, C., Marzano, F. S., Martinet, P., Song, Y. Y., Ahn, M. H., and Rosenkranz, P. W.: RTTOV-gb v1.0 – updates on sensors, absorption models, uncertainty, and availability, Geosci. Model Dev., 12, 1833–1845, https://doi.org/10.5194/gmd-12-1833-2019, 2019.
+
 .. [Rosenkranz-2017] Rosenkranz, P. W.: Line-by-line microwave radiative transfer (non-scattering), Remote Sens. Code Library, https://doi.org/10.21982/M81013, 2017.
 
 .. [Schroeder-Westwater-1991] Schroeder J.A. and E.R. Westwater, Users' Guide to WPL Microwave Radiative Transfer Software, NOAA Technical Memorandum ERL WPL-213, 1991, https://repository.library.noaa.gov/view/noaa/32511

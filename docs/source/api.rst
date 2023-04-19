@@ -193,7 +193,7 @@ brightness temperture.
     :toctree: generated/
     :template: custom-module-template.rst
 
-    pyrtlib.absorption_model_uncertainty
+    pyrtlib.uncertainty.absmod_uncertainty
 
 
 API Web Services

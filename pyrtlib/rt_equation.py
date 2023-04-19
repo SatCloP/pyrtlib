@@ -14,7 +14,6 @@ import numpy as np
 
 from .absorption_model import O2AbsModel, H2OAbsModel, N2AbsModel, LiqAbsModel, O3AbsModel
 from .utils import constants, tk2b_mod
-from .absorption_model_uncertainty import absmod_uncertainties_perturb
 
 
 class RTEquation:
