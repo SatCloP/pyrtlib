@@ -6,7 +6,7 @@ from pyrtlib.absorption_model import H2OAbsModel
 from pyrtlib.atmospheric_profiles import AtmosphericProfiles as atmp
 from pyrtlib.utils import (ppmv2gkg, mr2rh, gas_mass, height_to_pressure, pressure_to_height, constants,
                            to_kelvin, to_celsius, get_frequencies_sat, eswat_goffgratch, satvap, satmix,
-                           import_lineshape)
+                           import_lineshape, atmospheric_tickness)
 
 z, p, d, t, md = atmp.gl_atm(atmp.TROPICAL)
 
@@ -132,3 +132,23 @@ class Test(TestCase):
         H2OAbsModel.model = 'R21SD'
         H2OAbsModel.set_ll()
         assert_almost_equal(H2OAbsModel.h2oll.aself, aself, decimal=5)
+
+    def test_atmospheric_tickness(self):
+        z = atmospheric_tickness(np.array([1000, 500]), np.array([280, 244]))
+        assert_almost_equal(np.array([0., 5.31569228]), z, decimal=5)
+        gkg = ppmv2gkg(md[:, atmp.H2O], atmp.H2O)
+        z = atmospheric_tickness(p, t, gkg/1000)
+        h = np.array([0.,   0.99705536,   1.9904238,   2.98635587,
+                      3.9884136,   4.98568001,   5.98430371,   6.97583587,
+                      7.96762711,   8.97141576,   9.95671685,  10.95897373,
+                      11.94235997,  12.95659692,  13.9206096,  14.93279803,
+                      15.94893135,  16.92047757,  17.91080171,  18.90666321,
+                      19.89208472,  20.88806132,  21.88441018,  22.86842643,
+                      23.85251614,  24.85011595,  27.3234496,  29.79827113,
+                      32.26783235,  34.73529522,  37.19942755,  39.65669422,
+                      42.1113353,  44.60256935,  47.06868679,  49.48806998,
+                      54.38801236,  59.27146052,  64.14382998,  69.03950383,
+                      73.97963167,  78.84667776,  83.69984482,  88.56755124,
+                      93.4126703,  98.17297656, 102.88137249, 107.51360655,
+                      112.1578853, 116.83331575])
+        assert_almost_equal(h, z, decimal=5)
