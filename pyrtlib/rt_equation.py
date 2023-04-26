@@ -26,7 +26,7 @@ class RTEquation:
     @staticmethod
     def vapor(t: np.ndarray, rh: np.ndarray, ice: Optional[bool] = False) -> Tuple[np.ndarray, np.ndarray]:
         """Compute saturation vapor pressure (es,in mb) over water or ice at
-        temperature tk (kelvins), using the Goff-Gratch formulation (List,1963).
+        temperature t (kelvins), using the Goff-Gratch formulation (List,1963).
 
         Args:
             t (numpy.ndarray): Temperature (K).
@@ -364,7 +364,7 @@ class RTEquation:
         return scld
 
     @staticmethod
-    def planck(frq: np.ndarray, tk: np.ndarray, taulay: np.ndarray) -> Tuple[
+    def planck(frq: np.ndarray, t: np.ndarray, taulay: np.ndarray) -> Tuple[
             np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
         """Computes the modified planck function (equation (4) in [Schroeder-Westwater-1992]_ 
         for the cosmic background temperature, the mean radiating
@@ -376,7 +376,7 @@ class RTEquation:
 
         Args:
             frq (numpy.ndarray): Channel frequency (GHz).
-            tk (numpy.ndarray): Temperature profile (K).
+            t (numpy.ndarray): Temperature profile (K).
             taulay (numpy.ndarray): Number of profile levels.
 
         Returns:
@@ -399,7 +399,7 @@ class RTEquation:
         hvk = np.dot(fHz, h) / k
         # maximum absolute value for exponential function argument
         expmax = 125.0
-        nl = len(tk)
+        nl = len(t)
         tauprof = np.zeros(taulay.shape)
         boftatm = np.zeros(taulay.shape)
         boft = np.zeros(taulay.shape)
@@ -411,10 +411,10 @@ class RTEquation:
             # Adapted from Planck_xxx.m, but from Satellite i-1 becomes i+1
             # taulay changed to i+1, debugged by ISMAR project
             ###########################################################################
-            Ts = tk[0]
-            boft[nl - 1] = tk2b_mod(hvk, tk[nl - 1])
+            Ts = t[0]
+            boft[nl - 1] = tk2b_mod(hvk, t[nl - 1])
             for i in range(nl - 2, -1, -1):
-                boft[i] = tk2b_mod(hvk, tk[i])
+                boft[i] = tk2b_mod(hvk, t[i])
                 boftlay = (boft[i + 1] + np.dot(boft[i],
                            np.exp(-taulay[i+1]))) / (1.0 + np.exp(-taulay[i+1]))
                 batmlay = np.dot(
@@ -436,9 +436,9 @@ class RTEquation:
                 boftotl = boftatm[0]
                 boftmr = boftatm[0]
         else:
-            boft[0] = tk2b_mod(hvk, tk[0])
+            boft[0] = tk2b_mod(hvk, t[0])
             for i in range(1, nl):
-                boft[i] = tk2b_mod(hvk, tk[i])
+                boft[i] = tk2b_mod(hvk, t[i])
                 boftlay = (boft[i - 1] + boft[i] *
                            np.exp(-taulay[i])) / (1.0 + np.exp(-taulay[i]))
                 batmlay = boftlay * \
@@ -574,7 +574,7 @@ class RTEquation:
         return awet, adry
 
     @staticmethod
-    def clearsky_absorption_uncertainty(p: np.ndarray, tk: np.ndarray, e: np.ndarray, frq: np.ndarray, amu: Tuple):
+    def clearsky_absorption_uncertainty(p: np.ndarray, t: np.ndarray, e: np.ndarray, frq: np.ndarray, amu: Tuple):
         nl = len(p)
         awet = np.zeros(p.shape)
         adry = np.zeros(p.shape)
@@ -584,7 +584,7 @@ class RTEquation:
         db2np = np.dot(np.log(10.0), 0.1)
 
         for i in range(0, nl):
-            v = 300.0 / tk[i]
+            v = 300.0 / t[i]
             ekpa = e[i] / 10.0
             pdrykpa = p[i] / 10.0 - ekpa
             npp, ncpp = H2OAbsModel().h2o_uncertainty(pdrykpa, v, ekpa, frq, amu)

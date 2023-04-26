@@ -22,7 +22,7 @@ class TbCloudRTE(object):
     Initialize TbCloudRTE
     """
 
-    def __init__(self, z: np.ndarray, p: np.ndarray, tk: np.ndarray, rh: np.ndarray, frq: np.ndarray,
+    def __init__(self, z: np.ndarray, p: np.ndarray, t: np.ndarray, rh: np.ndarray, frq: np.ndarray,
                  angles: Optional[np.ndarray] = np.array([90.]),
                  o3n: Optional[np.ndarray] = None,
                  amu: Optional[Tuple] = None,
@@ -42,7 +42,7 @@ class TbCloudRTE(object):
         Args:
             z (np.ndarray): Height profile (km).
             p (np.ndarray): Pressure profile (mb).
-            tk (np.ndarray): Temperature profile (K).
+            t (np.ndarray): Temperature profile (K).
             rh (np.ndarray): Relative humidity profile (fraction).
             frq (np.ndarray): Channel frequencies (GHz).
             angles (Optional[np.ndarray], optional): Elevation anglesX (deg).. Defaults to 90.
@@ -59,7 +59,7 @@ class TbCloudRTE(object):
 
         self.z = z
         self.p = p
-        self.tk = tk
+        self.tk = t
         self.rh = rh
         self.frq = frq
         self.angles = angles

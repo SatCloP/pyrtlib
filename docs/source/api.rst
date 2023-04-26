@@ -101,7 +101,7 @@ Example:
 
     from pyrtlib.atmospheric_profiles import AtmosphericProfiles as atmp
 
-    z, p, d, tk, md = atmp.gl_atm(atmp.TROPICAL)
+    z, p, d, t, md = atmp.gl_atm(atmp.TROPICAL)
     # index of available profiles
     atmp.atm_profiles()
     {0: 'Tropical',
