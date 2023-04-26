@@ -19,8 +19,8 @@ coverage:
 # --------------
 # which folders/files to ignore
 ignore:
-  - "tests"
-  - "_lineshape"
+  - "**/tests"
+  - "**/_lineshape"
   - "setup.py"
   - "hello_spectrum.py"
 
