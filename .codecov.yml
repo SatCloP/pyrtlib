@@ -19,8 +19,10 @@ coverage:
 # --------------
 # which folders/files to ignore
 ignore:
-  - "*/tests/.*"
+  - "tests"
+  - "_lineshape"
   - "setup.py"
+  - "hello_spectrum.py"
 
 # Pull request comments:
 # ----------------------
