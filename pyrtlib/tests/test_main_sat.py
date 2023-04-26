@@ -418,7 +418,6 @@ class Test(TestCase):
             os.path.join(THIS_DIR, "data", "tb_tot_rose21sd_RAOB_es.csv"))
         assert_allclose(df.tbtotal, df_expected.tbtotal_igra2_beg2021, atol=0)
 
-    @pytest.mark.skip(reason="skipping")
     def test_pyrtlib_sat_R21SD_ERA5_cloudy(self):
         lonlat = (15.8158, 38.2663)
         nc_file = os.path.join(THIS_DIR, "data", "era5_reanalysis-2019-06-25T12:00:00.nc")
