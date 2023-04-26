@@ -12,56 +12,70 @@
 
 A python package to compute atmospheric radiative transfer model based on the radiative transfer equation (RTE).
 
-![spectrum](resources/spectrum.png)
+![spectrum](resources/spectrum_r22.jpeg)
 
 # Example
 
 For examples of how to use pyrtlib see the [examples gallery](docs/examples). Code can be downloaded both as python script or notebook file.
 
-## Performing calculation of brightness temperature for a model.
-Atmospheric profile definition:
+## Performing calculation of upwelling brightness temperature.
 
 ```python
->>> z, p, _, t, md = atmp.gl_atm(atmp.TROPICAL)
+   from pyrtlib.tb_spectrum import TbCloudRTE
+   from pyrtlib.atmospheric_profiles import AtmosphericProfiles as atmp
+   from pyrtlib.utils import mr2rh, ppmv2gkg
 ```
+Atmospheric profile definition:
+
+```python   
+   z, p, _, t, md = atmp.gl_atm(atmp.MIDLATITUDE_SUMMER)
+```
+
 Units conversion:
-```python
->>> gkg = ppmv2gkg(md[:, atmp.H2O], atmp.H2O)
+
+```python 
+   gkg = ppmv2gkg(md[:, atmp.H2O], atmp.H2O)
 ```
-Relative humidity of H2O (water vapor)
+Relative humidity of :math:`H_2O` (water vapor)
+
 ```python
->>> rh = mr2rh(p, t, gkg)[0] / 100
+   rh = mr2rh(p, t, gkg)[0] / 100
 ```
 Deifinition of angles and frequencies:
-```python
->>> ang = np.array([90.])
->>> frq = np.arange(20, 201, 1)
+
+```python 
+   ang = np.array([90.])
+   frq = np.arange(20, 1001, 1)
 ```
-Initialize parameters:
-```python
->>> rte = TbCloudRTE(z, p, t, rh, frq, ang)
+Initialize parameters for main execution:
+
+```python 
+   rte = TbCloudRTE(z, p, t, rh, frq, ang)
 ```
-Set absorption mofel:
-```python
->>> rte.init_absmdl('R16')
+Set absorption model:
+
+```python 
+   rte.init_absmdl('R22SD')
 ```
-Execute model:
-```python
->>> df = rte.execute()
->>> df.tbtotal
-0      297.391838
-1      296.186240
-2      294.748245
-3      294.953483
-4      296.027799
-         ...
-176    275.997899
-177    276.611319
-178    277.129218
-179    277.566840
-180    277.936645
-Name: tbtotal, Length: 181, dtype: float64
+Execute model by computing upwelling radiances:
+
+```python 
+   df = rte.execute()
+   df.tbtotal
+   0      293.119811
+   1      292.538088
+   2      291.736672
+   3      291.913658
+   4      292.493971
+            ...    
+   976    230.179993
+   977    231.435965
+   978    232.592915
+   979    233.666322
+   980    234.667522
+   Name: tbtotal, Length: 981, dtype: float64
 ```
+
 Preview of the output dataframe:
 |tbtotal|tbatm|tmr|tmrcld|tauwet|taudry|tauliq|tauice|
 |:----|:----|:----|:----|:----|:----|:----|:----|
