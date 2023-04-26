@@ -287,7 +287,7 @@ class TbCloudRTE(object):
         """
 
         # Set RTE
-        RTEquation.from_sat = self._satellite
+        RTEquation._from_sat = self._satellite
 
         # compute vapor pressure and vapor density
         e, rho = RTEquation.vapor(self.tk, self.rh, self.ice)
@@ -313,7 +313,7 @@ class TbCloudRTE(object):
             # handle each frequency
             # this are based on NOAA RTE fortran routines
             for j in range(0, self.nf):
-                RTEquation.emissivity = self._es[j]
+                RTEquation._emissivity = self._es[j]
                 if self._uncertainty:
                     awet, adry = RTEquation.clearsky_absorption_uncertainty(self.p, self.tk, e, self.frq[j], self.amu)
                 else:

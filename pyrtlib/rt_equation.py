@@ -20,8 +20,8 @@ class RTEquation:
     """This class contains the main Radiative Transfer Equation functions.
     """
 
-    from_sat = False
-    emissivity = 1.0
+    _from_sat = False
+    _emissivity = 1.0
 
     @staticmethod
     def vapor(t: np.ndarray, rh: np.ndarray, ice: Optional[bool] = False) -> Tuple[np.ndarray, np.ndarray]:
@@ -404,7 +404,7 @@ class RTEquation:
         boftatm = np.zeros(taulay.shape)
         boft = np.zeros(taulay.shape)
 
-        if RTEquation.from_sat:
+        if RTEquation._from_sat:
             boftotl = 0.0
             ###########################################################################
             # Then compute upwelling radiance
@@ -425,8 +425,8 @@ class RTEquation:
             # The background is a combination of surface emission and downwelling
             # radiance (boftotl) reflected by the surface
             if tauprof[0] < expmax:
-                boftbg = np.dot(RTEquation.emissivity, tk2b_mod(
-                    hvk, Ts)) + np.dot((1 - RTEquation.emissivity), boftotl)
+                boftbg = np.dot(RTEquation._emissivity, tk2b_mod(
+                    hvk, Ts)) + np.dot((1 - RTEquation._emissivity), boftotl)
                 # boftbg_sat  = es * TK2B_mod(hvk,Ts); # SAT: eps * B(Tsrf) + (1-eps) B_dw
                 bakgrnd = np.dot(boftbg, np.exp(-tauprof[0]))
                 boftotl = bakgrnd + boftatm[0]
