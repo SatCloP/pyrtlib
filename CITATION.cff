@@ -1,0 +1,14 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+- family-names: "Salvatore"
+  given-names: "Larosa"
+  orcid: "https://orcid.org/0000-0003-2588-6082"
+- family-names: "Domenico"
+  given-names: "Cimini"
+  orcid: "https://orcid.org/0000-0002-5962-223X"
+title: "A Python-based library for non-scattering atmospheric radiative transfer computations"
+version: 1.3.0
+doi: 10.5281/zenodo.1234
+date-released: 2023-06-30
+url: "https://github.com/slarosa/pyrtlib"
