@@ -9,7 +9,8 @@ jobs:
 
   build_docs_job:
     runs-on: ubuntu-latest
-    steps:      
+    steps:
+      - uses: actions/checkout@v2
       - name: Prereqs
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
