@@ -9,8 +9,8 @@ jobs:
 
   build_docs_job:
     runs-on: ubuntu-latest
-    container: debian:buster-slim
-    steps:
+    # container: debian:buster-slim
+    steps:      
       - name: Prereqs
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
