@@ -63,7 +63,7 @@ extensions = [
     'sphinx.ext.coverage',
     'sphinx_panels',
     # 'sphinx.ext.graphviz',
-    'rst2pdf.pdfbuilder',
+    # 'rst2pdf.pdfbuilder',
     # 'autoapi.extension'
     # "sphinx.ext.linkcode",
     # 'myst_parser',
