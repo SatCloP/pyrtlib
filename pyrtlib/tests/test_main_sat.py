@@ -20,17 +20,11 @@ THIS_DIR = os.path.dirname(os.path.abspath(__file__))
 class Test(TestCase):
 
     # @pytest.mark.datafiles(DATA_DIR)
-    @pytest.mark.skip(reason="skipping")
     def test_pyrtlib_sat_R19SD_atm(self):
-        d = {'tropical': atmp.TROPICAL,
-             'midlat_summer': atmp.MIDLATITUDE_SUMMER,
-             'midlat_winter': atmp.MIDLATITUDE_WINTER,
-             'subarctic_summer': atmp.SUBARCTIC_SUMMER,
-             'subarctic_winter': atmp.SUBARCTIC_WINTER,
-             'us_standard': atmp.US_STANDARD}
+        d = atmp.atm_profiles()
 
         for k, v in d.items():
-            z, p, _, t, md = atmp.gl_atm(v)
+            z, p, _, t, md = atmp.gl_atm(k)
 
             gkg = ppmv2gkg(md[:, atmp.H2O], atmp.H2O)
             rh = mr2rh(p, t, gkg)[0] / 100
@@ -42,8 +36,8 @@ class Test(TestCase):
             rte.init_absmdl('R19SD')
             df = rte.execute()
 
-            df_expected = pd.read_csv(os.path.join(THIS_DIR, "data", "tbtotal_atm_R19SD.csv"))
-            assert_allclose(df.tbtotal, df_expected[k], atol=0)
+            df_expected = pd.read_csv(os.path.join(THIS_DIR, "data", "tbtotal_atm_rose19sd.csv"))
+            assert_allclose(df.tbtotal, df_expected[v.lower().replace(" ", "_")], atol=0)
 
     # @pytest.mark.datafiles(DATA_DIR)
     @pytest.mark.skip(reason="skipping")
