@@ -1,9 +1,9 @@
-##############
+==============
 API references
-##############
+==============
 
 Main class
-====================
+==========
 
 The main class which computes brightness temperatures (Tb), mean
 radiating temperature (Tmr), and integrated absorption (Tau) for 
@@ -13,35 +13,60 @@ that the original TBMODEL, Cyber Version, returned.
 .. autosummary::
     :toctree: generated/
 
-    pyrtlib.main.BTCloudRTE
+    pyrtlib.tb_spectrum.TbCloudRTE
 
-Example
-.......
 
-.. code-block:: python
+Example:
 
-    from pyrtlib.main import BTCloudRTE
+Compute downwelling (:code:`rte.satellite == False`) brightness temperature for a typical Tropical Atmosphere, using emissivity surface.
 
-    rte = BTCloudRTE(z, p, t, rh, frq, ang)
-    rte.init_absmdl('rose19sd')
-    rte.satellite = True
-    rte.emissivity = 0.6
+.. plot::
+    :include-source: true
+
+    from pyrtlib.tb_spectrum import TbCloudRTE
+    from pyrtlib.atmospheric_profiles import AtmosphericProfiles as atmp
+    from pyrtlib.utils import ppmv2gkg, mr2rh
+
+    z, p, _, t, md = atmp.gl_atm(atmp.TROPICAL)
+    gkg = ppmv2gkg(md[:, atmp.H2O], atmp.H2O)
+    rh = mr2rh(p, t, gkg)[0] / 100
+
+    ang = np.array([90.])
+    frq = np.arange(20, 201, 1)
+
+    rte = TbCloudRTE(z, p, t, rh, frq, ang)
+    rte.init_absmdl('R19SD')
+    rte.satellite = False
+    rte.emissivity = 0.8
     df = rte.execute()
+    df = df.set_index(frq)
+    df.tbtotal.plot(figsize=(12,8), xlabel="Frequency [GHz]", ylabel="Brightness Temperature [K]")
 
-Also, it is possible to execute a combination of absorption models. The following example use :code:`rose19sd` model for :math:`O_2` and
-:code:`rose16` for :math:`H_2O`:
+Also, it is possible to execute a combination of absorption models. The following example use :code:`R19SD` model for :math:`O_2` and
+:code:`R16` for :math:`H_2O`: to compute upwelling brightness temperature.
 
-.. code-block:: python
+.. plot::
+    :include-source: true
 
-    from pyrtlib.main import BTCloudRTE
-    from pyrtlib.utils import import_lineshape
-    from pyrtlib.absmodel import H2OAbsModel, O2AbsModel
+    from pyrtlib.tb_spectrum import TbCloudRTE
+    from pyrtlib.absorption_model import H2OAbsModel
+    from pyrtlib.atmospheric_profiles import AtmosphericProfiles as atmp
+    from pyrtlib.utils import ppmv2gkg, mr2rh
 
-    rte = BTCloudRTE(z, p, t, rh, frq, ang)
-    rte.init_absmdl('rose19sd')
-    H2OAbsModel.model = 'rose16'
-    H2OAbsModel.h2oll = import_lineshape('h2oll_{}'.format(H2OAbsModel.model))
+    z, p, _, t, md = atmp.gl_atm(atmp.TROPICAL)
+    gkg = ppmv2gkg(md[:, atmp.H2O], atmp.H2O)
+    rh = mr2rh(p, t, gkg)[0] / 100
+
+    ang = np.array([90.])
+    frq = np.arange(20, 201, 1)
+
+    rte = TbCloudRTE(z, p, t, rh, frq, ang)
+    rte.init_absmdl('R19SD')
+    H2OAbsModel.model = 'R16'
+    H2OAbsModel.set_ll()
     df = rte.execute()
+    df = df.set_index(frq)
+    df.tbtotal.plot(figsize=(12,8), xlabel="Frequency [GHz]", ylabel="Brightness Temperature [K]")
 
 
 Standard Atmospheric Profiles
@@ -67,25 +92,30 @@ Plus suplimental profiles where available.
 .. autosummary::
     :toctree: generated/
 
-    pyrtlib.atmp.AtmosphericProfiles
+    pyrtlib.atmospheric_profiles.AtmosphericProfiles
 
 
-Example
-.......
+Example:
 
 .. code-block:: python
 
-    from pyrtlib.atmp import AtmosphericProfiles as atmp
+    from pyrtlib.atmospheric_profiles import AtmosphericProfiles as atmp
 
-    z, p, d, tk, md = atmp.gl_atm(atmp.TROPICAL)
+    z, p, d, t, md = atmp.gl_atm(atmp.TROPICAL)
     # index of available profiles
     atmp.atm_profiles()
+    {0: 'Tropical',
+     1: 'Midlatitude Summer',
+     2: 'Midlatitude Winter',
+     3: 'Subarctic Summer',
+     4: 'Subarctic Winter',
+     5: 'US Standard'}
 
 
 Radiative Transfer Equation
 ===========================
 
-RTE functions called from :py:class:`pyrtlib.rte.RTEquation`:
+RTE functions called from :py:class:`pyrtlib.rt_equation.RTEquation`:
 
 * :code:`bright` = compute temperature for the modified Planck radiance 
 * :code:`cloudy_absorption`   = computes cloud (liquid and ice) absorption profiles
@@ -102,7 +132,7 @@ RTE functions called from :py:class:`pyrtlib.rte.RTEquation`:
 .. autosummary::
     :toctree: generated/
 
-    pyrtlib.rte.RTEquation
+    pyrtlib.rt_equation.RTEquation
 
 
 Absorption Models
@@ -113,15 +143,32 @@ collision-induced power absorption coefficient (neper/km) in air ("dry continuum
 
 .. autosummary::
     :toctree: generated/
-    :template: custom-class-template.rst
 
-    pyrtlib.absmodel.AbsModel
-    pyrtlib.absmodel.H2OAbsModel
-    pyrtlib.absmodel.O2AbsModel
-    pyrtlib.absmodel.O3AbsModel
-    pyrtlib.absmodel.N2AbsModel
-    pyrtlib.absmodel.LiqAbsModel
+    pyrtlib.absorption_model.AbsModel
+    pyrtlib.absorption_model.H2OAbsModel
+    pyrtlib.absorption_model.O2AbsModel
+    pyrtlib.absorption_model.O3AbsModel
+    pyrtlib.absorption_model.N2AbsModel
+    pyrtlib.absorption_model.LiqAbsModel
 
+To get all implemented models use the following code:
+
+.. code-block:: python
+
+    from pyrtlib.absorption_model import AbsModel
+
+    AbsModel.implemented_models()
+    ['R98',
+     'R03',
+     'R16',
+     'R17',
+     'R19',
+     'R19SD',
+     'R20',
+     'R20SD',
+     'R21SD',
+     'R22SD',
+     'MAKAROV11']
 
 Utility Functions
 =================
@@ -130,31 +177,38 @@ The utils module contains funtions of general utility used in multiple places th
  
 .. autosummary::
     :toctree: generated/
-    :template: custom-module-template.rst   
+    :template: custom-module-template.rst
 
     pyrtlib.utils
 
 
-Line Shape
+Uncertainty
 ===========
+
+This module has some tool to compute the absorption model sensitivity to the uncertainty of spectroscopic parameters, 
+with the purpose of identifying the most significant contributions to the total uncertainty of modeled upwelling/downwelling
+brightness temperture.
 
 .. autosummary::
     :toctree: generated/
     :template: custom-module-template.rst
 
-    pyrtlib.lineshape
-    pyrtlib.absmod_uncertainty
+    pyrtlib.uncertainty.absmod_uncertainty
 
 
 API Web Services
 ================
 Observations dataset web services which may be used in pyrtlib. 
-Available datasets are the Wyoming Upper Air Archive (University of Wyoming) or the 
+Available datasets are the Wyoming Upper Air Archive (University of Wyoming), NCEI’s Integrated Radiosonde Archive version 2 (IGRA2) or the 
 ERA5 Reanalysis model data (Copernicus Climate Change Service). See examples to get started to use these services.
+
+.. note::
+    Parts of the code have been reused from the `Siphon <https://github.com/Unidata/siphon>`_ library.
 
 .. autosummary::
     :toctree: generated/
 
     pyrtlib.apiwebservices.WyomingUpperAir
+    pyrtlib.apiwebservices.IGRAUpperAir
     pyrtlib.apiwebservices.ERA5Reanalysis
     

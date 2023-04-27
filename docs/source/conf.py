@@ -10,53 +10,75 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
-# import os
-# import sys
+import os
+import sys
+from pathlib import Path
 # sys.path.insert(0, os.path.abspath('.'))
 import warnings
+from datetime import datetime
 from sphinx_gallery.sorting import FileNameSortKey
 
+cwd = Path.cwd().resolve()
+sys.path.insert(0, str(cwd))
+sys.path.insert(0, str(cwd.parent.parent))
 
 # -- Project information -----------------------------------------------------
-
+cur_date = datetime.utcnow()
 project = 'pyrtlib'
-copyright = '2021, CNR-IMAA'
+copyright = f'2021-{cur_date:%Y}, SatCloP - CNR-IMAA'
 author = 'Salvatore Larosa'
 
 # The full version, including alpha/beta/rc tags
-release = '1.0.0'
+import pyrtlib # isort:skip
+version = str(pyrtlib.__version__)
+release = version
+switcher_version = version
 
 # -- General configuration ---------------------------------------------------
-
+exclude_patterns = [
+    "**.ipynb_checkpoints",
+    # to ensure that include files (partial pages) aren't built, exclude them
+    # https://github.com/sphinx-doc/sphinx/issues/1965#issuecomment-124732907
+    "**/includes/**",
+]
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
+    'matplotlib.sphinxext.plot_directive',
     'sphinx.ext.autodoc',
+    "sphinx_copybutton",
     'sphinx.ext.mathjax',
-    'sphinx.ext.viewcode',
+    #'sphinx.ext.viewcode',
     'sphinx.ext.intersphinx',
     'sphinx.ext.extlinks',
     'sphinx.ext.napoleon',
     'sphinx.ext.autosummary',
     # 'sphinx.ext.doctest',
-    # 'sphinx_toggleprompt',
+    'sphinx_toggleprompt',
     'sphinx.ext.todo',
     'sphinx.ext.githubpages',
     'nbsphinx',
     'sphinx_gallery.gen_gallery',
     'sphinx.ext.coverage',
-    'sphinx.ext.graphviz',
+    'sphinx_panels',
+    # 'sphinx.ext.graphviz',
     # 'rst2pdf.pdfbuilder',
+    # 'autoapi.extension'
+    # "sphinx.ext.linkcode",
+    # 'myst_parser',
+    # 'myst_nb'
 ]
 
+toggleprompt_offset_right = 35
+
 # Configuration of sphinx.ext.coverage
-coverage_show_missing_items = True
+# coverage_show_missing_items = True
 
 # graphviz configuration output format
-graphviz_output_format = 'svg'
+# graphviz_output_format = 'svg'
 
-# pdf_documents = [('index', u'rst2pdf', project + u'Documentation', u'Salvatore Larosa'),]
+pdf_documents = [('index', u'rst2pdf', project + u'Documentation', u'Salvatore Larosa'),]
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -71,25 +93,54 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store', '**.ipynb_checkpoints']
 #
 # This is also used if you do content translation via gettext catalogs.
 # Usually you set "language" from the command line for these cases.
-language = None
+language = 'en'
 
 # -- Options for HTML output -------------------------------------------------
-
+# sphinx-panels shouldn't add bootstrap css since the pydata-sphinx-theme
+# already loads it
+panels_add_bootstrap_css = False
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = 'sphinx_rtd_theme'
-
+html_theme = "pydata_sphinx_theme"
+html_show_sourcelink = False
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
 
-html_logo = "../../resources/logo/logo_white_large.png"
+# add_module_names = False
+
+html_favicon = str(Path('_static') / 'thumb_logo.svg')
+# html_logo = "../../resources/logo/logo_white_large_new.png"
 html_theme_options = {
-    'logo_only': False,
-    'display_version': True,
+    "external_links": [],
+    "switcher": {
+        "json_url": str(Path('_static') / 'versions.json'),
+        "version_match": switcher_version,
+    },
+    "announcement": "Official PyRTLib Documentation ",
+    "logo": {
+        "image_light": str(Path('_static') / 'thumb_logo.png'),
+        "image_dark": str(Path('_static') / 'thumb_white_logo.png'),
+        "text": "PyRTLib",
+    },
+    "show_prev_next": False,
+    "navbar_start": ["navbar-logo"],
+    # "navbar_align": "content",
+    "navbar_end": ["version-switcher", "theme-switcher", "navbar-icon-links"],
+    "github_url": "https://github.com/slarosa/pyrtlib",
+    "secondary_sidebar_items": "page-toc.html",
+    "footer_start": ["copyright"],
+    "footer_end": ["sphinx-version"],
 }
+
+# html_sidebars = {
+#     "index": [
+#         "sidebar_versions.html",
+#     ],
+#     # '**': ['localtoc.html', 'pagesource.html']
+# }
 
 # A list of files that should not be packed into the epub file.
 epub_exclude_files = ['search.html']
@@ -100,10 +151,10 @@ autosummary_generate = True
 
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
-man_pages = [
-    ('index', 'pyrtlib', 'pyrtlib Documentation',
-     ['Andrew Collette and contributors'], 1)
-]
+# man_pages = [
+#     ('index', 'pyrtlib', 'pyrtlib Documentation',
+#      ['Andrew Collette and contributors'], 1)
+# ]
 
 # If true, show URL addresses after external links.
 # man_show_urls = False
@@ -113,8 +164,12 @@ man_pages = [
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
     ('index', 'pyrtlib.tex', 'pyrtlib Documentation',
-     'Salvatore Larosa and contributors', 'manual'),
+     'Salvatore Larosa, Doemnico Cimini and contributors', 'manual'),
 ]
+latex_engine = 'xelatex'
+# The name of an image file (relative to this directory) to place at the top of
+# the title page.
+latex_logo = None
 
 # -- Options for Texinfo output -------------------------------------------
 
@@ -127,6 +182,9 @@ texinfo_documents = [
      'Miscellaneous'),
 ]
 
+# html_css_files = [
+#     "pyrtlib.css",
+# ]
 # # == Disable search functionality for html
 # def on_builder_inited(app):
 #     if app.builder.name == 'html':
@@ -142,6 +200,8 @@ def setup(app):
     # Override footnote callout CSS to be normal text instead of superscript
     # In-line links to references as numbers in brackets.
     app.add_css_file("refs_format.css")
+    app.add_css_file("pyrtlib.css")
+    app.registry.source_suffix.pop(".ipynb", None)
 
 # suppress "WARNING: Footnote [1] is not referenced." messages
 # https://github.com/pvlib/pvlib-python/issues/837
@@ -149,11 +209,14 @@ suppress_warnings = ['ref.footnote']
 
 # settings for sphinx-gallery
 sphinx_gallery_conf = {
-    'examples_dirs': ['../examples'],  # location of gallery scripts
-    'gallery_dirs': ['auto_examples'],  # location of generated output
+    'examples_dirs': [str(cwd.parent / 'script_examples')],  # location of gallery scripts
+    'gallery_dirs': ['examples'],  # location of generated output
+    'filename_pattern': r'\.py',
     # sphinx-gallery only shows plots from plot_*.py files by default:
     # 'filename_pattern': '*.py',
     'within_subsection_order': FileNameSortKey,
+    'default_thumb_file': str(Path('_static') / 'thumb_logo.png'),
+    'abort_on_example_error': True,
 
     # directory where function/class granular galleries are stored
     'backreferences_dir': 'generated/gallery_backreferences',
@@ -168,111 +231,108 @@ warnings.filterwarnings("ignore", category=UserWarning,
                         message='Matplotlib is currently using agg, which is a'
                                 ' non-GUI backend, so cannot show the figure.')
 
-import os
-import sys
-
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 # on_rtd is whether we are on readthedocs.org
-on_rtd = os.environ.get('READTHEDOCS', None) == 'True'
+# on_rtd = os.environ.get('READTHEDOCS', None) == 'True'
 
-if not on_rtd:  # only import and set the theme if we're building docs locally
-    import sphinx_rtd_theme
+# if not on_rtd:  # only import and set the theme if we're building docs locally
+#     import sphinx_rtd_theme
 
-    html_theme = 'sphinx_rtd_theme'
-    html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
-else:
-    html_theme = 'default'
+#     html_theme = 'sphinx_rtd_theme'
+#     html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
+# else:
+#     html_theme = 'default'
 
 # add sourcecode to path
-sys.path.insert(0, os.path.abspath('../../'))
+# sys.path.insert(0, os.path.abspath('../../'))
 
-############################
-# SETUP THE RTD LOWER-LEFT #
-############################
+# ############################
+# # SETUP THE RTD LOWER-LEFT #
+# ############################
 
 # The master toctree document.
 master_doc = 'index'
 
-try:
-    html_context
-except NameError:
-    html_context = dict()
-html_context['display_lower_left'] = True
+# try:
+#     html_context
+# except NameError:
+#     html_context = dict()
+# html_context['display_lower_left'] = True
 
-if 'REPO_NAME' in os.environ:
-    REPO_NAME = os.environ['REPO_NAME']
-else:
-    REPO_NAME = ''
+# if 'REPO_NAME' in os.environ:
+#     REPO_NAME = os.environ['REPO_NAME']
+# else:
+#     REPO_NAME = ''
 
-# SET CURRENT_LANGUAGE
-if 'current_language' in os.environ:
-    # get the current_language env var set by buildDocs.sh
-    current_language = os.environ['current_language']
-else:
-    # the user is probably doing `make html`
-    # set this build's current language to english
-    current_language = 'en'
+# # SET CURRENT_LANGUAGE
+# if 'current_language' in os.environ:
+#     # get the current_language env var set by buildDocs.sh
+#     current_language = os.environ['current_language']
+# else:
+#     # the user is probably doing `make html`
+#     # set this build's current language to english
+#     current_language = 'en'
 
-# tell the theme which language to we're currently building
-html_context['current_language'] = 'en'
+# # tell the theme which language to we're currently building
+# html_context['current_language'] = 'en'
 
-# SET CURRENT_VERSION
-from git import Repo
+# # SET CURRENT_VERSION
+# from git import Repo
 
-repo = Repo(search_parent_directories=True)
+# repo = Repo(search_parent_directories=True)
 
-if 'current_version' in os.environ:
-    # get the current_version env var set by buildDocs.sh
-    current_version = os.environ['current_version']
-else:
-    # the user is probably doing `make html`
-    # set this build's current version by looking at the branch
-    current_version = repo.active_branch.name
+# if 'current_version' in os.environ:
+#     # get the current_version env var set by buildDocs.sh
+#     current_version = os.environ['current_version']
+# else:
+#     # the user is probably doing `make html`
+#     # set this build's current version by looking at the branch
+#     current_version = repo.active_branch.name
 
-# tell the theme which version we're currently on ('current_version' affects
-# the lower-left rtd menu and 'version' affects the logo-area version)
-html_context['current_version'] = current_version
-html_context['version'] = current_version
+# # tell the theme which version we're currently on ('current_version' affects
+# # the lower-left rtd menu and 'version' affects the logo-area version)
+# html_context['current_version'] = current_version
+# html_context['version'] = current_version
 
-# POPULATE LINKS TO OTHER LANGUAGES
-html_context['languages'] = [('en', '/' + REPO_NAME + '/en/' + current_version + '/')]
+# # POPULATE LINKS TO OTHER LANGUAGES
+# html_context['languages'] = [('en', '/' + REPO_NAME + '/en/' + current_version + '/')]
 
-# languages = [lang.name for lang in os.scandir('locales') if lang.is_dir()]
-# for lang in languages:
-#    html_context['languages'].append( (lang, '/' +REPO_NAME+ '/' +lang+ '/' +current_version+ '/') )
+# # languages = [lang.name for lang in os.scandir('locales') if lang.is_dir()]
+# # for lang in languages:
+# #    html_context['languages'].append( (lang, '/' +REPO_NAME+ '/' +lang+ '/' +current_version+ '/') )
 
-# POPULATE LINKS TO OTHER VERSIONS
-html_context['versions'] = list()
+# # POPULATE LINKS TO OTHER VERSIONS
+# html_context['versions'] = list()
 
-versions = [branch.name for branch in repo.branches]
-for version in versions:
-    if version != 'gh-pages':
-        html_context['versions'].append((version, '/' + REPO_NAME + '/' + current_language + '/' + version + '/'))
+# versions = [branch.name for branch in repo.branches]
+# for version in versions:
+#     if version != 'gh-pages':
+#         html_context['versions'].append((version, '/' + REPO_NAME + '/' + current_language + '/' + version + '/'))
 
-# settings for creating PDF with rinoh
-# rinoh_documents = [(
-#  master_doc,
-#  'target',
-#  project+ ' Documentation',
-#  '© ' +copyright,
-# )]
-# today_fmt = "%B %d, %Y"
+# # settings for creating PDF with rinoh
+# # rinoh_documents = [(
+# #  master_doc,
+# #  'target',
+# #  project+ ' Documentation',
+# #  '© ' +copyright,
+# # )]
+# # today_fmt = "%B %d, %Y"
 
-# settings for EPUB
-epub_basename = project
+# # settings for EPUB
+# epub_basename = project
 
-html_context['downloads'] = list()
-html_context['downloads'].append(('pdf',
-                                  '/' + REPO_NAME + '/' + current_language + '/' + current_version + '/' + project + '-docs_' + current_language + '_' + current_version + '.pdf'))
+# html_context['downloads'] = list()
+# html_context['downloads'].append(('pdf',
+#                                   '/' + REPO_NAME + '/' + current_language + '/' + current_version + '/' + project + '-docs_' + current_language + '_' + current_version + '.pdf'))
 
-html_context['downloads'].append(('epub',
-                                  '/' + REPO_NAME + '/' + current_language + '/' + current_version + '/' + project + '-docs_' + current_language + '_' + current_version + '.epub'))
+# html_context['downloads'].append(('epub',
+#                                   '/' + REPO_NAME + '/' + current_language + '/' + current_version + '/' + project + '-docs_' + current_language + '_' + current_version + '.epub'))
 
-html_context['display_github'] = True
-html_context['github_user'] = 'slarosa'
-html_context['github_repo'] = 'pyrtlib'
-html_context['github_version'] = 'main/docs/'
+# html_context['display_github'] = True
+# html_context['github_user'] = 'slarosa'
+# html_context['github_repo'] = 'pyrtlib'
+# html_context['github_version'] = 'main/docs/'
 
 # Napoleon stuff
 #
@@ -338,6 +398,23 @@ intersphinx_mapping = {
     'numpy': ('http://docs.scipy.org/doc/numpy', None),
 }
 
+# Turn off code and image links for embedded mpl plots
+plot_html_show_source_link = False
+plot_html_show_formats = False
+plot_formats = ['png']
+plot_rcparams = {'savefig.bbox': 'tight'}
+
+# The suffix of source filenames.
+source_suffix = ['.rst', '.md']
+source_encoding = "utf-8"
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = 'default'
 highlight_language = 'python3'
+
+# def linkcode_resolve(domain, info):
+#     if domain != 'py':
+#         return None
+#     if not info['module']:
+#         return None
+#     filename = info['module'].replace('.', '/')
+#     return "https://somesite/sourcerepo/%s.py" % filename

@@ -17,12 +17,15 @@ from typing import Optional, Tuple
 try:
     import cdsapi
 except ModuleNotFoundError as e:
-    warnings.warn("Module CDSAPI must be installed to download ERA5 Reanalysis dataset.")
+    warnings.warn(
+        "Module CDSAPI must be installed to download ERA5 Reanalysis dataset.")
 import numpy as np
+# from scipy.spatial import cKDTree
+from sklearn.neighbors import BallTree, KDTree
 import pandas as pd
 from netCDF4 import Dataset
 
-from ..utils import pressure_to_height
+from ..utils import atmospheric_tickness
 
 
 class ERA5Reanalysis:
@@ -46,23 +49,27 @@ class ERA5Reanalysis:
         nc = Dataset(file)
         lats = nc.variables['latitude'][:]
         lons = nc.variables['longitude'][:]
-        idx_lat = ERAFIVE.find_nearest(lats, lonlat[1])
-        idx_lon = ERAFIVE.find_nearest(lons, lonlat[0])
+        # idx_lat = ERAFIVE.find_nearest(lats, lonlat[1])
+        # idx_lon = ERAFIVE.find_nearest(lons, lonlat[0])
+        idx, dist = ERAFIVE._find_nearest(lons, lats, lonlat)
 
         pres = np.asarray(nc.variables['level'][:])
-        temp = np.asarray(nc.variables['t'][:, :, idx_lat, idx_lon])
-        rh = np.asarray(nc.variables['r'][:, :, idx_lat, idx_lon]) / 100 # RH in decimal
-        clwc = np.asarray(nc.variables['clwc'][:, :, idx_lat, idx_lon])
-        ciwc = np.asarray(nc.variables['ciwc'][:, :, idx_lat, idx_lon])
-        crwc = np.asarray(nc.variables['crwc'][:, :, idx_lat, idx_lon])
-        cswc = np.asarray(nc.variables['cswc'][:, :, idx_lat, idx_lon])
-        q = np.asarray(nc.variables['q'][:, :, idx_lat, idx_lon])
+        temp = np.asarray(nc.variables['t'][:, :, idx, idx])
+        # RH in decimal
+        rh = np.asarray(nc.variables['r'][:, :, idx, idx]) / 100
+        clwc = np.asarray(nc.variables['clwc'][:, :, idx, idx])
+        ciwc = np.asarray(nc.variables['ciwc'][:, :, idx, idx])
+        crwc = np.asarray(nc.variables['crwc'][:, :, idx, idx])
+        cswc = np.asarray(nc.variables['cswc'][:, :, idx, idx])
+        q = np.asarray(nc.variables['q'][:, :, idx, idx])
 
-        z = pressure_to_height(pres) / 1000 # Altitude in km
-        date = pd.to_datetime(nc.variables['time'][:], origin='1900-01-01 00:00:00.0', unit='h')
+        z = atmospheric_tickness(np.flip(pres), np.flip(temp[0]), np.flip(q[0]))  # Altitude in km
+
+        date = pd.to_datetime(
+            nc.variables['time'][:], origin='1900-01-01 00:00:00.0', unit='h')
 
         df = pd.DataFrame({'p': np.flip(pres),
-                           'z': np.flip(z),
+                           'z': z,
                            't': np.flip(temp[0]),
                            'rh': np.flip(rh[0]),
                            'clwc': np.flip(clwc[0]),
@@ -70,12 +77,12 @@ class ERA5Reanalysis:
                            'crwc': np.flip(crwc[0]),
                            'cswc': np.flip(cswc[0]),
                            'q': np.flip(q[0]),
-                           'time': np.repeat(date, len(z))
+                           'time': np.repeat(date, len(pres))
                            })
+        
+        return df  # , (idx, dist), np.stack((lons, lats))
 
-        return df
-
-    def find_nearest(self, array, value):
+    def _find_nearest(self, lons, lats, point):
         """Find index of nearest coordinate
 
         Args:
@@ -85,29 +92,45 @@ class ERA5Reanalysis:
         Returns:
             [type]: [description]
         """
-        idx = np.searchsorted(array, value, side="left")
-        if np.amax(array) < value < np.amin(array):
-            warnings.warn('Out of boundingbox: value {} is out of dataset extent'.format(value))
-        if idx > 0 and (idx == len(array) or math.fabs(value - array[idx - 1]) < math.fabs(value - array[idx])):
-            return idx - 1
-        else:
-            return idx
+        # idx = np.searchsorted(array, value, side="left")
+        # if np.amax(array) < value < np.amin(array):
+        #     warnings.warn('Out of boundingbox: value {} is out of dataset extent'.format(value))
+        # if idx > 0 and (idx == len(array) or math.fabs(value - array[idx - 1]) < math.fabs(value - array[idx])):
+        #     return idx - 1
+        # else:
+        #     return idx
+
+        # scipy
+        # combined_x_y_arrays = np.dstack([lats.ravel(), lons.ravel()])[0]
+        # # points = list(point.transpose())
+        #
+        # mytree = cKDTree(combined_x_y_arrays)
+        # dist, indexes = mytree.query(point)
+
+        ball = BallTree(np.radians(
+            np.stack((lats, lons), axis=-1)), metric='haversine')
+        dist, indexes = ball.query(np.radians(
+            np.array(np.flip(point)).reshape(1, 2)), k=1)
+
+        return indexes[0][0], dist
 
     @staticmethod
-    def request_data(path: str, time: datetime, lonlat: tuple, offset: Optional[np.float] = 0.3) -> str:
+    def request_data(path: str, time: datetime, lonlat: tuple, resolution: Optional[float] = 0.25, offset: Optional[float] = 0.4) -> str:
         """Download ERA5Reanalysis data from the Copernicus Climate Change Service.
 
         Args:
             path (str): The output directory
             time (datetime): The date and time of the desired observation.
             lonlat (tuple): The coordinatre in degrees, longitude and latitude
-            offset (Optional[np.float], optional): The offset to apply to coordinates to get the extent. Defaults to 0.3.
+            resolution (Optional[float], optional): The pixel size of the requested grid data. Defaults to 0.25.
+            offset (Optional[float], optional): The offset to apply to coordinates to get the extent. Defaults to 0.3.
 
         Returns:
             str: The path to downloaded netcdf file
         """
         # North, West, South, Est
-        extent = [lonlat[1] + offset, lonlat[0] - offset, lonlat[1] - offset, lonlat[0] + offset]
+        extent = [lonlat[1] + offset, lonlat[0] - offset,
+                  lonlat[1] - offset, lonlat[0] + offset]
         nc_file_name = 'era5_reanalysis-{}.nc'.format(time.isoformat())
         nc_file = os.path.join(path, nc_file_name)
 
@@ -130,7 +153,7 @@ class ERA5Reanalysis:
                 'day': time.day,
                 'time': '{}:00'.format(time.hour),
                 'area': extent,
-                'grid': [0.25, 0.25],
+                'grid': [resolution, resolution],
                 'format': 'netcdf',
             },
             nc_file)

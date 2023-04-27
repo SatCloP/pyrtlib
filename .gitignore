@@ -1,3 +1,5 @@
+~*
+.DS_Store
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -137,3 +139,11 @@ console*
 
 # VScode
 .vscode/
+
+# Spinx doc
+*.swp
+docs/_build
+docs/build/doctrees/
+docs/source/_build/
+docs/source/generated/
+docs/source/examples/

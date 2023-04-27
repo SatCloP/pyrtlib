@@ -15,12 +15,11 @@ coverage:
   round: down       # up, down, or nearest
   precision: 2      # Number of decimal places, between 0 and 5
 
-# Ignoring Paths
-# --------------
-# which folders/files to ignore
-ignore:
-  - "*/tests/.*"
-  - "setup.py"
+  ignore:
+    - "**/tests/**"
+    - "**/_lineshape/**"
+    - "setup.py"
+    - "hello_spectrum.py"
 
 # Pull request comments:
 # ----------------------

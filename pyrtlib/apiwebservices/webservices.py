@@ -13,6 +13,8 @@ from requests.sessions import Session
 
 from ..version import __version__
 
+HTTPError = requests.HTTPError
+
 
 class HTTPSessionManager(object):
     """Manage the creation of sessions for HTTP access."""
