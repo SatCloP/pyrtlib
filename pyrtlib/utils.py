@@ -291,7 +291,7 @@ def mr2rho(mr: np.ndarray, t: np.ndarray, p: np.ndarray) -> np.ndarray:
     # I think the above is an approximation valid within ~1#.
     # To be consistent with Vapor_xxx.m and mr2rh.m (see
     # Compute_Transmittances_for_RTTOV_dsb.m), it should be:
-    rvap = np.dot(constants('Rwatvap'), 1e-05)
+    rvap = np.dot(constants('Rwatvap')[0], 1e-05)
 
     eps = 0.621970585
     rho = np.multiply(np.multiply(mr, p), 1.0) / (np.dot(
