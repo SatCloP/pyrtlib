@@ -20,6 +20,7 @@ ignore:
   - "**/_lineshape/**"
   - "setup.py"
   - "hello_spectrum.py"
+  - "**/apiwebservices/eps_sandbox.py" # not implemented yet
 
 # Pull request comments:
 # ----------------------

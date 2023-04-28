@@ -12,9 +12,9 @@ References
 
 .. [PAYNE] Payne, V. H., Mlawer, E. J., Cady-Pereira, K. E., and Moncet, J.-L.: Water vapor continuum absorption in the microwave, IEEE T. Geosci. Remote, 49, 2194–2208, https://doi.org/10.1109/TGRS.2010.2091416, 2011.
 
-.. [AUGUST] Alduchov, O. A., and R. E. Eskridge, 1996: Improved Magnus' form approximation of saturation vapor pressure. J. Appl. Meteor., 35, 601–609, http://journals.ametsoc.org/doi/abs/10.1175/1520-0450%281996%29035%3C0601%3AIMFAOS%3E2.0.CO%3B2.
+.. [August-1828] Alduchov, O. A., and R. E. Eskridge, 1996: Improved Magnus' form approximation of saturation vapor pressure. J. Appl. Meteor., 35, 601–609, http://journals.ametsoc.org/doi/abs/10.1175/1520-0450%281996%29035%3C0601%3AIMFAOS%3E2.0.CO%3B2.
 
-.. [MAGNUS] Magnus, G., 1844: Versuche über die Spannkräfte des Wasserdampfs. Ann. Phys. Chem., 61, 225 – 247, http://onlinelibrary.wiley.com/doi/10.1002/andp.18441370202/abstract.
+.. [Magnus-1844] Magnus, G., 1844: Versuche über die Spannkräfte des Wasserdampfs. Ann. Phys. Chem., 61, 225 – 247, http://onlinelibrary.wiley.com/doi/10.1002/andp.18441370202/abstract.
 
 .. [Bean-Dutton] Bradford R. Bean, E. J. Dutton: Radio Meteorology - Superintendentof Documents, U.S.GovernmentPrint.Office, 1966 - 435 pagine, https://books.google.it/books?id=Jw9RAAAAMAAJ&printsec=frontcover&hl=it&source=gbs_ge_summary_r&cad=0#v=onepage&q&f=false.
 
@@ -59,3 +59,5 @@ References
 .. [Turner-2009] Turner, D. D., Cadeddu, M. P., Löhnert, U., Crewell, S., and Vogelmann, A. M.: Modifications to the Water Vapor Continuum in the Microwave Suggested by Ground-Based 150-GHz Observations, IEEE T. Geosci. Remote, 47, 3326–3337, https://doi.org/10.1109/TGRS.2009.2022262, 2009.
 
 .. [Tretyakov-2016] Tretyakov, M. Yu.: Spectroscopy underlying microwave remote sensing of atmospheric water vapor, J. Mol. Spectrosc., 328, 7–26, https://doi.org/10.1016/j.jms.2016.06.006, 2016. 
+
+.. [Alduchov-1996] Alduchov, O. A., and R. E. Eskridge, 1996: Improved Magnus Form Approximation of Saturation Vapor Pressure. J. Appl. Meteor. Climatol., 35, 601–609, https://doi.org/10.1175/1520-0450(1996)035<0601:IMFAOS>2.0.CO;2.
