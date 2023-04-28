@@ -211,11 +211,11 @@ def ppmv2gkg(ppmv: np.ndarray, gasid: int) -> np.ndarray:
     """Convert volume mixing ratio in ppmv to mass mixing ratio in g/kg.
 
     Args:
-        ppmv (np.ndarray): mass mixing ratio (g/kg).
+        ppmv (numpy.ndarray): mass mixing ratio (g/kg).
         gasid (int): HITRAN gas id.
 
     Returns:
-        np.ndarray: Mass mixing ratio in g/kg
+        numpy.ndarray: Mass mixing ratio in g/kg
 
     See also:
         :py:meth:`gas_mass`
@@ -246,13 +246,13 @@ def mr2rh(p: np.ndarray,
     from using saturation vapor pressure over water to over ice.
 
     Args:
-        p (np.ndarray): Pressure profile (mb).
-        t (np.ndarray): Temperature profile (K).
-        w (np.ndarray): Water Vapor Mixing ratio (g/kg).
-        Tconvert (np.ndarray, optional): [description]. Defaults to None.
+        p (numpy.ndarray): Pressure profile (mb).
+        t (numpy.ndarray): Temperature profile (K).
+        w (numpy.ndarray): Water Vapor Mixing ratio (g/kg).
+        Tconvert (numpy.ndarray, optional): [description]. Defaults to None.
 
     Returns:
-        np.ndarray: Relative humidity
+        numpy.ndarray: Relative humidity
     """
     # saturation pressure
     esat = satvap(t)
@@ -278,12 +278,12 @@ def mr2rho(mr: np.ndarray, t: np.ndarray, p: np.ndarray) -> np.ndarray:
     Equations were provided by Holger Linne' from Max Planck Institute.
 
     Args:
-        mr (np.ndarray): Mixing ratio (g/kg)
-        t (np.ndarray): Temperature profiles (K)
-        p (np.ndarray): Pressure profiles (mb).
+        mr (numpy.ndarray): Mixing ratio (g/kg)
+        t (numpy.ndarray): Temperature profiles (K)
+        p (numpy.ndarray): Pressure profiles (mb).
 
     Returns:
-        np.ndarray: Water Vapor Density (g/m3)
+        numpy.ndarray: Water Vapor Density (g/m3)
     """
 
     rho = np.multiply(np.multiply(mr, p), 0.3477) / t
@@ -307,11 +307,11 @@ def mr2e(p: np.ndarray, mr: np.ndarray) -> np.ndarray:
     DCT 3/6/00
 
     Args:
-        p (np.ndarray): Pressure profile (mb).
-        mr (np.ndarray): Mixing Ratio (g/kg).
+        p (numpy.ndarray): Pressure profile (mb).
+        mr (numpy.ndarray): Mixing Ratio (g/kg).
 
     Returns:
-        np.ndarray: H2O partial pressure (mb).
+        numpy.ndarray: H2O partial pressure (mb).
     """
 
     # ratio of water mass to dry air mass
@@ -326,11 +326,11 @@ def e2mr(p: np.ndarray, e: np.ndarray) -> np.ndarray:
     and H2O partial pressure (mbar)
 
     Args:
-        p (np.ndarray): Pressure (mb).
-        e (np.ndarray): H2O partial pressure (mb).
+        p (numpy.ndarray): Pressure (mb).
+        e (numpy.ndarray): H2O partial pressure (mb).
 
     Returns:
-        np.ndarray: H2= Mass Mixing Ratio (g/kg)
+        numpy.ndarray: H2= Mass Mixing Ratio (g/kg)
     """
 
     # ratio of water mass to dry air mass
@@ -351,12 +351,12 @@ def satmix(p: np.ndarray,
     DCT, updated 3/5/00
 
     Args:
-        p (np.ndarray): Pressure profile (mb).
-        t (np.ndarray): Temperature profile (K).
-        Tconvert (Optional[np.ndarray], optional): _description_. Defaults to None.
+        p (numpy.ndarray): Pressure profile (mb).
+        t (numpy.ndarray): Temperature profile (K).
+        Tconvert (Optional[numpy.ndarray], optional): _description_. Defaults to None.
 
     Returns:
-        np.ndarray: Saturation mixing ratio (g/kg).
+        numpy.ndarray: Saturation mixing ratio (g/kg).
     """
     # warning('off')
 
@@ -378,11 +378,11 @@ def satvap(t: np.ndarray, Tconvert: Optional[np.ndarray] = None) -> np.ndarray:
     Tconvert (K).
 
     Args:
-        t (np.ndarray): Temperature profile (K).
-        Tconvert (Optional[np.ndarray], optional): _description_. Defaults to None.
+        t (numpy.ndarray): Temperature profile (K).
+        Tconvert (Optional[numpy.ndarray], optional): _description_. Defaults to None.
 
     Returns:
-        np.ndarray: Saturation vapor pressure (mbar).
+        numpy.ndarray: Saturation vapor pressure (mbar).
 
     """
     # saturation pressure over water
@@ -402,10 +402,10 @@ def eswat_goffgratch(t: np.ndarray) -> np.ndarray:
     """Compute water vapor saturation pressure over water using Goff-Gratch formulation.
 
     Args:
-        t (np.ndarray): Temperature profile (K).
+        t (numpy.ndarray): Temperature profile (K).
 
     Returns:
-        np.ndarray: Water vapor saturation pressure over water (mb).
+        numpy.ndarray: Water vapor saturation pressure over water (mb).
 
     References
     ----------
@@ -475,11 +475,11 @@ def tk2b_mod(hvk: np.ndarray, t: np.ndarray) -> np.ndarray:
     .. math:: \tilde{B} = \frac{1}{ e^{\frac{h\nu}{k_{B}T}}-1}
 
     Args:
-        hvk (np.ndarray): (Planck constant * frequency) / Boltzmann constant.
-        t (np.ndarray): Temperature (K)
+        hvk (numpy.ndarray): (Planck constant * frequency) / Boltzmann constant.
+        t (numpy.ndarray): Temperature (K)
 
     Returns:
-        np.ndarray: Modified Planck function.
+        numpy.ndarray: Modified Planck function.
     """
     Btilde = 1.0 / (np.exp(hvk / t) - 1.0)
 
@@ -494,11 +494,11 @@ def dilec12(f: np.ndarray, t: np.ndarray) -> np.ndarray:
     imaginary part in the range -pi to +pi.
 
     Args:
-        f (np.ndarray): Frequency (GHz)
-        t (np.ndarray): Temeprature (K)
+        f (numpy.ndarray): Frequency (GHz)
+        t (numpy.ndarray): Temeprature (K)
 
     Returns:
-        np.ndarray: Dielectric constant for liquid water.
+        numpy.ndarray: Dielectric constant for liquid water.
 
     References
     ----------
@@ -551,11 +551,11 @@ def dcerror(x: np.ndarray, y: np.ndarray) -> np.ndarray:
     This version is double precision and valid in all quadrants.
 
     Args:
-        x (np.ndarray): _description_
-        y (np.ndarray): _description_
+        x (numpy.ndarray): _description_
+        y (numpy.ndarray): _description_
 
     Returns:
-        np.ndarray: _description_
+        numpy.ndarray: _description_
 
     References
     ----------
@@ -652,11 +652,11 @@ def virtual_temperature(t: np.ndarray, mr: np.ndarray) -> np.ndarray:
     .. math:: T_v = T \frac{\text{w} + \epsilon}{\epsilon\,(1 + \text{w})}
 
     Args:
-        t (np.ndarray): Air temperature (K)
-        mr (np.ndarray): Mass mixing ratio (dimensionless kg/kg-1)
+        t (numpy.ndarray): Air temperature (K)
+        mr (numpy.ndarray): Mass mixing ratio (dimensionless kg/kg-1)
 
     Returns:
-        np.ndarray: Corresponding virtual temperature of the parcel
+        numpy.ndarray: Corresponding virtual temperature of the parcel
 
     Examples:
         >>> from pyrtlib.utils import virtual_temperature
@@ -704,12 +704,12 @@ def atmospheric_tickness(p: np.ndarray, t: np.ndarray, mr: Optional[np.ndarray] 
     This assumes a hydrostatic atmosphere.
 
     Args:
-        p (np.ndarray): Atmospheric pressure profile (mb)
-        t (np.ndarray): Atmospheric temperature profile (K).
-        mr (Optional[np.ndarray], optional): Mass mixing ratio (dimensionless kg/kg-1). Defaults to None.
+        p (numpy.ndarray): Atmospheric pressure profile (mb)
+        t (numpy.ndarray): Atmospheric temperature profile (K).
+        mr (Optional[numpy.ndarray], optional): Mass mixing ratio (dimensionless kg/kg-1). Defaults to None.
 
     Returns:
-        np.ndarray: The thickness of the layers in kilometers
+        numpy.ndarray: The thickness of the layers in kilometers
 
     .. note::
         This function is based on metpy.calc.thickness_hydrostatic method.
@@ -731,7 +731,7 @@ def dewpoint2rh(td: float,
                 ice: Optional[bool] = False,
                 method: Optional[str] = 'arm') -> float:
     r"""Calculate relative humidity from temperature and dewpoint.
-    Value is calculated using the August-Roche-Magnus approximation. [AUGUST]_ [MAGNUS]_.
+    Value is calculated using the August-Roche-Magnus approximation. [August-1828]_ [Magnus-1844]_.
 
     .. math:: RH = \frac {\exp(\frac{a T_d}{b+T_d})} {\exp(\frac{a T}{b+T})}
 
@@ -750,9 +750,7 @@ def dewpoint2rh(td: float,
 
     References
     ----------
-    .. [1] Alduchov, O. A., and R. E. Eskridge, 1996: Improved Magnus' form approximation of saturation vapor pressure. J. Appl. Meteor., 35, 601–609.
-    .. [2] August, E. F., 1828: Ueber die Berechnung der Expansivkraft des Wasserdunstes. Ann. Phys. Chem., 13, 122–137.
-    .. [3] Magnus, G., 1844: Versuche über die Spannkräfte des Wasserdampfs. Ann. Phys. Chem., 61, 225–247.
+    .. [1] [Alduchov-1996]_
     """
     if method == 'arm':
         a = 17.625
@@ -799,12 +797,12 @@ def kgkg_to_kgm3(q: np.ndarray, p: np.ndarray, t: np.ndarray) -> np.ndarray:
     The same equations are used for ice clouds, by replacing LWC by IWC and :math:`q_{liq}` by :math:`q_{ice}`
 
     Args:
-        q (np.ndarray): specific humidity (Kg Kg-1)
-        p (np.ndarray): pressure (hPa)
-        t (np.ndarray): temperature (K)
+        q (numpy.ndarray): specific humidity (Kg Kg-1)
+        p (numpy.ndarray): pressure (hPa)
+        t (numpy.ndarray): temperature (K)
 
     Returns:
-        np.ndarray: [description]
+        numpy.ndarray: [description]
 
     References:
         .. [1] M. Z. Jacobson. Fundamentals of atmospheric modelling. Cambridge Eds., 2005.
@@ -822,12 +820,12 @@ def ppmv_to_moleculesm3(mr: np.ndarray, p: np.ndarray,
     """For any gas, this function converts mixing ratio  (in ppmv) to number density (molecules/m3).
 
     Args:
-        mr (np.ndarray): mixing ratio in ppmv
-        p (np.ndarray): pressure in Pa
-        t (np.ndarray): temperature in K
+        mr (numpy.ndarray): mixing ratio in ppmv
+        p (numpy.ndarray): pressure in Pa
+        t (numpy.ndarray): temperature in K
 
     Returns:
-        np.ndarray: [description]
+        numpy.ndarray: [description]
     """
     av = constants('avogadro')[0]
     rg = constants('R')[0]
@@ -872,10 +870,10 @@ def to_kelvin(t: np.ndarray) -> np.ndarray:
     """Convert T from Celsius to Kelvin
 
     Args:
-        t (np.ndarray): Temperature (°C)
+        t (numpy.ndarray): Temperature (°C)
 
     Returns:
-        np.ndarray: Temperature (K)
+        numpy.ndarray: Temperature (K)
     """
     t_k = t + 273.25
 
@@ -886,10 +884,10 @@ def to_celsius(t: np.ndarray) -> np.ndarray:
     """Convert T from Kelvin to Celsius
 
     Args:
-        t (np.ndarray): Temperature (K)
+        t (numpy.ndarray): Temperature (K)
 
     Returns:
-        np.ndarray: Temperature (°C)
+        numpy.ndarray: Temperature (°C)
     """
     t_c = t - 273.25
 
@@ -903,7 +901,7 @@ def get_frequencies_sat(instrument: str) -> np.ndarray:
         instrument (str): Instrument from which getting frequencies
 
     Returns:
-        np.ndarray: Frequencies (GHz) of the instrument selected
+        numpy.ndarray: Frequencies (GHz) of the instrument selected
 
     See Also:
         :py:meth:`pyrtlib.utils.get_frequencies`
