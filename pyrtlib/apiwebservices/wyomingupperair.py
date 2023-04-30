@@ -27,33 +27,24 @@ class WyomingUpperAir(HTTPEndPoint):
 
     @classmethod
     def request_data(cls, time: datetime, site_id: Union[str, int], **kwargs) -> pd.DataFrame:
-        r"""Retrieve upper air observations from the Wyoming archive.
+        """Retrieve upper air observations from the Wyoming archive.
 
-        Parameters
-        ----------
-        time : datetime
-            The date and time of the desired observation.
-
-        site_id : str
-            The three letter ICAO identifier of the station for which data should be
+        Args:
+            time (datetime.datetime): The date and time of the desired observation.
+            site_id (Union[str, int]): The three letter ICAO identifier of the station for which data should be
             downloaded.
 
-        kwargs
-            Arbitrary keyword arguments to use to initialize source
-
-        Returns
-        -------
-            df :  pandas.DataFrame
-                containing the data
-
+        Returns:
+            pandas.DataFrame:  A dataframe containing the data
         """
+
         endpoint = cls()
         df = endpoint._get_data(time, site_id)
         return df
 
     @classmethod
     def get_stations(cls, region: Optional[str] = 'europe') -> pd.DataFrame:
-        r"""Retrieve list of available stations from the Wyoming archive.
+        """Retrieve list of available stations from the Wyoming archive.
 
         +---------+----------------+
         | region  | name           |
@@ -79,22 +70,17 @@ class WyomingUpperAir(HTTPEndPoint):
         | mideast | Mideast        |
         +---------+----------------+
 
-        Parameters
-        ----------
-        region : str
-            The name of region from which to get stations list
+        Args:
+            region (Optional[str], optional): The name of region from which to get stations list. Defaults to 'europe'.
 
-        Returns
-        -------
-            df : pandas.DataFrame
-                stations id and name
-
+        Returns:
+            pandas.DataFrame: A dDataFrame of stations id and name
         """
 
         endpoint = cls()
         endpoint._base = 'http://weather.uwyo.edu/upperair/'
 
-        resp = endpoint.get_path('{}.html'.format(region))
+        resp = endpoint._get_path('{}.html'.format(region))
         soup = BeautifulSoup(resp.text, 'html.parser')
         area_tag = soup.find_all('area')
         stations = {}
@@ -193,7 +179,7 @@ class WyomingUpperAir(HTTPEndPoint):
                 '&YEAR={time:%Y}&MONTH={time:%m}&FROM={time:%d%H}&TO={time:%d%H}'
                 '&STNM={stid}').format(time=time, stid=site_id)
 
-        resp = self.get_path(path)
+        resp = self._get_path(path)
         # See if the return is valid, but has no data
         if resp.text.find('Can\'t') != -1:
             raise ValueError(
