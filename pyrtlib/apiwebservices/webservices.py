@@ -106,7 +106,7 @@ class HTTPEndPoint(object):
         self._session = session_manager.create_session()
         self._get_metadata()
 
-    def get_query(self, query: dict) -> str:
+    def _get_query(self, query: dict) -> str:
         """Make a GET request, including a query, to the endpoint.
 
         The path of the request is to the base URL assigned to the endpoint.
@@ -127,9 +127,9 @@ class HTTPEndPoint(object):
 
         """
         url = self._base[:-1] if self._base[-1] == '/' else self._base
-        return self.get(url, query)
+        return self._get(url, query)
 
-    def url_path(self, path: str) -> str:
+    def _url_path(self, path: str) -> str:
         """Assemble the full url to a path.
 
         Given a path relative to the base URL, assemble the full URL.
@@ -151,7 +151,7 @@ class HTTPEndPoint(object):
         """
         return posixpath.join(self._base, path)
 
-    def get_path(self, path: str, querystrings: Optional[dict] = None) -> requests.Response:
+    def _get_path(self, path: str, querystrings: Optional[dict] = None) -> requests.Response:
         """Make a GET request, optionally including a query, to a relative path.
 
         The path of the request includes a path on top of the base URL
@@ -174,9 +174,9 @@ class HTTPEndPoint(object):
         get_query, get, url_path
 
         """
-        return self.get(self.url_path(path), querystrings)
+        return self._get(self._url_path(path), querystrings)
 
-    def get(self, path: str, params: Optional[dict] = None) -> str:
+    def _get(self, path: str, params: Optional[dict] = None) -> str:
         """Make a GET request, optionally including a parameters, to a path.
 
         The path of the request is the full URL.

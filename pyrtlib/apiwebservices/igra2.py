@@ -57,22 +57,20 @@ class IGRAUpperAir(HTTPEndPoint):
 
     @classmethod
     def request_data(cls, time: datetime, site_id: str, beg2021: Optional[bool] = False, derived: Optional[bool] = False) -> Tuple[pd.DataFrame, pd.DataFrame]:
-        """Retreive IGRA version 2 data for one station.
+        """Retreive IGRA version 2 data files contain the full period of record.
 
-        Parameters
-        ----------
-        site_id : str
-            11-character IGRA2 station identifier.
+        Args:
+            time (datetime): The date and time of the desired observation. If list of two times is given,
+                dataframes for all dates within the two dates will be returned.
+            site_id (str): 11-character IGRA2 station identifier.
+            beg2021 (Optional[bool], optional): If True retrieve files of derived sounding parameters. Defaults to False.
+            derived (Optional[bool], optional): If True retrieve files only contain soundings from the current
+                (or current and previous) year. Defaults to False.
 
-        time : datetime
-           The date and time of the desired observation. If list of two times is given,
-           dataframes for all dates within the two dates will be returned.
-
-        Returns
-        -------
-            :class: `pandas.DataFrame` containing the data.
-
+        Returns:
+            Tuple[pandas.DataFrame, pandas.DataFrame]: A dataframe containing the data.
         """
+
         igra2 = cls()
 
         # Set parameters for data query
@@ -135,7 +133,7 @@ class IGRAUpperAir(HTTPEndPoint):
 
         # Get the data and handle if there is none matching what was requested
         try:
-            resp = self.get_path(path)
+            resp = self._get_path(path)
         except HTTPError:
             raise ValueError('No data available for {time:%Y-%m-%d %HZ} '
                              'for station {stid}.'.format(time=self.begin_date,
