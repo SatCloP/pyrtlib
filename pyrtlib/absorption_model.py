@@ -22,7 +22,7 @@ class AbsModel:
 
     @property
     def model(self) -> str:
-        """Getter for absorption model"""
+        """Getter/Setter for absorption model"""
         return self._model
 
     @model.setter
