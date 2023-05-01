@@ -5,6 +5,7 @@ import numpy as np
 import pandas as pd
 from numpy.testing import assert_allclose, assert_equal
 from pyrtlib.uncertainty.absmod_uncertainty import parameters_perturbation
+from pyrtlib.uncertainty import covariance_matrix
 from pyrtlib.atmospheric_profiles import AtmosphericProfiles as atmp
 from pyrtlib.tb_spectrum import TbCloudRTE
 from pyrtlib.utils import ppmv2gkg, mr2rh
@@ -51,3 +52,10 @@ class Test(TestCase):
         df_expected = pd.read_csv(
             os.path.join(THIS_DIR, "data", "tbtotal_uncertainty_gamma_a_min.csv"))
         assert_allclose(df.tbtotal.values, df_expected.gamma_a)
+
+    def test_cov_p(self):
+        n = 106
+        r111 = covariance_matrix.R17_111
+        r112 = covariance_matrix.R17_112
+
+        assert_allclose(r111[0:n, 0:n], r112[0:n, 0:n])
