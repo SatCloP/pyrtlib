@@ -37,7 +37,7 @@ Units conversion:
 ```python 
    gkg = ppmv2gkg(md[:, atmp.H2O], atmp.H2O)
 ```
-Relative humidity of :math:`H_2O` (water vapor)
+Relative humidity of $H_2O$ (water vapor)
 
 ```python
    rh = mr2rh(p, t, gkg)[0] / 100
