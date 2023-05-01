@@ -32,7 +32,7 @@ class WyomingUpperAir(HTTPEndPoint):
         Args:
             time (datetime.datetime): The date and time of the desired observation.
             site_id (Union[str, int]): The three letter ICAO identifier of the station for which data should be
-            downloaded.
+                downloaded.
 
         Returns:
             pandas.DataFrame:  A dataframe containing the data
