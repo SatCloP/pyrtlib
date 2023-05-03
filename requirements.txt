@@ -1,8 +1,8 @@
 setuptools
+pandas
 numpy
 scipy
 scikit-learn
-pandas
 pytest==7.2.0
 pytest-datafiles>=2.0
 netCDF4

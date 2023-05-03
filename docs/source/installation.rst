@@ -1,6 +1,5 @@
-==============
 Install Guide
-==============
+=============
 
 pyrtlib can be installed on any computer supporting Python 3.6 (or higher).
 The actual installation procedure depends on the operating system. The
@@ -124,3 +123,28 @@ To insert when package is ready to the release
 
     To get an up-to-date
     version of pyrtlib, download it directly from `GitHub <https://github.com/slarosa/pyrtlib>`_.
+
+
+Build and run Docker image
+===========================
+
+To build docker inage download pyrtlib code from `GitHub <https://github.com/slarosa/pyrtlib>`_.
+Next run the following command from you prefer terminal.
+
+.. code-block:: console
+
+   unzip pyrtlib.zip
+   cd pyrtlib
+
+From within pyrtlib folder run the following docker command to build the docker image
+
+.. code-block:: console
+
+   docker build --pull --rm -f "Dockerfile" -t pyrtlib:latest "." 
+   docker run --rm -it  pyrtlib:latest
+
+To test run the exaple script from within the docker image
+
+.. code-block:: console
+
+   root@993587e5fea9:/home/dev/pyrtlib# python3 hello_spectrum.py
