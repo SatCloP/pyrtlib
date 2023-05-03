@@ -9,6 +9,8 @@ setup(
     include_package_data=True,
     package_dir={'': 'pyrtlib'},
     python_requires='>=3.6',
+    setup_requires=['pytest-runner', 'cython', 'numpy'],
+    tests_require=['pytest', 'xdoctest'],
     install_requires=required,
     url='',
     license='MIT License',
