@@ -128,7 +128,7 @@ To insert when package is ready to the release
 Build and run Docker image
 ===========================
 
-To build docker inage download pyrtlib code from `GitHub <https://github.com/slarosa/pyrtlib>`_.
+To build docker image it is necessary to download the pyrtlib source code from `GitHub <https://github.com/slarosa/pyrtlib>`_.
 Next run the following command from you prefer terminal.
 
 .. code-block:: console
