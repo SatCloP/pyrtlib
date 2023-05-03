@@ -1,12 +1,12 @@
 from unittest import TestCase
 
 import numpy as np
-from numpy.testing import assert_allclose, assert_almost_equal
+from numpy.testing import assert_allclose, assert_almost_equal, assert_equal
 from pyrtlib.absorption_model import H2OAbsModel
 from pyrtlib.atmospheric_profiles import AtmosphericProfiles as atmp
 from pyrtlib.utils import (ppmv2gkg, mr2rh, gas_mass, height_to_pressure, pressure_to_height, constants,
                            to_kelvin, to_celsius, get_frequencies_sat, eswat_goffgratch, satvap, satmix,
-                           import_lineshape, atmospheric_tickness, mr2rho, mr2e)
+                           import_lineshape, atmospheric_tickness, mr2rho, mr2e, esice_goffgratch)
 
 z, p, d, t, md = atmp.gl_atm(atmp.TROPICAL)
 
@@ -158,6 +158,19 @@ class Test(TestCase):
     def test_constants(self):
         cs = constants('R')[0]
         assert_almost_equal(cs, 8.31446261815324, decimal=5)
+        cs_list = constants()
+        cs_list_ex = ['avogadro',
+                      'boltzmann',
+                      'EarthRadius',
+                      'gravity',
+                      'light',
+                      'Np2dB',
+                      'planck',
+                      'Rdry',
+                      'Rwatvap',
+                      'Tcosmicbkg',
+                      'R']
+        assert_equal(cs_list, cs_list_ex)
 
     def test_import_linelist(self):
         model = 'R21SD'
@@ -188,3 +201,20 @@ class Test(TestCase):
                       93.4126703,  98.17297656, 102.88137249, 107.51360655,
                       112.1578853, 116.83331575])
         assert_almost_equal(h, z, decimal=5)
+
+    def test_esice_goffgratch(self):
+        eice = esice_goffgratch(t)
+        eice_ex = np.array([4.46886926e+01, 2.94273085e+01, 1.90367102e+01, 1.40918238e+01,
+                            8.34828341e+00, 4.81745835e+00, 2.70260886e+00, 1.48458452e+00,
+                            7.82312951e-01, 3.97932076e-01, 1.96960374e-01, 9.04389659e-02,
+                            4.15819757e-02, 1.80168867e-02, 7.30775615e-03, 2.83619102e-03,
+                            1.01755016e-03, 7.15761625e-04, 1.34919490e-03, 2.44422502e-03,
+                            4.39341246e-03, 7.72458595e-03, 1.31247892e-02, 1.80168867e-02,
+                            2.39426078e-02, 3.16390238e-02, 6.27796299e-02, 1.16494842e-01,
+                            2.12606526e-01, 3.77790389e-01, 6.54739552e-01, 1.11904734e+00,
+                            1.85249073e+00, 3.00390376e+00, 4.54128870e+00, 4.77709067e+00,
+                            2.65516657e+00, 1.02671926e+00, 1.76446210e-01, 2.30397076e-02,
+                            2.13532575e-03, 1.30308709e-04, 3.08419643e-05, 3.02455186e-05,
+                            1.19097392e-04, 3.63686345e-04, 9.23737220e-03, 3.22861540e-01,
+                            4.46886926e+01, 3.25249157e+03])
+        assert_almost_equal(eice_ex, eice, decimal=5)
