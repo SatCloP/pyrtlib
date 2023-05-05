@@ -87,3 +87,18 @@ class Test(TestCase):
             parameters['gamma_a'].uncer[0])
         expected = (-0.012229016120066702, 0.001854236371206569)
         assert_equal(expected, u)
+        u = AbsModUncertainty.uncertainty_propagation(
+            "aA", parameters['delta_a'].value[0],
+            parameters['gamma_a'].value[0],
+            parameters['delta_a'].uncer[0],
+            parameters['gamma_a'].uncer[0])
+        expected = (-0.033002727999999995, 0.005)
+        assert_equal(expected, u)
+        u = AbsModUncertainty.uncertainty_propagation(
+            "aA+bB", parameters['delta_a'].value[0],
+            parameters['gamma_a'].value[0],
+            parameters['delta_a'].uncer[0],
+            parameters['gamma_a'].uncer[0])
+        expected = (2.665720348, 0.01724224503539188)
+        assert_equal(expected, u)
+
