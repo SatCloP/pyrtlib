@@ -125,26 +125,25 @@ To insert when package is ready to the release
     version of pyrtlib, download it directly from `GitHub <https://github.com/slarosa/pyrtlib>`_.
 
 
-Build and run Docker image
-===========================
+Build and run the Docker image
+===============================
 
-To build docker image it is necessary to download the pyrtlib source code from `GitHub <https://github.com/slarosa/pyrtlib>`_.
-Next run the following command from you prefer terminal.
+To build docker image it is necessary to download the latest  pyrtlib release from this `link <https://github.com/slarosa/pyrtlib/releases/latest>`_ and then run the following command from you prefer terminal.
 
 .. code-block:: console
 
-   unzip pyrtlib.zip
-   cd pyrtlib
+   $ tar zxvf pyrtlib.tar.gz
+   $ cd pyrtlib
 
 From within pyrtlib folder run the following docker command to build the docker image
 
 .. code-block:: console
 
-   docker build --pull --rm -f "Dockerfile" -t pyrtlib:latest "." 
-   docker run --rm -it  pyrtlib:latest
+   $ docker build --pull --rm -f "Dockerfile" -t pyrtlib:latest "." 
+   $ docker run --rm -it  pyrtlib:latest
 
 To test run the exaple script from within the docker image
 
 .. code-block:: console
 
-   root@993587e5fea9:/home/dev/pyrtlib# python3 hello_spectrum.py
+   $ root@993587e5fea9:/home/dev/pyrtlib# python3 hello_spectrum.py
