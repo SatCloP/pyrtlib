@@ -41,12 +41,11 @@ class AbsModel:
             :py:func:`~pyrtlib.utils.import_lineshape`
 
         Example:
-
-        .. code-block:: python
-        
-            >>> from pyrtlib.absorption_model import H2OAbsModel
-            >>> H2OAbsModel.model = 'R21SD'
-            >>> H2OAbsModel.set_ll()
+            .. code-block:: python
+            
+                from pyrtlib.absorption_model import H2OAbsModel
+                H2OAbsModel.model = 'R21SD'
+                H2OAbsModel.set_ll()
 
         .. note::
             Model must be set with `model` property before calling this method (see Example).
@@ -61,22 +60,21 @@ class AbsModel:
             List[str]: The list the implemented absorption models
 
         Example:
+            .. code-block:: python
 
-        .. code-block:: python
-
-            >>> from pyrtlib.absorption_model import AbsModel
-            >>> AbsModel.implemented_models()
-            ['R98',
-            'R03',
-            'R16',
-            'R17',
-            'R19',
-            'R19SD',
-            'R20',
-            'R20SD',
-            'R21SD',
-            'R22SD',
-            'MAKAROV11']
+                >>> from pyrtlib.absorption_model import AbsModel
+                >>> AbsModel.implemented_models()
+                ['R98',
+                'R03',
+                'R16',
+                'R17',
+                'R19',
+                'R19SD',
+                'R20',
+                'R20SD',
+                'R21SD',
+                'R22SD',
+                'MAKAROV11']
         """
         return list(['R98', 
                      'R03', 
@@ -236,31 +234,30 @@ class H2OAbsModel(AbsModel):
         .. [1] [Rosenkranz-2017]_.
 
         Example:
+            .. code-block:: python
 
-        .. code-block:: python
+                import numpy as np
+                from pyrtlib.rt_equation import RTEquation
+                from pyrtlib.absorption_model import H2OAbsModel, AbsModel
+                from pyrtlib.atmospheric_profiles import AtmosphericProfiles as atmp
+                from pyrtlib.utils import ppmv2gkg, mr2rh, import_lineshape
 
-            import numpy as np
-            from pyrtlib.rt_equation import RTEquation
-            from pyrtlib.absorption_model import H2OAbsModel, AbsModel
-            from pyrtlib.atmospheric_profiles import AtmosphericProfiles as atmp
-            from pyrtlib.utils import ppmv2gkg, mr2rh, import_lineshape
+                z, p, d, tk, md = atmp.gl_atm(atmp.TROPICAL)
+                frq = np.arange(20, 201, 1)
+                ice = 0
+                gkg = ppmv2gkg(md[:, atmp.H2O], atmp.H2O)
+                rh = mr2rh(p, tk, gkg)[0] / 100
 
-            z, p, d, tk, md = atmp.gl_atm(atmp.TROPICAL)
-            frq = np.arange(20, 201, 1)
-            ice = 0
-            gkg = ppmv2gkg(md[:, atmp.H2O], atmp.H2O)
-            rh = mr2rh(p, tk, gkg)[0] / 100
+                e, rho = RTEquation.vapor(tk, rh, ice)
 
-            e, rho = RTEquation.vapor(tk, rh, ice)
-
-            AbsModel.model = 'R16'
-            H2OAbsModel.h2oll = import_lineshape('h2oll_{}'.format('R16'))
-            for i in range(0, len(z)):
-                v = 300.0 / tk[i]
-                ekpa = e[i] / 10.0
-                pdrykpa = p[i] / 10.0 - ekpa
-                for j in range(0, len(frq)):
-                    _, _ = H2OAbsModel().h2o_absorption(pdrykpa, v, ekpa, frq[j])
+                AbsModel.model = 'R16'
+                H2OAbsModel.h2oll = import_lineshape('h2oll_{}'.format('R16'))
+                for i in range(0, len(z)):
+                    v = 300.0 / tk[i]
+                    ekpa = e[i] / 10.0
+                    pdrykpa = p[i] / 10.0 - ekpa
+                    for j in range(0, len(frq)):
+                        _, _ = H2OAbsModel().h2o_absorption(pdrykpa, v, ekpa, frq[j])
 
         """
         # the best-fit voigt are given in koshelev et al. 2018, table 2 (rad,
@@ -873,7 +870,6 @@ class O3AbsModel(AbsModel):
                     arg1 = (self.o3ll.fl[k]-f)/betad
                     arg2 = widthc/betad
                     s = self.o3ll.s1[k] * np.exp(self.o3ll.b[k] * (1.0 - ti))
-                    # TODO: check fortran code DREAL
                     sum += s * np.real(dcerror(arg1, arg2))/betad
 
             abs_o3 = .56419e-4 * sum * qvinv * ti2 * den

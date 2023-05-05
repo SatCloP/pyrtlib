@@ -191,10 +191,9 @@ brightness temperture.
 
 .. autosummary::
     :toctree: generated/
-    :template: custom-module-template.rst
 
-    pyrtlib.uncertainty.absmod_uncertainty
-
+    pyrtlib.uncertainty.AbsModUncertainty
+    pyrtlib.uncertainty.SpectroscopicParameter
 
 API Web Services
 ================

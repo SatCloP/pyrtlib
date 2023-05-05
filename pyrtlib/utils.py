@@ -127,11 +127,7 @@ def gas_mass(gasid: int) -> float:
         gasid (int): The gas ID defined in :py:class:`~pyrtlib.atmospheric_profiles.AtmosphericProfiles`
 
     Returns:
-        float: The mass of the HITRAN gas ID
-
-    .. note::
-        TODO: Results are not accurate because amu values need more significant figures.
-
+        float: The mass of the HITRAN gas ID.
     """
 
     if gasid == 0:
@@ -907,9 +903,10 @@ def get_frequencies_sat(instrument: str) -> np.ndarray:
         :py:meth:`pyrtlib.utils.get_frequencies`
 
     Example:
-        >>> from pyrtlib.utils import get_frequencies_sat
-        >>> mwi = get_frequencies_sat("MWI")
-        >>> print(mwi)
+        .. code-block:: python
+
+            from pyrtlib.utils import get_frequencies_sat
+            mwi = get_frequencies_sat("MWI")
     """
     cf = 183.31
     cf2 = 243.20

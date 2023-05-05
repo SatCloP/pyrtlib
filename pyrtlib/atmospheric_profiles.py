@@ -57,16 +57,18 @@ class AtmosphericProfiles:
     .. [1] [ANDERSON]_
     
     Examples:
-        >>> from pyrtlib.atmospheric_profiles import AtmosphericProfiles as atmp
-        >>> atmp.atm_profiles()
-        {0: 'Tropical',
-         1: 'Midlatitude Summer',
-         2: 'Midlatitude Winter',
-         3: 'Subarctic Summer',
-         4: 'Subarctic Winter',
-         5: 'US Standard'}
-        >>> atmp.TROPICAL, atmp.H2O
-        (0, 0)
+        .. code-block:: python
+        
+            >>> from pyrtlib.atmospheric_profiles import AtmosphericProfiles as atmp
+            >>> atmp.atm_profiles()
+            {0: 'Tropical',
+            1: 'Midlatitude Summer',
+            2: 'Midlatitude Winter',
+            3: 'Subarctic Summer',
+            4: 'Subarctic Winter',
+            5: 'US Standard'}
+            >>> atmp.TROPICAL, atmp.H2O
+            (0, 0)
     """
 
     TROPICAL = 0
