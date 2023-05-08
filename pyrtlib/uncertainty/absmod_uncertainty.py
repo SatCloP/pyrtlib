@@ -31,14 +31,15 @@ PATH = os.path.dirname(os.path.abspath(__file__))
 U = np.loadtxt(open(os.path.join(PATH, "tbd", "u.csv"), "rb"), delimiter=",")
 SIGMA = np.loadtxt(open(os.path.join(
     PATH, "tbd", "sigma_widths_revised.csv"), "rb"), delimiter=",")
-TVEC = np.loadtxt(
-    open(os.path.join(PATH, "tbd", "Tvec.csv"), "rb"), delimiter=",")
-PVEC = np.loadtxt(
-    open(os.path.join(PATH, "tbd", "Pvec.csv"), "rb"), delimiter=",")
-FVEC = np.loadtxt(
-    open(os.path.join(PATH, "tbd", "Fvec.csv"), "rb"), delimiter=",")
-PR_EXT = np.loadtxt(
-    open(os.path.join(PATH, "tbd", "PR_ext.csv"), "rb"), delimiter=",")
+
+# TVEC = np.loadtxt(
+#     open(os.path.join(PATH, "tbd", "Tvec.csv"), "rb"), delimiter=",")
+# PVEC = np.loadtxt(
+#     open(os.path.join(PATH, "tbd", "Pvec.csv"), "rb"), delimiter=",")
+# FVEC = np.loadtxt(
+#     open(os.path.join(PATH, "tbd", "Fvec.csv"), "rb"), delimiter=",")
+# PR_EXT = np.loadtxt(
+#     open(os.path.join(PATH, "tbd", "PR_ext.csv"), "rb"), delimiter=",")
 
 # FIELDS = (
 #     'value',
@@ -57,7 +58,7 @@ class SpectroscopicParameter:
 
     Example:
         .. code-block:: python
-        
+
             >>> from pyrtlib.uncertainty import SpectroscopicParameter
             >>> parameters = SpectroscopicParameter.parameters()
             >>> parameters['O2gamma_WL'].value
@@ -782,15 +783,15 @@ class AbsModUncertainty:
         return AMU_copy
 
     # @NotImplemented
-    @staticmethod
-    def apu_line_mixing(f: np.ndarray, t: np.ndarray, p: np.ndarray, residual_source: Optional[int] = 0):
-        unkn = 0.0  # unknown uncertainty outside the temp and freq range
-        if residual_source == 1:
-            pass
-        elif residual_source == 2:
-            pass
-        else:
-            tgrid, fgrid, pgrid = np.meshgrid(TVEC, FVEC, PVEC)
-            apu = si.interpn((tgrid, fgrid, pgrid), PR_EXT, t, f, p, 'linear')
+    # @staticmethod
+    # def _apu_line_mixing(f: np.ndarray, t: np.ndarray, p: np.ndarray, residual_source: Optional[int] = 0):
+    #     unkn = 0.0  # unknown uncertainty outside the temp and freq range
+    #     if residual_source == 1:
+    #         pass
+    #     elif residual_source == 2:
+    #         pass
+    #     else:
+    #         tgrid, fgrid, pgrid = np.meshgrid(TVEC, FVEC, PVEC)
+    #         apu = si.interpn((tgrid, fgrid, pgrid), PR_EXT, t, f, p, 'linear')
 
-        return apu
+    #     return apu
