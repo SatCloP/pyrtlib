@@ -155,9 +155,9 @@ class TbCloudRTE(object):
         """
         if absmdl == 'uncertainty':
             O2AbsModel.model = 'R18'
-            O2AbsModel.o2ll = import_lineshape('o2ll_{}'.format('R18'))
+            O2AbsModel.set_ll()
             H2OAbsModel.model = 'R17'
-            H2OAbsModel.h2oll = import_lineshape('h2oll_{}'.format('R17'))
+            H2OAbsModel.set_ll()
             N2AbsModel.model = 'R03'
             LiqAbsModel.model = 'R16'
             self._uncertainty = True

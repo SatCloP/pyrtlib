@@ -469,9 +469,11 @@ class H2OAbsModel(AbsModel):
         self.h2oll.w0s[0:2] = amu['gamma_w'].value[0:2] / 1000.0  # to check
         self.h2oll.x[0:2] = amu['n_a'].value[0:2]
         self.h2oll.xs[0:2] = amu['n_w'].value[0:2]
-        self.h2oll.sr[0:2] = amu['SR'].value[0:2]
-        # self.h2oll.sh[0:2] = amu['delta_a'].value[0:2] / 1000.0
-        # self.h2oll.shs[0:2] = amu['delta_w'].value[0:2] / 1000.0
+        if H2OAbsModel.model > 'R17':
+            self.h2oll.sh[0:2] = amu['delta_a'].value[0:2] / 1000.0
+            self.h2oll.shs[0:2] = amu['delta_w'].value[0:2] / 1000.0
+        else: 
+            self.h2oll.sr[0:2] = amu['SR'].value[0:2]
         self.h2oll.fl[0:2] = amu['FL'].value[0:2]
 
         # b = np.loadtxt('/Users/slarosa/Downloads/w0.csv')
@@ -512,10 +514,14 @@ class H2OAbsModel(AbsModel):
             widthf = self.h2oll.w0[i] * pda * ti ** self.h2oll.x[i]
             widths = self.h2oll.w0s[i] * pvap * ti ** self.h2oll.xs[i]
             width = widthf + widths
-            # shiftf = self.h2oll.sh[i] * pda * ti ** self.h2oll.xh[i]
-            # shifts = self.h2oll.shs[i] * pvap * ti ** self.h2oll.xhs[i]
-            shift = self.h2oll.sr[i] * widthf
-            # shift = shiftf + shifts
+            if H2OAbsModel.model > 'R17':
+                shiftf = self.h2oll.sh[i] * pda * ti ** self.h2oll.xh[i]
+                shifts = self.h2oll.shs[i] * pvap * ti ** self.h2oll.xhs[i]
+                shift = shiftf + shifts
+                
+            else:
+                shift = self.h2oll.sr[i] * widthf
+            
             wsq = width ** 2
             s = self.h2oll.s1[i] * ti2 * np.exp(self.h2oll.b2[i] * (1. - ti))
             df[0] = f - self.h2oll.fl[i] - shift
