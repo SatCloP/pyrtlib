@@ -5,10 +5,8 @@ API references
 Main class
 ==========
 
-The main class which computes brightness temperatures (Tb), mean
-radiating temperature (Tmr), and integrated absorption (Tau) for 
-clear or cloudy conditions,  Also returns all integrated quantities
-that the original TBMODEL, Cyber Version, returned.
+The main class which computes brightness temperatures (Tb), mean radiating temperature (Tmr), and integrated absorption (Tau) for 
+clear or cloudy conditions. Also returns all integrated quantities that the original TBMODEL, Cyber Version, returned.
 
 .. autosummary::
     :toctree: generated/

@@ -19,18 +19,9 @@ from dataclasses import dataclass
 from typing import Tuple, Optional, Dict
 
 import numpy as np
-import scipy.interpolate as si
+# import scipy.interpolate as si
 
-UNKNOWN = 0.0
-MB2TORR = 0.750062
-USEKOSHELEV2017 = True
-USEKOSHELEV2017_WHAT = 'rad'
-C_CM = 29979245800.0
-
-PATH = os.path.dirname(os.path.abspath(__file__))
-U = np.loadtxt(open(os.path.join(PATH, "tbd", "u.csv"), "rb"), delimiter=",")
-SIGMA = np.loadtxt(open(os.path.join(
-    PATH, "tbd", "sigma_widths_revised.csv"), "rb"), delimiter=",")
+from pyrtlib.utils import constants
 
 # TVEC = np.loadtxt(
 #     open(os.path.join(PATH, "tbd", "Tvec.csv"), "rb"), delimiter=",")
@@ -40,16 +31,6 @@ SIGMA = np.loadtxt(open(os.path.join(
 #     open(os.path.join(PATH, "tbd", "Fvec.csv"), "rb"), delimiter=",")
 # PR_EXT = np.loadtxt(
 #     open(os.path.join(PATH, "tbd", "PR_ext.csv"), "rb"), delimiter=",")
-
-# FIELDS = (
-#     'value',
-#     'uncer',
-#     'units',
-#     'refer')
-
-# AMU_NT = namedtuple('AMU_NT', FIELDS)
-# """Absirption model uncertainties for spectroscopic parameters"""
-# AMU_NT.__new__.__defaults__ = (None,) * len(AMU_NT._fields)
 
 
 @dataclass
@@ -94,6 +75,22 @@ class SpectroscopicParameter:
     """
 
     @staticmethod
+    def set_parameters(SP) -> None:
+        """Set new values to spectroscopic parameters.
+
+        Args:
+            SP (dict): The new dictionary with the spectroscopic parameters
+
+        Example:
+            >>> parameters = SpectroscopicParameter.parameters()
+            >>> parameters['gamma_a'].value[0] = 2.688
+            >>> parameters['gamma_a'].uncer[0] = 0.039
+            >>> SpectroscopicParameter.set_parameters(parameters)
+
+        """
+        SpectroscopicParameter.SP = SP
+
+    @staticmethod
     def parameters() -> Dict:
         """Returns a mutable dictionary of all the spectroscopic parameters.
 
@@ -107,7 +104,7 @@ class SpectroscopicParameter:
             1.2
 
         New value may be added to parameters using :py:func:`~pyrtlib.uncertainty.SpectroscopicParameter` class as following
-        
+
         Example:
             >>> parameters['con_Xs'] = SpectroscopicParameter(2.3, 0.001, 'unitless', 'Tretyakov, JMS, 2016')
             >>> parameters['con_Xs'].value
@@ -119,8 +116,24 @@ class SpectroscopicParameter:
             >>> parameters['w2a'].value = 1.333
             >>> parameters['w2a'].value
             1.333
+
+        Note:
+            If new value will be added or modified it is necessary to save the new values by calling
+            the :py:func:`~pyrtlib.uncertainty.SpectroscopicParameter.set_parameters` function.
         """
-        SPECTROSCOPIC_PARAMS = {
+        UNKNOWN = 0.0
+        FL_LENGHT = 13
+        MB2TORR = 0.750062
+        USEKOSHELEV2017 = True
+        USEKOSHELEV2017_WHAT = 'rad'
+        C_CM = constants('light')[0] * 100
+
+        PATH = os.path.dirname(os.path.abspath(__file__))
+        U = np.loadtxt(open(os.path.join(PATH, "tbd", "u.csv"), "rb"), delimiter=",")
+        SIGMA = np.loadtxt(open(os.path.join(
+            PATH, "tbd", "sigma_widths_revised.csv"), "rb"), delimiter=",")
+
+        SpectroscopicParameter.SP = {
             'w2a': SpectroscopicParameter(
                 value=1.2,
                 uncer=0.05,
@@ -171,150 +184,150 @@ class SpectroscopicParameter:
             ),
             'FL': SpectroscopicParameter(
                 value=np.append([22.23507985, 183.310087],
-                                np.tile(UNKNOWN, (1, 13))),
-                uncer=np.append([5e-08, 1e-06], np.tile(UNKNOWN, (1, 13))),
+                                np.tile(UNKNOWN, (1, FL_LENGHT))),
+                uncer=np.append([5e-08, 1e-06], np.tile(UNKNOWN, (1, FL_LENGHT))),
                 units='GHz',
                 refer='Tretyakov, JMS, 2016'
             ),
             'S': SpectroscopicParameter(
                 value=np.append([4.39, 774.6], np.tile(
-                    UNKNOWN, (1, 13))) * 1e-25,
+                    UNKNOWN, (1, FL_LENGHT))) * 1e-25,
                 uncer=np.append([0.043, 7.7], np.tile(
-                    UNKNOWN, (1, 13))) * 1e-25,
+                    UNKNOWN, (1, FL_LENGHT))) * 1e-25,
                 units='cm/mol',
                 refer='Tretyakov, JMS, 2016'
             ),
             # units in Ros. model are [Hz*cm^2]; the conversion factor is just speed of light in cm (P. Rosenkranz, personal communication)
             'S_ros': SpectroscopicParameter(
                 value=np.append([4.39, 774.6], np.tile(
-                    UNKNOWN, (1, 13))) * C_CM,
+                    UNKNOWN, (1, FL_LENGHT))) * C_CM,
                 uncer=np.append([0.043, 7.7], np.tile(
-                    UNKNOWN, (1, 13))) * C_CM,
+                    UNKNOWN, (1, FL_LENGHT))) * C_CM,
                 units='Hz*cm^2',
                 refer='Tretyakov, JMS, 2016'
             ),
             'B2': SpectroscopicParameter(
                 value=np.array(
-                    [2.144, 0.668, 6.179, 1.541, 1.048, 3.595, 5.048, 1.405, 3.597, 2.379, 2.852, 0.159, 2.391, 0.396, 1.441]),
+                    [2.144, 0.668, 6.179, 1.541, 1.048, 3.595, 5.048, 1.405, 3.597, 2.379, 2.852, 0.159, 2.391, 0.396, 1.441, .0]),
                 uncer=np.array(
                     [2.144, 0.668, 6.179, 1.541, 1.048, 3.595, 5.048, 1.405, 3.597, 2.379, 2.852, 0.159, 2.391, 0.396,
-                     1.441]) / 100,
+                     1.441, .0]) / 100,
                 units='unitless',
                 refer='Rosenkranz, 2016 model + Tretyakov pers. comm.'
             ),
             'gamma_a': SpectroscopicParameter(
-                value=np.append([3.63, 3.926], np.tile(UNKNOWN, (1, 13))),
-                uncer=np.append([0.14, 0.02], np.tile(UNKNOWN, (1, 13))),
+                value=np.append([3.63, 3.926], np.tile(UNKNOWN, (1, FL_LENGHT))),
+                uncer=np.append([0.14, 0.02], np.tile(UNKNOWN, (1, FL_LENGHT))),
                 units='MHz/Torr',
                 refer='Tretyakov, JMS, 2016'
             ),
             'gamma_a_rad_k2017': SpectroscopicParameter(
-                value=np.append([3.598, 3.926], np.tile(UNKNOWN, (1, 13))),
-                uncer=np.append([0.022, 0.02], np.tile(UNKNOWN, (1, 13))),
+                value=np.append([3.598, 3.926], np.tile(UNKNOWN, (1, FL_LENGHT))),
+                uncer=np.append([0.022, 0.02], np.tile(UNKNOWN, (1, FL_LENGHT))),
                 units='MHz/Torr',
                 refer='Tretyakov, JMS, 2016 + Koshelev et al. 2018 (22 GHz, RAD)'
             ),
             'gamma_a_video_k2017': SpectroscopicParameter(
-                value=np.append([3.397, 3.926], np.tile(UNKNOWN, (1, 13))),
-                uncer=np.append([0.079, 0.02], np.tile(UNKNOWN, (1, 13))),
+                value=np.append([3.397, 3.926], np.tile(UNKNOWN, (1, FL_LENGHT))),
+                uncer=np.append([0.079, 0.02], np.tile(UNKNOWN, (1, FL_LENGHT))),
                 units='MHz/Torr',
                 refer='Tretyakov, JMS, 2016 + Koshelev et al. 2018 (22 GHz, Video)'
             ),
             'gamma_a_combo_k2017': SpectroscopicParameter(
-                value=np.append([3.584, 3.926], np.tile(UNKNOWN, (1, 13))),
-                uncer=np.append([0.052, 0.02], np.tile(UNKNOWN, (1, 13))),
+                value=np.append([3.584, 3.926], np.tile(UNKNOWN, (1, FL_LENGHT))),
+                uncer=np.append([0.052, 0.02], np.tile(UNKNOWN, (1, FL_LENGHT))),
                 units='MHz/Torr',
                 refer='Tretyakov, JMS, 2016 + Koshelev et al. 2018 (22 GHz, Combined)'
             ),
             'gamma_w': SpectroscopicParameter(
-                value=np.append([17.6, 19.7], np.tile(UNKNOWN, (1, 13))),
-                uncer=np.append([0.5, 0.5], np.tile(UNKNOWN, (1, 13))),
+                value=np.append([17.6, 19.7], np.tile(UNKNOWN, (1, FL_LENGHT))),
+                uncer=np.append([0.5, 0.5], np.tile(UNKNOWN, (1, FL_LENGHT))),
                 units='MHz/Torr',
                 refer='Tretyakov, JMS, 2016'
             ),
             'gamma_w_rad_k2017': SpectroscopicParameter(
-                value=np.append([17.713, 19.7], np.tile(UNKNOWN, (1, 13))),
-                uncer=np.append([0.015, 0.5], np.tile(UNKNOWN, (1, 13))),
+                value=np.append([17.713, 19.7], np.tile(UNKNOWN, (1, FL_LENGHT))),
+                uncer=np.append([0.015, 0.5], np.tile(UNKNOWN, (1, FL_LENGHT))),
                 units='MHz/Torr',
                 refer='Tretyakov, JMS, 2016 + Koshelev et al. 2018 (22 GHz, RAD)'
             ),
             'gamma_w_video_k2017': SpectroscopicParameter(
-                value=np.append([17.35, 19.7], np.tile(UNKNOWN, (1, 13))),
-                uncer=np.append([0.12, 0.5], np.tile(UNKNOWN, (1, 13))),
+                value=np.append([17.35, 19.7], np.tile(UNKNOWN, (1, FL_LENGHT))),
+                uncer=np.append([0.12, 0.5], np.tile(UNKNOWN, (1, FL_LENGHT))),
                 units='MHz/Torr',
                 refer='Tretyakov, JMS, 2016 + Koshelev et al. 2018 (22 GHz, Video)'
             ),
             'gamma_w_combo_k2017': SpectroscopicParameter(
-                value=np.append([17.707, 19.7], np.tile(UNKNOWN, (1, 13))),
-                uncer=np.append([0.045, 0.5], np.tile(UNKNOWN, (1, 13))),
+                value=np.append([17.707, 19.7], np.tile(UNKNOWN, (1, FL_LENGHT))),
+                uncer=np.append([0.045, 0.5], np.tile(UNKNOWN, (1, FL_LENGHT))),
                 units='MHz/Torr',
                 refer='Tretyakov, JMS, 2016 + Koshelev et al. 2018 (22 GHz, Combined)'
             ),
             'n_a': SpectroscopicParameter(
-                value=np.append([0.7, 0.74], np.tile(UNKNOWN, (1, 13))),
-                uncer=np.append([0.05, 0.03], np.tile(UNKNOWN, (1, 13))),
+                value=np.append([0.7, 0.74], np.tile(UNKNOWN, (1, FL_LENGHT))),
+                uncer=np.append([0.05, 0.03], np.tile(UNKNOWN, (1, FL_LENGHT))),
                 units='unitless',
                 refer='Tretyakov, JMS, 2016'
             ),
             'n_w': SpectroscopicParameter(
-                value=np.append([1.2, 0.78], np.tile(UNKNOWN, (1, 13))),
-                uncer=np.append([0.5, 0.08], np.tile(UNKNOWN, (1, 13))),
+                value=np.append([1.2, 0.78], np.tile(UNKNOWN, (1, FL_LENGHT))),
+                uncer=np.append([0.5, 0.08], np.tile(UNKNOWN, (1, FL_LENGHT))),
                 units='unitless',
                 refer='Tretyakov, JMS, 2016'
             ),
             'delta_a': SpectroscopicParameter(
-                value=np.append([0.0, -0.096], np.tile(UNKNOWN, (1, 13))),
-                uncer=np.append([0.1, 0.01], np.tile(UNKNOWN, (1, 13))),
+                value=np.append([0.0, -0.096], np.tile(UNKNOWN, (1, FL_LENGHT))),
+                uncer=np.append([0.1, 0.01], np.tile(UNKNOWN, (1, FL_LENGHT))),
                 units='unitless',
                 refer='Tretyakov, JMS, 2016'
             ),
             'delta_a_rad_k2017': SpectroscopicParameter(
-                value=np.append([-0.044, -0.096], np.tile(UNKNOWN, (1, 13))),
-                uncer=np.append([0.005, 0.01], np.tile(UNKNOWN, (1, 13))),
+                value=np.append([-0.044, -0.096], np.tile(UNKNOWN, (1, FL_LENGHT))),
+                uncer=np.append([0.005, 0.01], np.tile(UNKNOWN, (1, FL_LENGHT))),
                 units='MHz/Torr',
                 refer='Tretyakov, JMS, 2016 + Koshelev et al. 2018 (22 GHz, RAD)'
             ),
             'delta_a_video_k2017': SpectroscopicParameter(
-                value=np.append([0.081, -0.096], np.tile(UNKNOWN, (1, 13))),
-                uncer=np.append([0.015, 0.01], np.tile(UNKNOWN, (1, 13))),
+                value=np.append([0.081, -0.096], np.tile(UNKNOWN, (1, FL_LENGHT))),
+                uncer=np.append([0.015, 0.01], np.tile(UNKNOWN, (1, FL_LENGHT))),
                 units='MHz/Torr',
                 refer='Tretyakov, JMS, 2016 + Koshelev et al. 2018 (22 GHz, Video)'
             ),
             'delta_a_combo_k2017': SpectroscopicParameter(
-                value=np.append([-0.032, -0.096], np.tile(UNKNOWN, (1, 13))),
-                uncer=np.append([0.038, 0.01], np.tile(UNKNOWN, (1, 13))),
+                value=np.append([-0.032, -0.096], np.tile(UNKNOWN, (1, FL_LENGHT))),
+                uncer=np.append([0.038, 0.01], np.tile(UNKNOWN, (1, FL_LENGHT))),
                 units='MHz/Torr',
                 refer='Tretyakov, JMS, 2016 + Koshelev et al. 2018 (22 GHz, Combined)'
             ),
             'delta_w': SpectroscopicParameter(
-                value=np.append([-0.4, 0.23], np.tile(UNKNOWN, (1, 13))),
-                uncer=np.append([1.2, 0.03], np.tile(UNKNOWN, (1, 13))),
+                value=np.append([-0.4, 0.23], np.tile(UNKNOWN, (1, FL_LENGHT))),
+                uncer=np.append([1.2, 0.03], np.tile(UNKNOWN, (1, FL_LENGHT))),
                 units='MHz/Torr',
                 refer='Tretyakov, JMS, 2016'
             ),
             'delta_w_rad_k2017': SpectroscopicParameter(
-                value=np.append([1.085, 0.23], np.tile(UNKNOWN, (1, 13))),
-                uncer=np.append([0.011, 0.03], np.tile(UNKNOWN, (1, 13))),
+                value=np.append([1.085, 0.23], np.tile(UNKNOWN, (1, FL_LENGHT))),
+                uncer=np.append([0.011, 0.03], np.tile(UNKNOWN, (1, FL_LENGHT))),
                 units='MHz/Torr',
                 refer='Tretyakov, JMS, 2016 + Koshelev et al. 2018 (22 GHz, RAD)'
             ),
             'delta_w_video_k2017': SpectroscopicParameter(
-                value=np.append([1.53, 0.23], np.tile(UNKNOWN, (1, 13))),
-                uncer=np.append([0.06, 0.03], np.tile(UNKNOWN, (1, 13))),
+                value=np.append([1.53, 0.23], np.tile(UNKNOWN, (1, FL_LENGHT))),
+                uncer=np.append([0.06, 0.03], np.tile(UNKNOWN, (1, FL_LENGHT))),
                 units='MHz/Torr',
                 refer='Tretyakov, JMS, 2016 + Koshelev et al. 2018 (22 GHz, Video)'
             ),
             'delta_w_combo_k2017': SpectroscopicParameter(
-                value=np.append([1.099, 0.23], np.tile(UNKNOWN, (1, 13))),
-                uncer=np.append([0.079, 0.03], np.tile(UNKNOWN, (1, 13))),
+                value=np.append([1.099, 0.23], np.tile(UNKNOWN, (1, FL_LENGHT))),
+                uncer=np.append([0.079, 0.03], np.tile(UNKNOWN, (1, FL_LENGHT))),
                 units='MHz/Torr',
                 refer='Tretyakov, JMS, 2016 + Koshelev et al. 2018 (22 GHz, Combined)'
             ),
             # Shift to width ratio (this is used in Ros 2016 & 2017 models instead of delta_a/w)
             # In Ros 2016: SR = delta_a/gamma_a
             'SR': SpectroscopicParameter(
-                value=np.append([0.0, 0.0], np.tile(UNKNOWN, (1, 13))),
-                uncer=np.append([0.0, 0.0], np.tile(UNKNOWN, (1, 13))),
+                value=np.append([0.0, 0.0], np.tile(UNKNOWN, (1, FL_LENGHT))),
+                uncer=np.append([0.0, 0.0], np.tile(UNKNOWN, (1, FL_LENGHT))),
                 units='unitless',
                 refer='Tretyakov, JMS, 2016 - Eq. 3 and 5'
             ),
@@ -574,65 +587,62 @@ class SpectroscopicParameter:
         # np_zeros[34:49] = AMU['O2_V'].value[34:49] * 0.2
         # AMU['O2_V_NL'] = AMU['O2_V_NL']._replace(uncer=np_zeros)
 
-        np_zeros = np.zeros(SPECTROSCOPIC_PARAMS['O2gamma'].value.shape)
-        np_zeros[38:49] = SPECTROSCOPIC_PARAMS['O2gamma'].value[38:49] * 0.1
-        SPECTROSCOPIC_PARAMS['O2gamma_mmW'].uncer = np_zeros
-        np_zeros = np.zeros(SPECTROSCOPIC_PARAMS['O2gamma'].value.shape)
-        np_zeros[34:49] = SPECTROSCOPIC_PARAMS['O2gamma'].value[34:49] * 0.1
-        SPECTROSCOPIC_PARAMS['O2gamma_NL'].uncer = np_zeros
-        np_zeros = np.zeros(SPECTROSCOPIC_PARAMS['O2gamma'].value.shape)
+        np_zeros = np.zeros(SpectroscopicParameter.SP['O2gamma'].value.shape)
+        np_zeros[38:49] = SpectroscopicParameter.SP['O2gamma'].value[38:49] * 0.1
+        SpectroscopicParameter.SP['O2gamma_mmW'].uncer = np_zeros
+        np_zeros = np.zeros(SpectroscopicParameter.SP['O2gamma'].value.shape)
+        np_zeros[34:49] = SpectroscopicParameter.SP['O2gamma'].value[34:49] * 0.1
+        SpectroscopicParameter.SP['O2gamma_NL'].uncer = np_zeros
+        np_zeros = np.zeros(SpectroscopicParameter.SP['O2gamma'].value.shape)
         np_zeros[20:38] = SIGMA[20:38, 2]
-        SPECTROSCOPIC_PARAMS['O2gamma_WL'].uncer = np_zeros
-        np_zeros = np.zeros(SPECTROSCOPIC_PARAMS['Y300'].value.shape)
+        SpectroscopicParameter.SP['O2gamma_WL'].uncer = np_zeros
+        np_zeros = np.zeros(SpectroscopicParameter.SP['Y300'].value.shape)
         np_zeros[0:34] = U[37:71]
-        SPECTROSCOPIC_PARAMS['Y300'].uncer = np_zeros
-        np_zeros = np.zeros(SPECTROSCOPIC_PARAMS['Y300'].value.shape)
-        np_zeros[34:49] = SPECTROSCOPIC_PARAMS['Y300'].value[34:49] * 0.2
-        SPECTROSCOPIC_PARAMS['Y300_NL'].uncer = np_zeros
-        np_zeros = np.zeros(SPECTROSCOPIC_PARAMS['O2_V'].value.shape)
+        SpectroscopicParameter.SP['Y300'].uncer = np_zeros
+        np_zeros = np.zeros(SpectroscopicParameter.SP['Y300'].value.shape)
+        np_zeros[34:49] = SpectroscopicParameter.SP['Y300'].value[34:49] * 0.2
+        SpectroscopicParameter.SP['Y300_NL'].uncer = np_zeros
+        np_zeros = np.zeros(SpectroscopicParameter.SP['O2_V'].value.shape)
         np_zeros[0:34] = U[71:105]
-        SPECTROSCOPIC_PARAMS['O2_V'].uncer = np_zeros
-        np_zeros = np.zeros(SPECTROSCOPIC_PARAMS['O2_V'].value.shape)
-        np_zeros[34:49] = SPECTROSCOPIC_PARAMS['O2_V'].value[34:49] * 0.2
-        SPECTROSCOPIC_PARAMS['O2_V_NL'].uncer = np_zeros
+        SpectroscopicParameter.SP['O2_V'].uncer = np_zeros
+        np_zeros = np.zeros(SpectroscopicParameter.SP['O2_V'].value.shape)
+        np_zeros[34:49] = SpectroscopicParameter.SP['O2_V'].value[34:49] * 0.2
+        SpectroscopicParameter.SP['O2_V_NL'].uncer = np_zeros
 
         if USEKOSHELEV2017:
-            SPECTROSCOPIC_PARAMS['gamma_a'] = SPECTROSCOPIC_PARAMS['gamma_a_{}_k2017'.format(
+            SpectroscopicParameter.SP['gamma_a'] = SpectroscopicParameter.SP['gamma_a_{}_k2017'.format(
                 USEKOSHELEV2017_WHAT)]
-            SPECTROSCOPIC_PARAMS['gamma_w'] = SPECTROSCOPIC_PARAMS['gamma_w_{}_k2017'.format(
+            SpectroscopicParameter.SP['gamma_w'] = SpectroscopicParameter.SP['gamma_w_{}_k2017'.format(
                 USEKOSHELEV2017_WHAT)]
-            SPECTROSCOPIC_PARAMS['delta_a'] = SPECTROSCOPIC_PARAMS['delta_a_{}_k2017'.format(
+            SpectroscopicParameter.SP['delta_a'] = SpectroscopicParameter.SP['delta_a_{}_k2017'.format(
                 USEKOSHELEV2017_WHAT)]
-            SPECTROSCOPIC_PARAMS['delta_w'] = SPECTROSCOPIC_PARAMS['delta_w_{}_k2017'.format(
+            SpectroscopicParameter.SP['delta_w'] = SpectroscopicParameter.SP['delta_w_{}_k2017'.format(
                 USEKOSHELEV2017_WHAT)]
 
         for i in range(0, 2):
-            SPECTROSCOPIC_PARAMS['SR'].value[i], \
-                SPECTROSCOPIC_PARAMS['SR'].uncer[i] = AbsModUncertainty.uncertainty_propagation('A/B',
-                                                                                                SPECTROSCOPIC_PARAMS[
-                                                                                                    'delta_a'].value[i],
-                                                                                                SPECTROSCOPIC_PARAMS[
-                                                                                                    'gamma_a'].value[i],
-                                                                                                SPECTROSCOPIC_PARAMS[
-                                                                                                    'delta_a'].uncer[i],
-                                                                                                SPECTROSCOPIC_PARAMS['gamma_a'].uncer[i])
+            SpectroscopicParameter.SP['SR'].value[i], \
+                SpectroscopicParameter.SP['SR'].uncer[i] = AbsModUncertainty.uncertainty_propagation('A/B',
+                                                                              SpectroscopicParameter.SP['delta_a'].value[i],
+                                                                              SpectroscopicParameter.SP['gamma_a'].value[i],
+                                                                              SpectroscopicParameter.SP['delta_a'].uncer[i],
+                                                                              SpectroscopicParameter.SP['gamma_a'].uncer[i])
 
-        SPECTROSCOPIC_PARAMS['gamma_a'].value = SPECTROSCOPIC_PARAMS['gamma_a'].value * MB2TORR
-        SPECTROSCOPIC_PARAMS['gamma_a'].uncer = SPECTROSCOPIC_PARAMS['gamma_a'].uncer * MB2TORR
+        SpectroscopicParameter.SP['gamma_a'].value = SpectroscopicParameter.SP['gamma_a'].value * MB2TORR
+        SpectroscopicParameter.SP['gamma_a'].uncer = SpectroscopicParameter.SP['gamma_a'].uncer * MB2TORR
         # AMU['gamma_a'].uncer[0:2] = np.array([0.039, 0.015])
-        SPECTROSCOPIC_PARAMS['gamma_w'].value = SPECTROSCOPIC_PARAMS['gamma_w'].value * MB2TORR
-        SPECTROSCOPIC_PARAMS['delta_a'].value = SPECTROSCOPIC_PARAMS['delta_a'].value * MB2TORR
-        SPECTROSCOPIC_PARAMS['delta_w'].value = SPECTROSCOPIC_PARAMS['delta_w'].value * MB2TORR
-        SPECTROSCOPIC_PARAMS['gamma_a'].units = SPECTROSCOPIC_PARAMS['gamma_w'].units = SPECTROSCOPIC_PARAMS[
-            'delta_a'].units = SPECTROSCOPIC_PARAMS['delta_w'].units = 'MHz/mb'
+        SpectroscopicParameter.SP['gamma_w'].value = SpectroscopicParameter.SP['gamma_w'].value * MB2TORR
+        SpectroscopicParameter.SP['delta_a'].value = SpectroscopicParameter.SP['delta_a'].value * MB2TORR
+        SpectroscopicParameter.SP['delta_w'].value = SpectroscopicParameter.SP['delta_w'].value * MB2TORR
+        SpectroscopicParameter.SP['gamma_a'].units = SpectroscopicParameter.SP['gamma_w'].units = SpectroscopicParameter.SP[
+            'delta_a'].units = SpectroscopicParameter.SP['delta_w'].units = 'MHz/mb'
 
         # units in Ros. model are [Hz*cm^2]; the conversion factor is just speed of light in cm (P. Rosenkranz, personal communication)
         # AMU['S'] = AMU['S']._replace(value=AMU['S'].value * C_CM, uncer=AMU['S'].uncer * C_CM, units='Hz*cm^2')
-        SPECTROSCOPIC_PARAMS['S'].value = SPECTROSCOPIC_PARAMS['S'].value * C_CM
-        SPECTROSCOPIC_PARAMS['S'].uncer = SPECTROSCOPIC_PARAMS['S'].uncer * C_CM
-        SPECTROSCOPIC_PARAMS['S'].units = 'Hz*cm^2'
+        SpectroscopicParameter.SP['S'].value = SpectroscopicParameter.SP['S'].value * C_CM
+        SpectroscopicParameter.SP['S'].uncer = SpectroscopicParameter.SP['S'].uncer * C_CM
+        SpectroscopicParameter.SP['S'].units = 'Hz*cm^2'
 
-        return SPECTROSCOPIC_PARAMS
+        return SpectroscopicParameter.SP
 
 
 class AbsModUncertainty:
@@ -667,19 +677,19 @@ class AbsModUncertainty:
         associated uncertainty.
 
         +--------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-        | Function                                   | Standard deviation                                                                                                                                                                 |
+        | Function                                   |  Standard deviation                                                                                                                                                                |
         +--------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-        | .. math:: \displaystyle f=aA\,             | .. math:: \displaystyle \sigma _{f}=|a|\sigma _{A}                                                                                                                                 |
+        | :math:`f=aA`                               |  :math:`\sigma_{f}=|a|\sigma _{A}`                                                                                                                                                 |
         +--------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-        | .. math:: \displaystyle f=aA+bB\,          | .. math:: \displaystyle \sigma _{f}={\sqrt {a^{2}\sigma _{A}^{2}+b^{2}\sigma _{B}^{2}+2ab\,\sigma _{AB}}}                                                                          |
+        | :math:`\displaystyle f=aA+bB`              | :math:`\displaystyle \sigma _{f}={\sqrt {a^{2}\sigma _{A}^{2}+b^{2}\sigma _{B}^{2}+2ab\,\sigma _{AB}}}`                                                                            |
         +--------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-        | .. math:: \displaystyle f=aA-bB\,          | .. math:: \displaystyle \sigma _{f}={\sqrt {a^{2}\sigma _{A}^{2}+b^{2}\sigma _{B}^{2}-2ab\,\sigma _{AB}}}                                                                          |
+        | :math:`\displaystyle f=aA-bB`              | :math:`\displaystyle \sigma _{f}={\sqrt {a^{2}\sigma _{A}^{2}+b^{2}\sigma _{B}^{2}-2ab\,\sigma _{AB}}}`                                                                            |
         +--------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-        | .. math:: \displaystyle f=AB\,             | .. math:: \displaystyle \sigma _{f}\approx \left|f\right|{\sqrt {\left({\frac {\sigma _{A}}{A}}\right)^{2}+\left({\frac {\sigma _{B}}{B}}\right)^{2}+2{\frac {\sigma _{AB}}{AB}}}} |
+        | :math:`\displaystyle f=AB`                 | :math:`\displaystyle \sigma _{f}\approx \left|f\right|{\sqrt {\left({\frac {\sigma _{A}}{A}}\right)^{2}+\left({\frac {\sigma _{B}}{B}}\right)^{2}+2{\frac {\sigma _{AB}}{AB}}}}`   |
         +--------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-        | .. math:: \displaystyle f={\frac {A}{B}}\, | .. math:: \displaystyle \sigma _{f}\approx \left|f\right|{\sqrt {\left({\frac {\sigma _{A}}{A}}\right)^{2}+\left({\frac {\sigma _{B}}{B}}\right)^{2}-2{\frac {\sigma _{AB}}{AB}}}} |
+        | :math:`\displaystyle f={\frac {A}{B}}`     | :math:`\displaystyle \sigma _{f}\approx \left|f\right|{\sqrt {\left({\frac {\sigma _{A}}{A}}\right)^{2}+\left({\frac {\sigma _{B}}{B}}\right)^{2}-2{\frac {\sigma _{AB}}{AB}}}}`   |
         +--------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-        | .. math:: \displaystyle f=A^{a}\,          | .. math:: \displaystyle \sigma _{f}=|a|A^{a-1}\sigma _{A}                                                                                                                          |
+        | :math:`\displaystyle f=A^{a}`              | :math:`\displaystyle \sigma _{f}=|a|A^{a-1}\sigma _{A}`                                                                                                                            |
         +--------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 
         Args:
@@ -736,7 +746,7 @@ class AbsModUncertainty:
             mode (Optional[str], optional): [description]. Defaults to 'non'.
             index (Optional[int], optional): [description]. Defaults to None.
         """
-        AMU_copy = deepcopy(SpectroscopicParameter.parameters())
+        AMU_copy = deepcopy(SpectroscopicParameter.SP)
         if what == []:
             param = list(AMU_copy.keys())
         else:

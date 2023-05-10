@@ -515,6 +515,7 @@ class H2OAbsModel(AbsModel):
             # shiftf = self.h2oll.sh[i] * pda * ti ** self.h2oll.xh[i]
             # shifts = self.h2oll.shs[i] * pvap * ti ** self.h2oll.xhs[i]
             shift = self.h2oll.sr[i] * widthf
+            # shift = shiftf + shifts
             wsq = width ** 2
             s = self.h2oll.s1[i] * ti2 * np.exp(self.h2oll.b2[i] * (1. - ti))
             df[0] = f - self.h2oll.fl[i] - shift

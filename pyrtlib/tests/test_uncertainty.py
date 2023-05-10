@@ -78,6 +78,13 @@ class Test(TestCase):
         parameters['w2a'].value = 1.4
         assert_equal(parameters['w2a'].value, 1.4)
 
+    def test_set_parameters(self):
+        parameters = SpectroscopicParameter.parameters()
+        parameters['gamma_a'].value[0] = 2.688
+        parameters['gamma_a'].uncer[0] = 0.039
+        SpectroscopicParameter.set_parameters(parameters)
+        assert_equal(parameters['gamma_a'].value[0], 2.688)
+
     def test_uncertainty_propagation(self):
         parameters = SpectroscopicParameter.parameters()
         u = AbsModUncertainty.uncertainty_propagation(
