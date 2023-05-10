@@ -1,6 +1,6 @@
 import os
 from unittest import TestCase
-
+import pytest
 import numpy as np
 import pandas as pd
 from numpy.testing import assert_allclose, assert_equal
@@ -12,9 +12,9 @@ from pyrtlib.utils import ppmv2gkg, mr2rh
 
 THIS_DIR = os.path.dirname(os.path.abspath(__file__))
 
-
 class Test(TestCase):
     def test_absmod_uncertainties_perturb_min(self):
+        SpectroscopicParameter._initialize()
         amu = AbsModUncertainty.parameters_perturbation(['gamma_a'], 'min', 1)
         expected0 = 0.016501363999999998
         assert_equal(expected0, amu['gamma_a'].uncer[0])
@@ -27,6 +27,7 @@ class Test(TestCase):
         assert_equal(expected1, amu['gamma_a'].value[1])
 
     def test_absmod_uncertainties_perturb_max(self):
+        SpectroscopicParameter._initialize()
         amu = AbsModUncertainty.parameters_perturbation(['gamma_a'], 'max', 0)
         expected0 = 2.7152244399999996
         assert_equal(expected0, amu['gamma_a'].value[0])
@@ -43,6 +44,7 @@ class Test(TestCase):
 
         frq = np.arange(20, 201, 1)
 
+        SpectroscopicParameter._initialize()
         amu = AbsModUncertainty.parameters_perturbation(
             ['gamma_a'], 'min', index=1)
 
@@ -61,23 +63,26 @@ class Test(TestCase):
 
         assert_allclose(r111[0:n, 0:n], r112[0:n, 0:n])
 
+    # @pytest.mark.skip(reason="skipping")
     def test_spectroscopic_params(self):
         parameters = SpectroscopicParameter.parameters()
         v = parameters['w2a'].value
         assert_equal(v, 1.2)
 
     def test_add_spectr_params(self):
-        parameters = SpectroscopicParameter.parameters()
+        parameters = SpectroscopicParameter.SP
         parameters['test'] = SpectroscopicParameter(
             2.3, 0.001, 'unitless', 'Tretyakov, JMS, 2016')
         parameters['test'].value
         assert_equal(parameters['test'].value, 2.3)
 
+    # @pytest.mark.skip(reason="skipping")
     def test_edit_spectroscopic_params(self):
         parameters = SpectroscopicParameter.parameters()
         parameters['w2a'].value = 1.4
         assert_equal(parameters['w2a'].value, 1.4)
 
+    # @pytest.mark.skip(reason="skipping")
     def test_set_parameters(self):
         parameters = SpectroscopicParameter.parameters()
         parameters['gamma_a'].value[0] = 2.688

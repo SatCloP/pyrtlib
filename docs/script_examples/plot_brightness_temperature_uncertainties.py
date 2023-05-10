@@ -41,13 +41,6 @@ for i in range(0, 6):
     frq = np.arange(20, 60 + interp, interp)
 
     amu = SpectroscopicParameter.parameters()
-    amu['gamma_a'].value[0] = 2.688
-    amu['gamma_a'].uncer[0] = 0.039
-    amu['gamma_w'].value[0] = 13.281
-    amu['gamma_w'].uncer[0] = 0.039
-    # amu['FL'].value[0] = amu['FL'].value[0] * 1e6
-    # amu['FL'].uncer[0] = 0.05
-    SpectroscopicParameter.set_parameters(amu)
 
     rte = TbCloudRTE(z, p, t, rh, frq, amu=amu)
     rte.init_absmdl('uncertainty')
