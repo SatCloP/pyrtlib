@@ -38,15 +38,13 @@ for i in range(0, 6):
     gkg = ppmv2gkg(md[:, atmp.H2O], atmp.H2O)
     rh = mr2rh(p, t, gkg)[0] / 100
 
-    interp = 2
+    interp = .5
     frq = np.arange(20, 60 + interp, interp)
 
     amu = SpectroscopicParameter.parameters()
 
     rte = TbCloudRTE(z, p, t, rh, frq, amu=amu)
     rte.init_absmdl('uncertainty')
-    H2OAbsModel.model = 'R17'
-    H2OAbsModel.set_ll()
     df = rte.execute()
     
     amu = AbsModUncertainty.parameters_perturbation(['gamma_a'], 'max', index=0)

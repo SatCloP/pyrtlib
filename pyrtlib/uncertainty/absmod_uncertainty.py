@@ -36,7 +36,7 @@ from pyrtlib.utils import constants
 
 @dataclass
 class SpectroscopicParameter:
-    """Absirption model uncertainties for spectroscopic parameters
+    """Absorption model uncertainties for the spectroscopic parameters
 
     Example:
         .. code-block:: python
@@ -63,20 +63,47 @@ class SpectroscopicParameter:
             'Rosenkranz, pers. comm., 2017'
     """
     value: np.ndarray
-    """_summary_
+    """The value associated to the parameter
     """
     uncer: np.ndarray
-    """_summary_
+    """The uncertainty of the parameter
     """
     units: Optional[str] = ''
-    """_summary_
+    """The units of the parameter
     """
     refer: Optional[str] = ''
-    """_summary_
+    """The reference of the parameter
+    """
+    name: Optional[str] = ''
+    """The name or description of the parameter
     """
 
     def _initialize() -> Dict:
         SpectroscopicParameter.parameters()
+
+    @staticmethod
+    def _parameters_skeleton():
+        SP = {
+            "w2a": SpectroscopicParameter(value=.0, uncer=.0, name='Water-to-air broadening ratio'),
+            "con_Cf": SpectroscopicParameter(value=.0, uncer=.0, name='Foreign induced broadening coefficient'),
+            "con_Cs": SpectroscopicParameter(value=.0, uncer=.0, name='Self induced broadening coefficient'),
+            "con_Xf": SpectroscopicParameter(value=.0, uncer=.0, name='Foreign broadening temperature dependence exponents'),
+            "con_Xs": SpectroscopicParameter(value=.0, uncer=.0, name='Self broadening temperature dependence exponents'),
+            
+            "FL": SpectroscopicParameter(value=.0, uncer=.0, name='Central frequency line'),
+            "S": SpectroscopicParameter(value=.0, uncer=.0, name='Line intensity (or strength)'),
+            "B2": SpectroscopicParameter(value=.0, uncer=.0, name=''),
+
+            "gamma_a": SpectroscopicParameter(value=.0, uncer=.0, name='Air induced broadening coefficients'),
+            "gamma_w": SpectroscopicParameter(value=.0, uncer=.0, name='Water induced broadening coefficients'),
+            "n_a": SpectroscopicParameter(value=.0, uncer=.0, name='Temperature-dependence exponent of air'),
+            "n_w": SpectroscopicParameter(value=.0, uncer=.0, name='Temperature-dependence exponent of water'),
+            "delta_a": SpectroscopicParameter(value=.0, uncer=.0, name='Air induced shifting coefficient'),
+            "delta_w": SpectroscopicParameter(value=.0, uncer=.0, name='Water induced shifting coefficient'),
+            "n_da": SpectroscopicParameter(value=.0, uncer=.0, name='T-exponent of air-shifting'),
+            "n_dw": SpectroscopicParameter(value=.0, uncer=.0, name='T-exponent of water-shifting'),
+            "wv_nS": SpectroscopicParameter(value=.0, uncer=.0, name='Intensity temperature-dependence exponent'),
+        }
 
     @staticmethod
     def set_parameters(SP: dict) -> None:
@@ -157,7 +184,6 @@ class SpectroscopicParameter:
             # spectrum windows. Therefore, to keep the new model consistent with Turner's results, it's necessary to
             # modify the multipliers slightly, but mainly in the foreign-continuum;
             'con_Cf_factr': SpectroscopicParameter(
-                # value=1.105,
                 value=1.0976,
                 uncer=np.sqrt(0.098 ** 2 + 0.03 ** 2),
                 units='unitless',
@@ -692,14 +718,6 @@ class AbsModUncertainty:
 
     For a more exaustive example on how uncertainty work look at :ref:`uncert_example`.
 
-    Raises:
-        ValueError: _description_
-        NotImplementedError: _description_
-        ValueError: _description_
-
-    Returns:
-        _type_: _description_
-
     References:
         .. [1] [Koshelev-2011]_
         .. [2] [Koshelev-2015]_
@@ -743,7 +761,7 @@ class AbsModUncertainty:
             sAB (float): sqrt of covariance between A and B. Defaults to 0.0.
 
         Raises:
-            ValueError: [description]
+            ValueError: Raise if `fun` argument is not defined.
 
         Returns:
             tuple: function computed with imput variables and uncertainty on function used
@@ -778,17 +796,23 @@ class AbsModUncertainty:
         return F, sF
 
     @staticmethod
-    def parameters_perturbation(what: Optional[list] = [], mode: Optional[str] = 'non', index: Optional[int] = None):
-        """[summary]
+    def parameters_perturbation(what: Optional[list] = [], mode: Optional[str] = 'non', index: Optional[int] = None) -> Dict:
+        """This functoin execute the perturbatoin of the spectroscopic parameters provided.
 
         Args:
-            what (list): [description]
-            mode (Optional[str], optional): [description]. Defaults to 'non'.
-            index (Optional[int], optional): [description]. Defaults to None.
+            what (Optional[list], optional): The name of the parameter/s being perturbed. Defaults to [].
+            mode (Optional[str], optional): The type of perturbation (max or min). Defaults to 'non'.
+            index (Optional[int], optional): The index of the coefficient being perturbed. Defaults to None.
+
+        Raises:
+            ValueError: If argument `mode` is not set or invalid
+
+        Returns:
+            dict: The new dictionary that includes perturbed parameters.
         """
-        AMU_copy = deepcopy(SpectroscopicParameter.SP)
+        amu_copy = deepcopy(SpectroscopicParameter.SP)
         if what == []:
-            param = list(AMU_copy.keys())
+            param = list(amu_copy.keys())
         else:
             param = what
 
@@ -798,21 +822,21 @@ class AbsModUncertainty:
 
         npar = len(param)
         for i in range(npar):
-            new_value = AMU_copy[param[i]].value
-            uncer = AMU_copy[param[i]].uncer
+            new_value = amu_copy[param[i]].value
+            uncer = amu_copy[param[i]].uncer
             if mode == 'max':
                 # new_value[param_index] = new_value[param_index] + uncer[param_index]
                 if isinstance(new_value, float) or isinstance(uncer, float):
-                    AMU_copy[param[i]].value = new_value + uncer
+                    amu_copy[param[i]].value = new_value + uncer
                 else:
-                    AMU_copy[param[i]].value[param_index] = new_value[param_index] + \
+                    amu_copy[param[i]].value[param_index] = new_value[param_index] + \
                         uncer[param_index]
             elif mode == 'min':
                 # new_value[param_index] = new_value[param_index] - uncer[param_index]
                 if isinstance(new_value, float) or isinstance(uncer, float):
-                    AMU_copy[param[i]].value = new_value - uncer
+                    amu_copy[param[i]].value = new_value - uncer
                 else:
-                    AMU_copy[param[i]].value[param_index] = new_value[param_index] - \
+                    amu_copy[param[i]].value[param_index] = new_value[param_index] - \
                         uncer[param_index]
             elif mode == 'non':
                 pass
@@ -830,7 +854,7 @@ class AbsModUncertainty:
             else:
                 raise ValueError("mode args is not set or invalid")
 
-        return AMU_copy
+        return amu_copy
 
     # @NotImplemented
     # @staticmethod

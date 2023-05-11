@@ -1,4 +1,4 @@
-Installation Instructions
+Installation instructions
 =========================
 
 pyrtlib can be installed on any computer supporting Python 3.6 (or higher).

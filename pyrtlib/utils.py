@@ -7,7 +7,8 @@ __date__ = 'March 2021'
 __copyright__ = '(C) 2021, CNR-IMAA'
 
 from typing import Tuple, Optional, Union, List, Dict
-
+import sys
+from importlib import reload
 import numpy as np
 
 
@@ -38,8 +39,11 @@ def import_lineshape(name: str) -> Dict:
     try:
         module = __import__('pyrtlib._lineshape', globals(),
                             locals(), [name.lower()])
-    except ImportError:
+    except ImportError as e:
         return None
+    if vars(module)[name.lower()] in sys.modules.values():
+        reload(vars(module)[name.lower()])
+    
     return vars(module)[name.lower()]
 
 
