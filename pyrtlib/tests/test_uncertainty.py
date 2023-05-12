@@ -79,8 +79,8 @@ class Test(TestCase):
     # @pytest.mark.skip(reason="skipping")
     def test_edit_spectroscopic_params(self):
         parameters = SpectroscopicParameter.parameters()
-        parameters['w2a'].value = 1.2
-        assert_equal(parameters['w2a'].value, 1.2)
+        parameters['w2a'].value = 1.4
+        assert_equal(parameters['w2a'].value, 1.4)
 
     # @pytest.mark.skip(reason="skipping")
     def test_set_parameters(self):

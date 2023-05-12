@@ -53,12 +53,12 @@ for i in range(0, 6):
     parameters = AbsModUncertainty.parameters_perturbation(['gamma_a'], 'max', index=0)
     rte.set_amu(parameters)
     df_gamma = rte.execute()
-    df['delta_max_gamma_a'] = df.tbtotal - df_gamma.tbtotal
+    df['delta_max_gamma_a'] = df_gamma.tbtotal - df.tbtotal
 
     parameters = AbsModUncertainty.parameters_perturbation(['gamma_a'], 'min', index=0)
     rte.set_amu(parameters)
     df_gamma = rte.execute()
-    df['delta_min_gamma_a'] = df.tbtotal - df_gamma.tbtotal
+    df['delta_min_gamma_a'] = df_gamma.tbtotal - df.tbtotal
 
     df = df.set_index(frq)
 
@@ -70,7 +70,7 @@ for i in range(0, 6):
 
 # ax.legend()
 ax.grid(True, 'both')
-plt.title("Perturbed parameter: $\ H_2O - C_f$")
+plt.title("Perturbed parameter: $\ H_2O - \gamma_a$")
 plt.show()
 
 # %%
