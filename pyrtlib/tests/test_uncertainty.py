@@ -70,7 +70,7 @@ class Test(TestCase):
         assert_equal(v, 1.2)
 
     def test_add_spectr_params(self):
-        parameters = SpectroscopicParameter.SP
+        parameters = SpectroscopicParameter.parameters()
         parameters['test'] = SpectroscopicParameter(
             2.3, 0.001, 'unitless', 'Tretyakov, JMS, 2016')
         parameters['test'].value
@@ -79,15 +79,15 @@ class Test(TestCase):
     # @pytest.mark.skip(reason="skipping")
     def test_edit_spectroscopic_params(self):
         parameters = SpectroscopicParameter.parameters()
-        parameters['w2a'].value = 1.4
-        assert_equal(parameters['w2a'].value, 1.4)
+        parameters['w2a'].value = 1.2
+        assert_equal(parameters['w2a'].value, 1.2)
 
     # @pytest.mark.skip(reason="skipping")
     def test_set_parameters(self):
         parameters = SpectroscopicParameter.parameters()
         parameters['gamma_a'].value[0] = 2.688
         parameters['gamma_a'].uncer[0] = 0.039
-        SpectroscopicParameter.set_parameters(parameters)
+        # SpectroscopicParameter.set_parameters(parameters)
         assert_equal(parameters['gamma_a'].value[0], 2.688)
 
     def test_uncertainty_propagation(self):

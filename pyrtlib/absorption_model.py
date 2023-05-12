@@ -459,14 +459,14 @@ class H2OAbsModel(AbsModel):
             Union[ Tuple[numpy.ndarray, numpy.ndarray], None]: [description]
         """
 
-        self.h2oll.cf = amu['con_Cf'].value # * amu['con_Cf_factr'].value
-        self.h2oll.cs = amu['con_Cs'].value # * amu['con_Cs_factr'].value
+        self.h2oll.cf = amu['con_Cf'].value * amu['con_Cf_factr'].value
+        self.h2oll.cs = amu['con_Cs'].value * amu['con_Cs_factr'].value
         self.h2oll.xcf = amu['con_Xf'].value
         self.h2oll.xcs = amu['con_Xs'].value
         self.h2oll.s1[0:2] = amu['S'].value[0:2]
         self.h2oll.b2 = amu['B2'].value
-        self.h2oll.w0[0:2] = amu['gamma_a'].value[0:2] / 1000.0  # to check
-        self.h2oll.w0s[0:2] = amu['gamma_w'].value[0:2] / 1000.0  # to check
+        self.h2oll.w0[0:2] = amu['gamma_a'].value[0:2] / 1000.0
+        self.h2oll.w0s[0:2] = amu['gamma_w'].value[0:2] / 1000.0
         self.h2oll.x[0:2] = amu['n_a'].value[0:2]
         self.h2oll.xs[0:2] = amu['n_w'].value[0:2]
         if H2OAbsModel.model > 'R17':

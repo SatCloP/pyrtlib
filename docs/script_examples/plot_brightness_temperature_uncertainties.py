@@ -6,7 +6,7 @@ Performing sensitivity of spectroscopic parameters
 # %%
 # This example shows how to use the
 # :py:class:`pyrtlib.tb_spectrum.TbCloudRTE` method to calculate sensitivity of simulated downwelling brightness temperature
-# with a perturbed water vapor absorption parameter (:math:`\gamma_a` air broadening 22 GHz).
+# with a perturbed water vapor absorption parameter (:math:`\gamma_a` air broadening 22 GHz) from [Cimini-2018]_.
 
 import matplotlib.pyplot as plt
 
@@ -26,7 +26,7 @@ atm = ['Tropical',
        'Subarctic Winter',
        'U.S. Standard']
 
-colors = ["r", "b", "g", "c", "m", "y"]
+colors = ["r", "m", "g", "b", "c", "k"]
 
 fig, ax = plt.subplots(1, 1, figsize=(12, 8))
 ax.set_xlabel('Frequency [GHz]')
@@ -38,24 +38,25 @@ for i in range(0, 6):
     gkg = ppmv2gkg(md[:, atmp.H2O], atmp.H2O)
     rh = mr2rh(p, t, gkg)[0] / 100
 
-    interp = .5
+    interp = .1
     frq = np.arange(20, 60 + interp, interp)
 
-    amu = SpectroscopicParameter.parameters()
+    parameters = SpectroscopicParameter.parameters()
+    parameters['gamma_a'].value[0] = 2.688
+    parameters['gamma_a'].uncer[0] = 0.039
 
-    rte = TbCloudRTE(z, p, t, rh, frq, amu=amu)
+    rte = TbCloudRTE(z, p, t, rh, frq, amu=parameters)
     rte.init_absmdl('uncertainty')
+    rte.satellite = False
     df = rte.execute()
     
-    amu = AbsModUncertainty.parameters_perturbation(['gamma_a'], 'max', index=0)
-
-    rte.set_amu(amu)
+    parameters = AbsModUncertainty.parameters_perturbation(['gamma_a'], 'max', index=0)
+    rte.set_amu(parameters)
     df_gamma = rte.execute()
     df['delta_max_gamma_a'] = df.tbtotal - df_gamma.tbtotal
 
-    amu = AbsModUncertainty.parameters_perturbation(['gamma_a'], 'min', index=0)
-
-    rte.set_amu(amu)
+    parameters = AbsModUncertainty.parameters_perturbation(['gamma_a'], 'min', index=0)
+    rte.set_amu(parameters)
     df_gamma = rte.execute()
     df['delta_min_gamma_a'] = df.tbtotal - df_gamma.tbtotal
 
@@ -69,7 +70,7 @@ for i in range(0, 6):
 
 # ax.legend()
 ax.grid(True, 'both')
-plt.title("Perturbed parameters: $\gamma_a$")
+plt.title("Perturbed parameter: $\ H_2O - C_f$")
 plt.show()
 
 # %%

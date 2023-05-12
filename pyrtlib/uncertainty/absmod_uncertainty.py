@@ -173,8 +173,8 @@ class SpectroscopicParameter:
                 refer='Koshelev et al., JQSRT, 2015'
             ),
             'con_Cf': SpectroscopicParameter(
-                value=5.43e-10,
-                uncer=UNKNOWN,
+                value=5.96e-10,
+                uncer=5.5e-11,
                 units='1/(km*(mb^2*GHz^2))',
                 refer='RTE Rosen98 routine'
             ),
@@ -184,14 +184,14 @@ class SpectroscopicParameter:
             # spectrum windows. Therefore, to keep the new model consistent with Turner's results, it's necessary to
             # modify the multipliers slightly, but mainly in the foreign-continuum;
             'con_Cf_factr': SpectroscopicParameter(
-                value=1.0976,
+                value=1.11,
                 uncer=np.sqrt(0.098 ** 2 + 0.03 ** 2),
                 units='unitless',
                 refer='Turner et al., TGRSS, 2009'
             ),
             'con_Cs': SpectroscopicParameter(
-                value=1.8e-08,
-                uncer=UNKNOWN,
+                value=1.42e-8,
+                uncer=3.2e-9,
                 units='1/(km*(mb^2*GHz^2))',
                 refer='RTE Rosen98 routine'
             ),
@@ -690,7 +690,7 @@ class SpectroscopicParameter:
                                                                                                      SP[
                                                                                                          'delta_a'].uncer[i],
                                                                                                      SP['gamma_a'].uncer[i])
-
+        
         SP['gamma_a'].value = SP['gamma_a'].value * MB2TORR
         SP['gamma_a'].uncer = SP['gamma_a'].uncer * MB2TORR
         # AMU['gamma_a'].uncer[0:2] = np.array([0.039, 0.015])
