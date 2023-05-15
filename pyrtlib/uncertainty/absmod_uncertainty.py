@@ -155,10 +155,6 @@ class SpectroscopicParameter:
             "X11": SpectroscopicParameter(value=0.785, uncer=.0, units = 'unitless', name='Temperature dependence of broadening coefficient'),
             "X16": SpectroscopicParameter(value=0.765, uncer=.0, units = 'unitless', name='Temperature dependence of broadening coefficient'),
             "X05": SpectroscopicParameter(value=0.80, uncer=.0, units = 'unitless', name='Temperature dependence of broadening coefficient'),
-            "Y300": SpectroscopicParameter(value=ll.y300, uncer=np.zeros(len(ll.f)), units = '1/bar == 1/1e5Pa =~ 1/atm', name='Line mixing coefficients (single lines)'),
-            "Y300_NL": SpectroscopicParameter(value=ll.y300, uncer=.0, units = '1/mb', name='Line mixing coefficients for neglected lines (NL)'),
-            "O2_V": SpectroscopicParameter(value=ll.v, uncer=np.zeros(len(ll.f)), units = '1/bar == 1/1e5Pa =~ 1/atm', name='O2 line mixing temperature dependence'),
-            "O2_V_NL": SpectroscopicParameter(value=ll.v, uncer=.0, units = '1/mb', name='O2 line mixing temperature dependence for neglected lines (NL)'),
             "O2_nS": SpectroscopicParameter(value=2.0, uncer=.0, units = 'unitless',  name='Intensity temperature-dependence exponent'),
             "w2a": SpectroscopicParameter(value=1.2, uncer=.0, units = 'unitless', name='Water-to-air broadening ratio'),
         }
@@ -170,8 +166,12 @@ class SpectroscopicParameter:
                 "dnu1": SpectroscopicParameter(value=ll.dnu1, uncer=.0, name=''),
             }
         else:
-            o2_sp_ = {}
-
+            o2_sp_ = {
+                "O2_V": SpectroscopicParameter(value=ll.v, uncer=np.zeros(len(ll.f)), units = '1/bar == 1/1e5Pa =~ 1/atm', name='O2 line mixing temperature dependence'),
+                "O2_V_NL": SpectroscopicParameter(value=ll.v, uncer=.0, units = '1/mb', name='O2 line mixing temperature dependence for neglected lines (NL)'),
+                "Y300": SpectroscopicParameter(value=ll.y300, uncer=np.zeros(len(ll.f)), units = '1/bar == 1/1e5Pa =~ 1/atm', name='Line mixing coefficients (single lines)'),
+                "Y300_NL": SpectroscopicParameter(value=ll.y300, uncer=.0, units = '1/mb', name='Line mixing coefficients for neglected lines (NL)'),
+            }
         o2_sp = {**o2_sp, **o2_sp_}
 
         return o2_sp

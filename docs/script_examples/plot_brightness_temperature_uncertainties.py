@@ -71,7 +71,7 @@ for i in range(0, 6):
     ax.set_box_aspect(0.7)
 
 ax.grid(True, 'both')
-plt.title("Perturbed parameter: $\ H_2O - C_f$")
+plt.title("Perturbed parameter: $\ H_2O - \gamma_a$")
 plt.show()
 
 # %%

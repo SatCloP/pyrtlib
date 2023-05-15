@@ -560,12 +560,18 @@ class O2AbsModel(AbsModel):
             self.o2ll.x16 = amu['X16'].value
             self.o2ll.x05 = amu['X05'].value
             self.o2ll.x = amu['X05'].value
-            self.o2ll.y300 = amu['Y300'].value
-            self.o2ll.y300[34:49] = amu['Y300_NL'].value[34:49]
-            self.o2ll.v = amu['O2_V'].value
-            self.o2ll.v[34:49] = amu['O2_V_NL'].value[34:49]
             self.o2ll.snr = amu['Snr'].value
             self.o2ll.ns = amu['O2_nS'].value
+            if O2AbsModel.model > 'R19':
+                self.o2ll.y0 = amu['y0'].value
+                self.o2ll.y1 = amu['y1'].value
+                self.o2ll.dnu0 = amu['dnu0'].value
+                self.o2ll.dnu1 = amu['dnu1'].value
+            else:
+                self.o2ll.y300 = amu['Y300'].value
+                self.o2ll.y300[34:49] = amu['Y300_NL'].value[34:49]
+                self.o2ll.v = amu['O2_V'].value
+                self.o2ll.v[34:49] = amu['O2_V_NL'].value[34:49]
 
         # *** add the following lines *************************
         db2np = np.log(10.0) * 0.1
