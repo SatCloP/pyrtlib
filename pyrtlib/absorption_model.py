@@ -4,7 +4,7 @@ This class contains the absorption model used in pyrtlib.
 """
 
 import types
-from typing import Tuple, Union, List
+from typing import Tuple, Union, List, Optional
 
 import numpy as np
 
@@ -216,7 +216,7 @@ class H2OAbsModel(AbsModel):
     def set_ll() -> None:
         H2OAbsModel.h2oll = import_lineshape(f"h2oll_{H2OAbsModel.model}")
 
-    def h2o_absorption(self, pdrykpa: np.ndarray, vx: np.ndarray, ekpa: np.ndarray, frq: np.ndarray) -> Union[
+    def h2o_absorption(self, pdrykpa: np.ndarray, vx: np.ndarray, ekpa: np.ndarray, frq: np.ndarray, amu: Optional[dict] = None) -> Union[
             Tuple[np.ndarray, np.ndarray], None]:
         """Compute absorption coefficients in atmosphere due to water vapor for all models.
 
@@ -260,6 +260,29 @@ class H2OAbsModel(AbsModel):
                         _, _ = H2OAbsModel().h2o_absorption(pdrykpa, v, ekpa, frq[j])
 
         """
+        if amu:
+            self.h2oll.cf = amu['con_Cf'].value * amu['con_Cf_factr'].value
+            self.h2oll.cs = amu['con_Cs'].value * amu['con_Cs_factr'].value
+            if H2OAbsModel.model > 'R17':
+                self.h2oll.cf = amu['con_Cf'].value
+                self.h2oll.cs = amu['con_Cs'].value
+            self.h2oll.xcf = amu['con_Xf'].value
+            self.h2oll.xcs = amu['con_Xs'].value
+            self.h2oll.s1 = amu['S'].value
+            self.h2oll.b2 = amu['B2'].value
+            self.h2oll.w0 = amu['gamma_a'].value / 1000.0
+            self.h2oll.w0s = amu['gamma_w'].value / 1000.0
+            self.h2oll.x = amu['n_a'].value
+            self.h2oll.xs = amu['n_w'].value
+            if H2OAbsModel.model > 'R17':
+                self.h2oll.sh = amu['delta_a'].value / 1000.0
+                self.h2oll.shs = amu['delta_w'].value / 1000.0
+                self.h2oll.xh = amu['n_da'].value
+                self.h2oll.xhs = amu['n_dw'].value
+            else: 
+                self.h2oll.sr = amu['SR'].value
+            self.h2oll.fl = amu['FL'].value
+
         # the best-fit voigt are given in koshelev et al. 2018, table 2 (rad,
         # mhz/torr). these correspond to w3(1) and ws(1) in h2o_list_r18 (mhz/mb)
 
@@ -461,6 +484,9 @@ class H2OAbsModel(AbsModel):
 
         self.h2oll.cf = amu['con_Cf'].value * amu['con_Cf_factr'].value
         self.h2oll.cs = amu['con_Cs'].value * amu['con_Cs_factr'].value
+        if H2OAbsModel.model > 'R17':
+            self.h2oll.cf = amu['con_Cf'].value
+            self.h2oll.cs = amu['con_Cs'].value
         self.h2oll.xcf = amu['con_Xf'].value
         self.h2oll.xcs = amu['con_Xs'].value
         self.h2oll.s1[0:2] = amu['S'].value[0:2]
@@ -566,7 +592,7 @@ class O2AbsModel(AbsModel):
     def set_ll() -> None:
         O2AbsModel.o2ll = import_lineshape(f"o2ll_{O2AbsModel.model}")
 
-    def o2_absorption(self, pdrykpa: float, vx: float, ekpa: float, frq: float) -> Tuple[np.ndarray, np.ndarray]:
+    def o2_absorption(self, pdrykpa: float, vx: float, ekpa: float, frq: float, amu: Optional[dict] = None) -> Tuple[np.ndarray, np.ndarray]:
         """Returns power absorption coefficient due to oxygen in air in nepers/km.
 
         History:
@@ -619,6 +645,26 @@ class O2AbsModel(AbsModel):
             line widths as in the 60 GHz band: (1/T)**X (Koshelev et al 2016)
          3. The sign of DNU in the shape factor is corrected.
         """
+
+        if amu:
+            self.o2ll.w2a = amu['w2a'].value
+            # self.o2ll.apu = amu['APU'].value
+            self.o2ll.w300[0:38] = amu['O2gamma'].value[0:38]
+            self.o2ll.w300[34:49] = amu['O2gamma_NL'].value[34:49]
+            self.o2ll.wb300 = amu['WB300'].value
+            self.o2ll.f = amu['O2FL'].value
+            self.o2ll.s300 = amu['O2S'].value
+            self.o2ll.be = amu['O2BE'].value
+            self.o2ll.x11 = amu['X11'].value
+            self.o2ll.x16 = amu['X16'].value
+            self.o2ll.x05 = amu['X05'].value
+            self.o2ll.x = amu['X05'].value
+            self.o2ll.y300 = amu['Y300'].value
+            self.o2ll.y300[34:49] = amu['Y300_NL'].value[34:49]
+            self.o2ll.v = amu['O2_V'].value
+            self.o2ll.v[34:49] = amu['O2_V_NL'].value[34:49]
+            self.o2ll.snr = amu['Snr'].value
+            self.o2ll.ns = amu['O2_nS'].value
 
         # *** add the following lines *************************
         db2np = np.log(10.0) * 0.1
@@ -752,7 +798,7 @@ class O2AbsModel(AbsModel):
         """
 
         self.o2ll.w2a = amu['w2a'].value
-        self.o2ll.apu = amu['APU'].value
+        # self.o2ll.apu = amu['APU'].value
         self.o2ll.w300[0:38] = amu['O2gamma'].value[0:38]
         self.o2ll.w300[34:49] = amu['O2gamma_NL'].value[34:49]
         self.o2ll.wb300 = amu['WB300'].value
@@ -802,7 +848,7 @@ class O2AbsModel(AbsModel):
         o2abs = np.maximum(o2abs, 0.0)
 
         # here goes apu_line_mixing
-        o2abs = o2abs * self.o2ll.apu
+        # o2abs = o2abs * self.o2ll.apu
 
         ncpp = self.o2ll.snr * freq * freq * \
             dfnr / (th * (freq * freq + dfnr * dfnr))

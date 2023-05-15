@@ -46,8 +46,8 @@ class TbCloudRTE(object):
             rh (np.ndarray): Relative humidity profile (fraction).
             frq (np.ndarray): Channel frequencies (GHz).
             angles (Optional[np.ndarray], optional): Elevation anglesX (deg).. Defaults to 90.
-            o3n (Optional[np.ndarray], optional): _description_. Defaults to None.
-            amu (Optional[Tuple], optional): _description_. Defaults to None.
+            o3n (Optional[np.ndarray], optional): Ozone profile. Defaults to None.
+            amu (Optional[Tuple], optional): Absorption model uncertainties. Defined by :py:func:`~pyrtlib.uncertainty.SpectroscopicParameter`. Defaults to None.
             absmdl (Optional[str], optional): Absorption model. Defaults to ''.
             ray_tracing (Optional[bool], optional): Wether True (default) it computes ray tracing for
                                             distance between layers, otherwise use simple plane
@@ -144,7 +144,15 @@ class TbCloudRTE(object):
         else:
             raise ValueError("Please enter a valid value or array for emissivity")
 
-    def set_amu(self, amu: Tuple) -> Tuple:
+    def set_amu(self, amu: Tuple) -> None:
+        """Set absorption model uncertainties
+
+        Args:
+            amu (Dict): The spectroscopic parameters dictionary
+
+        See also:
+            :py:func:`~pyrtlib.uncertainty.SpectroscopicParameter`
+        """
         self.amu = amu
 
     def init_absmdl(self, absmdl: str):
@@ -314,8 +322,8 @@ class TbCloudRTE(object):
             # this are based on NOAA RTE fortran routines
             for j in range(0, self.nf):
                 RTEquation._emissivity = self._es[j]
-                if self._uncertainty:
-                    awet, adry = RTEquation.clearsky_absorption_uncertainty(self.p, self.tk, e, self.frq[j], self.amu)
+                if self.amu:
+                    awet, adry = RTEquation.clearsky_absorption(self.p, self.tk, e, self.frq[j], self.o3n, self.amu)
                 else:
                     # Rosenkranz, personal communication, 2019/02/12 (email)
                     awet, adry = RTEquation.clearsky_absorption(self.p, self.tk, e, self.frq[j], self.o3n)

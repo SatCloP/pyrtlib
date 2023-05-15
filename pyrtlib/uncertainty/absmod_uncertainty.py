@@ -21,7 +21,7 @@ from dataclasses import dataclass, field
 
 import numpy as np
 # import scipy.interpolate as si
-
+from pyrtlib.absorption_model import H2OAbsModel, O2AbsModel, O3AbsModel
 from pyrtlib.utils import constants
 
 # TVEC = np.loadtxt(
@@ -42,7 +42,7 @@ class SpectroscopicParameter:
         .. code-block:: python
 
             >>> from pyrtlib.uncertainty import SpectroscopicParameter
-            >>> parameters = SpectroscopicParameter.parameters()
+            >>> parameters = SpectroscopicParameter.oxygen_parameters('R18')
             >>> parameters['O2gamma_WL'].value
             array([1.688, 1.703, 1.513, 1.491, 1.415, 1.408, 1.353, 1.339, 1.295,
                 1.292, 1.262, 1.263, 1.223, 1.217, 1.189, 1.174, 1.134, 1.134,
@@ -79,41 +79,138 @@ class SpectroscopicParameter:
     """
 
     def _initialize() -> Dict:
-        SpectroscopicParameter.parameters()
+        SpectroscopicParameter._parameters()
 
     @staticmethod
-    def _parameters_skeleton():
-        SP = {
-            "w2a": SpectroscopicParameter(value=.0, uncer=.0, name='Water-to-air broadening ratio'),
-            "con_Cf": SpectroscopicParameter(value=.0, uncer=.0, name='Foreign induced broadening coefficient'),
-            "con_Cs": SpectroscopicParameter(value=.0, uncer=.0, name='Self induced broadening coefficient'),
-            "con_Xf": SpectroscopicParameter(value=.0, uncer=.0, name='Foreign broadening temperature dependence exponents'),
-            "con_Xs": SpectroscopicParameter(value=.0, uncer=.0, name='Self broadening temperature dependence exponents'),
-            
-            "FL": SpectroscopicParameter(value=.0, uncer=.0, name='Central frequency line'),
-            "S": SpectroscopicParameter(value=.0, uncer=.0, name='Line intensity (or strength)'),
-            "B2": SpectroscopicParameter(value=.0, uncer=.0, name=''),
+    def water_parameters(model: str) -> Dict:
+        """This method is used for uncertainty analysis and returns the dictionary
+        with the whole spectroscopic parameters for :math:`H_2O`.
 
-            "gamma_a": SpectroscopicParameter(value=.0, uncer=.0, name='Air induced broadening coefficients'),
-            "gamma_w": SpectroscopicParameter(value=.0, uncer=.0, name='Water induced broadening coefficients'),
-            "n_a": SpectroscopicParameter(value=.0, uncer=.0, name='Temperature-dependence exponent of air'),
-            "n_w": SpectroscopicParameter(value=.0, uncer=.0, name='Temperature-dependence exponent of water'),
-            "delta_a": SpectroscopicParameter(value=.0, uncer=.0, name='Air induced shifting coefficient'),
-            "delta_w": SpectroscopicParameter(value=.0, uncer=.0, name='Water induced shifting coefficient'),
-            "n_da": SpectroscopicParameter(value=.0, uncer=.0, name='T-exponent of air-shifting'),
-            "n_dw": SpectroscopicParameter(value=.0, uncer=.0, name='T-exponent of water-shifting'),
+        Args:
+            model (str): The absorption model.
+
+        Returns:
+            Dict: The :math:`H_2O` spectroscopic parameters dictionary
+        """
+        H2OAbsModel.model = model
+        H2OAbsModel.set_ll()
+        ll = H2OAbsModel.h2oll
+
+        h2o_sp = {
+            "con_Cf": SpectroscopicParameter(value=ll.cf, uncer=.0, units = '1/(km*(mb^2*GHz^2))', name='Foreign induced broadening coefficient'),
+            "con_Cs": SpectroscopicParameter(value=ll.cs, uncer=.0, units = '1/(km*(mb^2*GHz^2))', name='Self induced broadening coefficient'),
+            "con_Cf_factr": SpectroscopicParameter(value=1.11, uncer=.0, name=''),
+            "con_Cs_factr": SpectroscopicParameter(value=0.79, uncer=.0, name=''),
+            "con_Xf": SpectroscopicParameter(value=ll.xcf, uncer=.0, units = 'unitless', name='Foreign broadening temperature dependence exponents'),
+            "con_Xs": SpectroscopicParameter(value=ll.xcs, uncer=.0, units = 'unitless', name='Self broadening temperature dependence exponents'),
+
+            "FL": SpectroscopicParameter(value=ll.fl, uncer=.0, units = 'GHz', name='Central frequency line'),
+            "S": SpectroscopicParameter(value=ll.s1, uncer=np.zeros(len(ll.fl)), units = 'Hz*cm^2', name='Line intensity (or strength)'),
+            "B2": SpectroscopicParameter(value=ll.b2, uncer=.0, units = 'unitless', name='Temperature coefficient of intensity'),
+
+            "gamma_a": SpectroscopicParameter(value=ll.w0*1e3, units='MHz/mb', uncer=np.zeros(len(ll.fl)), name='Air induced broadening coefficients'),
+            "gamma_w": SpectroscopicParameter(value=ll.w0s*1e3, units = 'MHz/mb', uncer=np.zeros(len(ll.fl)), name='Water induced broadening coefficients'),
+            "n_a": SpectroscopicParameter(value=ll.x, uncer=.0, units = 'unitless', name='Temperature-dependence exponent of air'),
+            "n_w": SpectroscopicParameter(value=ll.xs, uncer=.0, units = 'unitless', name='Temperature-dependence exponent of water'),
+
             "wv_nS": SpectroscopicParameter(value=.0, uncer=.0, name='Intensity temperature-dependence exponent'),
         }
+        if H2OAbsModel.model > 'R17':
+            h2o_sp_ = {
+                "n_da": SpectroscopicParameter(value=ll.xh, uncer=.0, name='T-exponent of air-shifting'),
+                "n_dw": SpectroscopicParameter(value=ll.xhs, uncer=.0, name='T-exponent of water-shifting'),
+                "delta_a": SpectroscopicParameter(value=ll.sh*1e3, uncer=np.zeros(len(ll.fl)), units = 'MHz/mb', name='Air induced shifting coefficient'),
+                "delta_w": SpectroscopicParameter(value=ll.shs*1e3, uncer=np.zeros(len(ll.fl)), units = 'MHz/mb', name='Water induced shifting coefficient'),
+            }
+        else:
+            h2o_sp_ = {"SR": SpectroscopicParameter(value=ll.sr, uncer=np.zeros(len(ll.fl)), units='unitless', name='Shift to width ratio'),}
+
+        h2o_sp = {**h2o_sp, **h2o_sp_}
+
+        return h2o_sp
+
+    @staticmethod
+    def oxygen_parameters(model: str) -> Dict:
+        """This method is used for uncertainty analysis and returns the dictionary
+        with the whole spectroscopic parameters for :math:`O_2`.
+
+        Args:
+            model (str): The absorption model.
+
+        Returns:
+            Dict: The :math:`O_2` spectroscopic parameters dictionary
+        """
+        O2AbsModel.model = model
+        O2AbsModel.set_ll()
+        ll = O2AbsModel.o2ll
+
+        o2_sp = {
+            "O2FL": SpectroscopicParameter(value=ll.f, uncer=.0, units = 'GHz', name='Line frequency'),
+            "O2S": SpectroscopicParameter(value=ll.s300, uncer=.0, units = 'cm2*Hz', name='Line intensity (or strength)'),
+            "O2BE": SpectroscopicParameter(value=ll.be, uncer=.0, units = 'unitless', name='Temperature exponent for intensity'),
+            "O2gamma": SpectroscopicParameter(value=ll.w300, uncer=np.zeros(len(ll.f)), units = 'MHz/mb', name='Self broadening temperature dependence exponents'),
+            "O2gamma_NL": SpectroscopicParameter(value=ll.w300, uncer=.0, units='MHz/mb', name='Self broadening temperature dependence exponents for neglected lines (NL)'),
+            "Snr": SpectroscopicParameter(value=1.6e-17, uncer=.0, units = 'Hz*cm2/GHz2', name='Line intensity of non-resonant pseudo-line'),
+            "WB300": SpectroscopicParameter(value=ll.wb300, uncer=.0, units = 'MHz/mb', name='Pressure broadening of non-resonant pseudo-line'),
+            "X11": SpectroscopicParameter(value=0.785, uncer=.0, units = 'unitless', name='Temperature dependence of broadening coefficient'),
+            "X16": SpectroscopicParameter(value=0.765, uncer=.0, units = 'unitless', name='Temperature dependence of broadening coefficient'),
+            "X05": SpectroscopicParameter(value=0.80, uncer=.0, units = 'unitless', name='Temperature dependence of broadening coefficient'),
+            "Y300": SpectroscopicParameter(value=ll.y300, uncer=np.zeros(len(ll.f)), units = '1/bar == 1/1e5Pa =~ 1/atm', name='Line mixing coefficients (single lines)'),
+            "Y300_NL": SpectroscopicParameter(value=ll.y300, uncer=.0, units = '1/mb', name='Line mixing coefficients for neglected lines (NL)'),
+            "O2_V": SpectroscopicParameter(value=ll.v, uncer=np.zeros(len(ll.f)), units = '1/bar == 1/1e5Pa =~ 1/atm', name='O2 line mixing temperature dependence'),
+            "O2_V_NL": SpectroscopicParameter(value=ll.v, uncer=.0, units = '1/mb', name='O2 line mixing temperature dependence for neglected lines (NL)'),
+            "O2_nS": SpectroscopicParameter(value=2.0, uncer=.0, units = 'unitless',  name='Intensity temperature-dependence exponent'),
+            "w2a": SpectroscopicParameter(value=1.2, uncer=.0, units = 'unitless', name='Water-to-air broadening ratio'),
+        }
+        if O2AbsModel.model > 'R19':
+            o2_sp_ = {
+                "y0": SpectroscopicParameter(value=ll.y0, uncer=.0, name=''),
+                "y1": SpectroscopicParameter(value=ll.y1, uncer=.0, name=''),
+                "dnu0": SpectroscopicParameter(value=ll.dnu0, uncer=.0, name=''),
+                "dnu1": SpectroscopicParameter(value=ll.dnu1, uncer=.0, name=''),
+            }
+        else:
+            o2_sp_ = {}
+
+        o2_sp = {**o2_sp, **o2_sp_}
+
+        return o2_sp
+    
+    @staticmethod
+    def ozono_parameters(model: str) -> Dict:
+        """This method is used for uncertainty analysis and returns the dictionary
+        with the whole spectroscopic parameters for :math:`O_3`.
+
+        Args:
+            model (str): The absorption model.
+
+        Returns:
+            Dict: The Ozono (:math:`O_3`) spectroscopic parameters dictionary
+        """
+        O3AbsModel.model = model
+        O3AbsModel.set_ll()
+        ll = O3AbsModel.o3ll
+
+        o3_sp = {
+            "O3FL": SpectroscopicParameter(value=ll.fl, uncer=.0, units='GHz', name='Line frequency'),
+            "O3_S1": SpectroscopicParameter(value=ll.s1, uncer=.0, units = 'Hz*cm^2', name='Line intensity (or strength)'),
+            "O3_B": SpectroscopicParameter(value=ll.b, uncer=.0, units = 'unitless', name='Temperature Coefficient of intensity'),
+            "O3_W": SpectroscopicParameter(value=ll.w, uncer=.0, units = 'GHz/mb', name='Air-pressure broadening'),
+            "O3_X": SpectroscopicParameter(value=ll.x, uncer=.0, units = 'unitless', name='Temperature exponent of air broadening'),
+            "O3_SR": SpectroscopicParameter(value=ll.sr, uncer=.0, units = 'unitless', name='Shift-to-width ratio'),
+        }
+
+        return o3_sp
 
     @staticmethod
     def set_parameters(SP: dict) -> None:
-        """Set new values to spectroscopic parameters.
+        """Set new values and uncertainties to spectroscopic parameters.
 
         Args:
             SP (dict): The new dictionary with the spectroscopic parameters
 
         Example:
-            >>> parameters = SpectroscopicParameter.parameters()
+            >>> parameters = SpectroscopicParameter.water_parameters('R17')
             >>> parameters['gamma_a'].value[0] = 2.688
             >>> parameters['gamma_a'].uncer[0] = 0.039
             >>> SpectroscopicParameter.set_parameters(parameters)
@@ -122,7 +219,7 @@ class SpectroscopicParameter:
         SpectroscopicParameter.SP = SP
 
     @staticmethod
-    def parameters() -> Dict:
+    def _parameters() -> Dict:
         """Returns a mutable dictionary of all the spectroscopic parameters.
 
         Returns:
@@ -683,14 +780,14 @@ class SpectroscopicParameter:
         for i in range(0, 2):
             SP['SR'].value[i], \
                 SP['SR'].uncer[i] = AbsModUncertainty.uncertainty_propagation('A/B',
-                                                                                                     SP[
-                                                                                                         'delta_a'].value[i],
-                                                                                                     SP[
-                                                                                                         'gamma_a'].value[i],
-                                                                                                     SP[
-                                                                                                         'delta_a'].uncer[i],
-                                                                                                     SP['gamma_a'].uncer[i])
-        
+                                                                              SP[
+                                                                                  'delta_a'].value[i],
+                                                                              SP[
+                                                                                  'gamma_a'].value[i],
+                                                                              SP[
+                                                                                  'delta_a'].uncer[i],
+                                                                              SP['gamma_a'].uncer[i])
+
         SP['gamma_a'].value = SP['gamma_a'].value * MB2TORR
         SP['gamma_a'].uncer = SP['gamma_a'].uncer * MB2TORR
         # AMU['gamma_a'].uncer[0:2] = np.array([0.039, 0.015])

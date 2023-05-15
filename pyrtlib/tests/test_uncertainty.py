@@ -44,7 +44,12 @@ class Test(TestCase):
 
         frq = np.arange(20, 201, 1)
 
-        SpectroscopicParameter._initialize()
+        water_sp = SpectroscopicParameter.water_parameters("R17")
+        oxygen_sp = SpectroscopicParameter.oxygen_parameters("R18")
+
+        parameters = {**water_sp, **oxygen_sp}
+        SpectroscopicParameter.set_parameters(parameters)
+
         amu = AbsModUncertainty.parameters_perturbation(
             ['gamma_a'], 'min', index=1)
 
@@ -65,12 +70,12 @@ class Test(TestCase):
 
     # @pytest.mark.skip(reason="skipping")
     def test_spectroscopic_params(self):
-        parameters = SpectroscopicParameter.parameters()
-        v = parameters['w2a'].value
+        oxygen_sp = SpectroscopicParameter.oxygen_parameters("R18")
+        v = oxygen_sp['w2a'].value
         assert_equal(v, 1.2)
 
     def test_add_spectr_params(self):
-        parameters = SpectroscopicParameter.parameters()
+        parameters = SpectroscopicParameter.water_parameters("R17")
         parameters['test'] = SpectroscopicParameter(
             2.3, 0.001, 'unitless', 'Tretyakov, JMS, 2016')
         parameters['test'].value
@@ -78,39 +83,41 @@ class Test(TestCase):
 
     # @pytest.mark.skip(reason="skipping")
     def test_edit_spectroscopic_params(self):
-        parameters = SpectroscopicParameter.parameters()
+        parameters = SpectroscopicParameter.oxygen_parameters("R18")
         parameters['w2a'].value = 1.4
         assert_equal(parameters['w2a'].value, 1.4)
 
     # @pytest.mark.skip(reason="skipping")
     def test_set_parameters(self):
-        parameters = SpectroscopicParameter.parameters()
+        parameters = SpectroscopicParameter.water_parameters("R17")
         parameters['gamma_a'].value[0] = 2.688
         parameters['gamma_a'].uncer[0] = 0.039
         # SpectroscopicParameter.set_parameters(parameters)
         assert_equal(parameters['gamma_a'].value[0], 2.688)
 
     def test_uncertainty_propagation(self):
-        parameters = SpectroscopicParameter.parameters()
+        parameters = SpectroscopicParameter.water_parameters("R19")
+        parameters['delta_a'].uncer = np.array([0.005])
+        parameters['gamma_a'].uncer = np.array([0.022])
         u = AbsModUncertainty.uncertainty_propagation(
             "A/B", parameters['delta_a'].value[0],
             parameters['gamma_a'].value[0],
             parameters['delta_a'].uncer[0],
             parameters['gamma_a'].uncer[0])
-        expected = (-0.012229016120066702, 0.001854236371206569)
+        expected = (-0.0122267506483882929, 0.0018552168412088639)
         assert_equal(expected, u)
         u = AbsModUncertainty.uncertainty_propagation(
             "aA", parameters['delta_a'].value[0],
             parameters['gamma_a'].value[0],
             parameters['delta_a'].uncer[0],
             parameters['gamma_a'].uncer[0])
-        expected = (-0.033002727999999995, 0.005)
+        expected = (-0.033, 0.005)
         assert_equal(expected, u)
         u = AbsModUncertainty.uncertainty_propagation(
             "aA+bB", parameters['delta_a'].value[0],
             parameters['gamma_a'].value[0],
             parameters['delta_a'].uncer[0],
             parameters['gamma_a'].uncer[0])
-        expected = (2.665720348, 0.01724224503539188)
+        expected = (2.666, 0.02256102834535695)
         assert_equal(expected, u)
 

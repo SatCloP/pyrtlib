@@ -9,9 +9,8 @@ Performing sensitivity of spectroscopic parameters
 # with a perturbed water vapor absorption parameter (:math:`\gamma_a` air broadening 22 GHz) from [Cimini-2018]_.
 
 import matplotlib.pyplot as plt
-
-plt.rcParams.update({'font.size': 15})
 import numpy as np
+plt.rcParams.update({'font.size': 15})
 
 from pyrtlib.atmospheric_profiles import AtmosphericProfiles as atmp
 from pyrtlib.tb_spectrum import TbCloudRTE
@@ -41,12 +40,15 @@ for i in range(0, 6):
     interp = .1
     frq = np.arange(20, 60 + interp, interp)
 
-    parameters = SpectroscopicParameter.parameters()
+    parameters = {**SpectroscopicParameter.water_parameters('R17'), **SpectroscopicParameter.oxygen_parameters('R18')}
     parameters['gamma_a'].value[0] = 2.688
     parameters['gamma_a'].uncer[0] = 0.039
-
+    SpectroscopicParameter.set_parameters(parameters)
+    
     rte = TbCloudRTE(z, p, t, rh, frq, amu=parameters)
-    rte.init_absmdl('uncertainty')
+    rte.init_absmdl('R17')
+    O2AbsModel.model = 'R18'
+    O2AbsModel.set_ll()
     rte.satellite = False
     df = rte.execute()
     
@@ -68,9 +70,8 @@ for i in range(0, 6):
     ax.legend()
     ax.set_box_aspect(0.7)
 
-# ax.legend()
 ax.grid(True, 'both')
-plt.title("Perturbed parameter: $\ H_2O - \gamma_a$")
+plt.title("Perturbed parameter: $\ H_2O - C_f$")
 plt.show()
 
 # %%

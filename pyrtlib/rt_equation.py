@@ -512,7 +512,7 @@ class RTEquation:
         return aliq, aice
 
     @staticmethod
-    def clearsky_absorption(p: np.ndarray, t: np.ndarray, e: np.ndarray, frq: np.ndarray, o3n: np.ndarray = None) -> Tuple[np.ndarray, np.ndarray]:
+    def clearsky_absorption(p: np.ndarray, t: np.ndarray, e: np.ndarray, frq: np.ndarray, o3n: Optional[np.ndarray] = None, amu: Optional[dict] = None) -> Tuple[np.ndarray, np.ndarray]:
         """Computes profiles of water vapor and dry air absorption 
         for a given set of frequencies. Subroutines :math:`H_2O` and :math:`O_2` 
         contain the absorption model of [Liebe-Layton]_ with oxygen 
@@ -552,10 +552,10 @@ class RTEquation:
             ekpa = e[i] / 10.0
             pdrykpa = p[i] / 10.0 - ekpa
             # add H2O term
-            npp, ncpp = H2OAbsModel().h2o_absorption(pdrykpa, v, ekpa, frq)
+            npp, ncpp = H2OAbsModel().h2o_absorption(pdrykpa, v, ekpa, frq, amu)
             awet[i] = factor * (npp + ncpp) * db2np
             # add O2 term
-            npp, ncpp = O2AbsModel().o2_absorption(pdrykpa, v, ekpa, frq)
+            npp, ncpp = O2AbsModel().o2_absorption(pdrykpa, v, ekpa, frq, amu)
             aO2[i] = factor * (npp + ncpp) * db2np
             # add N2 term
             if N2AbsModel.model not in ['R03', 'R16', 'R17', 'R18', 'R98', 'makarov11']:
