@@ -4,6 +4,7 @@ import pytest
 import numpy as np
 import pandas as pd
 from numpy.testing import assert_allclose, assert_equal
+from pyrtlib.absorption_model import O2AbsModel
 from pyrtlib.uncertainty import AbsModUncertainty, SpectroscopicParameter
 from pyrtlib.uncertainty import covariance_matrix
 from pyrtlib.atmospheric_profiles import AtmosphericProfiles as atmp
@@ -54,7 +55,9 @@ class Test(TestCase):
             ['gamma_a'], 'min', index=1)
 
         rte = TbCloudRTE(z, p, t, rh, frq, amu=amu)
-        rte.init_absmdl('uncertainty')
+        rte.init_absmdl('R17')
+        O2AbsModel.model = 'R18'
+        O2AbsModel.set_ll()
         df = rte.execute()
 
         df_expected = pd.read_csv(
