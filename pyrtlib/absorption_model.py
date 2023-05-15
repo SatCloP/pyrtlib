@@ -42,7 +42,7 @@ class AbsModel:
 
         Example:
             .. code-block:: python
-            
+
                 from pyrtlib.absorption_model import H2OAbsModel
                 H2OAbsModel.model = 'R21SD'
                 H2OAbsModel.set_ll()
@@ -76,16 +76,16 @@ class AbsModel:
                 'R22SD',
                 'MAKAROV11']
         """
-        return list(['R98', 
-                     'R03', 
-                     'R16', 
-                     'R17', 
-                     'R19', 
-                     'R19SD', 
-                     'R20', 
-                     'R20SD', 
-                     'R21SD', 
-                     'R22SD', 
+        return list(['R98',
+                     'R03',
+                     'R16',
+                     'R17',
+                     'R19',
+                     'R19SD',
+                     'R20',
+                     'R20SD',
+                     'R21SD',
+                     'R22SD',
                      'MAKAROV11'])
 
 
@@ -279,7 +279,7 @@ class H2OAbsModel(AbsModel):
                 self.h2oll.shs = amu['delta_w'].value / 1000.0
                 self.h2oll.xh = amu['n_da'].value
                 self.h2oll.xhs = amu['n_dw'].value
-            else: 
+            else:
                 self.h2oll.sr = amu['SR'].value
             self.h2oll.fl = amu['FL'].value
 
@@ -463,105 +463,6 @@ class H2OAbsModel(AbsModel):
         else:
             npp = (3.1831e-05 * den * summ / db2np) / factor
 
-        ncpp = (con / db2np) / factor
-
-        return npp, ncpp
-
-    def h2o_uncertainty(self, pdrykpa: np.ndarray, vx: np.ndarray, ekpa: np.ndarray, frq: np.ndarray, amu: dict) -> \
-            Union[Tuple[np.ndarray, np.ndarray], None]:
-        """[summary]
-
-        Args:
-            pdrykpa (numpy.ndarray): [description]
-            vx (numpy.ndarray): [description]
-            ekpa (numpy.ndarray): [description]
-            frq (numpy.ndarray): [description]
-            amu (dict): [description]
-
-        Returns:
-            Union[ Tuple[numpy.ndarray, numpy.ndarray], None]: [description]
-        """
-
-        self.h2oll.cf = amu['con_Cf'].value * amu['con_Cf_factr'].value
-        self.h2oll.cs = amu['con_Cs'].value * amu['con_Cs_factr'].value
-        if H2OAbsModel.model > 'R17':
-            self.h2oll.cf = amu['con_Cf'].value
-            self.h2oll.cs = amu['con_Cs'].value
-        self.h2oll.xcf = amu['con_Xf'].value
-        self.h2oll.xcs = amu['con_Xs'].value
-        self.h2oll.s1[0:2] = amu['S'].value[0:2]
-        self.h2oll.b2 = amu['B2'].value
-        self.h2oll.w0[0:2] = amu['gamma_a'].value[0:2] / 1000.0
-        self.h2oll.w0s[0:2] = amu['gamma_w'].value[0:2] / 1000.0
-        self.h2oll.x[0:2] = amu['n_a'].value[0:2]
-        self.h2oll.xs[0:2] = amu['n_w'].value[0:2]
-        if H2OAbsModel.model > 'R17':
-            self.h2oll.sh[0:2] = amu['delta_a'].value[0:2] / 1000.0
-            self.h2oll.shs[0:2] = amu['delta_w'].value[0:2] / 1000.0
-            self.h2oll.xh = amu['n_da'].value
-            self.h2oll.xhs = amu['n_dw'].value
-        else: 
-            self.h2oll.sr[0:2] = amu['SR'].value[0:2]
-        self.h2oll.fl[0:2] = amu['FL'].value[0:2]
-
-        # b = np.loadtxt('/Users/slarosa/Downloads/w0.csv')
-        # np.testing.assert_allclose(self.h2oll.w0, b, verbose=True)
-        # print('allclose')
-        # return
-
-        db2np = np.log(10.0) * 0.1
-        rvap = (0.01 * 8.31451) / 18.01528
-        factor = 0.182 * frq
-        t = 300.0 / vx
-        p = (pdrykpa + ekpa) * 10.0
-        rho = ekpa * 10.0 / (rvap * t)
-        f = frq
-
-        if rho.any() <= 0.0:
-            # abh2o = 0.0
-            # npp = 0
-            # ncpp = 0
-            return
-
-        pvap = (rho * t) / 217.0
-        pda = p - pvap
-        den = 3.335e+16 * rho
-
-        # continuum terms
-        ti = self.h2oll.reftcon / t
-        con = (self.h2oll.cf * pda * ti ** self.h2oll.xcf +
-               self.h2oll.cs * pvap * ti ** self.h2oll.xcs) * pvap * f * f
-        # add resonances
-        nlines = len(self.h2oll.fl)
-        ti = self.h2oll.reftline / t
-        df = np.zeros((2, 1))
-
-        ti2 = ti ** amu['wv_nS'].value
-        summ = 0.0
-        for i in range(0, nlines):
-            widthf = self.h2oll.w0[i] * pda * ti ** self.h2oll.x[i]
-            widths = self.h2oll.w0s[i] * pvap * ti ** self.h2oll.xs[i]
-            width = widthf + widths
-            if H2OAbsModel.model > 'R17':
-                shiftf = self.h2oll.sh[i] * pda * ti ** self.h2oll.xh[i]
-                shifts = self.h2oll.shs[i] * pvap * ti ** self.h2oll.xhs[i]
-                shift = shiftf + shifts
-                
-            else:
-                shift = self.h2oll.sr[i] * widthf
-            
-            wsq = width ** 2
-            s = self.h2oll.s1[i] * ti2 * np.exp(self.h2oll.b2[i] * (1. - ti))
-            df[0] = f - self.h2oll.fl[i] - shift
-            df[1] = f + self.h2oll.fl[i] + shift
-            base = width / (562500.0 + wsq)
-            res = 0.0
-            for j in range(0, 2):
-                if np.abs(df[j]) < 750.0:
-                    res += width / (df[j] ** 2 + wsq) - base
-            summ += s * res * (f / self.h2oll.fl[i]) ** 2
-
-        npp = (3.1831e-05 * den * summ / db2np) / factor
         ncpp = (con / db2np) / factor
 
         return npp, ncpp
@@ -782,86 +683,6 @@ class O2AbsModel(AbsModel):
 
         return npp, ncpp
 
-    def o2abs_uncertainty(self, pdrykpa: float, vx: float, ekpa: float, frq: float, amu: dict) -> Tuple[
-            np.ndarray, np.ndarray]:
-        """[summary]
-
-        Args:
-            pdrykpa (float): [description]
-            vx (float): [description]
-            ekpa (float): [description]
-            frq (float): [description]
-            amu (dict): [description]
-
-        Returns:
-            Tuple[ np.ndarray, np.ndarray]: [description]
-        """
-
-        self.o2ll.w2a = amu['w2a'].value
-        # self.o2ll.apu = amu['APU'].value
-        self.o2ll.w300[0:38] = amu['O2gamma'].value[0:38]
-        self.o2ll.w300[34:49] = amu['O2gamma_NL'].value[34:49]
-        self.o2ll.wb300 = amu['WB300'].value
-        self.o2ll.f = amu['O2FL'].value
-        self.o2ll.s300 = amu['O2S'].value
-        self.o2ll.be = amu['O2BE'].value
-        self.o2ll.x11 = amu['X11'].value
-        self.o2ll.x16 = amu['X16'].value
-        self.o2ll.x05 = amu['X05'].value
-        self.o2ll.x = amu['X05'].value
-        self.o2ll.y300 = amu['Y300'].value
-        self.o2ll.y300[34:49] = amu['Y300_NL'].value[34:49]
-        self.o2ll.v = amu['O2_V'].value
-        self.o2ll.v[34:49] = amu['O2_V_NL'].value[34:49]
-        self.o2ll.snr = amu['Snr'].value
-        self.o2ll.ns = amu['O2_nS'].value
-
-        db2np = np.log(10.0) * 0.1
-        rvap = (0.01 * 8.31451) / 18.01528
-        factor = 0.182 * frq
-        temp = 300.0 / vx
-        pres = (pdrykpa + ekpa) * 10.0
-        vapden = ekpa * 10.0 / (rvap * temp)
-        freq = frq
-
-        th = 300.0 / temp
-        th1 = th - 1.0
-        b = th ** self.o2ll.x
-        preswv = (vapden * temp) / 217.0
-        presda = pres - preswv
-        den = 0.001 * (presda * b + self.o2ll.w2a * preswv * th)
-        dfnr = self.o2ll.wb300 * den
-        th3 = th ** (self.o2ll.ns + 1)  # to perturb nS (default value 2)
-        summ = 0.0
-
-        nlines = len(self.o2ll.f)
-        for k in range(0, nlines):
-            df = self.o2ll.w300[k] * den
-            fcen = self.o2ll.f[k]
-            y = den * (self.o2ll.y300[k] + self.o2ll.v[k] * th1)
-            strr = self.o2ll.s300[k] * np.exp(-self.o2ll.be[k] * th1)
-            sf1 = (df + (freq - fcen) * y) / ((freq - fcen) ** 2 + df * df)
-            sf2 = (df - (freq + fcen) * y) / ((freq + fcen) ** 2 + df * df)
-            summ += strr * (sf1 + sf2) * (freq / self.o2ll.f[k]) ** 2
-
-        o2abs = 1.6097e+11 * summ * presda * th3
-        o2abs = np.maximum(o2abs, 0.0)
-
-        # here goes apu_line_mixing
-        # o2abs = o2abs * self.o2ll.apu
-
-        ncpp = self.o2ll.snr * freq * freq * \
-            dfnr / (th * (freq * freq + dfnr * dfnr))
-        ncpp *= 1.6097e+11 * presda * th3
-        ncpp += N2AbsModel.n2_absorption(temp, pres, freq)
-
-        # change the units from np/km to ppm
-        npp = (o2abs / db2np) / factor
-
-        ncpp = (ncpp / db2np) / factor
-
-        return npp, ncpp
-
 
 class O3AbsModel(AbsModel):
     """This class contains the :math:`O_3` absorption model used in pyrtlib.
@@ -888,7 +709,7 @@ class O3AbsModel(AbsModel):
     def set_ll() -> None:
         O3AbsModel.o3ll = import_lineshape(f"o3ll_{O3AbsModel.model}")
 
-    def o3_absorption(self, t: np.ndarray, p: np.ndarray, f: np.ndarray, o3n: np.ndarray) -> np.ndarray:
+    def o3_absorption(self, t: np.ndarray, p: np.ndarray, f: np.ndarray, o3n: np.ndarray, amu: Optional[dict] = None) -> np.ndarray:
         """This function computes power absorption coeff (Np/km) in the atmosphere 
         due to selcted lines of ozone (:math:`O_3`).
 
@@ -901,6 +722,14 @@ class O3AbsModel(AbsModel):
         Returns:
             np.ndarray: Ozone Power Absorption Coeff. (Np/km)
         """
+
+        if amu:
+            self.o3ll.fl = amu['O3_FL'].value
+            self.o3ll.s1 = amu['O3_S1'].value
+            self.o3ll.b = amu['O3_B'].value
+            self.o3ll.w = amu['O3_W'].value
+            self.o3ll.x = amu['O3_X'].value
+            self.o3ll.sr = amu['O3_SR'].value
 
         if o3n.any() <= 0:
             abs_o3 = 0

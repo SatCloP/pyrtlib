@@ -192,7 +192,7 @@ class SpectroscopicParameter:
         ll = O3AbsModel.o3ll
 
         o3_sp = {
-            "O3FL": SpectroscopicParameter(value=ll.fl, uncer=.0, units='GHz', name='Line frequency'),
+            "O3_FL": SpectroscopicParameter(value=ll.fl, uncer=.0, units='GHz', name='Line frequency'),
             "O3_S1": SpectroscopicParameter(value=ll.s1, uncer=.0, units = 'Hz*cm^2', name='Line intensity (or strength)'),
             "O3_B": SpectroscopicParameter(value=ll.b, uncer=.0, units = 'unitless', name='Temperature Coefficient of intensity'),
             "O3_W": SpectroscopicParameter(value=ll.w, uncer=.0, units = 'GHz/mb', name='Air-pressure broadening'),
