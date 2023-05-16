@@ -95,7 +95,7 @@ class LiqAbsModel(AbsModel):
 
     @staticmethod
     def liquid_water_absorption(water: np.ndarray, freq: np.ndarray, temp: np.ndarray) -> np.ndarray:
-        """Computes Absorption In Nepers/Km by Suspended Water Droplets.
+        """Computes Absorption In Nepers/km by Suspended Water Droplets.
 
         Args:
             water (numpy.ndarray): Water in g/m3.
