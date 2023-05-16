@@ -26,6 +26,10 @@ References
 
 .. [Rosenkranz-2017] Rosenkranz, P. W.: Line-by-line microwave radiative transfer (non-scattering), Remote Sens. Code Library, https://doi.org/10.21982/M81013, 2017.
 
+.. [Rosenkranz-2015] Rosenkranz, P. W.: A Model for the Complex Dielectric Constant of Supercooled Liquid Water at Microwave Frequencies, IEEE Transactions on Geoscience and Remote Sensing, vol. 53, no. 3, pp. 1387-1393, March 2015, https://doi.org/10.1109/TGRS.2014.2339015.
+
+.. [Rosenkranz-1988] P.W. Rosenkranz, Interference coefficients for overlapping oxygen lines in air, Journal of Quantitative Spectroscopy and Radiative Transfer, Volume 39, Issue 4, 1988, Pages 287-297, https://doi.org/10.1016/0022-4073(88)90004-0.
+
 .. [Schroeder-Westwater-1991] Schroeder J.A. and E.R. Westwater, Users' Guide to WPL Microwave Radiative Transfer Software, NOAA Technical Memorandum ERL WPL-213, 1991, https://repository.library.noaa.gov/view/noaa/32511
 
 .. [Schroeder-Westwater-1992] Schroeder J.A. and E.R. Westwater, “Guide to Microwave Weighting Function Calculations,” U.S. Dept. ofCommerce, National Oceanic and Atmospheric Administration, Wave Propagation Laboratory, July 1992. 
@@ -35,8 +39,6 @@ References
 .. [Westwater-1972] Westwater, Ed R., Microwave emission from clouds, United States, National Oceanic and Atmospheric Administration;Environmental Research Laboratories (U.S.), 1972, https://repository.library.noaa.gov/view/noaa/22891
 
 .. [Liebe-Layton] Liebe, Hans J. and Donald H. Layton. “Millimeter-wave properties of the atmosphere: Laboratory studies and propagation modeling.” (1987).
-
-.. [Rosenkranz-1988] P.W. Rosenkranz, Interference coefficients for overlapping oxygen lines in air, Journal of Quantitative Spectroscopy and Radiative Transfer, Volume 39, Issue 4, 1988, Pages 287-297, https://doi.org/10.1016/0022-4073(88)90004-0.
 
 .. [Liebe-Hufford-Manabe] Liebe H.J., G.A. Hufford and T. Manabe, “A model fo r the complex permittivity of water at frequenciesbelow 1 THz”, Internat. J. Infrared and mm Waves, Vol. 12, pp. 659-675 (1991). 
 

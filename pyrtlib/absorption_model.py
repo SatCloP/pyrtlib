@@ -95,12 +95,12 @@ class LiqAbsModel(AbsModel):
 
     @staticmethod
     def liquid_water_absorption(water: np.ndarray, freq: np.ndarray, temp: np.ndarray) -> np.ndarray:
-        """Computes Absorption In Nepers/km by Suspended Water Droplets.
+        """Computes absorption in Nepers/km by suspended liquid water droplets.
 
         Args:
-            water (numpy.ndarray): Water in g/m3.
-            freq (numpy.ndarray): Frequency in GHz (Valid From 0 To 1000 Ghz).
-            temp (numpy.ndarray): Temperature in K.
+            water (numpy.ndarray): Liquid water content (g/m3) - (mass of liquid water per volume of dry air).
+            freq (numpy.ndarray): Frequency (GHz) - (valid from 0 to 1000 GHz).
+            temp (numpy.ndarray): Temperature (K).
 
         Returns:
             np.ndarray: [description]
@@ -109,12 +109,14 @@ class LiqAbsModel(AbsModel):
         ----------
         .. [1] [Liebe-Hufford-Manabe]_.
         .. [2] [Liebe-Hufford-Cotton]_.
+        .. [3] [Rosenkranz-1988]_.
 
         .. note::
             Revision history:
 
-            * Pwr 8/3/92   Original Version
-            * Pwr 12/14/98 Temp. Dependence Of Eps2 Eliminated To Agree With Mpm93 
+            * PWR 08/03/92 Original Version
+            * PWR 12/14/98 Temp dependence of eps2 eliminated to agree with MPM93 
+            * PWR 06/05/15 Using dilec12 for complex dielectric constant
         """
         if water <= 0:
             abliq = 0
@@ -148,13 +150,13 @@ class N2AbsModel(AbsModel):
 
     @staticmethod
     def n2_absorption(t: np.ndarray, p: np.ndarray, f: np.ndarray) -> np.ndarray:
-        """Collision-Induced Power Absorption Coefficient (Neper/Km) in air
+        """Collision-Induced Power Absorption Coefficient (Neper/km) in air
         with modification of 1.34 to account for O2-O2 and O2-N2 collisions, as calculated by [Boissoles-2003]_.
 
         Args:
             t (numpy.ndarray): Temperature (K).
-            p (numpy.ndarray): Dry Air Pressure (mb).
-            f (numpy.ndarray): Frequency (Ghz)(Valid 0-2000 Ghz).
+            p (numpy.ndarray): Dry air pressure (mb).
+            f (numpy.ndarray): Frequency (GHz) - (valid 0-2000 GHz).
 
         Raises:
             ValueError: _description_
@@ -221,13 +223,13 @@ class H2OAbsModel(AbsModel):
         """Compute absorption coefficients in atmosphere due to water vapor for all models.
 
         Args:
-            pdrykpa (numpy.ndarray): [description]
-            vx (numpy.ndarray): [description]
-            ekpa (numpy.ndarray): [description]
-            frq (numpy.ndarray): [description]
+            pdrykpa (numpy.ndarray): Dry air pressure (kPa).
+            vx (numpy.ndarray): Theta (adim) - (normalised temperature 300/t(K)).
+            ekpa (numpy.ndarray): Water vapor partial pressure (kPa).
+            frq (numpy.ndarray): Frequency (GHz) - (valid 0-1000 GHz).
 
         Returns:
-            Union[ Tuple[numpy.ndarray, numpy.ndarray], None]: [description]
+            Union[ Tuple[numpy.ndarray, numpy.ndarray], None]: WV line and continuum absirption terms (ppm)
 
         References
         ----------
