@@ -173,12 +173,12 @@ class TbCloudRTE(object):
             # Defines models
             try:
                 O2AbsModel.model = absmdl
-                O2AbsModel.o2ll = import_lineshape('o2ll_{}'.format(absmdl))
+                O2AbsModel.set_ll()
             except KeyError as e:
                 warnings.warn("The lines list {} was not found. You have to define absorption model manually".format(e))
             try:
                 H2OAbsModel.model = absmdl
-                H2OAbsModel.h2oll = import_lineshape('h2oll_{}'.format(absmdl))
+                H2OAbsModel.set_ll()
             except KeyError as e:
                 warnings.warn("The lines list {} was not found".format(e))
             

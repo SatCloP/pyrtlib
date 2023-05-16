@@ -15,26 +15,28 @@ THIS_DIR = os.path.dirname(os.path.abspath(__file__))
 
 class Test(TestCase):
     def test_absmod_uncertainties_perturb_min(self):
-        SpectroscopicParameter._initialize()
-        amu = AbsModUncertainty.parameters_perturbation(['gamma_a'], 'min', 1)
-        expected0 = 0.016501363999999998
-        assert_equal(expected0, amu['gamma_a'].uncer[0])
-        expected1 = 0.015001240000000
-        assert_equal(expected1, amu['gamma_a'].uncer[1])
-
-        expected0 = 2.698723076000000
+        w_sp = SpectroscopicParameter.water_parameters('R17')
+        w_sp['gamma_a'].uncer[0:2] = np.array([0.039, 0.01])
+        SpectroscopicParameter.set_parameters(w_sp)
+        
+        amu = AbsModUncertainty.parameters_perturbation(['gamma_a'], 'min', 0)
+        expected0 = 2.626
         assert_equal(expected0, amu['gamma_a'].value[0])
-        expected1 = 2.929742172000000
+        amu = AbsModUncertainty.parameters_perturbation(['gamma_a'], 'min', 1)
+        expected1 = 2.926
         assert_equal(expected1, amu['gamma_a'].value[1])
 
     def test_absmod_uncertainties_perturb_max(self):
-        SpectroscopicParameter._initialize()
+        w_sp = SpectroscopicParameter.water_parameters('R17')
+        w_sp['gamma_a'].uncer[0:2] = np.array([0.039, 0.01])
+        SpectroscopicParameter.set_parameters(w_sp)
+
         amu = AbsModUncertainty.parameters_perturbation(['gamma_a'], 'max', 0)
-        expected0 = 2.7152244399999996
+        expected0 = 2.704
         assert_equal(expected0, amu['gamma_a'].value[0])
 
         amu = AbsModUncertainty.parameters_perturbation(['gamma_a'], 'max', 1)
-        expected1 = 2.9597446520000004
+        expected1 = 2.9459999999999997
         assert_equal(expected1, amu['gamma_a'].value[1])
 
     def test_pyrtlib_uncertainty_gamma_a(self):
