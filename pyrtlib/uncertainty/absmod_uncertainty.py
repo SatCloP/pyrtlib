@@ -39,28 +39,31 @@ class SpectroscopicParameter:
     """Absorption model uncertainties for the spectroscopic parameters
 
     Example:
-        .. code-block:: python
+        >>> from pyrtlib.uncertainty import SpectroscopicParameter
+        >>> parameters = SpectroscopicParameter.water_parameters('R18')
+        >>> parameters['con_Cf'].value
+        5.95e-10
 
-            >>> from pyrtlib.uncertainty import SpectroscopicParameter
-            >>> parameters = SpectroscopicParameter.oxygen_parameters('R18')
-            >>> parameters['O2gamma_WL'].value
-            array([1.688, 1.703, 1.513, 1.491, 1.415, 1.408, 1.353, 1.339, 1.295,
-                1.292, 1.262, 1.263, 1.223, 1.217, 1.189, 1.174, 1.134, 1.134,
-                1.089, 1.088, 1.037, 1.038, 0.996, 0.996, 0.955, 0.955, 0.906,
-                0.906, 0.858, 0.858, 0.811, 0.811, 0.764, 0.764, 0.717, 0.717,
-                0.669, 0.669, 2.78 , 1.64 , 1.64 , 1.64 , 1.6  , 1.6  , 1.6  ,
-                1.6  , 1.62 , 1.47 , 1.47 ])
-            >>> parameters['O2gamma_WL'].uncer
-            array([0.   , 0.   , 0.   , 0.   , 0.   , 0.   , 0.   , 0.   , 0.   ,
-                0.   , 0.   , 0.   , 0.   , 0.   , 0.   , 0.   , 0.   , 0.   ,
-                0.   , 0.   , 0.012, 0.012, 0.015, 0.015, 0.017, 0.017, 0.019,
-                0.019, 0.021, 0.021, 0.024, 0.024, 0.026, 0.026, 0.028, 0.028,
-                0.031, 0.031, 0.   , 0.   , 0.   , 0.   , 0.   , 0.   , 0.   ,
-                0.   , 0.   , 0.   , 0.   ])
-            >>> parameters['O2gamma_WL'].units
-            'MHz/mb'
-            >>> parameters['O2gamma_WL'].refer
-            'Rosenkranz, pers. comm., 2017'
+        New value may be added to parameters using :py:func:`~pyrtlib.uncertainty.SpectroscopicParameter` class as following
+
+        >>> parameters['con_Xs'] = SpectroscopicParameter(2.3, 0.001, 'unitless', 'Tretyakov, JMS, 2016')
+        >>> parameters['con_Xs'].value
+        2.3
+        >>> parameters['con_Xs'].uncer
+        'unitless'
+        >>> parameters['con_Xs'].refer
+        'Tretyakov, JMS, 2016'
+
+        Also, existing parameters may be modified as following
+
+        >>> parameters['w2a'].value = 1.333
+        >>> parameters['w2a'].value
+        1.333
+
+    Note:
+        If new value will be added or modified it is necessary to save the new values by calling
+        the :py:func:`~pyrtlib.uncertainty.SpectroscopicParameter.set_parameters` function.
+
     """
     value: np.ndarray
     """The value associated to the parameter
@@ -99,8 +102,8 @@ class SpectroscopicParameter:
         h2o_sp = {
             "con_Cf": SpectroscopicParameter(value=ll.cf, uncer=.0, units = '1/(km*(mb^2*GHz^2))', name='Foreign induced broadening coefficient'),
             "con_Cs": SpectroscopicParameter(value=ll.cs, uncer=.0, units = '1/(km*(mb^2*GHz^2))', name='Self induced broadening coefficient'),
-            "con_Cf_factr": SpectroscopicParameter(value=1.11, uncer=.0, name=''),
-            "con_Cs_factr": SpectroscopicParameter(value=0.79, uncer=.0, name=''),
+            "con_Cf_factr": SpectroscopicParameter(value=1.11, uncer=np.sqrt(0.098 ** 2 + 0.03 ** 2), units='unitless', refer='Turner et al., TGRSS, 2009', name=''),
+            "con_Cs_factr": SpectroscopicParameter(value=0.79, uncer=np.sqrt(0.17 ** 2 + 0.06 ** 2), units='unitless', refer='Turner et al., TGRSS, 2009', name=''),
             "con_Xf": SpectroscopicParameter(value=ll.xcf, uncer=.0, units = 'unitless', name='Foreign broadening temperature dependence exponents'),
             "con_Xs": SpectroscopicParameter(value=ll.xcs, uncer=.0, units = 'unitless', name='Self broadening temperature dependence exponents'),
 
@@ -154,7 +157,7 @@ class SpectroscopicParameter:
             "WB300": SpectroscopicParameter(value=ll.wb300, uncer=.0, units = 'MHz/mb', name='Pressure broadening of non-resonant pseudo-line'),
             "X11": SpectroscopicParameter(value=0.785, uncer=.0, units = 'unitless', name='Temperature dependence of broadening coefficient'),
             "X16": SpectroscopicParameter(value=0.765, uncer=.0, units = 'unitless', name='Temperature dependence of broadening coefficient'),
-            "X05": SpectroscopicParameter(value=0.80, uncer=.0, units = 'unitless', name='Temperature dependence of broadening coefficient'),
+            "X05": SpectroscopicParameter(value=ll.x, uncer=.0, units = 'unitless', name='Temperature dependence of broadening coefficient'),
             "O2_nS": SpectroscopicParameter(value=2.0, uncer=.0, units = 'unitless',  name='Intensity temperature-dependence exponent'),
             "w2a": SpectroscopicParameter(value=1.2, uncer=.0, units = 'unitless', name='Water-to-air broadening ratio'),
         }
