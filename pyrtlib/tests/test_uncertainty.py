@@ -14,7 +14,7 @@ from pyrtlib.utils import ppmv2gkg, mr2rh, ppmv_to_moleculesm3
 THIS_DIR = os.path.dirname(os.path.abspath(__file__))
 
 class Test(TestCase):
-    def test_absmod_uncertainties_perturb_min(self):
+    def test_absmod_uncertainties_perturb_water_min(self):
         w_sp = SpectroscopicParameter.water_parameters('R17')
         w_sp['gamma_a'].uncer[0:2] = np.array([0.039, 0.01])
         SpectroscopicParameter.set_parameters(w_sp)
@@ -26,18 +26,33 @@ class Test(TestCase):
         expected1 = 2.926
         assert_equal(expected1, amu['gamma_a'].value[1])
 
-    def test_absmod_uncertainties_perturb_max(self):
-        w_sp = SpectroscopicParameter.water_parameters('R17')
-        w_sp['gamma_a'].uncer[0:2] = np.array([0.039, 0.01])
-        SpectroscopicParameter.set_parameters(w_sp)
+    def test_absmod_uncertainties_perturb_oxygen_max(self):
+        o_sp = SpectroscopicParameter.oxygen_parameters('R18')
+        o_sp['O2S'].value[0:2] = np.array([2.906e-15, 7.957e-16])
+        o_sp['O2S'].uncer[0:2] = o_sp['O2S'].value[0:2] / 100
+        SpectroscopicParameter.set_parameters(o_sp)
 
-        amu = AbsModUncertainty.parameters_perturbation(['gamma_a'], 'max', 0)
-        expected0 = 2.704
-        assert_equal(expected0, amu['gamma_a'].value[0])
+        amu = AbsModUncertainty.parameters_perturbation(['O2S'], 'max', 0)
+        expected0 = 2.93506e-15
+        assert_equal(expected0, amu['O2S'].value[0])
 
-        amu = AbsModUncertainty.parameters_perturbation(['gamma_a'], 'max', 1)
-        expected1 = 2.9459999999999997
-        assert_equal(expected1, amu['gamma_a'].value[1])
+        amu = AbsModUncertainty.parameters_perturbation(['O2S'], 'max', 1)
+        expected1 = 8.03657e-16
+        assert_equal(expected1, amu['O2S'].value[1])
+
+    def test_absmod_uncertainties_perturb_ozono_max(self):
+        oz_sp = SpectroscopicParameter.ozono_parameters('R18')
+        oz_sp['O3_S1'].value[0:2] = np.array([2.272e-13, 3.547e-13])
+        oz_sp['O3_S1'].uncer[0:2] = oz_sp['O3_S1'].value[0:2] / 100
+        SpectroscopicParameter.set_parameters(oz_sp)
+
+        amu = AbsModUncertainty.parameters_perturbation(['O3_S1'], 'max', 0)
+        expected0 = 2.29472e-13
+        assert_equal(expected0, amu['O3_S1'].value[0])
+
+        amu = AbsModUncertainty.parameters_perturbation(['O3_S1'], 'max', 1)
+        expected1 = 3.58247e-13
+        assert_equal(expected1, amu['O3_S1'].value[1])
 
     def test_pyrtlib_uncertainty_gamma_a(self):
         z, p, _, t, md = atmp.gl_atm(atmp.TROPICAL)

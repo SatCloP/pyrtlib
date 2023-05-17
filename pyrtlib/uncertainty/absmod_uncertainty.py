@@ -149,7 +149,7 @@ class SpectroscopicParameter:
 
         o2_sp = {
             "O2FL": SpectroscopicParameter(value=ll.f, uncer=.0, units = 'GHz', name='Line frequency'),
-            "O2S": SpectroscopicParameter(value=ll.s300, uncer=.0, units = 'cm2*Hz', name='Line intensity (or strength)'),
+            "O2S": SpectroscopicParameter(value=ll.s300, uncer=np.zeros(len(ll.f)), units = 'cm2*Hz', name='Line intensity (or strength)'),
             "O2BE": SpectroscopicParameter(value=ll.be, uncer=.0, units = 'unitless', name='Temperature exponent for intensity'),
             "O2gamma": SpectroscopicParameter(value=ll.w300, uncer=np.zeros(len(ll.f)), units = 'MHz/mb', name='Self broadening temperature dependence exponents'),
             "O2gamma_NL": SpectroscopicParameter(value=ll.w300, uncer=.0, units='MHz/mb', name='Self broadening temperature dependence exponents for neglected lines (NL)'),
@@ -195,12 +195,12 @@ class SpectroscopicParameter:
         ll = O3AbsModel.o3ll
 
         o3_sp = {
-            "O3_FL": SpectroscopicParameter(value=ll.fl, uncer=.0, units='GHz', name='Line frequency'),
-            "O3_S1": SpectroscopicParameter(value=ll.s1, uncer=.0, units = 'Hz*cm^2', name='Line intensity (or strength)'),
-            "O3_B": SpectroscopicParameter(value=ll.b, uncer=.0, units = 'unitless', name='Temperature Coefficient of intensity'),
-            "O3_W": SpectroscopicParameter(value=ll.w, uncer=.0, units = 'GHz/mb', name='Air-pressure broadening'),
-            "O3_X": SpectroscopicParameter(value=ll.x, uncer=.0, units = 'unitless', name='Temperature exponent of air broadening'),
-            "O3_SR": SpectroscopicParameter(value=ll.sr, uncer=.0, units = 'unitless', name='Shift-to-width ratio'),
+            "O3_FL": SpectroscopicParameter(value=ll.fl, uncer=np.zeros(len(ll.fl)), units='GHz', name='Line frequency'),
+            "O3_S1": SpectroscopicParameter(value=ll.s1, uncer=np.zeros(len(ll.fl)), units = 'Hz*cm^2', name='Line intensity (or strength)'),
+            "O3_B": SpectroscopicParameter(value=ll.b, uncer=np.zeros(len(ll.fl)), units = 'unitless', name='Temperature Coefficient of intensity'),
+            "O3_W": SpectroscopicParameter(value=ll.w, uncer=np.zeros(len(ll.fl)), units = 'GHz/mb', name='Air-pressure broadening'),
+            "O3_X": SpectroscopicParameter(value=ll.x, uncer=np.zeros(len(ll.fl)), units = 'unitless', name='Temperature exponent of air broadening'),
+            "O3_SR": SpectroscopicParameter(value=ll.sr, uncer=np.zeros(len(ll.fl)), units = 'unitless', name='Shift-to-width ratio'),
         }
 
         return o3_sp
