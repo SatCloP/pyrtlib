@@ -69,7 +69,7 @@ class TbCloudRTE(object):
         self.ray_tracing = ray_tracing
         self._satellite = from_sat
         self.cloudy = cloudy
-        self._uncertainty = False
+        self._uncertainty = True if self.amu else False
 
         self.nl = len(z)
         self.nf = len(frq)
@@ -322,11 +322,9 @@ class TbCloudRTE(object):
             # this are based on NOAA RTE fortran routines
             for j in range(0, self.nf):
                 RTEquation._emissivity = self._es[j]
-                if self.amu:
-                    awet, adry = RTEquation.clearsky_absorption(self.p, self.tk, e, self.frq[j], self.o3n, self.amu)
-                else:
                     # Rosenkranz, personal communication, 2019/02/12 (email)
-                    awet, adry = RTEquation.clearsky_absorption(self.p, self.tk, e, self.frq[j], self.o3n)
+                awet, adry = RTEquation.clearsky_absorption(self.p, self.tk, e, self.frq[j], 
+                                                            self.o3n, self.amu if self._uncertainty else None)
                 self.sptauwet[j, k], \
                 self.ptauwet[j, k, :] = RTEquation.exponential_integration(1, awet, ds, 0, self.nl, 1)
                 self.sptaudry[j, k], \
