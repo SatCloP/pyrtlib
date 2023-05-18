@@ -100,33 +100,34 @@ class SpectroscopicParameter:
         ll = H2OAbsModel.h2oll
 
         h2o_sp = {
-            "con_Cf": SpectroscopicParameter(value=ll.cf, uncer=.0, units = '1/(km*(mb^2*GHz^2))', name='Foreign induced broadening coefficient'),
-            "con_Cs": SpectroscopicParameter(value=ll.cs, uncer=.0, units = '1/(km*(mb^2*GHz^2))', name='Self induced broadening coefficient'),
+            "con_Cf": SpectroscopicParameter(value=ll.cf, uncer=.0, units='1/(km*(mb^2*GHz^2))', name='Foreign induced broadening coefficient'),
+            "con_Cs": SpectroscopicParameter(value=ll.cs, uncer=.0, units='1/(km*(mb^2*GHz^2))', name='Self induced broadening coefficient'),
             "con_Cf_factr": SpectroscopicParameter(value=1.11, uncer=np.sqrt(0.098 ** 2 + 0.03 ** 2), units='unitless', refer='Turner et al., TGRSS, 2009', name=''),
             "con_Cs_factr": SpectroscopicParameter(value=0.79, uncer=np.sqrt(0.17 ** 2 + 0.06 ** 2), units='unitless', refer='Turner et al., TGRSS, 2009', name=''),
-            "con_Xf": SpectroscopicParameter(value=ll.xcf, uncer=.0, units = 'unitless', name='Foreign broadening temperature dependence exponents'),
-            "con_Xs": SpectroscopicParameter(value=ll.xcs, uncer=.0, units = 'unitless', name='Self broadening temperature dependence exponents'),
+            "con_Xf": SpectroscopicParameter(value=ll.xcf, uncer=.0, units='unitless', name='Foreign broadening temperature dependence exponents'),
+            "con_Xs": SpectroscopicParameter(value=ll.xcs, uncer=.0, units='unitless', name='Self broadening temperature dependence exponents'),
 
-            "FL": SpectroscopicParameter(value=ll.fl, uncer=.0, units = 'GHz', name='Central frequency line'),
-            "S": SpectroscopicParameter(value=ll.s1, uncer=np.zeros(len(ll.fl)), units = 'Hz*cm^2', name='Line intensity (or strength)'),
-            "B2": SpectroscopicParameter(value=ll.b2, uncer=.0, units = 'unitless', name='Temperature coefficient of intensity'),
+            "FL": SpectroscopicParameter(value=ll.fl, uncer=np.zeros(len(ll.fl)), units='GHz', name='Central frequency line'),
+            "S": SpectroscopicParameter(value=ll.s1, uncer=np.zeros(len(ll.fl)), units='Hz*cm^2', name='Line intensity (or strength)'),
+            "B2": SpectroscopicParameter(value=ll.b2, uncer=.0, units='unitless', name='Temperature coefficient of intensity'),
 
-            "gamma_a": SpectroscopicParameter(value=ll.w0*1e3, units='MHz/mb', uncer=np.zeros(len(ll.fl)), name='Air induced broadening coefficients'),
-            "gamma_w": SpectroscopicParameter(value=ll.w0s*1e3, units = 'MHz/mb', uncer=np.zeros(len(ll.fl)), name='Water induced broadening coefficients'),
-            "n_a": SpectroscopicParameter(value=ll.x, uncer=.0, units = 'unitless', name='Temperature-dependence exponent of air'),
-            "n_w": SpectroscopicParameter(value=ll.xs, uncer=.0, units = 'unitless', name='Temperature-dependence exponent of water'),
+            "gamma_a": SpectroscopicParameter(value=ll.w0*1e3, uncer=np.zeros(len(ll.fl)), units='MHz/mb', name='Air induced broadening coefficients'),
+            "gamma_w": SpectroscopicParameter(value=ll.w0s*1e3, uncer=np.zeros(len(ll.fl)), units='MHz/mb', name='Water induced broadening coefficients'),
+            "n_a": SpectroscopicParameter(value=ll.x, uncer=np.zeros(len(ll.fl)), units='unitless', name='Temperature-dependence exponent of air'),
+            "n_w": SpectroscopicParameter(value=ll.xs, uncer=np.zeros(len(ll.fl)), units='unitless', name='Temperature-dependence exponent of water'),
 
             "wv_nS": SpectroscopicParameter(value=.0, uncer=.0, name='Intensity temperature-dependence exponent'),
         }
         if H2OAbsModel.model > 'R17':
             h2o_sp_ = {
-                "n_da": SpectroscopicParameter(value=ll.xh, uncer=.0, name='T-exponent of air-shifting'),
-                "n_dw": SpectroscopicParameter(value=ll.xhs, uncer=.0, name='T-exponent of water-shifting'),
-                "delta_a": SpectroscopicParameter(value=ll.sh*1e3, uncer=np.zeros(len(ll.fl)), units = 'MHz/mb', name='Air induced shifting coefficient'),
-                "delta_w": SpectroscopicParameter(value=ll.shs*1e3, uncer=np.zeros(len(ll.fl)), units = 'MHz/mb', name='Water induced shifting coefficient'),
+                "n_da": SpectroscopicParameter(value=ll.xh, uncer=np.zeros(len(ll.fl)), name='T-exponent of air-shifting'),
+                "n_dw": SpectroscopicParameter(value=ll.xhs, uncer=np.zeros(len(ll.fl)), name='T-exponent of water-shifting'),
+                "delta_a": SpectroscopicParameter(value=ll.sh*1e3, uncer=np.zeros(len(ll.fl)), units='MHz/mb', name='Air induced shifting coefficient'),
+                "delta_w": SpectroscopicParameter(value=ll.shs*1e3, uncer=np.zeros(len(ll.fl)), units='MHz/mb', name='Water induced shifting coefficient'),
             }
         else:
-            h2o_sp_ = {"SR": SpectroscopicParameter(value=ll.sr, uncer=np.zeros(len(ll.fl)), units='unitless', name='Shift to width ratio'),}
+            h2o_sp_ = {"SR": SpectroscopicParameter(value=ll.sr, uncer=np.zeros(
+                len(ll.fl)), units='unitless', name='Shift to width ratio'), }
 
         h2o_sp = {**h2o_sp, **h2o_sp_}
 
@@ -148,18 +149,18 @@ class SpectroscopicParameter:
         ll = O2AbsModel.o2ll
 
         o2_sp = {
-            "O2FL": SpectroscopicParameter(value=ll.f, uncer=.0, units = 'GHz', name='Line frequency'),
-            "O2S": SpectroscopicParameter(value=ll.s300, uncer=np.zeros(len(ll.f)), units = 'cm2*Hz', name='Line intensity (or strength)'),
-            "O2BE": SpectroscopicParameter(value=ll.be, uncer=.0, units = 'unitless', name='Temperature exponent for intensity'),
-            "O2gamma": SpectroscopicParameter(value=ll.w300, uncer=np.zeros(len(ll.f)), units = 'MHz/mb', name='Self broadening temperature dependence exponents'),
+            "O2FL": SpectroscopicParameter(value=ll.f, uncer=.0, units='GHz', name='Line frequency'),
+            "O2S": SpectroscopicParameter(value=ll.s300, uncer=np.zeros(len(ll.f)), units='cm2*Hz', name='Line intensity (or strength)'),
+            "O2BE": SpectroscopicParameter(value=ll.be, uncer=.0, units='unitless', name='Temperature exponent for intensity'),
+            "O2gamma": SpectroscopicParameter(value=ll.w300, uncer=np.zeros(len(ll.f)), units='MHz/mb', name='Self broadening temperature dependence exponents'),
             "O2gamma_NL": SpectroscopicParameter(value=ll.w300, uncer=.0, units='MHz/mb', name='Self broadening temperature dependence exponents for neglected lines (NL)'),
-            "Snr": SpectroscopicParameter(value=1.6e-17, uncer=.0, units = 'Hz*cm2/GHz2', name='Line intensity of non-resonant pseudo-line'),
-            "WB300": SpectroscopicParameter(value=ll.wb300, uncer=.0, units = 'MHz/mb', name='Pressure broadening of non-resonant pseudo-line'),
-            "X11": SpectroscopicParameter(value=0.785, uncer=.0, units = 'unitless', name='Temperature dependence of broadening coefficient'),
-            "X16": SpectroscopicParameter(value=0.765, uncer=.0, units = 'unitless', name='Temperature dependence of broadening coefficient'),
-            "X05": SpectroscopicParameter(value=ll.x, uncer=.0, units = 'unitless', name='Temperature dependence of broadening coefficient'),
-            "O2_nS": SpectroscopicParameter(value=2.0, uncer=.0, units = 'unitless',  name='Intensity temperature-dependence exponent'),
-            "w2a": SpectroscopicParameter(value=1.2, uncer=.0, units = 'unitless', name='Water-to-air broadening ratio'),
+            "Snr": SpectroscopicParameter(value=1.6e-17, uncer=.0, units='Hz*cm2/GHz2', name='Line intensity of non-resonant pseudo-line'),
+            "WB300": SpectroscopicParameter(value=ll.wb300, uncer=.0, units='MHz/mb', name='Pressure broadening of non-resonant pseudo-line'),
+            "X11": SpectroscopicParameter(value=0.785, uncer=.0, units='unitless', name='Temperature dependence of broadening coefficient'),
+            "X16": SpectroscopicParameter(value=0.765, uncer=.0, units='unitless', name='Temperature dependence of broadening coefficient'),
+            "X05": SpectroscopicParameter(value=ll.x, uncer=.0, units='unitless', name='Temperature dependence of broadening coefficient'),
+            "O2_nS": SpectroscopicParameter(value=2.0, uncer=.0, units='unitless',  name='Intensity temperature-dependence exponent'),
+            "w2a": SpectroscopicParameter(value=1.2, uncer=.0, units='unitless', name='Water-to-air broadening ratio'),
         }
         if O2AbsModel.model > 'R19':
             o2_sp_ = {
@@ -170,15 +171,15 @@ class SpectroscopicParameter:
             }
         else:
             o2_sp_ = {
-                "O2_V": SpectroscopicParameter(value=ll.v, uncer=np.zeros(len(ll.f)), units = '1/bar == 1/1e5Pa =~ 1/atm', name='O2 line mixing temperature dependence'),
-                "O2_V_NL": SpectroscopicParameter(value=ll.v, uncer=.0, units = '1/mb', name='O2 line mixing temperature dependence for neglected lines (NL)'),
-                "Y300": SpectroscopicParameter(value=ll.y300, uncer=np.zeros(len(ll.f)), units = '1/bar == 1/1e5Pa =~ 1/atm', name='Line mixing coefficients (single lines)'),
-                "Y300_NL": SpectroscopicParameter(value=ll.y300, uncer=.0, units = '1/mb', name='Line mixing coefficients for neglected lines (NL)'),
+                "O2_V": SpectroscopicParameter(value=ll.v, uncer=np.zeros(len(ll.f)), units='1/bar == 1/1e5Pa =~ 1/atm', name='O2 line mixing temperature dependence'),
+                "O2_V_NL": SpectroscopicParameter(value=ll.v, uncer=.0, units='1/mb', name='O2 line mixing temperature dependence for neglected lines (NL)'),
+                "Y300": SpectroscopicParameter(value=ll.y300, uncer=np.zeros(len(ll.f)), units='1/bar == 1/1e5Pa =~ 1/atm', name='Line mixing coefficients (single lines)'),
+                "Y300_NL": SpectroscopicParameter(value=ll.y300, uncer=.0, units='1/mb', name='Line mixing coefficients for neglected lines (NL)'),
             }
         o2_sp = {**o2_sp, **o2_sp_}
 
         return o2_sp
-    
+
     @staticmethod
     def ozono_parameters(model: str) -> Dict:
         """This method is used for uncertainty analysis and returns the dictionary
@@ -196,11 +197,11 @@ class SpectroscopicParameter:
 
         o3_sp = {
             "O3_FL": SpectroscopicParameter(value=ll.fl, uncer=np.zeros(len(ll.fl)), units='GHz', name='Line frequency'),
-            "O3_S1": SpectroscopicParameter(value=ll.s1, uncer=np.zeros(len(ll.fl)), units = 'Hz*cm^2', name='Line intensity (or strength)'),
-            "O3_B": SpectroscopicParameter(value=ll.b, uncer=np.zeros(len(ll.fl)), units = 'unitless', name='Temperature Coefficient of intensity'),
-            "O3_W": SpectroscopicParameter(value=ll.w, uncer=np.zeros(len(ll.fl)), units = 'GHz/mb', name='Air-pressure broadening'),
-            "O3_X": SpectroscopicParameter(value=ll.x, uncer=np.zeros(len(ll.fl)), units = 'unitless', name='Temperature exponent of air broadening'),
-            "O3_SR": SpectroscopicParameter(value=ll.sr, uncer=np.zeros(len(ll.fl)), units = 'unitless', name='Shift-to-width ratio'),
+            "O3_S1": SpectroscopicParameter(value=ll.s1, uncer=np.zeros(len(ll.fl)), units='Hz*cm^2', name='Line intensity (or strength)'),
+            "O3_B": SpectroscopicParameter(value=ll.b, uncer=np.zeros(len(ll.fl)), units='unitless', name='Temperature Coefficient of intensity'),
+            "O3_W": SpectroscopicParameter(value=ll.w, uncer=np.zeros(len(ll.fl)), units='GHz/mb', name='Air-pressure broadening'),
+            "O3_X": SpectroscopicParameter(value=ll.x, uncer=np.zeros(len(ll.fl)), units='unitless', name='Temperature exponent of air broadening'),
+            "O3_SR": SpectroscopicParameter(value=ll.sr, uncer=np.zeros(len(ll.fl)), units='unitless', name='Shift-to-width ratio'),
         }
 
         return o3_sp

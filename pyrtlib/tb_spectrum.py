@@ -161,29 +161,20 @@ class TbCloudRTE(object):
         Args:
             absmdl (str): Absorption model.
         """
-        if absmdl == 'uncertainty':
-            O2AbsModel.model = 'R18'
+        # Defines models
+        try:
+            O2AbsModel.model = absmdl
             O2AbsModel.set_ll()
-            H2OAbsModel.model = 'R17'
+        except KeyError as e:
+            warnings.warn("The lines list {} was not found. You have to define absorption model manually".format(e))
+        try:
+            H2OAbsModel.model = absmdl
             H2OAbsModel.set_ll()
-            N2AbsModel.model = 'R03'
-            LiqAbsModel.model = 'R16'
-            self._uncertainty = True
-        else:
-            # Defines models
-            try:
-                O2AbsModel.model = absmdl
-                O2AbsModel.set_ll()
-            except KeyError as e:
-                warnings.warn("The lines list {} was not found. You have to define absorption model manually".format(e))
-            try:
-                H2OAbsModel.model = absmdl
-                H2OAbsModel.set_ll()
-            except KeyError as e:
-                warnings.warn("The lines list {} was not found".format(e))
-            
-            N2AbsModel.model = absmdl
-            LiqAbsModel.model = absmdl
+        except KeyError as e:
+            warnings.warn("The lines list {} was not found".format(e))
+        
+        N2AbsModel.model = absmdl
+        LiqAbsModel.model = absmdl
 
     def init_cloudy(self, cldh: np.ndarray, denice: np.ndarray, denliq: np.ndarray) -> None:
         """Initialize cloudy conditions parameters.
