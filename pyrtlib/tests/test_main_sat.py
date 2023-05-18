@@ -213,8 +213,6 @@ class Test(TestCase):
             os.path.join(THIS_DIR, "data", "tb_tot_ros03_16_17_18_19_19sd_20_20sd_98_mak11_21sd.csv"))
         assert_allclose(df.tbtotal, df_expected.ros21sd, atol=0)
 
-    # @pytest.mark.datafiles(DATA_DIR)
-    @pytest.mark.skip(reason="skipping")
     def test_pyrtlib_sat_R18(self):
         z, p, _, t, md = atmp.gl_atm(atmp.TROPICAL)
 
