@@ -10,10 +10,15 @@ RUN apt-get update \
 
 RUN python3 -m pip install cftime
 
-WORKDIR /tmp
-RUN wget https://github.com/slarosa/pyrtlib/archive/refs/heads/main.zip && \
-    unzip -a pyrtlib-main.zip && \
-    cd pyrtlib-main
+# TODO: uncomment when repository will be public
+# WORKDIR /tmp
+# RUN wget https://github.com/slarosa/pyrtlib/archive/refs/heads/main.zip && \
+#     unzip -a pyrtlib-main.zip && \
+#     cd pyrtlib-main
+ADD . /home/dev/pyrtlib
+WORKDIR /home/dev/pyrtlib
+RUN python3 setup.py install
+
 RUN python3 setup.py install
 
 ENTRYPOINT ["/bin/bash"]
