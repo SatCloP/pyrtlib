@@ -545,8 +545,7 @@ class O2AbsModel(AbsModel):
             submm line-widths from Golubiatnikov & Krupnov, except 234-GHz line width from Drouin.
             Mixing coeff. from Makarov's 2018 revision.
          2. The same temperature dependence (X) is used for submillimeter
-            line widths as in the 60 GHz band: (1/T)**X (Koshelev et al 2016)
-         3. The sign of DNU in the shape factor is corrected.
+            line widths as in the 60 GHz band: (1/T)**X (Koshelev et al 2016).
         """
 
         if amu:
@@ -723,12 +722,12 @@ class O3AbsModel(AbsModel):
 
         Args:
             t (np.ndarray): Temperature (K)
-            p (np.ndarray): Total Pressure (mb)
+            p (np.ndarray): Total pressure (mb)
             f (np.ndarray): Frequency (GHz)
-            o3n (np.ndarray): Ozone Number Density (molecules/m^3)
+            o3n (np.ndarray): Ozone number density (molecules/m^3)
 
         Returns:
-            np.ndarray: Ozone Power Absorption Coeff. (Np/km)
+            np.ndarray: Ozone power absorption coeff. (Np/km)
         """
 
         if amu:
