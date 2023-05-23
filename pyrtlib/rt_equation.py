@@ -512,7 +512,7 @@ class RTEquation:
         return aliq, aice
 
     @staticmethod
-    def clearsky_absorption(p: np.ndarray, t: np.ndarray, e: np.ndarray, frq: np.ndarray, o3n: np.ndarray = None) -> Tuple[np.ndarray, np.ndarray]:
+    def clearsky_absorption(p: np.ndarray, t: np.ndarray, e: np.ndarray, frq: np.ndarray, o3n: Optional[np.ndarray] = None, amu: Optional[dict] = None) -> Tuple[np.ndarray, np.ndarray]:
         """Computes profiles of water vapor and dry air absorption 
         for a given set of frequencies. Subroutines :math:`H_2O` and :math:`O_2` 
         contain the absorption model of [Liebe-Layton]_ with oxygen 
@@ -552,10 +552,10 @@ class RTEquation:
             ekpa = e[i] / 10.0
             pdrykpa = p[i] / 10.0 - ekpa
             # add H2O term
-            npp, ncpp = H2OAbsModel().h2o_absorption(pdrykpa, v, ekpa, frq)
+            npp, ncpp = H2OAbsModel().h2o_absorption(pdrykpa, v, ekpa, frq, amu)
             awet[i] = factor * (npp + ncpp) * db2np
             # add O2 term
-            npp, ncpp = O2AbsModel().o2_absorption(pdrykpa, v, ekpa, frq)
+            npp, ncpp = O2AbsModel().o2_absorption(pdrykpa, v, ekpa, frq, amu)
             aO2[i] = factor * (npp + ncpp) * db2np
             # add N2 term
             if N2AbsModel.model not in ['R03', 'R16', 'R17', 'R18', 'R98', 'makarov11']:
@@ -567,32 +567,8 @@ class RTEquation:
                     'No model avalaible with this name: {} . Sorry...'.format('model'))
 
             if not o3n is None and O3AbsModel.model in ['R18', 'R21', 'R21SD', 'R22', 'R22SD']:
-                aO3[i] = O3AbsModel().o3_absorption(t[i], p[i], frq, o3n[i])
+                aO3[i] = O3AbsModel().o3_absorption(t[i], p[i], frq, o3n[i], amu)
 
             adry[i] = aO2[i] + aN2[i] + aO3[i]
-
-        return awet, adry
-
-    @staticmethod
-    def clearsky_absorption_uncertainty(p: np.ndarray, t: np.ndarray, e: np.ndarray, frq: np.ndarray, amu: Tuple):
-        nl = len(p)
-        awet = np.zeros(p.shape)
-        adry = np.zeros(p.shape)
-        aO2_N2 = np.zeros(p.shape)
-        aN2 = np.zeros(p.shape)
-        factor = np.dot(0.182, frq)
-        db2np = np.dot(np.log(10.0), 0.1)
-
-        for i in range(0, nl):
-            v = 300.0 / t[i]
-            ekpa = e[i] / 10.0
-            pdrykpa = p[i] / 10.0 - ekpa
-            npp, ncpp = H2OAbsModel().h2o_uncertainty(pdrykpa, v, ekpa, frq, amu)
-            awet[i] = (factor * (npp + ncpp)) * db2np
-            npp, ncpp = O2AbsModel().o2abs_uncertainty(pdrykpa, v, ekpa, frq, amu)
-            # add N2 term
-            # aN2[i] = N2AbsModel.n2_absorption(tk[i], np.dot(pdrykpa, 10), frq)
-            aO2_N2[i] = (factor * (npp + ncpp)) * db2np
-            adry[i] = aO2_N2[i]
 
         return awet, adry

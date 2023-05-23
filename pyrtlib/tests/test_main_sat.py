@@ -110,7 +110,7 @@ class Test(TestCase):
         rte = TbCloudRTE(z, p, t, rh, frq, ang)
         rte.init_absmdl('R16')
         O2AbsModel.model = 'makarov11'
-        O2AbsModel.o2ll = import_lineshape('o2ll_{}'.format(O2AbsModel.model))
+        O2AbsModel.set_ll()
         df = rte.execute()
 
         df_expected = pd.read_csv(
@@ -206,15 +206,13 @@ class Test(TestCase):
         rte = TbCloudRTE(z, p, t, rh, frq)
         rte.init_absmdl('R20')
         H2OAbsModel.model = 'R21SD'
-        H2OAbsModel.h2oll = import_lineshape('h2oll_{}'.format(H2OAbsModel.model))
+        H2OAbsModel.set_ll()
         df = rte.execute()
 
         df_expected = pd.read_csv(
             os.path.join(THIS_DIR, "data", "tb_tot_ros03_16_17_18_19_19sd_20_20sd_98_mak11_21sd.csv"))
         assert_allclose(df.tbtotal, df_expected.ros21sd, atol=0)
 
-    # @pytest.mark.datafiles(DATA_DIR)
-    @pytest.mark.skip(reason="skipping")
     def test_pyrtlib_sat_R18(self):
         z, p, _, t, md = atmp.gl_atm(atmp.TROPICAL)
 
@@ -232,8 +230,6 @@ class Test(TestCase):
             os.path.join(THIS_DIR, "data", "tb_tot_ros03_16_17_18_19_19sd_20_20sd_98_mak11_21sd.csv"))
         assert_allclose(df.tbtotal, df_expected.ros18, atol=0)
 
-    # @pytest.mark.datafiles(DATA_DIR)
-    @pytest.mark.skip(reason="skipping")
     def test_pyrtlib_sat_R98(self):
         z, p, _, t, md = atmp.gl_atm(atmp.TROPICAL)
 
@@ -308,9 +304,6 @@ class Test(TestCase):
         o3n = np.zeros(z.shape)
         for k in range(0, len(z)):
             o3n[k] = ppmv_to_moleculesm3(o3n_ppmv[k], p[k] * 100.0, t[k])
-        # o3n = np.interp(z,o3n,z)
-        # o3n_matlab = np.loadtxt("/Users/slarosa/Downloads/o3.csv", delimiter=',')
-        # assert_allclose(o3n, o3n_matlab, atol=0)
 
         gkg = ppmv2gkg(md[:, atmp.H2O], atmp.H2O)
         rh = mr2rh(p, t, gkg)[0] / 100
@@ -321,9 +314,9 @@ class Test(TestCase):
         rte = TbCloudRTE(z, p, t, rh, frq, ang, o3n)
         rte.init_absmdl('R20')
         H2OAbsModel.model = 'R21SD'
-        H2OAbsModel.h2oll = import_lineshape('h2oll_{}'.format(H2OAbsModel.model))
+        H2OAbsModel.set_ll()
         O3AbsModel.model = 'R18'
-        O3AbsModel.o3ll = import_lineshape('o3ll_{}'.format(O3AbsModel.model))
+        O3AbsModel.set_ll()
         df = rte.execute()
 
         df_expected = pd.read_csv(
@@ -349,7 +342,7 @@ class Test(TestCase):
         rte.emissivity = 0.6
         rte.init_absmdl('R20')
         H2OAbsModel.model = 'R21SD'
-        H2OAbsModel.h2oll = import_lineshape('h2oll_{}'.format(H2OAbsModel.model))
+        H2OAbsModel.set_ll()
         df = rte.execute()
 
         df_expected = pd.read_csv(
@@ -377,7 +370,7 @@ class Test(TestCase):
         rte.emissivity = 0.6
         rte.init_absmdl('R20')
         H2OAbsModel.model = 'R21SD'
-        H2OAbsModel.h2oll = import_lineshape('h2oll_{}'.format(H2OAbsModel.model))
+        H2OAbsModel.set_ll()
         df = rte.execute()
 
         df_expected = pd.read_csv(
@@ -405,7 +398,7 @@ class Test(TestCase):
         rte.emissivity = 0.6
         rte.init_absmdl('R20')
         H2OAbsModel.model = 'R21SD'
-        H2OAbsModel.h2oll = import_lineshape('h2oll_{}'.format(H2OAbsModel.model))
+        H2OAbsModel.set_ll()
         df = rte.execute()
 
         df_expected = pd.read_csv(
@@ -434,7 +427,7 @@ class Test(TestCase):
         rte.init_absmdl('R20')
         rte.init_cloudy(cldh, denice, denliq)
         H2OAbsModel.model = 'R21SD'
-        H2OAbsModel.h2oll = import_lineshape('h2oll_{}'.format(H2OAbsModel.model))
+        H2OAbsModel.set_ll()
     
         df = rte.execute()
 

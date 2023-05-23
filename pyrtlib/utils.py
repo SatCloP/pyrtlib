@@ -7,7 +7,8 @@ __date__ = 'March 2021'
 __copyright__ = '(C) 2021, CNR-IMAA'
 
 from typing import Tuple, Optional, Union, List, Dict
-
+import sys
+from importlib import reload
 import numpy as np
 
 
@@ -38,8 +39,11 @@ def import_lineshape(name: str) -> Dict:
     try:
         module = __import__('pyrtlib._lineshape', globals(),
                             locals(), [name.lower()])
-    except ImportError:
+    except ImportError as e:
         return None
+    if vars(module)[name.lower()] in sys.modules.values():
+        reload(vars(module)[name.lower()])
+    
     return vars(module)[name.lower()]
 
 
@@ -127,11 +131,7 @@ def gas_mass(gasid: int) -> float:
         gasid (int): The gas ID defined in :py:class:`~pyrtlib.atmospheric_profiles.AtmosphericProfiles`
 
     Returns:
-        float: The mass of the HITRAN gas ID
-
-    .. note::
-        TODO: Results are not accurate because amu values need more significant figures.
-
+        float: The mass of the HITRAN gas ID.
     """
 
     if gasid == 0:
@@ -907,9 +907,10 @@ def get_frequencies_sat(instrument: str) -> np.ndarray:
         :py:meth:`pyrtlib.utils.get_frequencies`
 
     Example:
-        >>> from pyrtlib.utils import get_frequencies_sat
-        >>> mwi = get_frequencies_sat("MWI")
-        >>> print(mwi)
+        .. code-block:: python
+
+            from pyrtlib.utils import get_frequencies_sat
+            mwi = get_frequencies_sat("MWI")
     """
     cf = 183.31
     cf2 = 243.20

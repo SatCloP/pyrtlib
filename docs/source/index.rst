@@ -54,18 +54,6 @@ which are commonly exploited for atmospheric sounding by microwave radiometer (M
       :type: ref
       :text: Go To Reference
       :classes: btn-outline-primary btn-block
-   
-   ---
-   :img-top: _static/code.svg
-
-   Jupyter notebook example
-
-   +++
-
-   .. link-button:: notebook/index
-      :type: ref
-      :text: Go To Reference
-      :classes: btn-block btn-outline-primary 
 
 .. pyrtlib is a python tool that provides a set of calsses and methods for simulating ........
 
@@ -215,14 +203,6 @@ API References
    :maxdepth: 2
    
    api
-
-Notebook Example
-----------------
-
-.. toctree::
-   :maxdepth: 2
-   
-   notebook/index
 
 Gallery Example
 ---------------

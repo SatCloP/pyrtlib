@@ -1,7 +1,7 @@
 .. _uncert_example:
 
 ================
-Notebook Example
+Notebook example
 ================
 
 .. toctree::

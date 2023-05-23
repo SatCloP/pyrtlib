@@ -46,8 +46,8 @@ class TbCloudRTE(object):
             rh (np.ndarray): Relative humidity profile (fraction).
             frq (np.ndarray): Channel frequencies (GHz).
             angles (Optional[np.ndarray], optional): Elevation anglesX (deg).. Defaults to 90.
-            o3n (Optional[np.ndarray], optional): _description_. Defaults to None.
-            amu (Optional[Tuple], optional): _description_. Defaults to None.
+            o3n (Optional[np.ndarray], optional): Ozone profile. Defaults to None.
+            amu (Optional[Tuple], optional): Absorption model uncertainties. Defined by :py:func:`~pyrtlib.uncertainty.SpectroscopicParameter`. Defaults to None.
             absmdl (Optional[str], optional): Absorption model. Defaults to ''.
             ray_tracing (Optional[bool], optional): Wether True (default) it computes ray tracing for
                                             distance between layers, otherwise use simple plane
@@ -69,7 +69,7 @@ class TbCloudRTE(object):
         self.ray_tracing = ray_tracing
         self._satellite = from_sat
         self.cloudy = cloudy
-        self._uncertainty = False
+        self._uncertainty = True if self.amu else False
 
         self.nl = len(z)
         self.nf = len(frq)
@@ -144,8 +144,17 @@ class TbCloudRTE(object):
         else:
             raise ValueError("Please enter a valid value or array for emissivity")
 
-    def set_amu(self, amu: Tuple) -> Tuple:
+    def set_amu(self, amu: Tuple) -> None:
+        """Set absorption model uncertainties
+
+        Args:
+            amu (Dict): The spectroscopic parameters dictionary
+
+        See also:
+            :py:func:`~pyrtlib.uncertainty.SpectroscopicParameter`
+        """
         self.amu = amu
+        self._uncertainty = True
 
     def init_absmdl(self, absmdl: str):
         """Initialize absorption models.
@@ -153,29 +162,20 @@ class TbCloudRTE(object):
         Args:
             absmdl (str): Absorption model.
         """
-        if absmdl == 'uncertainty':
-            O2AbsModel.model = 'R18'
-            O2AbsModel.o2ll = import_lineshape('o2ll_{}'.format('R18'))
-            H2OAbsModel.model = 'R17'
-            H2OAbsModel.h2oll = import_lineshape('h2oll_{}'.format('R17'))
-            N2AbsModel.model = 'R03'
-            LiqAbsModel.model = 'R16'
-            self._uncertainty = True
-        else:
-            # Defines models
-            try:
-                O2AbsModel.model = absmdl
-                O2AbsModel.o2ll = import_lineshape('o2ll_{}'.format(absmdl))
-            except KeyError as e:
-                warnings.warn("The lines list {} was not found. You have to define absorption model manually".format(e))
-            try:
-                H2OAbsModel.model = absmdl
-                H2OAbsModel.h2oll = import_lineshape('h2oll_{}'.format(absmdl))
-            except KeyError as e:
-                warnings.warn("The lines list {} was not found".format(e))
-            
-            N2AbsModel.model = absmdl
-            LiqAbsModel.model = absmdl
+        # Defines models
+        try:
+            O2AbsModel.model = absmdl
+            O2AbsModel.set_ll()
+        except KeyError as e:
+            warnings.warn("The lines list {} was not found. You have to define absorption model manually".format(e))
+        try:
+            H2OAbsModel.model = absmdl
+            H2OAbsModel.set_ll()
+        except KeyError as e:
+            warnings.warn("The lines list {} was not found".format(e))
+        
+        N2AbsModel.model = absmdl
+        LiqAbsModel.model = absmdl
 
     def init_cloudy(self, cldh: np.ndarray, denice: np.ndarray, denliq: np.ndarray) -> None:
         """Initialize cloudy conditions parameters.
@@ -314,11 +314,9 @@ class TbCloudRTE(object):
             # this are based on NOAA RTE fortran routines
             for j in range(0, self.nf):
                 RTEquation._emissivity = self._es[j]
-                if self._uncertainty:
-                    awet, adry = RTEquation.clearsky_absorption_uncertainty(self.p, self.tk, e, self.frq[j], self.amu)
-                else:
                     # Rosenkranz, personal communication, 2019/02/12 (email)
-                    awet, adry = RTEquation.clearsky_absorption(self.p, self.tk, e, self.frq[j], self.o3n)
+                awet, adry = RTEquation.clearsky_absorption(self.p, self.tk, e, self.frq[j], 
+                                                            self.o3n, self.amu if self._uncertainty else None)
                 self.sptauwet[j, k], \
                 self.ptauwet[j, k, :] = RTEquation.exponential_integration(1, awet, ds, 0, self.nl, 1)
                 self.sptaudry[j, k], \

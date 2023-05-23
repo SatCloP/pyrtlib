@@ -1,22 +1,21 @@
 """
-Performing uncertainty on Brightness Temperature 
-================================================
+Performing sensitivity of spectroscopic parameters 
+==================================================
 """
 
 # %%
 # This example shows how to use the
-# :py:class:`pyrtlib.tb_spectrum.TbCloudRTE` method to calculate uncertainty on brightness temperature
-# with gamma_a as perturbation sptectroscopic parameter
+# :py:class:`pyrtlib.tb_spectrum.TbCloudRTE` method to calculate sensitivity of simulated downwelling brightness temperature
+# with a perturbed water vapor absorption parameter (:math:`\gamma_a` air broadening 22 GHz) from [Cimini-2018]_.
 
 import matplotlib.pyplot as plt
-
-plt.rcParams.update({'font.size': 15})
 import numpy as np
+plt.rcParams.update({'font.size': 15})
 
 from pyrtlib.atmospheric_profiles import AtmosphericProfiles as atmp
 from pyrtlib.tb_spectrum import TbCloudRTE
-from pyrtlib.absorption_model import H2OAbsModel, O3AbsModel
-from pyrtlib.uncertainty.absmod_uncertainty import parameters_perturbation
+from pyrtlib.absorption_model import H2OAbsModel, O2AbsModel
+from pyrtlib.uncertainty import AbsModUncertainty, SpectroscopicParameter
 from pyrtlib.utils import ppmv2gkg, mr2rh
 
 atm = ['Tropical',
@@ -26,49 +25,55 @@ atm = ['Tropical',
        'Subarctic Winter',
        'U.S. Standard']
 
+colors = ["r", "m", "g", "b", "c", "k"]
+
 fig, ax = plt.subplots(1, 1, figsize=(12, 8))
 ax.set_xlabel('Frequency [GHz]')
 ax.set_ylabel('$\Delta {T_B}$ [K]')
-
 for i in range(0, 6):
 
-    z, p, d, t, md = atmp.gl_atm(i) # 'U.S. Standard'
+    z, p, d, t, md = atmp.gl_atm(i)
 
     gkg = ppmv2gkg(md[:, atmp.H2O], atmp.H2O)
     rh = mr2rh(p, t, gkg)[0] / 100
 
-    ang = np.array([90.])
-    frq = np.arange(20, 151, 1)
+    interp = .1
+    frq = np.arange(20, 60 + interp, interp)
 
-    amu = parameters_perturbation()
-
-    rte = TbCloudRTE(z, p, t, rh, frq, ang, amu=amu)
-    rte.init_absmdl('uncertainty')
+    parameters = {**SpectroscopicParameter.water_parameters('R17'), **SpectroscopicParameter.oxygen_parameters('R18')}
+    parameters['gamma_a'].value[0] = 2.688
+    parameters['gamma_a'].uncer[0] = 0.039
+    SpectroscopicParameter.set_parameters(parameters)
+    
+    rte = TbCloudRTE(z, p, t, rh, frq, amu=parameters)
+    rte.init_absmdl('R17')
+    O2AbsModel.model = 'R18'
+    O2AbsModel.set_ll()
+    rte.satellite = False
     df = rte.execute()
-    df = df.set_index(frq)
-
-    amu = parameters_perturbation(['gamma_a'], 'max', index=1)
-
-    rte = TbCloudRTE(z, p, t, rh, frq, ang, amu=amu)
-    rte.init_absmdl('uncertainty')
+    
+    parameters = AbsModUncertainty.parameters_perturbation(['gamma_a'], 'max', index=0)
+    rte.set_amu(parameters)
     df_gamma = rte.execute()
-    df_gamma = df_gamma.set_index(frq)
-
     df['delta_max_gamma_a'] = df_gamma.tbtotal - df.tbtotal
 
-    amu = parameters_perturbation(['gamma_a'], 'min', index=1)
-
-    rte = TbCloudRTE(z, p, t, rh, frq, ang, amu=amu)
-    rte.init_absmdl('uncertainty')
+    parameters = AbsModUncertainty.parameters_perturbation(['gamma_a'], 'min', index=0)
+    rte.set_amu(parameters)
     df_gamma = rte.execute()
-    df_gamma = df_gamma.set_index(frq)
-
     df['delta_min_gamma_a'] = df_gamma.tbtotal - df.tbtotal
 
-    df.delta_max_gamma_a.plot(ax=ax, style='--', label='{}'.format(atm[i]))
-    df.delta_min_gamma_a.plot(ax=ax, label='{}'.format(atm[i]))
+    df = df.set_index(frq)
 
-# ax.legend()
+    df.delta_max_gamma_a.plot(ax=ax, style='--', label='_nolegend_', color=colors[i])
+    df.delta_min_gamma_a.plot(ax=ax, label='{}'.format(atm[i]), color=colors[i])
+
+    ax.legend()
+    ax.set_box_aspect(0.7)
+
 ax.grid(True, 'both')
-plt.title("Perturbed parameters: $\gamma_a$")
+plt.title("Perturbed parameter: $\ H_2O - \gamma_a$")
 plt.show()
+
+# %%
+# Solid lines correspond to negative perturbation (value − uncertainty), 
+# while dashed lines correspond to positive perturbation (value + uncertainty).
