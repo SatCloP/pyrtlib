@@ -261,11 +261,12 @@ class H2OAbsModel(AbsModel):
 
         """
         if amu:
-            self.h2oll.cf = amu['con_Cf'].value * amu['con_Cf_factr'].value
-            self.h2oll.cs = amu['con_Cs'].value * amu['con_Cs_factr'].value
             if H2OAbsModel.model > 'R17':
                 self.h2oll.cf = amu['con_Cf'].value
                 self.h2oll.cs = amu['con_Cs'].value
+            else:
+                self.h2oll.cf = amu['con_Cf'].value * amu['con_Cf_factr'].value
+                self.h2oll.cs = amu['con_Cs'].value * amu['con_Cs_factr'].value
             self.h2oll.xcf = amu['con_Xf'].value
             self.h2oll.xcs = amu['con_Xs'].value
             self.h2oll.s1 = amu['S'].value

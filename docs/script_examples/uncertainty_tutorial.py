@@ -114,15 +114,13 @@ rh = mr2rh(p, t, gkg)[0] / 100
 # ________________________________________
 
 # %%
-frq = sorted(list(set().union(get_frequencies('hat'), np.arange(20, 61, 0.5).tolist())))
+interp = 0.5
+frq = sorted(list(set().union(get_frequencies('hat'), np.arange(20, 60 + interp, interp).tolist())))
 
 # %% [markdown]
 # Performing uncertainty of brightness temperature
 # ________________________________________________
-
-# %% [markdown]
 # Default calculatoin consideres no cloud and no perturbation
-# ___________________________________________________________
 
 # %%
 rte = TbCloudRTE(z, p, t, rh, frq, amu=parameters)

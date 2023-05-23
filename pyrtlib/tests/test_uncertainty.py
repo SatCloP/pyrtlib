@@ -104,7 +104,8 @@ class Test(TestCase):
         amu = AbsModUncertainty.parameters_perturbation(
             ['O3_X'], 'min', index=0)
 
-        rte = TbCloudRTE(z, p, t, rh, frq, o3n=o3n, amu=amu)
+        rte = TbCloudRTE(z, p, t, rh, frq, o3n=o3n)
+        rte.set_amu(amu)
         rte.init_absmdl('R20')
         H2OAbsModel.model = 'R21SD'
         H2OAbsModel.set_ll()
@@ -115,6 +116,32 @@ class Test(TestCase):
         df_expected = pd.read_csv(
             os.path.join(THIS_DIR, "data", "tbtotal_uncertainty_gamma_a_min.csv"))
         assert_allclose(df.tbtotal.values, df_expected.o3_x)
+
+    def test_set_amu(self):
+        z, p, _, t, md = atmp.gl_atm(atmp.US_STANDARD)
+
+        gkg = ppmv2gkg(md[:, atmp.H2O], atmp.H2O)
+        rh = mr2rh(p, t, gkg)[0] / 100
+
+        frq = np.arange(20, 201, 1)
+        water_sp = SpectroscopicParameter.water_parameters("R17")
+        oxygen_sp = SpectroscopicParameter.oxygen_parameters("R18")
+        water_sp['con_Cf_factr'].value = 1
+        water_sp['con_Cs_factr'].value = 1
+        parameters = {**water_sp, **oxygen_sp}
+        SpectroscopicParameter.set_parameters(parameters)
+
+        rte = TbCloudRTE(z, p, t, rh, frq)
+        rte.satellite = False
+        rte.init_absmdl('R17')
+        O2AbsModel.model = 'R18'
+        O2AbsModel.set_ll()
+        df = rte.execute()
+
+        rte.set_amu(parameters)
+        df_expected = rte.execute()
+
+        assert_allclose(df.tbtotal.values, df_expected.tbtotal.values)
 
     def test_cov_p(self):
         n = 106

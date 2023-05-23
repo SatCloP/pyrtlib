@@ -154,6 +154,7 @@ class TbCloudRTE(object):
             :py:func:`~pyrtlib.uncertainty.SpectroscopicParameter`
         """
         self.amu = amu
+        self._uncertainty = True
 
     def init_absmdl(self, absmdl: str):
         """Initialize absorption models.
