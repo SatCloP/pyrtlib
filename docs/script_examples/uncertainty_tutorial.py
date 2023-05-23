@@ -28,14 +28,6 @@ from pyrtlib.absorption_model import O2AbsModel
 from pyrtlib.utils import ppmv2gkg, mr2rh, get_frequencies, constants
 from pyrtlib.uncertainty import covariance_matrix
 
-# %%
-atm = ['Tropical',
-       'Midlatitude Summer',
-       'Midlatitude Winter',
-       'Subarctic Summer',
-       'Subarctic Winter',
-       'U.S. Standard']
-
 # %% [markdown]
 # Define spectroscopic parameters to be perturbed and them uncertainties
 # ______________________________________________________________________
@@ -186,7 +178,9 @@ params['sigma_tb_with_con_Xs'] = sigma_tb
 params.plot(x='freq', y=['sigma_tb', 'sigma_tb_with_con_Xs'],
             title="${T_B}$ uncertainty due to uncertainties in ${O_2}$ and ${H_2 O}$ parameters",
             xlabel='Frequency [GHz]', ylabel='$\sigma_{T_B}$ [K]',
-            label=[atm[atmp.TROPICAL], atm[atmp.TROPICAL] + ' with ${H_2 O}$ ${n_{CS}}$ parameter'], figsize=(12,8))
+            label=[atmp.atm_profiles()[atmp.TROPICAL], 
+                   atmp.atm_profiles()[atmp.TROPICAL] + ' with ${H_2 O}$ ${n_{CS}}$ parameter'], 
+                   figsize=(12,8))
 plt.grid()
 
 
