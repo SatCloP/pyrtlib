@@ -20,7 +20,7 @@ A python package to compute atmospheric radiative transfer model based on the ra
 
 # Example
 
-For examples of how to use pyrtlib see the [examples gallery](docs/examples). Code can be downloaded both as python script or notebook file.
+For examples of how to use pyrtlib see the [examples gallery](docs/script_examples). Code can be downloaded both as python script or notebook file.
 
 ## Performing calculation of upwelling brightness temperature.
 
