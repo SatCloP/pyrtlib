@@ -18,7 +18,7 @@ import numpy as np
 
 from pyrtlib.rt_equation import RTEquation
 from pyrtlib.absorption_model import H2OAbsModel, O2AbsModel, AbsModel
-from pyrtlib.atmospheric_profiles import AtmosphericProfiles as atmp
+from pyrtlib.climatology import AtmosphericProfiles as atmp
 from pyrtlib.utils import ppmv2gkg, mr2rh, import_lineshape, height_to_pressure
 
 z, p, d, t, md = atmp.gl_atm(atmp.TROPICAL)

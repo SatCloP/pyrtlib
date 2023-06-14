@@ -77,7 +77,7 @@ Quick start
 .. code-block:: python
    
    from pyrtlib.tb_spectrum import TbCloudRTE
-   from pyrtlib.atmospheric_profiles import AtmosphericProfiles as atmp
+   from pyrtlib.climatology import AtmosphericProfiles as atmp
    from pyrtlib.utils import mr2rh, ppmv2gkg
 
 Atmospheric profile definition:

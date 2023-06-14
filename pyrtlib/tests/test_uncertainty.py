@@ -7,7 +7,7 @@ from numpy.testing import assert_allclose, assert_equal
 from pyrtlib.absorption_model import H2OAbsModel, O2AbsModel, O3AbsModel
 from pyrtlib.uncertainty import AbsModUncertainty, SpectroscopicParameter
 from pyrtlib.uncertainty import covariance_matrix
-from pyrtlib.atmospheric_profiles import AtmosphericProfiles as atmp
+from pyrtlib.climatology import AtmosphericProfiles as atmp
 from pyrtlib.tb_spectrum import TbCloudRTE
 from pyrtlib.utils import ppmv2gkg, mr2rh, ppmv_to_moleculesm3
 

@@ -43,7 +43,7 @@ def import_lineshape(name: str) -> Dict:
         return None
     if vars(module)[name.lower()] in sys.modules.values():
         reload(vars(module)[name.lower()])
-    
+
     return vars(module)[name.lower()]
 
 
@@ -128,7 +128,7 @@ def gas_mass(gasid: int) -> float:
     Returns the mass of the HITRAN gas ID
 
     Args:
-        gasid (int): The gas ID defined in :py:class:`~pyrtlib.atmospheric_profiles.AtmosphericProfiles`
+        gasid (int): The gas ID defined in :py:class:`~pyrtlib.climatology.AtmosphericProfiles`
 
     Returns:
         float: The mass of the HITRAN gas ID.
@@ -252,7 +252,8 @@ def mr2rh(p: np.ndarray,
         Tconvert (numpy.ndarray, optional): [description]. Defaults to None.
 
     Returns:
-        numpy.ndarray: Relative humidity
+        numpy.ndarray: Relative humidity using ratios of gas pressures
+        numpy.ndarray: Relative humidity using WMO definition
     """
     # saturation pressure
     esat = satvap(t)
@@ -319,6 +320,47 @@ def mr2e(p: np.ndarray, mr: np.ndarray) -> np.ndarray:
     e = np.multiply(p, mr) / (np.dot(1000.0, eps) + mr)
 
     return e
+
+
+def rho2rh(rho: np.ndarray, t: np.ndarray, p: np.ndarray) -> np.ndarray:
+    """_summary_
+
+    Args:
+        rho (np.ndarray): _description_
+        t (np.ndarray): _description_
+        p (np.ndarray): _description_
+
+    Returns:
+        np.ndarray: _description_
+    """
+    e = (rho * t)/216.7
+    mr = e2mr(p, e)
+
+    rh = mr2rh(p, t, mr)
+
+    return rh
+
+
+def rho2mr(rho: np.ndarray, t: np.ndarray, p: np.ndarray) -> np.ndarray:
+    """Determine water vapor mass mixing ratio (g/kg) given reference pressure (mbar), 
+    temperature (t,K), and water vapor density (g/m3).
+
+    Args:
+        rho (np.ndarray): _description_
+        t (np.ndarray): _description_
+        p (np.ndarray): _description_
+
+    Returns:
+        np.ndarray: _description_
+    """
+
+    mr = rho * t / (p * 0.3477)
+
+    rvap = constants('Rwatvap')[0] * 1e-5  # [J kg-1 K-1] -> [hPa * m2 g-1 K-1]
+    eps = 0.621970585  # Rdry/Rvap
+    mr = rho * (1e3*eps*rvap) / (p/t - rvap * rho)
+
+    return mr
 
 
 def e2mr(p: np.ndarray, e: np.ndarray) -> np.ndarray:

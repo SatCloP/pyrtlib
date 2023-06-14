@@ -402,7 +402,7 @@ intersphinx_mapping = {
 plot_html_show_source_link = False
 plot_html_show_formats = False
 plot_formats = ['png']
-plot_rcparams = {'savefig.bbox': 'tight'}
+plot_rcparams = {'savefig.bbox': 'tight', 'font.size': 15}
 
 # The suffix of source filenames.
 source_suffix = ['.rst', '.md']

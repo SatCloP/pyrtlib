@@ -393,7 +393,7 @@ class IGRAUpperAir(HTTPEndPoint):
             df = df.dropna(subset=('temperature', 'reported_relative_humidity',
                            'u_wind', 'v_wind'), how='all').reset_index(drop=True)
 
-            df.units = {'pressure': 'hPa',
+            df.attrs['units'] = {'pressure': 'hPa',
                         'reported_height': 'meter',
                         'calculated_height': 'meter',
                         'temperature': 'Kelvin',
@@ -427,7 +427,7 @@ class IGRAUpperAir(HTTPEndPoint):
 
             df.drop('dewpoint_depression', axis=1, inplace=True)
 
-            df.units = {'etime': 'second',
+            df.attrs['units'] = {'etime': 'second',
                         'pressure': 'hPa',
                         'height': 'meter',
                         'temperature': 'degC',
@@ -442,7 +442,7 @@ class IGRAUpperAir(HTTPEndPoint):
     def _clean_header_df(self, df: pd.DataFrame) -> pd.DataFrame:
         """Format the header dataframe and add units."""
         if self.suffix == '-drvd.txt':
-            df.units = {'release_time': 'second',
+            df.attrs['units'] = {'release_time': 'second',
                         'precipitable_water': 'millimeter',
                         'inv_pressure': 'hPa',
                         'inv_height': 'meter',
@@ -465,7 +465,7 @@ class IGRAUpperAir(HTTPEndPoint):
                         'convective_inhibition': 'Joule / kilogram'}
 
         else:
-            df.units = {'release_time': 'second',
+            df.attrs['units'] = {'release_time': 'second',
                         'latitude': 'degrees',
                         'longitude': 'degrees'}
 

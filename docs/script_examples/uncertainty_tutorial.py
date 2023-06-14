@@ -22,7 +22,7 @@ import pandas as pd
 
 # %%
 from pyrtlib.uncertainty import AbsModUncertainty, SpectroscopicParameter
-from pyrtlib.atmospheric_profiles import AtmosphericProfiles as atmp
+from pyrtlib.climatology import AtmosphericProfiles as atmp
 from pyrtlib.tb_spectrum import TbCloudRTE
 from pyrtlib.absorption_model import O2AbsModel
 from pyrtlib.utils import ppmv2gkg, mr2rh, get_frequencies, constants

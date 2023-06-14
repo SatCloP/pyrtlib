@@ -8,7 +8,7 @@ from typing import Tuple, Union, List, Optional
 
 import numpy as np
 
-from pyrtlib.atmospheric_profiles import AtmosphericProfiles as atmp
+from pyrtlib.climatology import AtmosphericProfiles as atmp
 from .utils import dilec12, dcerror, constants, gas_mass, import_lineshape
 
 
@@ -73,8 +73,7 @@ class AbsModel:
                 'R20',
                 'R20SD',
                 'R21SD',
-                'R22SD',
-                'MAKAROV11']
+                'R22SD']
         """
         return list(['R98',
                      'R03',
@@ -85,8 +84,7 @@ class AbsModel:
                      'R20',
                      'R20SD',
                      'R21SD',
-                     'R22SD',
-                     'MAKAROV11'])
+                     'R22SD'])
 
 
 class LiqAbsModel(AbsModel):
@@ -239,7 +237,7 @@ class H2OAbsModel(AbsModel):
                 import numpy as np
                 from pyrtlib.rt_equation import RTEquation
                 from pyrtlib.absorption_model import H2OAbsModel, AbsModel
-                from pyrtlib.atmospheric_profiles import AtmosphericProfiles as atmp
+                from pyrtlib.climatology import AtmosphericProfiles as atmp
                 from pyrtlib.utils import ppmv2gkg, mr2rh, import_lineshape
 
                 z, p, d, tk, md = atmp.gl_atm(atmp.TROPICAL)
@@ -298,10 +296,9 @@ class H2OAbsModel(AbsModel):
         # cyh ***********************************************
 
         if rho.any() <= 0.0:
-            # abh2o = 0.0
-            # npp = 0
-            # ncpp = 0
-            return
+            npp = 0
+            ncpp = 0
+            return npp, ncpp
 
         pvap = (rho * t) / 216.68
         if H2OAbsModel.model in ['R03', 'R16', 'R17', 'R98', 'makarov11']:
