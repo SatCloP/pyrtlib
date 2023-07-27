@@ -227,7 +227,7 @@ class H2OAbsModel(AbsModel):
             frq (numpy.ndarray): Frequency (GHz) - (valid 0-1000 GHz).
 
         Returns:
-            Union[ Tuple[numpy.ndarray, numpy.ndarray], None]: WV line and continuum absirption terms (ppm)
+            Union[ Tuple[numpy.ndarray, numpy.ndarray], None]: WV line and continuum absorption terms (ppm)
 
         References
         ----------
@@ -512,13 +512,13 @@ class O2AbsModel(AbsModel):
         * 8/20/19  pwr - adjust intensities according to Koshelev meas.
 
         Args:
-            pdrykpa ([type], optional): [description]. Defaults to None.
-            vx ([type], optional): [description]. Defaults to None.
-            ekpa ([type], optional): [description]. Defaults to None.
-            frq ([type], optional): [description]. Defaults to None.
+            pdrykpa (numpy.ndarray): Dry air pressure (kPa).
+            vx (numpy.ndarray): Theta (adim) - (normalised temperature 300/t(K)).
+            ekpa (numpy.ndarray): Water vapor partial pressure (kPa).
+            frq (numpy.ndarray): Frequency (GHz) - (valid 0-1000 GHz).
 
         Returns:
-            [type]: [description]
+            [numpy.ndarray]: Oxigen line and continuum absorption terms (ppm)
 
         References
         ----------
