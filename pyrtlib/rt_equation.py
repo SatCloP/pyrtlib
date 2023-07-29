@@ -239,7 +239,7 @@ class RTEquation:
             rl = np.copy(r)
             tanthl = np.copy(tanth)
 
-            return np.asarray(ds)
+        return np.asarray(ds)
 
     @staticmethod
     def exponential_integration(zeroflg: bool, x: np.ndarray, ds: np.ndarray, ibeg: int, iend: int, factor: float) -> Tuple[np.ndarray, np.ndarray]:
