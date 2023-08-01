@@ -323,12 +323,12 @@ def mr2e(p: np.ndarray, mr: np.ndarray) -> np.ndarray:
 
 
 def rho2rh(rho: np.ndarray, t: np.ndarray, p: np.ndarray) -> np.ndarray:
-    """_summary_
+    """Convertsa water vapor density to relative humidity.
 
     Args:
-        rho (np.ndarray): _description_
-        t (np.ndarray): _description_
-        p (np.ndarray): _description_
+        rho (np.ndarray): Water vapor density (g/m3)
+        t (np.ndarray): Temperature (K)
+        p (np.ndarray): Pressure (mb).
 
     Returns:
         np.ndarray: _description_
@@ -346,9 +346,9 @@ def rho2mr(rho: np.ndarray, t: np.ndarray, p: np.ndarray) -> np.ndarray:
     temperature (t,K), and water vapor density (g/m3).
 
     Args:
-        rho (np.ndarray): _description_
-        t (np.ndarray): _description_
-        p (np.ndarray): _description_
+        rho (np.ndarray): Water vapor density (g/m3)
+        t (np.ndarray): Temperature (K)
+        p (np.ndarray): Pressure (mb).
 
     Returns:
         np.ndarray: _description_
