@@ -1,7 +1,7 @@
 """
 Read and Download data from ERA5Reanalysis Reanalysis model data.
-To download ERA5 dataset it is necessary to configure a API key.
-Step-by-step ti create a API key can be found to https://cds.climate.copernicus.eu/api-how-to
+To download ERA5 dataset it is necessary to configure an API key.
+Step-by-step to create an API key can be found to https://cds.climate.copernicus.eu/api-how-to
 """
 
 __author__ = ''

@@ -351,7 +351,7 @@ def rho2mr(rho: np.ndarray, t: np.ndarray, p: np.ndarray) -> np.ndarray:
         p (np.ndarray): Pressure (mb).
 
     Returns:
-        np.ndarray: _description_
+        np.ndarray: H2O Mass Mixing Ratio (g/kg)
     """
 
     mr = rho * t / (p * 0.3477)
@@ -372,7 +372,7 @@ def e2mr(p: np.ndarray, e: np.ndarray) -> np.ndarray:
         e (numpy.ndarray): H2O partial pressure (mb).
 
     Returns:
-        numpy.ndarray: H2= Mass Mixing Ratio (g/kg)
+        numpy.ndarray: H2O Mass Mixing Ratio (g/kg)
     """
 
     # ratio of water mass to dry air mass
@@ -395,7 +395,7 @@ def satmix(p: np.ndarray,
     Args:
         p (numpy.ndarray): Pressure profile (mb).
         t (numpy.ndarray): Temperature profile (K).
-        Tconvert (Optional[numpy.ndarray], optional): _description_. Defaults to None.
+        Tconvert (Optional[numpy.ndarray], optional): Threshold temperature below which saturation water pressure is calculated over ice instead of liquid water. Defaults to None.
 
     Returns:
         numpy.ndarray: Saturation mixing ratio (g/kg).

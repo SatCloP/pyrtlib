@@ -116,10 +116,12 @@ class WyomingUpperAir(HTTPEndPoint):
         tabular_data = StringIO(soup.find_all('pre')[0].contents[0])
         title = soup.find_all('h2')[0].contents[0]
         col_names = ['pressure', 'height', 'temperature', 'dewpoint', 'rh', 'mixr']
-        df = pd.read_fwf(tabular_data, skiprows=5, usecols=[0, 1, 2, 3, 4, 5], names=col_names, infer_rows=200)
-
+        # df = pd.read_fwf(tabular_data, skiprows=5, usecols=[0, 1, 2, 3, 4, 5], names=col_names, infer_rows=300)
+        # change to read_csv function as some data column (e.g. height) couls be corrupted
+        # To be further investigated in order to catch the issue
+        df = pd.read_csv(tabular_data, header=None, skiprows=5, delim_whitespace=True, usecols=[0, 1, 2, 3, 4, 5], names=col_names)
         # Drop any rows with all NaN values for T, Td, winds
-        df = df.dropna(subset=('temperature', 'dewpoint'), how='all').reset_index(drop=True)
+        df = df.dropna(subset=('temperature', 'dewpoint'), how='any').reset_index(drop=True)
 
         # Parse metadata
         meta_data = soup.find_all('pre')[1].contents[0]

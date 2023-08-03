@@ -23,7 +23,7 @@ from pyrtlib.apiwebservices import ERA5Reanalysis
 
 # Tito Scalo, Potenza, Italy
 lonlat = (15.8158, 38.2663)
-nc_file = 'era5_reanalysis-2019-06-25T12:00:00.nc'
+nc_file = 'era5_reanalysis-2023-05-16T18:00:00.nc'
 df_era5 = ERA5Reanalysis.read_data(nc_file, lonlat)
 
 mdl = 'R21SD'
