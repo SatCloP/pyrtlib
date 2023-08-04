@@ -14,7 +14,7 @@
 <!--[![GitHub commit](https://img.shields.io/github/last-commit/slarosa/pyrtlib)](https://github.com/slarosa/pyrtlib/commits/main)-->
 <!-- [![license](https://img.shields.io/github/license/slarosa/pyrtlib.svg)](https://github.com/slarosa/pyrtlib/blob/main/LICENSE.md) -->
 
-A python package to compute atmospheric radiative transfer model based on the radiative transfer equation (RTE).
+PyRTlib is a Python package, for non-scattering line-by-line microwave RT simulations. PyRTlib is a user-friendly tool for computing down and up-welling brightness temperatures and related quantities (e.g., atmospheric absorption, optical depth, opacity) in Python.
 
 ![spectrum](resources/spectrum_r22.jpeg)
 
