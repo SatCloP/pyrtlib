@@ -5,7 +5,7 @@ with open('requirements.txt') as f:
 
 setup(
     name='pyrtlib',
-    version='1.3.0',
+    version='1.0.0',
     include_package_data=True,
     package_dir={'': 'pyrtlib'},
     python_requires='>=3.6',
@@ -13,15 +13,15 @@ setup(
     tests_require=['pytest'],
     install_requires=required,
     url='',
-    license='MIT License',
+    license='GPLv3',
     author='slarosa',
-    author_email='salvatore.larosa@imaa.cnr.it',
+    author_email='salvatore-larosa@cnr.it',
     description='pyrtlib - Radiative Transfer library',
     classifiers=[
         'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Science/Research',
         'Intended Audience :: Education',
-        'License :: OSI Approved :: MIT License',
+        'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
         'Topic :: Scientific/Engineering'
         'Programming Language :: Python :: 3 :: Only',
         'Programming Language :: Python :: 3.8',

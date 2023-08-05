@@ -5,15 +5,15 @@
    You can adapt this file completely to your liking, but it should at least contain the root `toctree` directive.
 
 
-PyRTLib documentation
+PyRTlib documentation
 =====================
 
-PyRTLib allows to simulate and calculate radiometric parameters and estimting propogation parameters using as input meteorological data.
-Some meteorological dataset are built-in in PyRTLib which can be download and used directly in PyRTLib. It considers atmospheric profiles from both radiosounding observations (RAOB) and model reanalysis (ERA5).
+PyRTlib allows to simulate and calculate radiometric parameters and estimting propogation parameters using as input meteorological data.
+Some meteorological dataset are built-in in PyRTlib which can be download and used directly in PyRTlib. It considers atmospheric profiles from both radiosounding observations (RAOB) and model reanalysis (ERA5).
 RAOB profiles come from Wyoming Upper Air Archive (University of Wyoming) and NCEI’s Integrated Radiosonde Archive version 2 (IGRA2) by the National Climatic Data Center (NCDC) of the National Oceanic and Atmospheric Administration (NOAA).
 
-PyRTLib also allows to quantify absorption model uncertainty due to uncertainty in the underlying spectroscopic parameters. [Cimini-2018]_
-The approach is applied to a widely used microwave absorption model [Rosenkranz-2017]_, on which PyRTLib is based, and radiative transfer calculations at any frequencies range, 
+PyRTlib also allows to quantify absorption model uncertainty due to uncertainty in the underlying spectroscopic parameters. [Cimini-2018]_
+The approach is applied to a widely used microwave absorption model [Rosenkranz-2017]_, on which PyRTlib is based, and radiative transfer calculations at any frequencies range, 
 which are commonly exploited for atmospheric sounding by microwave radiometer (MWR).  
 
 .. panels::

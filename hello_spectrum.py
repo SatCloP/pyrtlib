@@ -57,7 +57,7 @@ def main():
         time.sleep(0.1)
     print('Hello Spectrum!\n')
     print(df)
-    print(f'\nPyRTLib {__version__} successfully executed')
+    print(f'\nPyRTlib {__version__} successfully executed')
 
 
 if __name__ == '__main__':

@@ -1,9 +1,9 @@
 [
     {
-        "name": "v1.3.2 (stable)",
-        "version": "1.3.2",
+        "name": "v1.0.0 (stable)",
+        "version": "1.0.0",
         "url": "https://github.com/SatCloP/pyrtlib/releases/latest"
-    }
+    },
     {
         "name": "dev",
         "version": "dev",

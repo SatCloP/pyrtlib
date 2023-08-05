@@ -119,11 +119,11 @@ html_theme_options = {
         "json_url": str(Path('_static') / 'versions.json'),
         "version_match": switcher_version,
     },
-    "announcement": "Official PyRTLib Documentation ",
+    "announcement": "Official PyRTlib Documentation ",
     "logo": {
         "image_light": str(Path('_static') / 'thumb_logo.png'),
         "image_dark": str(Path('_static') / 'thumb_white_logo.png'),
-        "text": "PyRTLib",
+        "text": "PyRTlib",
     },
     "show_prev_next": False,
     "navbar_start": ["navbar-logo"],
