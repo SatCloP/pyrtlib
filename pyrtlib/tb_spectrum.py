@@ -205,10 +205,10 @@ class TbCloudRTE(object):
             # raise AttributeError("Set cloudy to True before running init_cloudy()")
 
     def execute(self, only_bt: bool = True) -> Union[pd.DataFrame, Tuple[pd.DataFrame, Dict[str, np.ndarray]]]:
-        """Comopute Tb.
+        """This function computes Brightness Temperature and other radiometric parameters.
 
         Args:
-            only_bt (bool): If True (default) returns only brightness temperature. Default to True.
+            only_bt (bool): If True returns only brightness temperature. Default to True.
         
         Returns a pandas dataframe containing:
         

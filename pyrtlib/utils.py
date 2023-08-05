@@ -43,7 +43,7 @@ def import_lineshape(name: str) -> Dict:
         return None
     if vars(module)[name.lower()] in sys.modules.values():
         reload(vars(module)[name.lower()])
-    
+
     return vars(module)[name.lower()]
 
 
@@ -128,7 +128,7 @@ def gas_mass(gasid: int) -> float:
     Returns the mass of the HITRAN gas ID
 
     Args:
-        gasid (int): The gas ID defined in :py:class:`~pyrtlib.atmospheric_profiles.AtmosphericProfiles`
+        gasid (int): The gas ID defined in :py:class:`~pyrtlib.climatology.AtmosphericProfiles`
 
     Returns:
         float: The mass of the HITRAN gas ID.
@@ -252,7 +252,8 @@ def mr2rh(p: np.ndarray,
         Tconvert (numpy.ndarray, optional): [description]. Defaults to None.
 
     Returns:
-        numpy.ndarray: Relative humidity
+        numpy.ndarray: Relative humidity using ratios of gas pressures
+        numpy.ndarray: Relative humidity using WMO definition
     """
     # saturation pressure
     esat = satvap(t)
@@ -321,6 +322,47 @@ def mr2e(p: np.ndarray, mr: np.ndarray) -> np.ndarray:
     return e
 
 
+def rho2rh(rho: np.ndarray, t: np.ndarray, p: np.ndarray) -> np.ndarray:
+    """Convert water vapor density to relative humidity.
+
+    Args:
+        rho (np.ndarray): Water vapor density (g/m3)
+        t (np.ndarray): Temperature (K)
+        p (np.ndarray): Pressure (mb).
+
+    Returns:
+        np.ndarray: Relative humidity (fraction)
+    """
+    e = (rho * t)/216.7
+    mr = e2mr(p, e)
+
+    rh = mr2rh(p, t, mr)
+
+    return rh
+
+
+def rho2mr(rho: np.ndarray, t: np.ndarray, p: np.ndarray) -> np.ndarray:
+    """Determine water vapor mass mixing ratio (g/kg) given reference pressure (mbar), 
+    temperature (t,K), and water vapor density (g/m3).
+
+    Args:
+        rho (np.ndarray): Water vapor density (g/m3)
+        t (np.ndarray): Temperature (K)
+        p (np.ndarray): Pressure (mb).
+
+    Returns:
+        np.ndarray: H2O Mass Mixing Ratio (g/kg)
+    """
+
+    mr = rho * t / (p * 0.3477)
+
+    rvap = constants('Rwatvap')[0] * 1e-5  # [J kg-1 K-1] -> [hPa * m2 g-1 K-1]
+    eps = 0.621970585  # Rdry/Rvap
+    mr = rho * (1e3*eps*rvap) / (p/t - rvap * rho)
+
+    return mr
+
+
 def e2mr(p: np.ndarray, e: np.ndarray) -> np.ndarray:
     """Compute H2O mass mixing ratio (g/kg) given pressure (mbar)
     and H2O partial pressure (mbar)
@@ -330,7 +372,7 @@ def e2mr(p: np.ndarray, e: np.ndarray) -> np.ndarray:
         e (numpy.ndarray): H2O partial pressure (mb).
 
     Returns:
-        numpy.ndarray: H2= Mass Mixing Ratio (g/kg)
+        numpy.ndarray: H2O Mass Mixing Ratio (g/kg)
     """
 
     # ratio of water mass to dry air mass
@@ -353,7 +395,7 @@ def satmix(p: np.ndarray,
     Args:
         p (numpy.ndarray): Pressure profile (mb).
         t (numpy.ndarray): Temperature profile (K).
-        Tconvert (Optional[numpy.ndarray], optional): _description_. Defaults to None.
+        Tconvert (Optional[numpy.ndarray], optional): Threshold temperature below which saturation water pressure is calculated over ice instead of liquid water. Defaults to None.
 
     Returns:
         numpy.ndarray: Saturation mixing ratio (g/kg).

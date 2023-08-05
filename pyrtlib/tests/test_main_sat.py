@@ -7,7 +7,7 @@ import pandas as pd
 from datetime import datetime
 from numpy.testing import assert_allclose
 from pyrtlib.absorption_model import H2OAbsModel, LiqAbsModel, O2AbsModel, O3AbsModel
-from pyrtlib.atmospheric_profiles import AtmosphericProfiles as atmp
+from pyrtlib.climatology import AtmosphericProfiles as atmp
 from pyrtlib.tb_spectrum import TbCloudRTE
 from pyrtlib.apiwebservices import WyomingUpperAir, ERA5Reanalysis, IGRAUpperAir
 from pyrtlib.utils import ppmv2gkg, ppmv_to_moleculesm3, mr2rh, import_lineshape, dewpoint2rh, kgkg_to_kgm3, pressure_to_height, to_kelvin

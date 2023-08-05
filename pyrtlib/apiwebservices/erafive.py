@@ -1,7 +1,7 @@
 """
 Read and Download data from ERA5Reanalysis Reanalysis model data.
-To download ERA5 dataset it is necessary to configure a API key.
-Step-by-step ti create a API key can be found to https://cds.climate.copernicus.eu/api-how-to
+To download ERA5 dataset it is necessary to configure an API key.
+Step-by-step to create an API key can be found to https://cds.climate.copernicus.eu/api-how-to
 """
 
 __author__ = ''
@@ -61,6 +61,7 @@ class ERA5Reanalysis:
         ciwc = np.asarray(nc.variables['ciwc'][:, :, idx, idx])
         crwc = np.asarray(nc.variables['crwc'][:, :, idx, idx])
         cswc = np.asarray(nc.variables['cswc'][:, :, idx, idx])
+        ozone = np.asarray(nc.variables['o3'][:, :, idx, idx])
         q = np.asarray(nc.variables['q'][:, :, idx, idx])
 
         z = atmospheric_tickness(np.flip(pres), np.flip(temp[0]), np.flip(q[0]))  # Altitude in km
@@ -76,6 +77,7 @@ class ERA5Reanalysis:
                            'ciwc': np.flip(ciwc[0]),
                            'crwc': np.flip(crwc[0]),
                            'cswc': np.flip(cswc[0]),
+                           'o3': np.flip(ozone[0]),
                            'q': np.flip(q[0]),
                            'time': np.repeat(date, len(pres))
                            })
@@ -135,7 +137,7 @@ class ERA5Reanalysis:
         nc_file = os.path.join(path, nc_file_name)
 
         variables = ['relative_humidity', 'specific_cloud_ice_water_content', 'specific_cloud_liquid_water_content',
-                     'specific_humidity', 'specific_rain_water_content', 'specific_snow_water_content', 'temperature']
+                     'specific_humidity', 'specific_rain_water_content', 'specific_snow_water_content', 'ozone_mass_mixing_ratio', 'temperature']
         c = cdsapi.Client()
         c.retrieve(
             'reanalysis-era5-pressure-levels',

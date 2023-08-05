@@ -8,7 +8,7 @@ from typing import Tuple, Union, List, Optional
 
 import numpy as np
 
-from pyrtlib.atmospheric_profiles import AtmosphericProfiles as atmp
+from pyrtlib.climatology import AtmosphericProfiles as atmp
 from .utils import dilec12, dcerror, constants, gas_mass, import_lineshape
 
 
@@ -73,8 +73,7 @@ class AbsModel:
                 'R20',
                 'R20SD',
                 'R21SD',
-                'R22SD',
-                'MAKAROV11']
+                'R22SD']
         """
         return list(['R98',
                      'R03',
@@ -85,8 +84,7 @@ class AbsModel:
                      'R20',
                      'R20SD',
                      'R21SD',
-                     'R22SD',
-                     'MAKAROV11'])
+                     'R22SD'])
 
 
 class LiqAbsModel(AbsModel):
@@ -95,12 +93,12 @@ class LiqAbsModel(AbsModel):
 
     @staticmethod
     def liquid_water_absorption(water: np.ndarray, freq: np.ndarray, temp: np.ndarray) -> np.ndarray:
-        """Computes Absorption In Nepers/Km by Suspended Water Droplets.
+        """Computes absorption in Nepers/km by suspended liquid water droplets.
 
         Args:
-            water (numpy.ndarray): Water in g/m3.
-            freq (numpy.ndarray): Frequency in GHz (Valid From 0 To 1000 Ghz).
-            temp (numpy.ndarray): Temperature in K.
+            water (numpy.ndarray): Liquid water content (g/m3) - (mass of liquid water per volume of dry air).
+            freq (numpy.ndarray): Frequency (GHz) - (valid from 0 to 1000 GHz).
+            temp (numpy.ndarray): Temperature (K).
 
         Returns:
             np.ndarray: [description]
@@ -109,12 +107,14 @@ class LiqAbsModel(AbsModel):
         ----------
         .. [1] [Liebe-Hufford-Manabe]_.
         .. [2] [Liebe-Hufford-Cotton]_.
+        .. [3] [Rosenkranz-1988]_.
 
         .. note::
             Revision history:
 
-            * Pwr 8/3/92   Original Version
-            * Pwr 12/14/98 Temp. Dependence Of Eps2 Eliminated To Agree With Mpm93 
+            * PWR 08/03/92 Original Version
+            * PWR 12/14/98 Temp dependence of eps2 eliminated to agree with MPM93 
+            * PWR 06/05/15 Using dilec12 for complex dielectric constant
         """
         if water <= 0:
             abliq = 0
@@ -148,13 +148,13 @@ class N2AbsModel(AbsModel):
 
     @staticmethod
     def n2_absorption(t: np.ndarray, p: np.ndarray, f: np.ndarray) -> np.ndarray:
-        """Collision-Induced Power Absorption Coefficient (Neper/Km) in air
+        """Collision-Induced Power Absorption Coefficient (Neper/km) in air
         with modification of 1.34 to account for O2-O2 and O2-N2 collisions, as calculated by [Boissoles-2003]_.
 
         Args:
             t (numpy.ndarray): Temperature (K).
-            p (numpy.ndarray): Dry Air Pressure (mb).
-            f (numpy.ndarray): Frequency (Ghz)(Valid 0-2000 Ghz).
+            p (numpy.ndarray): Dry air pressure (mb).
+            f (numpy.ndarray): Frequency (GHz) - (valid 0-2000 GHz).
 
         Raises:
             ValueError: _description_
@@ -221,13 +221,13 @@ class H2OAbsModel(AbsModel):
         """Compute absorption coefficients in atmosphere due to water vapor for all models.
 
         Args:
-            pdrykpa (numpy.ndarray): [description]
-            vx (numpy.ndarray): [description]
-            ekpa (numpy.ndarray): [description]
-            frq (numpy.ndarray): [description]
+            pdrykpa (numpy.ndarray): Dry air pressure (kPa).
+            vx (numpy.ndarray): Theta (adim) - (normalised temperature 300/t(K)).
+            ekpa (numpy.ndarray): Water vapor partial pressure (kPa).
+            frq (numpy.ndarray): Frequency (GHz) - (valid 0-1000 GHz).
 
         Returns:
-            Union[ Tuple[numpy.ndarray, numpy.ndarray], None]: [description]
+            Union[ Tuple[numpy.ndarray, numpy.ndarray], None]: WV line and continuum absorption terms (ppm)
 
         References
         ----------
@@ -239,7 +239,7 @@ class H2OAbsModel(AbsModel):
                 import numpy as np
                 from pyrtlib.rt_equation import RTEquation
                 from pyrtlib.absorption_model import H2OAbsModel, AbsModel
-                from pyrtlib.atmospheric_profiles import AtmosphericProfiles as atmp
+                from pyrtlib.climatology import AtmosphericProfiles as atmp
                 from pyrtlib.utils import ppmv2gkg, mr2rh, import_lineshape
 
                 z, p, d, tk, md = atmp.gl_atm(atmp.TROPICAL)
@@ -298,10 +298,9 @@ class H2OAbsModel(AbsModel):
         # cyh ***********************************************
 
         if rho.any() <= 0.0:
-            # abh2o = 0.0
-            # npp = 0
-            # ncpp = 0
-            return
+            npp = 0
+            ncpp = 0
+            return npp, ncpp
 
         pvap = (rho * t) / 216.68
         if H2OAbsModel.model in ['R03', 'R16', 'R17', 'R98', 'makarov11']:
@@ -513,13 +512,13 @@ class O2AbsModel(AbsModel):
         * 8/20/19  pwr - adjust intensities according to Koshelev meas.
 
         Args:
-            pdrykpa ([type], optional): [description]. Defaults to None.
-            vx ([type], optional): [description]. Defaults to None.
-            ekpa ([type], optional): [description]. Defaults to None.
-            frq ([type], optional): [description]. Defaults to None.
+            pdrykpa (numpy.ndarray): Dry air pressure (kPa).
+            vx (numpy.ndarray): Theta (adim) - (normalised temperature 300/t(K)).
+            ekpa (numpy.ndarray): Water vapor partial pressure (kPa).
+            frq (numpy.ndarray): Frequency (GHz) - (valid 0-1000 GHz).
 
         Returns:
-            [type]: [description]
+            [numpy.ndarray]: Oxigen line and continuum absorption terms (ppm)
 
         References
         ----------
@@ -544,8 +543,7 @@ class O2AbsModel(AbsModel):
             submm line-widths from Golubiatnikov & Krupnov, except 234-GHz line width from Drouin.
             Mixing coeff. from Makarov's 2018 revision.
          2. The same temperature dependence (X) is used for submillimeter
-            line widths as in the 60 GHz band: (1/T)**X (Koshelev et al 2016)
-         3. The sign of DNU in the shape factor is corrected.
+            line widths as in the 60 GHz band: (1/T)**X (Koshelev et al 2016).
         """
 
         if amu:
@@ -722,12 +720,12 @@ class O3AbsModel(AbsModel):
 
         Args:
             t (np.ndarray): Temperature (K)
-            p (np.ndarray): Total Pressure (mb)
+            p (np.ndarray): Total pressure (mb)
             f (np.ndarray): Frequency (GHz)
-            o3n (np.ndarray): Ozone Number Density (molecules/m^3)
+            o3n (np.ndarray): Ozone number density (molecules/m^3)
 
         Returns:
-            np.ndarray: Ozone Power Absorption Coeff. (Np/km)
+            np.ndarray: Ozone power absorption coeff. (Np/km)
         """
 
         if amu:

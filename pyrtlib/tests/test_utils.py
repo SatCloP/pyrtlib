@@ -3,7 +3,7 @@ from unittest import TestCase
 import numpy as np
 from numpy.testing import assert_allclose, assert_almost_equal, assert_equal
 from pyrtlib.absorption_model import H2OAbsModel
-from pyrtlib.atmospheric_profiles import AtmosphericProfiles as atmp
+from pyrtlib.climatology import AtmosphericProfiles as atmp
 from pyrtlib.utils import (ppmv2gkg, mr2rh, gas_mass, height_to_pressure, pressure_to_height, constants,
                            to_kelvin, to_celsius, get_frequencies_sat, eswat_goffgratch, satvap, satmix,
                            import_lineshape, atmospheric_tickness, mr2rho, mr2e, esice_goffgratch)

@@ -57,7 +57,7 @@ Deactivate the virtualenv:
    $ deactivate
 
 
-Installing PyRTLib from source
+Installing PyRTlib from source
 ------------------------------
 
 Download latest release of pyrtlib source from this `link <https://github.com/slarosa/pyrtlib/releases/latest>`_.
@@ -112,10 +112,10 @@ if pyrtlib has been properly installed you should see something like
    189.4100  273.904425    0.0  273.897462     0.0   8.196430  0.021170     0.0     0.0
    191.7100  277.820891    0.0  277.740367     0.0   5.586945  0.021468     0.0     0.0
 
-   PyRTLib 1.3.0 successfully installed
+   PyRTlib successfully installed
 
 
-Installing PyRTLib via PyPi
+Installing PyRTlib via PyPi
 ----------------------------
 To insert when package is ready to the release
 

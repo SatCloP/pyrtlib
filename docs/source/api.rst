@@ -22,7 +22,7 @@ Compute downwelling (:code:`rte.satellite == False`) brightness temperature for 
     :include-source: true
 
     from pyrtlib.tb_spectrum import TbCloudRTE
-    from pyrtlib.atmospheric_profiles import AtmosphericProfiles as atmp
+    from pyrtlib.climatology import AtmosphericProfiles as atmp
     from pyrtlib.utils import ppmv2gkg, mr2rh
 
     z, p, _, t, md = atmp.gl_atm(atmp.TROPICAL)
@@ -35,10 +35,9 @@ Compute downwelling (:code:`rte.satellite == False`) brightness temperature for 
     rte = TbCloudRTE(z, p, t, rh, frq, ang)
     rte.init_absmdl('R19SD')
     rte.satellite = False
-    rte.emissivity = 0.8
     df = rte.execute()
     df = df.set_index(frq)
-    df.tbtotal.plot(figsize=(12,8), xlabel="Frequency [GHz]", ylabel="Brightness Temperature [K]")
+    df.tbtotal.plot(figsize=(12,8), xlabel="Frequency [GHz]", ylabel="Brightness Temperature [K]", grid=True)
 
 Also, it is possible to execute a combination of absorption models. The following example use :code:`R19SD` model for :math:`O_2` and
 :code:`R16` for :math:`H_2O`: to compute upwelling brightness temperature.
@@ -48,7 +47,7 @@ Also, it is possible to execute a combination of absorption models. The followin
 
     from pyrtlib.tb_spectrum import TbCloudRTE
     from pyrtlib.absorption_model import H2OAbsModel
-    from pyrtlib.atmospheric_profiles import AtmosphericProfiles as atmp
+    from pyrtlib.climatology import AtmosphericProfiles as atmp
     from pyrtlib.utils import ppmv2gkg, mr2rh
 
     z, p, _, t, md = atmp.gl_atm(atmp.TROPICAL)
@@ -59,12 +58,13 @@ Also, it is possible to execute a combination of absorption models. The followin
     frq = np.arange(20, 201, 1)
 
     rte = TbCloudRTE(z, p, t, rh, frq, ang)
+    rte.emissivity = 0.9
     rte.init_absmdl('R19SD')
     H2OAbsModel.model = 'R16'
     H2OAbsModel.set_ll()
     df = rte.execute()
     df = df.set_index(frq)
-    df.tbtotal.plot(figsize=(12,8), xlabel="Frequency [GHz]", ylabel="Brightness Temperature [K]")
+    df.tbtotal.plot(figsize=(12,8), xlabel="Frequency [GHz]", ylabel="Brightness Temperature [K]", grid=True)
 
 
 Standard Atmospheric Profiles
@@ -90,14 +90,15 @@ Plus suplimental profiles where available.
 .. autosummary::
     :toctree: generated/
 
-    pyrtlib.atmospheric_profiles.AtmosphericProfiles
+    pyrtlib.climatology.AtmosphericProfiles
+    pyrtlib.climatology.ProfileExtrapolation
 
 
 Example:
 
 .. code-block:: python
 
-    from pyrtlib.atmospheric_profiles import AtmosphericProfiles as atmp
+    from pyrtlib.climatology import AtmosphericProfiles as atmp
 
     z, p, d, t, md = atmp.gl_atm(atmp.TROPICAL)
     # index of available profiles
@@ -165,8 +166,7 @@ To get all implemented models use the following code:
      'R20',
      'R20SD',
      'R21SD',
-     'R22SD',
-     'MAKAROV11']
+     'R22SD']
 
 Utility Functions
 =================

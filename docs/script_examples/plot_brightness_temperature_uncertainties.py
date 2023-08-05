@@ -12,7 +12,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 plt.rcParams.update({'font.size': 15})
 
-from pyrtlib.atmospheric_profiles import AtmosphericProfiles as atmp
+from pyrtlib.climatology import AtmosphericProfiles as atmp
 from pyrtlib.tb_spectrum import TbCloudRTE
 from pyrtlib.absorption_model import H2OAbsModel, O2AbsModel
 from pyrtlib.uncertainty import AbsModUncertainty, SpectroscopicParameter

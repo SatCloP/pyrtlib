@@ -1,12 +1,12 @@
 [
     {
-        "name": "dev",
-        "version": "dev",
-        "url": "https://mysite.org/en/2.1/index.html"
+        "name": "v1.0.0 (stable)",
+        "version": "1.0.0",
+        "url": "https://github.com/SatCloP/pyrtlib/releases/latest"
     },
     {
-        "name": "v2.1 (stable)",
-        "version": "2.1",
-        "url": "https://mysite.org/en/2.1/index.html"
+        "name": "dev",
+        "version": "dev",
+        "url": "https://github.com/SatCloP/pyrtlib/tree/dev"
     }
 ]

@@ -94,6 +94,15 @@ class SpectroscopicParameter:
 
         Returns:
             Dict: The :math:`H_2O` spectroscopic parameters dictionary
+
+        Example:
+            >>> sp = SpectroscopicParameter.water_parameters("R19")
+            >>> sp['con_Xs']
+            SpectroscopicParameter(value=7.5, 
+                                   uncer=0.0, 
+                                   units='unitless', 
+                                   refer='Tretyakov, JMS, 2016', 
+                                   name='Self broadening temperature dependence exponents')
         """
         H2OAbsModel.model = model
         H2OAbsModel.set_ll()

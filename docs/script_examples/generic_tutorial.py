@@ -21,7 +21,7 @@ import numpy as np
 
 
 # %%
-from pyrtlib.atmospheric_profiles import AtmosphericProfiles as atmp
+from pyrtlib.climatology import AtmosphericProfiles as atmp
 from pyrtlib.tb_spectrum import TbCloudRTE
 from pyrtlib.utils import ppmv2gkg, mr2rh
 

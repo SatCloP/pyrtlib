@@ -23,12 +23,12 @@ from pyrtlib.apiwebservices import ERA5Reanalysis
 # nc_file = ERA5Reanalysis.request_data(tempfile.gettempdir(), date, lonlat)
 
 lonlat = (15.13, 37.87)
-nc_file = 'era5_reanalysis-2018-08-20T11:00:00.nc'
+nc_file = 'era5_reanalysis-2023-05-16T18:00:00.nc'
 df_era5 = ERA5Reanalysis.read_data(nc_file, lonlat)
 
 mdl = 'R21SD'
 ang = np.array([90.])
-frq = np.arange(20, 201, 1)
+frq = np.arange(20, 101, 1)
 nf = len(frq)
 
 cldh = np.empty((2, 1))
@@ -59,6 +59,7 @@ H2OAbsModel.model = 'R21SD'
 H2OAbsModel.h2oll = import_lineshape('h2oll_{}'.format(H2OAbsModel.model))
 for cloudy in [False, True]:
     rte.cloudy = cloudy
+    rte.emissivity = 0.6
     rte.init_cloudy(cldh, denice, denliq)
     df = rte.execute()
     df = df.set_index(frq)

@@ -1,7 +1,7 @@
 
 from pyrtlib import __version__
 from pyrtlib.absorption_model import H2OAbsModel
-from pyrtlib.atmospheric_profiles import AtmosphericProfiles as atmp
+from pyrtlib.climatology import AtmosphericProfiles as atmp
 from pyrtlib.tb_spectrum import TbCloudRTE
 from pyrtlib.utils import ppmv2gkg, mr2rh, get_frequencies_sat
 import time
@@ -57,7 +57,7 @@ def main():
         time.sleep(0.1)
     print('Hello Spectrum!\n')
     print(df)
-    print(f'\nPyRTLib {__version__} successfully executed')
+    print(f'\nPyRTlib {__version__} successfully executed')
 
 
 if __name__ == '__main__':

@@ -5,7 +5,7 @@ from unittest import TestCase
 import numpy as np
 import pandas as pd
 from numpy.testing import assert_allclose, assert_equal
-from pyrtlib.atmospheric_profiles import AtmosphericProfiles as atmp
+from pyrtlib.climatology import AtmosphericProfiles as atmp
 from pyrtlib.tb_spectrum import TbCloudRTE
 from pyrtlib.absorption_model import H2OAbsModel
 from pyrtlib.apiwebservices import ERA5Reanalysis
