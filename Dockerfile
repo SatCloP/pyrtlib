@@ -13,8 +13,7 @@ RUN python3 -m pip install cftime
 # WORKDIR /tmp
 RUN wget https://github.com/SatCloP/pyrtlib/archive/refs/heads/main.zip && \
     unzip -a main.zip && \
-    cd pyrtlib-main
-
-RUN python3 setup.py install
+    cd pyrtlib-main && \
+    python3 setup.py install
 
 ENTRYPOINT ["/bin/bash"]
