@@ -58,7 +58,7 @@ which are commonly exploited for atmospheric sounding by microwave radiometer (M
 .. pyrtlib is a python tool that provides a set of calsses and methods for simulating ........
 
 The source code for pyrtlib python package is hosted on `github
-<https://github.com/slarosa/pyrtlib>`_.
+<https://github.com/SatCloP/pyrtlib>`_.
 
 .. note::
    The software is intended as an educational tool with limited ranges of 
@@ -226,17 +226,17 @@ Indices and search
 * :ref:`genindex`
 * :ref:`search`
 
-.. |build-docs-action| image:: https://github.com/slarosa/pyrtlib/workflows/build-docs-action/badge.svg
-   :target: https://github.com/slarosa/pyrtlib/actions/workflows/build_docs.yml
+.. |build-docs-action| image:: https://github.com/SatCloP/pyrtlib/workflows/build-docs-action/badge.svg
+   :target: https://github.com/SatCloP/pyrtlib/actions/workflows/build_docs.yml
 
-.. |run-python-tests| image:: https://github.com/slarosa/pyrtlib/workflows/run-python-tests/badge.svg
-   :target: https://github.com/slarosa/pyrtlib/actions/workflows/ci.yml
+.. |run-python-tests| image:: https://github.com/SatCloP/pyrtlib/workflows/run-python-tests/badge.svg
+   :target: https://github.com/SatCloP/pyrtlib/actions/workflows/ci.yml
 
 .. |license| image:: https://img.shields.io/github/license/slarosa/pyrtlib.svg
-   :target: https://github.com/slarosa/pyrtlib/blob/main/LICENSE.md
+   :target: https://github.com/SatCloP/pyrtlib/blob/main/LICENSE.md
 
 .. |GitHub commit| image:: https://img.shields.io/github/last-commit/slarosa/pyrtlib
-   :target: https://github.com/slarosa/pyrtlib/commits/main
+   :target: https://github.com/SatCloP/pyrtlib/commits/main
 
 .. |codecov| image:: https://codecov.io/gh/slarosa/pyrtlib/branch/main/graph/badge.svg?token=7DV4B4U1OZ
    :target: https://codecov.io/gh/slarosa/pyrtlib

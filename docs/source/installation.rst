@@ -60,7 +60,7 @@ Deactivate the virtualenv:
 Installing PyRTlib from source
 ------------------------------
 
-Download latest release of pyrtlib source from this `link <https://github.com/slarosa/pyrtlib/releases/latest>`_.
+Download latest release of pyrtlib source from this `link <https://github.com/SatCloP/pyrtlib/releases/latest>`_.
 
 .. code-block:: console
 
@@ -117,18 +117,22 @@ if pyrtlib has been properly installed you should see something like
 
 Installing PyRTlib via PyPi
 ----------------------------
-To insert when package is ready to the release
+pyrtlib can be installed via pip from PyPI. To install the package using the following command:
+
+.. code-block:: console
+   
+   $ pip install pyrtlib
 
 .. note::
 
     To get an up-to-date
-    version of pyrtlib, download it directly from `GitHub <https://github.com/slarosa/pyrtlib>`_.
+    version of pyrtlib, download it directly from `GitHub <https://github.com/SatCloP/pyrtlib>`_.
 
 
 Build and run the Docker image
 ===============================
 
-To build docker image it is necessary to download the latest  pyrtlib release from this `link <https://github.com/slarosa/pyrtlib/releases/latest>`_ and then run the following command from you prefer terminal.
+To build docker image it is necessary to download the latest  pyrtlib release from this `link <https://github.com/SatCloP/pyrtlib/releases/latest>`_ and then run the following command from you prefer terminal.
 
 .. code-block:: console
 

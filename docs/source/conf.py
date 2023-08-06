@@ -115,10 +115,10 @@ html_favicon = str(Path('_static') / 'thumb_logo.svg')
 # html_logo = "../../resources/logo/logo_white_large_new.png"
 html_theme_options = {
     "external_links": [],
-    "switcher": {
-        "json_url": str(Path('_static') / 'versions.json'),
-        "version_match": switcher_version,
-    },
+    # "switcher": {
+    #     "json_url": str(Path('_static') / 'versions.json'),
+    #     "version_match": switcher_version,
+    # },
     "announcement": "Official PyRTlib Documentation ",
     "logo": {
         "image_light": str(Path('_static') / 'thumb_logo.png'),
@@ -128,8 +128,9 @@ html_theme_options = {
     "show_prev_next": False,
     "navbar_start": ["navbar-logo"],
     # "navbar_align": "content",
-    "navbar_end": ["version-switcher", "theme-switcher", "navbar-icon-links"],
-    "github_url": "https://github.com/slarosa/pyrtlib",
+    # "navbar_end": ["version-switcher", "theme-switcher", "navbar-icon-links"],
+    "navbar_end": ["theme-switcher", "navbar-icon-links"],
+    "github_url": "https://github.com/SatCloP/pyrtlib",
     "secondary_sidebar_items": "page-toc.html",
     "footer_start": ["copyright"],
     "footer_end": ["sphinx-version"],
