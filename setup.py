@@ -17,6 +17,10 @@ setup(
     setup_requires=['pytest-runner'],
     tests_require=['pytest'],
     install_requires=required,
+    project_urls={
+        'documentation': 'https://satclop.github.io/pyrtlib',
+        'repository': 'https://github.com/SatCloP/pyrtlib'
+    },
     url='',
     license='GPLv3',
     author='slarosa',
