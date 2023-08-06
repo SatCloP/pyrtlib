@@ -5,10 +5,10 @@
 [![docker-image-ci](https://github.com/slarosa/pyrtlib/workflows/docker-image-ci/badge.svg)](https://github.com/slarosa/pyrtlib/actions/workflows/docker-image.yml)
 [![run-python-tests](https://github.com/slarosa/pyrtlib/workflows/run-python-tests/badge.svg)](https://github.com/slarosa/pyrtlib/actions/workflows/ci.yml)
 [![build-docs-action](https://github.com/slarosa/pyrtlib/workflows/build-docs-action/badge.svg)](https://github.com/slarosa/pyrtlib/actions/workflows/build_docs.yml)
-[![Project Status: WIP – Initial development is in progress, but there has not yet been a stable, usable release suitable for the public.](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
+[![Project Status: WIP – Initial development is in progress, but there has not yet been a stable, usable release suitable for the public.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/slarosa/pyrtlib?display_name=tag)
 [![codecov](https://codecov.io/gh/slarosa/pyrtlib/branch/main/graph/badge.svg?token=7DV4B4U1OZ)](https://codecov.io/gh/slarosa/pyrtlib)
-[![GitHub commits since tagged version](https://img.shields.io/github/commits-since/slarosa/pyrtlib/v1.3.2)](https://github.com/slarosa/pyrtlib/commits/)
+[![GitHub commits since tagged version](https://img.shields.io/github/commits-since/slarosa/pyrtlib/v1.3.1)](https://github.com/slarosa/pyrtlib/commits/)
 [![license](https://img.shields.io/github/license/slarosa/pyrtlib.svg)](https://github.com/slarosa/pyrtlib/blob/main/LICENSE)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.1234.svg)](https://doi.org/10.5281/zenodo.1234)
 <!--[![GitHub commit](https://img.shields.io/github/last-commit/slarosa/pyrtlib)](https://github.com/slarosa/pyrtlib/commits/main)-->
@@ -20,7 +20,7 @@ PyRTlib is a Python package, for non-scattering line-by-line microwave RT simula
 
 # Example
 
-For examples of how to use pyrtlib see the [examples gallery](docs/script_examples). Code can be downloaded both as python script or notebook file.
+For examples of how to use pyrtlib see the [examples gallery](docs/examples). Code can be downloaded both as python script or notebook file.
 
 ## Performing calculation of upwelling brightness temperature.
 
