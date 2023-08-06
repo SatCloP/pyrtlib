@@ -1,7 +1,12 @@
 from setuptools import setup, find_packages
+import os
 
 with open('requirements.txt') as f:
     required = f.read().splitlines()
+
+def read_file(filename):
+    with open(os.path.join(os.path.dirname(__file__), filename)) as file:
+        return file.read()
 
 setup(
     name='pyrtlib',
@@ -17,6 +22,7 @@ setup(
     author='slarosa',
     author_email='salvatore-larosa@cnr.it',
     description='pyrtlib - Radiative Transfer library',
+    long_description=read_file('README.md'),
     long_description_content_type='text/markdown',
     classifiers=[
         'Development Status :: 5 - Production/Stable',
