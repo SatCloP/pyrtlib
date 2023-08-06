@@ -10,7 +10,8 @@
 [![codecov](https://codecov.io/gh/SatCloP/pyrtlib/branch/main/graph/badge.svg?token=7DV4B4U1OZ)](https://codecov.io/gh/SatCloP/pyrtlib)
 [![GitHub commits since tagged version](https://img.shields.io/github/commits-since/SatCloP/pyrtlib/v1.0.0)](https://github.com/SatCloP/pyrtlib/commits/)
 [![license](https://img.shields.io/github/license/SatCloP/pyrtlib.svg)](https://github.com/SatCloP/pyrtlib/blob/main/LICENSE)
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.1234.svg)](https://doi.org/10.5281/zenodo.1234)
+[![DOI](https://zenodo.org/badge/345925671.svg)](https://zenodo.org/badge/latestdoi/345925671)
+
 <!--[![GitHub commit](https://img.shields.io/github/last-commit/slarosa/pyrtlib)](https://github.com/SatCloP/pyrtlib/commits/main)-->
 <!-- [![license](https://img.shields.io/github/license/slarosa/pyrtlib.svg)](https://github.com/SatCloP/pyrtlib/blob/main/LICENSE.md) -->
 
