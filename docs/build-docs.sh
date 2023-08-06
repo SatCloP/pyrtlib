@@ -103,6 +103,11 @@ git checkout -b gh-pages
 # that start with an underscore (_), such as our "_content" dir..
 touch .nojekyll
 
+# Add index.html to redirect to subfolder
+cat >index.html <<EOF 
+<meta http-equiv="refresh" content="0; url=https://${GITHUB_REPOSITORY}.github.io/en/main/index.html">
+EOF
+
 # Add README
 cat >README.md <<EOF
 # GitHub Pages Cache
