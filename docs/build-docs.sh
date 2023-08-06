@@ -105,7 +105,7 @@ touch .nojekyll
 
 # Add index.html to redirect to subfolder
 cat >index.html <<EOF 
-<meta http-equiv="refresh" content="0; url=https://${GITHUB_REPOSITORY}.github.io/en/main/index.html">
+<meta http-equiv="refresh" content="0; url=https://satclop.github.io/pyrtlib/en/main/index.html">
 EOF
 
 # Add README
