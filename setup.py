@@ -17,12 +17,14 @@ setup(
     author='slarosa',
     author_email='salvatore-larosa@cnr.it',
     description='pyrtlib - Radiative Transfer library',
+    long_description_content_type='text/markdown',
     classifiers=[
         'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Science/Research',
         'Intended Audience :: Education',
         'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
-        'Topic :: Scientific/Engineering'
+        'Topic :: Scientific/Engineering',
+        'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3 :: Only',
         'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: 3.9',
