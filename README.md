@@ -1,4 +1,4 @@
-<img align="" src="resources/logo/logo_large_new.png" width="400">
+<img align="" src="https://raw.githubusercontent.com/SatCloP/pyrtlib/main/resources/logo/logo_large_new.png" width="400">
 
 # A Radiative Transfer Python Library (non-scattering)
 
@@ -16,7 +16,7 @@
 
 PyRTlib is a Python package, for non-scattering line-by-line microwave RT simulations. PyRTlib is a user-friendly tool for computing down and up-welling brightness temperatures and related quantities (e.g., atmospheric absorption, optical depth, opacity) in Python.
 
-![spectrum](resources/spectrum_r22.jpeg)
+![spectrum](https://raw.githubusercontent.com/SatCloP/pyrtlib/main/resources/spectrum_r22.jpeg)
 
 # Example
 
