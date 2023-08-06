@@ -10,14 +10,10 @@ RUN apt-get update \
 
 RUN python3 -m pip install cftime
 
-# TODO: uncomment when repository will be public
-WORKDIR /tmp
+# WORKDIR /tmp
 RUN wget https://github.com/SatCloP/pyrtlib/archive/refs/heads/main.zip && \
     unzip -a main.zip && \
     cd pyrtlib-main
-# ADD . /home/dev/pyrtlib
-# WORKDIR /home/dev/pyrtlib
-# RUN python3 setup.py install
 
 RUN python3 setup.py install
 
