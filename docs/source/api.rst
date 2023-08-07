@@ -16,7 +16,7 @@ clear or cloudy conditions. Also returns all integrated quantities that the orig
 
 Example:
 
-Compute downwelling (:code:`rte.satellite == False`) brightness temperature for a typical Tropical Atmosphere, using emissivity surface.
+Compute downwelling (:code:`rte.satellite == False`) brightness temperature for a typical Tropical Atmosphere.
 
 .. plot::
     :include-source: true
@@ -40,7 +40,7 @@ Compute downwelling (:code:`rte.satellite == False`) brightness temperature for 
     df.tbtotal.plot(figsize=(12,8), xlabel="Frequency [GHz]", ylabel="Brightness Temperature [K]", grid=True)
 
 Also, it is possible to execute a combination of absorption models. The following example use :code:`R19SD` model for :math:`O_2` and
-:code:`R16` for :math:`H_2O`: to compute upwelling brightness temperature.
+:code:`R16` for :math:`H_2O`: to compute upwelling brightness temperature using emissivity surface.
 
 .. plot::
     :include-source: true
