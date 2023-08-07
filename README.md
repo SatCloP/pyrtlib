@@ -6,9 +6,10 @@
 [![run-python-tests](https://github.com/SatCloP/pyrtlib/workflows/run-python-tests/badge.svg)](https://github.com/SatCloP/pyrtlib/actions/workflows/ci.yml)
 [![build-docs-action](https://github.com/SatCloP/pyrtlib/workflows/build-docs-action/badge.svg)](https://github.com/SatCloP/pyrtlib/actions/workflows/build_docs.yml)
 [![Project Status: WIP – Initial development is in progress, but there has not yet been a stable, usable release suitable for the public.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
+[![PyPI Latest Release](https://img.shields.io/pypi/v/pyrtlib.svg)](https://pypi.org/project/pyrtlib/)
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/SatCloP/pyrtlib?display_name=tag)
 [![codecov](https://codecov.io/gh/SatCloP/pyrtlib/branch/main/graph/badge.svg?token=7DV4B4U1OZ)](https://codecov.io/gh/SatCloP/pyrtlib)
-[![GitHub commits since tagged version](https://img.shields.io/github/commits-since/SatCloP/pyrtlib/v1.0.0)](https://github.com/SatCloP/pyrtlib/commits/)
+<!--[![GitHub commits since tagged version](https://img.shields.io/github/commits-since/SatCloP/pyrtlib/v1.0.0)](https://github.com/SatCloP/pyrtlib/commits/) -->
 [![license](https://img.shields.io/github/license/SatCloP/pyrtlib.svg)](https://github.com/SatCloP/pyrtlib/blob/main/LICENSE)
 [![DOI](https://zenodo.org/badge/345925671.svg)](https://zenodo.org/badge/latestdoi/345925671)
 
