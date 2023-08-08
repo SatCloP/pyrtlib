@@ -7,8 +7,17 @@ authors:
 - family-names: "Cimini"
   given-names: "Domenico"
   orcid: "https://orcid.org/0000-0002-5962-223X"
+- family-names: "Gallucci"
+  given-names: "Donatello"
+  orcid: "https://orcid.org/0000-0002-6814-193X"
+- family-names: "Nilo"
+  given-names: "Saverio Teodosio"
+  orcid: "https://orcid.org/0000-0003-2630-8727"
+- family-names: "Romano"
+  given-names: "Filomena"
+  orcid: "https://orcid.org/0000-0002-0544-073X"
 title: "PyRTlib: an educational Python-based library for non-scattering atmospheric microwave radiative transfer computations"
-version: 1.0.1
-doi: 10.5281/zenodo.8219146
-date-released: 2023-08-06
+version: 1.0.2
+doi: 10.5281/zenodo.8220092
+date-released: 2023-08-08
 url: "https://github.com/SatCloP/pyrtlib"

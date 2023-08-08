@@ -10,7 +10,7 @@ def read_file(filename):
 
 setup(
     name='pyrtlib',
-    version='1.0.1',
+    version='1.0.2',
     include_package_data=True,
     package_dir={'': 'pyrtlib'},
     python_requires='>=3.6',
@@ -18,8 +18,8 @@ setup(
     tests_require=['pytest'],
     install_requires=required,
     project_urls={
-        'documentation': 'https://satclop.github.io/pyrtlib',
-        'repository': 'https://github.com/SatCloP/pyrtlib'
+        'Documentation': 'https://satclop.github.io/pyrtlib',
+        'Repository': 'https://github.com/SatCloP/pyrtlib'
     },
     url='',
     license='GPLv3',
