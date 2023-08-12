@@ -22,6 +22,14 @@ PyRTlib is a Python package, for non-scattering line-by-line microwave RT simula
 
 ![spectrum](https://raw.githubusercontent.com/SatCloP/pyrtlib/main/resources/spectrum_r22.jpeg)
 
+# Installation
+
+Use pip package to install quicly the pyrtlib library. See [installation instructions](https://satclop.github.io/pyrtlib/en/main/installation.html) for more info on how instaling pyrtlib. 
+
+```sh
+   $ pip install pyrtlib
+```
+
 # Example
 
 For examples of how to use pyrtlib see the [examples gallery](https://satclop.github.io/pyrtlib/en/main/examples/index.html). Code can be downloaded both as python script or notebook file.
@@ -83,3 +91,5 @@ Execute model by computing upwelling radiances:
    980    234.667522
    Name: tbtotal, Length: 981, dtype: float64
 ```
+## Cite as
+Larosa, S., Cimini, D., Gallucci, D., Nilo, S. T., & Romano, F. (2023). PyRTlib: an educational Python-based library for non-scattering atmospheric microwave radiative transfer computations [Computer software]. https://doi.org/10.5281/zenodo.8219145
