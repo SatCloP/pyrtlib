@@ -16,11 +16,11 @@ table {
     text-align: center !important;
 }
 
-/* .bd-header .navbar-header-items__start {
+.bd-header .navbar-header-items__start {
     flex-shrink: 0;
     gap: .5rem;
     margin-right: 200px;
-} */
+}
 
 @media(max-width: 960px) {
     .bd-header .navbar-header-items__start {
