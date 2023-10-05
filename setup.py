@@ -13,7 +13,7 @@ setup(
     version='1.0.2',
     include_package_data=True,
     package_dir={'': 'pyrtlib'},
-    python_requires='>=3.6',
+    python_requires='>=3.7',
     setup_requires=['pytest-runner'],
     tests_require=['pytest'],
     install_requires=required,
@@ -21,7 +21,6 @@ setup(
         'Documentation': 'https://satclop.github.io/pyrtlib',
         'Repository': 'https://github.com/SatCloP/pyrtlib'
     },
-    url='',
     license='GPLv3',
     author='slarosa',
     author_email='salvatore-larosa@cnr.it',
@@ -41,5 +40,5 @@ setup(
         'Programming Language :: Python :: 3.10',
         'Programming Language :: Python :: 3.11',
     ],
-    packages=find_packages('pyrtlib')
+    packages=find_packages()
 )
