@@ -12,7 +12,7 @@ setup(
     name='pyrtlib',
     version='1.0.2',
     include_package_data=True,
-    packages=find_packages(exclude=["*.tests", "*.tests.*", "tests.*", "tests"]),
+    packages=['pyrtlib'] + find_packages('pyrtlib', exclude=["*.tests", "*.tests.*", "tests.*", "tests"]),
     package_dir={'': 'pyrtlib'},
     python_requires='>=3.7',
     setup_requires=['pytest-runner'],
