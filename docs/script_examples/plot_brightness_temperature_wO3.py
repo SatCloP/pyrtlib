@@ -55,9 +55,9 @@ df.tbtotal.plot(ax=ax, linewidth=1, label='{} - {}'.format(atm[atmp.US_STANDARD]
 
 style = dict(size=20, color='gray', ha='center')
 ax.text(22, 45, "${H_2O}$", **style)
-ax.text(60, 255, "${O_2}}$", **style)
-ax.text(119, 280, "${O_2}}$", **style)
-ax.text(142, 100, "${O_3}}$", **style)
+ax.text(60, 255, "${O_2}$", **style)
+ax.text(119, 280, "${O_2}$", **style)
+ax.text(142, 100, "${O_3}$", **style)
 ax.text(183, 245, "${H_2O}$", **style)
 
 def ghz_to_mm(ghz):
