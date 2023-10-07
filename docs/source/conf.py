@@ -119,7 +119,7 @@ html_theme_options = {
     #     "json_url": str(Path('_static') / 'versions.json'),
     #     "version_match": switcher_version,
     # },
-    "announcement": "Official PyRTlib Documentation ",
+    "announcement": "Official PyRTlib {} Documentation".format(version),
     "logo": {
         "image_light": str(Path('_static') / 'thumb_logo.png'),
         "image_dark": str(Path('_static') / 'thumb_white_logo.png'),
