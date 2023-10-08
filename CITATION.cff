@@ -27,4 +27,5 @@ keywords:
   - python
 doi: 10.5281/zenodo.8219145
 date-released: 2023-10-05
-url: "https://github.com/SatCloP/pyrtlib"
+repository-code: "https://github.com/SatCloP/pyrtlib"
+url: "https://satclop.github.io/pyrtlib/"
