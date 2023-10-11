@@ -187,7 +187,12 @@ Preview of the output dataframe (see :py:meth:`pyrtlib.tb_spectrum.TbCloudRTE.ex
 Plotting result:
 
 .. image:: ../../resources/spectrum_r22.jpeg
-  
+
+Cite as
+-------
+
+Larosa, S., Cimini, D., Gallucci, D., Nilo, S. T., & Romano, F. (2023). PyRTlib: an educational Python-based library for non-scattering atmospheric microwave radiative transfer computations [Computer software]. https://doi.org/10.5281/zenodo.8219145
+
 Installation
 ------------
 
