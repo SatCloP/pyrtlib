@@ -58,7 +58,13 @@ for current_version in ${versions}; do
 
     # HTML #
     sphinx-build -b html docs/source docs/_build/html/${current_language}/${current_version} -D language="${current_language}"
-
+    if [ "$?" -eq "0" ]; then
+      echo "Done"
+    else
+      echo "Error while running sphinx"
+      exit 1
+    fi
+    
     #   # PDF #
     #   sphinx-build -b rinoh docs/source docs/_build/rinoh -D language="${current_language}"
     #   mkdir -p "${docroot}/${current_language}/${current_version}"
