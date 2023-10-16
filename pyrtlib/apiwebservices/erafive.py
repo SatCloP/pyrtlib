@@ -34,7 +34,6 @@ class ERA5Reanalysis:
     @classmethod
     def read_data(cls, file: str, lonlat: tuple) -> pd.DataFrame:
         """Read data from the ERA5 Reanalysis dataset.
-        Variables name and units information are reported within the attribute `units` (see example below).
 
         Args:
             file (str): The netcdf file
@@ -42,6 +41,9 @@ class ERA5Reanalysis:
 
         Returns:
             pandas.DataFrame: [description]
+
+        .. note:: Variables name and units information are reported within the attribute `units` of
+            the returned dataframe (see example below).
         
         Example:
             .. code-block:: python

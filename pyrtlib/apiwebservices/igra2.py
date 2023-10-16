@@ -58,7 +58,6 @@ class IGRAUpperAir(HTTPEndPoint):
     @classmethod
     def request_data(cls, time: datetime, site_id: str, beg2021: Optional[bool] = False, derived: Optional[bool] = False) -> Tuple[pd.DataFrame, pd.DataFrame]:
         """Retreive IGRA version 2 data files contain the full period of record.
-        Variables name and units information are reported within the attribute `units` (see example below).
 
         Args:
             time (datetime): The date and time of the desired observation. If list of two times is given,
@@ -71,6 +70,9 @@ class IGRAUpperAir(HTTPEndPoint):
         Returns:
             Tuple[pandas.DataFrame, pandas.DataFrame]: A dataframe containing the data and header information.
         
+        .. note:: Variables name and units information are reported within the attribute `units` of
+            the returned dataframe (see example below).
+
         Example:
             .. code-block:: python
 

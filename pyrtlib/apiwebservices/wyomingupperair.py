@@ -28,7 +28,6 @@ class WyomingUpperAir(HTTPEndPoint):
     @classmethod
     def request_data(cls, time: datetime, site_id: Union[str, int], **kwargs) -> pd.DataFrame:
         """Retrieve upper air observations from the Wyoming archive. 
-        Variables name and units information are reported within the attribute `units` (see example below).
 
         Args:
             time (datetime.datetime): The date and time of the desired observation.
@@ -37,6 +36,9 @@ class WyomingUpperAir(HTTPEndPoint):
 
         Returns:
             pandas.DataFrame:  A dataframe containing the data
+
+        .. note:: Variables name and units information are reported within the attribute `units` of
+            the returned dataframe (see example below).
 
         Example:
             .. code-block:: python
