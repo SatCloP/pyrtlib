@@ -27,7 +27,8 @@ class WyomingUpperAir(HTTPEndPoint):
 
     @classmethod
     def request_data(cls, time: datetime, site_id: Union[str, int], **kwargs) -> pd.DataFrame:
-        """Retrieve upper air observations from the Wyoming archive.
+        """Retrieve upper air observations from the Wyoming archive. 
+        Variables name and units information are reported within the attribute `units` (see example below).
 
         Args:
             time (datetime.datetime): The date and time of the desired observation.
@@ -36,6 +37,28 @@ class WyomingUpperAir(HTTPEndPoint):
 
         Returns:
             pandas.DataFrame:  A dataframe containing the data
+
+        Example:
+            .. code-block:: python
+
+                >>> from pyrtlib.apiwebservices import WyomingUpperAir
+                >>> from datetime import datetime
+                >>> date = datetime(2022, 6, 22, 12)
+                >>> station = 'LIRE' 
+                >>> df = WyomingUpperAir.request_data(date, station)
+                >>> df.attrs['units']
+                {'pressure': 'hPa',
+                 'height': 'meter',
+                 'temperature': 'degC',
+                 'dewpoint': 'degC',
+                 'rh': '%',
+                 'mixr': 'g/kg',
+                 'station': None,
+                 'station_number': None,
+                 'time': None,
+                 'latitude': 'degrees',
+                 'longitude': 'degrees',
+                 'elevation': 'meter'}
         """
 
         endpoint = cls()
@@ -109,8 +132,8 @@ class WyomingUpperAir(HTTPEndPoint):
         -------
             df :  pandas.DataFrame
                 containing the data
-
         """
+
         raw_data = self._get_data_raw(time, site_id)
         soup = BeautifulSoup(raw_data, 'html.parser')
         tabular_data = StringIO(soup.find_all('pre')[0].contents[0])
@@ -148,7 +171,7 @@ class WyomingUpperAir(HTTPEndPoint):
         df['title'] = title
 
         # Add unit dictionary
-        df.units = {'pressure': 'hPa',
+        df.attrs['units'] = {'pressure': 'hPa',
                     'height': 'meter',
                     'temperature': 'degC',
                     'dewpoint': 'degC',

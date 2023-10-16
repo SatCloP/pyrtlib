@@ -34,6 +34,7 @@ class ERA5Reanalysis:
     @classmethod
     def read_data(cls, file: str, lonlat: tuple) -> pd.DataFrame:
         """Read data from the ERA5 Reanalysis dataset.
+        Variables name and units information are reported within the attribute `units` (see example below).
 
         Args:
             file (str): The netcdf file
@@ -41,6 +42,26 @@ class ERA5Reanalysis:
 
         Returns:
             pandas.DataFrame: [description]
+        
+        Example:
+            .. code-block:: python
+
+                >>> from pyrtlib.apiwebservices import ERA5Reanalysis
+                >>> lonlat = (15.8158, 38.2663)
+                >>> date = datetime(2020, 2, 22, 12)
+                >>> nc_file = ERA5Reanalysis.request_data(tempfile.gettempdir(), date, lonlat)
+                >>> df_era5 = ERA5Reanalysis.read_data(nc_file, lonlat)
+                >>> df_era5.attrs['units']
+                {'p': 'hPa',
+                'z': 'km',
+                't': 'K',
+                'rh': '%',
+                'clwc': 'kg kg-1',
+                'ciwc': 'kg kg-1',
+                'crwc': 'kg kg-1',
+                'cswc': 'kg kg-1',
+                'o3': 'kg kg-1',
+                'q': 'kg kg-1'}
 
         .. note:: To convert specific cloud water content (CLWC) or specific cloud ice water content (CIWC) 
             from kg kg-1 to g m-3 using this function :py:meth:`pyrtlib.utils.kgkg_to_gm3`
@@ -64,7 +85,8 @@ class ERA5Reanalysis:
         ozone = np.asarray(nc.variables['o3'][:, :, idx, idx])
         q = np.asarray(nc.variables['q'][:, :, idx, idx])
 
-        z = atmospheric_tickness(np.flip(pres), np.flip(temp[0]), np.flip(q[0]))  # Altitude in km
+        z = atmospheric_tickness(np.flip(pres), np.flip(
+            temp[0]), np.flip(q[0]))  # Altitude in km
 
         date = pd.to_datetime(
             nc.variables['time'][:], origin='1900-01-01 00:00:00.0', unit='h')
@@ -81,7 +103,17 @@ class ERA5Reanalysis:
                            'q': np.flip(q[0]),
                            'time': np.repeat(date, len(pres))
                            })
-        
+        df.attrs['units'] = {'p': 'hPa',
+                             'z': 'km',
+                             't': 'K',
+                             'rh': '%',
+                             'clwc': 'kg kg-1',
+                             'ciwc': 'kg kg-1',
+                             'crwc': 'kg kg-1',
+                             'cswc': 'kg kg-1',
+                             'o3': 'kg kg-1',
+                             'q': 'kg kg-1'}
+
         return df  # , (idx, dist), np.stack((lons, lats))
 
     def _find_nearest(self, lons, lats, point):

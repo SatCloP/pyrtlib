@@ -58,6 +58,7 @@ class IGRAUpperAir(HTTPEndPoint):
     @classmethod
     def request_data(cls, time: datetime, site_id: str, beg2021: Optional[bool] = False, derived: Optional[bool] = False) -> Tuple[pd.DataFrame, pd.DataFrame]:
         """Retreive IGRA version 2 data files contain the full period of record.
+        Variables name and units information are reported within the attribute `units` (see example below).
 
         Args:
             time (datetime): The date and time of the desired observation. If list of two times is given,
@@ -68,7 +69,26 @@ class IGRAUpperAir(HTTPEndPoint):
                 (or current and previous) year. Defaults to False.
 
         Returns:
-            Tuple[pandas.DataFrame, pandas.DataFrame]: A dataframe containing the data.
+            Tuple[pandas.DataFrame, pandas.DataFrame]: A dataframe containing the data and header information.
+        
+        Example:
+            .. code-block:: python
+
+                >>> from pyrtlib.apiwebservices import IGRAUpperAir
+                >>> from datetime import datetime
+                >>> date = datetime(2022, 6, 22, 12)
+                >>> station = 'SPM00060018' 
+                >>> df, header = IGRAUpperAir.request_data(date, station)
+                >>> df.attrs['units']
+                {'etime': 'second',
+                 'pressure': 'hPa',
+                 'height': 'meter',
+                 'temperature': 'degC',
+                 'dewpoint': 'degC',
+                 'direction': 'degrees',
+                 'speed': 'meter / second',
+                 'u_wind': 'meter / second',
+                 'v_wind': 'meter / second'}
         """
 
         igra2 = cls()
