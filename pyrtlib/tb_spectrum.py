@@ -66,6 +66,17 @@ class TbCloudRTE(object):
         self.o3n = o3n
         self.amu = amu
 
+        dz = np.ediff1d(self.z)
+        if all(dz) > 0: pass
+        elif all(dz) < 0:
+            self.z = z[::-1]
+            self.p = p[::-1]
+            self.tk = t[::-1]
+            self.rh = rh[::-1]
+            print("Profile flipped up/douwn")
+        else:
+            raise SystemExit("ERROR: input profile seems incorrect.")
+
         self.ray_tracing = ray_tracing
         self._satellite = from_sat
         self.cloudy = cloudy
