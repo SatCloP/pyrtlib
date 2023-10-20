@@ -480,12 +480,6 @@ class RTEquation:
         See also:
             :py:func:`~pyrtlib.absorption_model.LiqAbsModel.liquid_water_absorption`
 
-        .. note::
-            Yong Han, 4/20/2000, ???
-
-        .. warning::
-            * ic light speed in cm s-1????
-            * ab_liq function is missing!!!!!
         """
 
         nl = len(t)

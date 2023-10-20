@@ -244,7 +244,7 @@ class TbCloudRTE(object):
                 cloud ice absorption integrated over each ray path (Np);
                 indexed by frequency and elevation angle
 
-            and a dictionary containing:
+        and with `only_bt=False` also a dictionary containing:
 
             taulaydry:
                 dry air absorption integrated over each ray path (Np);
@@ -283,7 +283,8 @@ class TbCloudRTE(object):
                 indexed by elevation angle
 
         Returns:
-            Union[pandas.DataFrame, Tuple[pandas.DataFrame, Dict[str, numpy.ndarray]]]: [description]
+            Union[pandas.DataFrame, Tuple[pandas.DataFrame, Dict[str, numpy.ndarray]]]: A pandas Dataframe with the brigthness temperature simulated.
+            If only_bt = False it also returns all intermediate RT variables.
         """
 
         # Set RTE
