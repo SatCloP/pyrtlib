@@ -9,7 +9,7 @@ from typing import Tuple, Union, List, Optional
 import numpy as np
 
 from pyrtlib.climatology import AtmosphericProfiles as atmp
-from .utils import dilec12, dcerror, constants, gas_mass, import_lineshape
+from .utils import dilec12, _dcerror, constants, gas_mass, import_lineshape
 
 
 class AbsModel:
@@ -101,7 +101,7 @@ class LiqAbsModel(AbsModel):
             temp (numpy.ndarray): Temperature (K).
 
         Returns:
-            np.ndarray: [description]
+            np.ndarray: Liquid water particels absorption (Np/km)
 
         References
         ----------
@@ -157,10 +157,10 @@ class N2AbsModel(AbsModel):
             f (numpy.ndarray): Frequency (GHz) - (valid 0-2000 GHz).
 
         Raises:
-            ValueError: _description_
+            ValueError: Raises to error whether inputn model is unorrect or not available
 
         Returns:
-            np.ndarray: _description_
+            np.ndarray: Nitrogen continum absorption terms in Np/km
 
         References
         ----------
@@ -376,7 +376,7 @@ class H2OAbsModel(AbsModel):
 
                         xrt = np.sqrt(xc)
                         pxw = 1.77245385090551603 * xrt * \
-                            dcerror(-np.imag(xrt), np.real(xrt))
+                            _dcerror(-np.imag(xrt), np.real(xrt))
                         sd = 2.0 * (1.0 - pxw) / (
                             width2 if H2OAbsModel.model not in ['R20SD', 'R21SD', 'R22SD'] else complex(width2, -delta2))
                         res += np.real(sd) - base
@@ -759,7 +759,7 @@ class O3AbsModel(AbsModel):
                     arg1 = (self.o3ll.fl[k]-f)/betad
                     arg2 = widthc/betad
                     s = self.o3ll.s1[k] * np.exp(self.o3ll.b[k] * (1.0 - ti))
-                    sum += s * np.real(dcerror(arg1, arg2))/betad
+                    sum += s * np.real(_dcerror(arg1, arg2))/betad
 
             abs_o3 = .56419e-4 * sum * qvinv * ti2 * den
         else:

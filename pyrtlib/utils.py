@@ -80,7 +80,7 @@ def constants(name: Optional[str] = None) -> Union[Tuple[float, str], List]:
     +---------------+-------------------------------------------+
 
     Raises:
-        ValueError: [description]
+        ValueError: Raises error wheter no costant available.
 
     Returns:
         Union[Tuple[float, str], List] Numerical Value of the asked constant and string specifying which units are used
@@ -584,7 +584,7 @@ def dilec12(f: np.ndarray, t: np.ndarray) -> np.ndarray:
     return kappa
 
 
-def dcerror(x: np.ndarray, y: np.ndarray) -> np.ndarray:
+def _dcerror(x: np.ndarray, y: np.ndarray) -> np.ndarray:
     r"""Sixth-Order Approx To The Complex Error Function of
 
     .. math:: z = x+iy

@@ -40,7 +40,7 @@ class ERA5Reanalysis:
             lonlat (tuple): longitude and latitude
 
         Returns:
-            pandas.DataFrame: [description]
+            pandas.DataFrame: Dataframe containing the variables retrieved.
 
         .. note:: Variables name and units information are reported within the attribute `units` of
             the returned dataframe (see example below).
