@@ -76,6 +76,11 @@ class TbCloudRTE(object):
             print("Profile flipped up/douwn")
         else:
             raise SystemExit("ERROR: input profile seems incorrect.")
+        
+        if len(self.p) <= 25 and min(self.p) > 10:
+            warnings.warn(f"Number of levels too low ({len(self.p)}) or "
+                          f"minimum pressure value lower than 10 hPa ({min(self.p)}). "
+                          "Please considering profile extrapolation.")
 
         self.ray_tracing = ray_tracing
         self._satellite = from_sat
