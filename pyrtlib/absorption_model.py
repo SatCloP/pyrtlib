@@ -50,7 +50,6 @@ class AbsModel:
         .. note::
             Model must be set with `model` property before calling this method (see Example).
         """
-        pass
 
     @staticmethod
     def implemented_models() -> List[str]:
@@ -129,7 +128,7 @@ class LiqAbsModel(AbsModel):
             fs = np.dot(39.8, fp)
             eps = (eps0 - eps1) / complex(1.0, freq / fp) + \
                 (eps1 - eps2) / complex(1.0, freq / fs) + eps2
-        elif LiqAbsModel.model in ['R17', 'R16', 'R19', 'R20', 'R19SD', 'R22SD', 'makarov11']:
+        elif LiqAbsModel.model in ['R17', 'R16', 'R19', 'R20', 'R19SD', 'R22SD']:
             eps = dilec12(freq, temp)
         else:
             raise ValueError(
@@ -171,7 +170,7 @@ class N2AbsModel(AbsModel):
 
         th = 300.0 / t
         fdepen = 0.5 + 0.5 / (1.0 + (f / 450.0) ** 2)
-        if N2AbsModel.model in ['R16', 'R17', 'R18', 'R19', 'R19SD', 'makarov11']:
+        if N2AbsModel.model in ['R16', 'R17', 'R18', 'R19', 'R19SD']:
             l, m, n = 6.5e-14, 3.6, 1.34
         elif N2AbsModel.model in ['R20', 'R20SD', 'R21SD', 'R22', 'R22SD']:
             l, m, n = 9.95e-14, 3.22, 1
@@ -303,12 +302,12 @@ class H2OAbsModel(AbsModel):
             return npp, ncpp
 
         pvap = (rho * t) / 216.68
-        if H2OAbsModel.model in ['R03', 'R16', 'R17', 'R98', 'makarov11']:
+        if H2OAbsModel.model in ['R03', 'R16', 'R17', 'R98']:
             pvap = (rho * t) / 217.0
         if H2OAbsModel.model in ['R22SD']:
             pvap = (constants("Rwatvap")[0] * 1e-05) * rho * t
         pda = p - pvap
-        if H2OAbsModel.model in ['R03', 'R16', 'R98', 'makarov11']:
+        if H2OAbsModel.model in ['R03', 'R16', 'R98']:
             den = 3.335e+16 * rho
         else:
             den = 3.344e+16 * rho
@@ -384,7 +383,7 @@ class H2OAbsModel(AbsModel):
                         res += width0 / (df[j] ** 2 + wsq) - base
 
                 summ += s * res * (f / self.h2oll.fl[i]) ** 2
-        elif H2OAbsModel.model in ['R16', 'R03', 'R17', 'R98', 'makarov11']:
+        elif H2OAbsModel.model in ['R16', 'R03', 'R17', 'R98']:
             ti2 = ti ** 2.5
             summ = 0.0
             for i in range(0, nlines):
@@ -522,7 +521,8 @@ class O2AbsModel(AbsModel):
 
         References
         ----------
-        .. [1] P.W. Rosenkranz, CHAP. 2 and appendix, in ATMOSPHERIC REMOTE SENSING BY MICROWAVE RADIOMETRY (M.A. Janssen, ed., 1993)(http://hdl.handle.net/1721.1/68611).
+        .. [1] P.W. Rosenkranz, CHAP. 2 and appendix, in ATMOSPHERIC REMOTE SENSING BY MICROWAVE RADIOMETRY 
+            (M.A. Janssen, ed., 1993)(http://hdl.handle.net/1721.1/68611).
         .. [2] G.Yu. Golubiatnikov & A.F. Krupnov, J. Mol. Spect. v.217, pp.282-287 (2003).
         .. [3] M.Yu. Tretyakov et al, J. Mol. Spect. v.223, pp.31-38 (2004).
         .. [4] M.Yu. Tretyakov et al, J. Mol. Spect. v.231, pp.1-14 (2005).
@@ -586,18 +586,18 @@ class O2AbsModel(AbsModel):
         th1 = th - 1.0
         b = th ** self.o2ll.x
         preswv = vapden * temp / 216.68
-        if O2AbsModel.model in ['R03', 'R16', 'R17', 'R18', 'R98', 'makarov11']:
+        if O2AbsModel.model in ['R03', 'R16', 'R17', 'R18', 'R98']:
             preswv = vapden * temp / 217.0
         if O2AbsModel.model in ['R22', 'R22SD']:
             preswv = 4.615228e-3 * vapden * temp
         presda = pres - preswv
         den = 0.001 * (presda * b + 1.2 * preswv * th)
-        if O2AbsModel.model in ['R03', 'R16', 'R98', 'makarov11']:
+        if O2AbsModel.model in ['R03', 'R16', 'R98']:
             den = 0.001 * (presda * b + 1.1 * preswv * th)
         if O2AbsModel.model == 'R03':
-            dens = 0.001 * (presda * th ** 0.9 + 1.1 * preswv * th)
+            den = 0.001 * (presda * th ** 0.9 + 1.1 * preswv * th)
         if O2AbsModel.model == 'R98':
-            dens = 0.001 * (presda + 1.1 * preswv) * th
+            den = 0.001 * (presda + 1.1 * preswv) * th
         dfnr = self.o2ll.wb300 * den
         pe2 = den * den
 
@@ -605,13 +605,13 @@ class O2AbsModel(AbsModel):
         # 1.571e-17 (o16-o16) + 1.3e-19 (o16-o18) = 1.584e-17
         summ = 1.584e-17 * freq * freq * dfnr / \
             (th * (freq * freq + dfnr * dfnr))
-        if O2AbsModel.model in ['R03', 'R16', 'R17', 'R18', 'R98', 'makarov11']:
+        if O2AbsModel.model in ['R03', 'R16', 'R17', 'R18', 'R98']:
             summ = 0.0
         nlines = len(self.o2ll.f)
         if O2AbsModel.model in ['R03', 'R98']:
             for k in range(0, nlines):
                 if k == 0:
-                    df = self.o2ll.w300[0] * dens
+                    df = self.o2ll.w300[0] * den
                 else:
                     df = self.o2ll.w300[k] * den
                 y = 0.001 * pres * b * \
@@ -678,7 +678,7 @@ class O2AbsModel(AbsModel):
             ncpp *= 5.034e+11 * presda * th ** 3 / 3.14159
         else:
             ncpp *= 1.6097e11 * presda * th ** 3  # n/pi*sum0
-        if O2AbsModel.model in ['R03', 'R16', 'R17', 'R18', 'R98', 'makarov11']:
+        if O2AbsModel.model in ['R03', 'R16', 'R17', 'R18', 'R98']:
             ncpp += N2AbsModel.n2_absorption(temp, pres, freq)
         # change the units from np/km to ppm
         npp = (o2abs / db2np) / factor
@@ -748,7 +748,7 @@ class O3AbsModel(AbsModel):
         # stratosphere, so lines are relatively narrow, and lorentz shape
         # factor is ok.
         if O3AbsModel.model in ["R22", "R222sd"]:
-            sum = 0.0
+            summ = 0.0
             nlines = len(self.o3ll.fl)
             for k in range(0, nlines):
                 if self.o3ll.fl[k] > (f + 1.0):
@@ -759,11 +759,11 @@ class O3AbsModel(AbsModel):
                     arg1 = (self.o3ll.fl[k]-f)/betad
                     arg2 = widthc/betad
                     s = self.o3ll.s1[k] * np.exp(self.o3ll.b[k] * (1.0 - ti))
-                    sum += s * np.real(_dcerror(arg1, arg2))/betad
+                    summ += s * np.real(_dcerror(arg1, arg2))/betad
 
-            abs_o3 = .56419e-4 * sum * qvinv * ti2 * den
+            abs_o3 = .56419e-4 * summ * qvinv * ti2 * den
         else:
-            sum = 0.0
+            summ = 0.0
             nlines = len(self.o3ll.fl)
             for k in range(0, nlines):
                 if self.o3ll.fl[k] > (f + 1.0):
@@ -777,8 +777,8 @@ class O3AbsModel(AbsModel):
                     s = self.o3ll.s1[k] * np.exp(self.o3ll.b[k] * (1.0 - ti))
                     shape = (f / self.o3ll.fl[k]) ** 2 * width / \
                         ((f - self.o3ll.fl[k]) ** 2 + width * width)
-                    sum += s * shape
+                    summ += s * shape
 
-            abs_o3 = 3.183e-05 * sum * qvinv * ti2 * den
+            abs_o3 = 3.183e-05 * summ * qvinv * ti2 * den
 
         return abs_o3

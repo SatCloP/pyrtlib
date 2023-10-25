@@ -14,14 +14,16 @@ import itertools
 import sys
 import warnings
 from zipfile import ZipFile
-from typing import List, Union, Optional, Tuple, Dict
+from typing import List, Optional, Tuple, Dict
 
 import numpy as np
 import pandas as pd
 
 from ..apiwebservices.webservices import HTTPEndPoint, HTTPError
 
-warnings.filterwarnings('ignore', "Pandas doesn't allow columns to be created", UserWarning)
+warnings.filterwarnings(
+    'ignore', "Pandas doesn't allow columns to be created", UserWarning)
+
 
 def get_wind_components(speed, wdir):
     r"""Calculate the U, V wind vector components from the speed and direction.
@@ -69,7 +71,7 @@ class IGRAUpperAir(HTTPEndPoint):
 
         Returns:
             Tuple[pandas.DataFrame, pandas.DataFrame]: A dataframe containing the data and header information.
-        
+
         .. note:: Variables name and units information are reported within the attribute `units` of
             the returned dataframe (see example below).
 
@@ -102,12 +104,12 @@ class IGRAUpperAir(HTTPEndPoint):
         else:
             igra2.folder = 'data/data-por/'
             igra2.suffix = igra2.suffix + '-data.txt'
-            
+
         if derived:
             igra2.folder = 'derived/derived-por/'
             igra2.suffix = igra2.suffix + '-drvd.txt'
 
-        if type(time) == datetime:
+        if isinstance(time, datetime):
             igra2.begin_date = time
             igra2.end_date = time
         else:
@@ -325,7 +327,8 @@ class IGRAUpperAir(HTTPEndPoint):
             colspecs_header = [(1, 12), (13, 17), (18, 20), (21, 23), (24, 26),
                                (27, 31), (31, 36), (37, 43), (43, 48), (49, 55),
                                (55, 61), (61, 67), (67, 73), (73, 79), (79, 85),
-                               (85, 91), (91, 97), (97, 103), (103, 109), (109, 115),
+                               (85, 91), (91, 97), (97,
+                                                    103), (103, 109), (109, 115),
                                (115, 121), (121, 127), (127, 133), (133, 139),
                                (139, 145), (145, 151), (151, 157)]
 
@@ -416,24 +419,24 @@ class IGRAUpperAir(HTTPEndPoint):
                            'u_wind', 'v_wind'), how='all').reset_index(drop=True)
 
             df.attrs['units'] = {'pressure': 'hPa',
-                        'reported_height': 'meter',
-                        'calculated_height': 'meter',
-                        'temperature': 'Kelvin',
-                        'temperature_gradient': 'Kelvin / kilometer',
-                        'potential_temperature': 'Kelvin',
-                        'potential_temperature_gradient': 'Kelvin / kilometer',
-                        'virtual_temperature': 'Kelvin',
-                        'virtual_potential_temperature': 'Kelvin',
-                        'vapor_pressure': 'Pascal',
-                        'saturation_vapor_pressure': 'Pascal',
-                        'reported_relative_humidity': 'percent',
-                        'calculated_relative_humidity': 'percent',
-                        'relative_humidity_gradient': 'percent / kilometer',
-                        'u_wind': 'meter / second',
-                        'u_wind_gradient': '(meter / second) / kilometer)',
-                        'v_wind': 'meter / second',
-                        'v_wind_gradient': '(meter / second) / kilometer)',
-                        'refractive_index': 'unitless'}
+                                 'reported_height': 'meter',
+                                 'calculated_height': 'meter',
+                                 'temperature': 'Kelvin',
+                                 'temperature_gradient': 'Kelvin / kilometer',
+                                 'potential_temperature': 'Kelvin',
+                                 'potential_temperature_gradient': 'Kelvin / kilometer',
+                                 'virtual_temperature': 'Kelvin',
+                                 'virtual_potential_temperature': 'Kelvin',
+                                 'vapor_pressure': 'Pascal',
+                                 'saturation_vapor_pressure': 'Pascal',
+                                 'reported_relative_humidity': 'percent',
+                                 'calculated_relative_humidity': 'percent',
+                                 'relative_humidity_gradient': 'percent / kilometer',
+                                 'u_wind': 'meter / second',
+                                 'u_wind_gradient': '(meter / second) / kilometer)',
+                                 'v_wind': 'meter / second',
+                                 'v_wind_gradient': '(meter / second) / kilometer)',
+                                 'refractive_index': 'unitless'}
 
         else:
             df['u_wind'], df['v_wind'] = get_wind_components(df['speed'],
@@ -450,14 +453,14 @@ class IGRAUpperAir(HTTPEndPoint):
             df.drop('dewpoint_depression', axis=1, inplace=True)
 
             df.attrs['units'] = {'etime': 'second',
-                        'pressure': 'hPa',
-                        'height': 'meter',
-                        'temperature': 'degC',
-                        'dewpoint': 'degC',
-                        'direction': 'degrees',
-                        'speed': 'meter / second',
-                        'u_wind': 'meter / second',
-                        'v_wind': 'meter / second'}
+                                 'pressure': 'hPa',
+                                 'height': 'meter',
+                                 'temperature': 'degC',
+                                 'dewpoint': 'degC',
+                                 'direction': 'degrees',
+                                 'speed': 'meter / second',
+                                 'u_wind': 'meter / second',
+                                 'v_wind': 'meter / second'}
 
         return df
 
@@ -465,30 +468,30 @@ class IGRAUpperAir(HTTPEndPoint):
         """Format the header dataframe and add units."""
         if self.suffix == '-drvd.txt':
             df.attrs['units'] = {'release_time': 'second',
-                        'precipitable_water': 'millimeter',
-                        'inv_pressure': 'hPa',
-                        'inv_height': 'meter',
-                        'inv_strength': 'Kelvin',
-                        'mixed_layer_pressure': 'hPa',
-                        'mixed_layer_height': 'meter',
-                        'freezing_point_pressure': 'hPa',
-                        'freezing_point_height': 'meter',
-                        'lcl_pressure': 'hPa',
-                        'lcl_height': 'meter',
-                        'lfc_pressure': 'hPa',
-                        'lfc_height': 'meter',
-                        'lnb_pressure': 'hPa',
-                        'lnb_height': 'meter',
-                        'lifted_index': 'degC',
-                        'showalter_index': 'degC',
-                        'k_index': 'degC',
-                        'total_totals_index': 'degC',
-                        'cape': 'Joule / kilogram',
-                        'convective_inhibition': 'Joule / kilogram'}
+                                 'precipitable_water': 'millimeter',
+                                 'inv_pressure': 'hPa',
+                                 'inv_height': 'meter',
+                                 'inv_strength': 'Kelvin',
+                                 'mixed_layer_pressure': 'hPa',
+                                 'mixed_layer_height': 'meter',
+                                 'freezing_point_pressure': 'hPa',
+                                 'freezing_point_height': 'meter',
+                                 'lcl_pressure': 'hPa',
+                                 'lcl_height': 'meter',
+                                 'lfc_pressure': 'hPa',
+                                 'lfc_height': 'meter',
+                                 'lnb_pressure': 'hPa',
+                                 'lnb_height': 'meter',
+                                 'lifted_index': 'degC',
+                                 'showalter_index': 'degC',
+                                 'k_index': 'degC',
+                                 'total_totals_index': 'degC',
+                                 'cape': 'Joule / kilogram',
+                                 'convective_inhibition': 'Joule / kilogram'}
 
         else:
             df.attrs['units'] = {'release_time': 'second',
-                        'latitude': 'degrees',
-                        'longitude': 'degrees'}
+                                 'latitude': 'degrees',
+                                 'longitude': 'degrees'}
 
         return df

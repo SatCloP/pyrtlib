@@ -9,10 +9,9 @@ __date__ = 'March 2021'
 __copyright__ = '(C) 2021, CNR-IMAA'
 
 import os
-import math
 import warnings
 from datetime import datetime
-from typing import Optional, Tuple
+from typing import Optional
 
 try:
     import cdsapi
@@ -21,7 +20,7 @@ except ModuleNotFoundError as e:
         "Module CDSAPI must be installed to download ERA5 Reanalysis dataset.")
 import numpy as np
 # from scipy.spatial import cKDTree
-from sklearn.neighbors import BallTree, KDTree
+from sklearn.neighbors import BallTree
 import pandas as pd
 from netCDF4 import Dataset
 

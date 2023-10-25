@@ -13,16 +13,13 @@
 
 """
 
-import os
 from copy import deepcopy
 from dataclasses import dataclass
 from typing import Tuple, Optional, Dict
-from dataclasses import dataclass, field
 
 import numpy as np
 # import scipy.interpolate as si
 from pyrtlib.absorption_model import H2OAbsModel, O2AbsModel, O3AbsModel
-from pyrtlib.utils import constants
 
 # TVEC = np.loadtxt(
 #     open(os.path.join(PATH, "tbd", "Tvec.csv"), "rb"), delimiter=",")
@@ -111,7 +108,7 @@ class SpectroscopicParameter:
         h2o_sp = {
             "con_Cf": SpectroscopicParameter(value=ll.cf, uncer=.0, units='1/(km*(mb^2*GHz^2))', name='Foreign induced broadening coefficient'),
             "con_Cs": SpectroscopicParameter(value=ll.cs, uncer=.0, units='1/(km*(mb^2*GHz^2))', name='Self induced broadening coefficient'),
-            
+
             "con_Xf": SpectroscopicParameter(value=ll.xcf, uncer=.0, units='unitless', name='Foreign broadening temperature dependence exponents'),
             "con_Xs": SpectroscopicParameter(value=ll.xcs, uncer=.0, units='unitless', name='Self broadening temperature dependence exponents'),
 
@@ -137,9 +134,9 @@ class SpectroscopicParameter:
             }
         else:
             h2o_sp_ = {
-                "SR": SpectroscopicParameter(value=ll.sr, uncer=np.zeros(len(ll.fl)), units='unitless', name='Shift to width ratio'), 
+                "SR": SpectroscopicParameter(value=ll.sr, uncer=np.zeros(len(ll.fl)), units='unitless', name='Shift to width ratio'),
                 "con_Cf_factr": SpectroscopicParameter(value=1.11, uncer=np.sqrt(0.098 ** 2 + 0.03 ** 2), units='unitless', refer='Turner et al., TGRSS, 2009', name=''),
-                "con_Cs_factr": SpectroscopicParameter(value=0.79, uncer=np.sqrt(0.17 ** 2 + 0.06 ** 2), units='unitless', refer='Turner et al., TGRSS, 2009', name=''),}
+                "con_Cs_factr": SpectroscopicParameter(value=0.79, uncer=np.sqrt(0.17 ** 2 + 0.06 ** 2), units='unitless', refer='Turner et al., TGRSS, 2009', name=''), }
 
         h2o_sp = {**h2o_sp, **h2o_sp_}
 

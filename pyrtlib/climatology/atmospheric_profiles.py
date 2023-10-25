@@ -12,7 +12,7 @@ class AtmosphericProfiles:
 
     Each of these profile contains data at 50 atmospheric levels.
     Altitude (km), Pressure (mb), Density (cm-3), Molec. densities (ppmv):
-    
+
     * 0 (H2O),
     * 1 (CO2),
     * 2 (O3),
@@ -20,7 +20,7 @@ class AtmosphericProfiles:
     * 4 (CO),
     * 5 (CH4),
     * 6 (O2)
-    
+
     Plus suplimental profiles where available.
     The last set of data sets are constituent profiles of molecular
     densities (ppmv) for the minor absorbing atmospheric gases.
@@ -29,10 +29,10 @@ class AtmosphericProfiles:
     ----------
 
     .. [1] [ANDERSON]_
-    
+
     Examples:
         .. code-block:: python
-        
+
             >>> from pyrtlib.climatology import AtmosphericProfiles as atmp
             >>> atmp.atm_profiles()
             {0: 'Tropical',
@@ -114,13 +114,12 @@ class AtmosphericProfiles:
                 AtmosphericProfiles.SUBARCTIC_WINTER: 'Subarctic Winter',
                 AtmosphericProfiles.US_STANDARD: 'US Standard'}
 
-
     @staticmethod
     def gl_atm(atm: int) -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
         """Returns the Atmopshere profile.
-        
+
         This method contains 6 model profiles:
-        
+
         +--------+---------------------+
         | option | model               |
         +--------+---------------------+
@@ -209,7 +208,7 @@ class AtmosphericProfiles:
             # Latitude (deg)
             # 45.5397
             mtx = np.loadtxt(os.path.join(path, "us_standard.dat"))
-        
+
         # Altitude (km)
         a = mtx[:, 0]
         # Pressue (mb)
@@ -295,14 +294,14 @@ class AtmosphericProfiles:
                   1.00e-15, 1.00e-15, 1.00e-15, 1.00e-15, 1.00e-15, 1.00e-15,
                   1.00e-15, 1.00e-15, 1.00e-15, 1.00e-15, 1.00e-15, 1.00e-15,
                   1.00e-15, 1.00e-15])
-        
+
         References
         ----------
 
             .. [1] Smith, M.A.H., Compilation of atmospheric gas concentration profiles from 0 to 50km, NASA Tech.Mem. 83289, 1982
             .. [2] Rinsland, C.P., et al., JGR 94 D15 18341-18349, 1989
             .. [3] Rinsland, C.P., et al., JGR 95 D10 16477-16490, 1990
-        
+
         """
 
         # ************************************************************************
@@ -326,7 +325,7 @@ class AtmosphericProfiles:
         #  COF2 & SF6
         #   0 - 14   ATMOS SS Rinsland 1990: ConsAt 14 value
         #  14 -120   ATMOS SS Rinsland 1990: LinExLogMix until 1.0E-15
-        
+
         #  H2S, CCLF3  (CFC13), CHCl2F (CFC21), C2CLF5  (CFC115)
         #   0 - 120   Smith 1982: until 1.0E-15
         #  CCL3F (F11), CCL2F2 (CFC12), CHCLF2 (CFC22), C2CL3F3 (CFC113), C2CL2F4 (CFC114), CCL4, CLONO2, N2O5, HNO4

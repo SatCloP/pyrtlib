@@ -14,7 +14,6 @@ import pandas as pd
 
 from .absorption_model import O2AbsModel, H2OAbsModel, N2AbsModel, LiqAbsModel
 from .rt_equation import RTEquation
-from .utils import import_lineshape
 
 
 class TbCloudRTE(object):
@@ -65,6 +64,23 @@ class TbCloudRTE(object):
         self.angles = angles
         self.o3n = o3n
         self.amu = amu
+
+        dz = np.ediff1d(self.z)
+        if all(dz) > 0:
+            pass
+        elif all(dz) < 0:
+            self.z = z[::-1]
+            self.p = p[::-1]
+            self.tk = t[::-1]
+            self.rh = rh[::-1]
+            print("Profile flipped up/douwn")
+        else:
+            raise SystemExit("ERROR: input profile seems incorrect.")
+
+        if len(self.p) <= 25 and min(self.p) > 10:
+            warnings.warn(f"Number of levels too low ({len(self.p)}) or "
+                          f"minimum pressure value lower than 10 hPa ({min(self.p)}). "
+                          "Please considering profile extrapolation.")
 
         self.ray_tracing = ray_tracing
         self._satellite = from_sat
@@ -142,7 +158,8 @@ class TbCloudRTE(object):
         elif isinstance(emissivity, np.ndarray):
             self._es = emissivity
         else:
-            raise ValueError("Please enter a valid value or array for emissivity")
+            raise ValueError(
+                "Please enter a valid value or array for emissivity")
 
     def set_amu(self, amu: Tuple) -> None:
         """Set absorption model uncertainties
@@ -167,13 +184,14 @@ class TbCloudRTE(object):
             O2AbsModel.model = absmdl
             O2AbsModel.set_ll()
         except KeyError as e:
-            warnings.warn("The lines list {} was not found. You have to define absorption model manually".format(e))
+            warnings.warn(
+                "The lines list {} was not found. You have to define absorption model manually".format(e))
         try:
             H2OAbsModel.model = absmdl
             H2OAbsModel.set_ll()
         except KeyError as e:
             warnings.warn("The lines list {} was not found".format(e))
-        
+
         N2AbsModel.model = absmdl
         LiqAbsModel.model = absmdl
 
@@ -194,8 +212,10 @@ class TbCloudRTE(object):
         if getattr(self, 'cloudy'):
             for j in range(0, ncld):
                 for i in range(0, self.nl):
-                    if self.z[i] == self.cldh[0, j]: self.beglev[j] = i
-                    if self.z[i] == self.cldh[1, j]: self.endlev[j] = i
+                    if self.z[i] == self.cldh[0, j]:
+                        self.beglev[j] = i
+                    if self.z[i] == self.cldh[1, j]:
+                        self.endlev[j] = i
 
             self.denice = denice
             self.denliq = denliq
@@ -209,37 +229,37 @@ class TbCloudRTE(object):
 
         Args:
             only_bt (bool): If True returns only brightness temperature. Default to True.
-        
+
         Returns a pandas dataframe containing:
-        
+
             tbtotal:
                 brightness temperature (K) includes cosmic background; 
                 indexed by frequency and elevation angle
-            
+
             tbatm:
                 atmospheric brightness temperature (K), no cosmic; 
                 background;indexed by frequency and elevation angle
-            
+
             tmr:
                 mean radiating temperature of the atmosphere (K);
                 indexed by frequency and elevation angle
-            
+
             tmrcld:
                 mean radiating temperature (K) of the lowest cloud layer;
                 indexed by frequency and elevation angle
-            
+
             taudry:
                 dry air absorption integrated over each ray path (Np);
                 indexed by frequency and elevation angle
-            
+
             tauwet:
                 water vapor absorption integrated over each ray path (Np);
                 indexed by frequency and elevation angle
-            
+
             tauliq:
                 cloud liquid absorption integrated over each ray path (Np);
                 indexed by frequency and elevation angle
-            
+
             tauice:
                 cloud ice absorption integrated over each ray path (Np);
                 indexed by frequency and elevation angle
@@ -265,19 +285,19 @@ class TbCloudRTE(object):
             srho:
                 water vapor density integrated along each ray path (cm);
                 indexed by elevation angle
-            
+
             swet:
                 wet refractivity integrated along each ray path (cm);
                 indexed by elevation angle
-            
+
             sdry:
                 dry refractivity integrated along each ray path (cm);
                 indexed by elevation angle
-            
+
             sliq:
                 cloud ice density integrated along each ray path (cm);
                 indexed by elevation angle
-            
+
             sice:
                 cloud liquid density integrated along each ray path (cm);
                 indexed by elevation angle
@@ -297,42 +317,53 @@ class TbCloudRTE(object):
         for k in range(0, self.nang):
             # Compute distance between each level (ds)
             if self.ray_tracing:
-                ds = RTEquation.ray_tracing(self.z, refindx, self.angles[k], self.z0)
+                ds = RTEquation.ray_tracing(
+                    self.z, refindx, self.angles[k], self.z0)
             else:
                 amass = 1 / np.sin(self.angles[k] * np.pi / 180)
                 ds = np.append([0], np.diff(self.z) * amass)
             # ds = [0; diff(z)]; # in alternative simple diff of z
 
             # Integrate over path (ds)
-            self.srho[k], _ = RTEquation.exponential_integration(True, rho, ds, 0, self.nl, 0.1)
-            self.swet[k], _ = RTEquation.exponential_integration(True, wetn, ds, 0, self.nl, 0.1)
-            self.sdry[k], _ = RTEquation.exponential_integration(True, dryn, ds, 0, self.nl, 0.1)
+            self.srho[k], _ = RTEquation.exponential_integration(
+                True, rho, ds, 0, self.nl, 0.1)
+            self.swet[k], _ = RTEquation.exponential_integration(
+                True, wetn, ds, 0, self.nl, 0.1)
+            self.sdry[k], _ = RTEquation.exponential_integration(
+                True, dryn, ds, 0, self.nl, 0.1)
             if self.cloudy:
-                self.sliq[k] = RTEquation.cloud_integrated_density(self.denliq, ds, self.beglev, self.endlev)
-                self.sice[k] = RTEquation.cloud_integrated_density(self.denice, ds, self.beglev, self.endlev)
+                self.sliq[k] = RTEquation.cloud_integrated_density(
+                    self.denliq, ds, self.beglev, self.endlev)
+                self.sice[k] = RTEquation.cloud_integrated_density(
+                    self.denice, ds, self.beglev, self.endlev)
 
             # handle each frequency
             # this are based on NOAA RTE fortran routines
             for j in range(0, self.nf):
                 RTEquation._emissivity = self._es[j]
-                    # Rosenkranz, personal communication, 2019/02/12 (email)
-                awet, adry = RTEquation.clearsky_absorption(self.p, self.tk, e, self.frq[j], 
+                # Rosenkranz, personal communication, 2019/02/12 (email)
+                awet, adry = RTEquation.clearsky_absorption(self.p, self.tk, e, self.frq[j],
                                                             self.o3n, self.amu if self._uncertainty else None)
                 self.sptauwet[j, k], \
-                self.ptauwet[j, k, :] = RTEquation.exponential_integration(1, awet, ds, 0, self.nl, 1)
+                    self.ptauwet[j, k, :] = RTEquation.exponential_integration(
+                        1, awet, ds, 0, self.nl, 1)
                 self.sptaudry[j, k], \
-                self.ptaudry[j, k, :] = RTEquation.exponential_integration(1, adry, ds, 0, self.nl, 1)
+                    self.ptaudry[j, k, :] = RTEquation.exponential_integration(
+                        1, adry, ds, 0, self.nl, 1)
                 if self.cloudy:
-                    aliq, aice = RTEquation.cloudy_absorption(self.tk, self.denliq, self.denice, self.frq[j])
+                    aliq, aice = RTEquation.cloudy_absorption(
+                        self.tk, self.denliq, self.denice, self.frq[j])
                     self.sptauliq[j, k], \
-                    self.ptauliq[j, k, :] = RTEquation.exponential_integration(0, aliq, ds, 0, self.nl, 1)
+                        self.ptauliq[j, k, :] = RTEquation.exponential_integration(
+                            0, aliq, ds, 0, self.nl, 1)
                     self.sptauice[j, k], \
-                    self.ptauice[j, k, :] = RTEquation.exponential_integration(0, aice, ds, 0, self.nl, 1)
+                        self.ptauice[j, k, :] = RTEquation.exponential_integration(
+                            0, aice, ds, 0, self.nl, 1)
 
                 self.ptaulay[j, k, :] = self.ptauwet[j, k, :] + \
-                                        self.ptaudry[j, k, :] + \
-                                        self.ptauice[j, k, :] + \
-                                        self.ptauliq[j, k, :]
+                    self.ptaudry[j, k, :] + \
+                    self.ptauice[j, k, :] + \
+                    self.ptauliq[j, k, :]
                 # [boftotl,boftatm,boftmr,PSPtauprof,hvk] = Planck_xxx(frq(j),tk,Ptaulay(j,k,:));
                 boftotl, boftatm, boftmr, psp_tauprof, hvk, _, _ = RTEquation.planck(self.frq[j], self.tk,
                                                                                      self.ptaulay[j, k, :])
