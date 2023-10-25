@@ -4,7 +4,6 @@ from __future__ import division
 from __future__ import print_function
 
 from typing import Tuple, Optional
-from datetime import datetime
 import numpy as np
 
 from pyrtlib.utils import rho2rh
@@ -15,7 +14,7 @@ class ProfileExtrapolation:
     # This is an abstract class that contains an instance to a modality of the
     # extrapolation.
 
-    def __init__(self, mode: Optional[str] ='ITU-Annex1'):
+    def __init__(self, mode: Optional[str] = 'ITU-Annex1'):
         """Initialize what extrapolation to be used.
         Only ITU-835-6 Annex1 has been implemented rigth now.
 
@@ -273,7 +272,7 @@ class ProfileExtrapolation:
         [1] Reference Standard Atmospheres
         https://www.itu.int/rec/R-REC-P.835/en
         """
-        
+
         return self.instance.standard_water_vapour_pressure(h, h_0, rho_0)
 
     def _get_season(self, lat: float, month: int) -> str:
@@ -295,7 +294,8 @@ class ProfileExtrapolation:
 
         return season
 
-    def profile_extrapolation(self, lat: float, month: int, z: np.ndarray, q: Tuple[np.ndarray, np.ndarray, np.ndarray]) -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
+    def profile_extrapolation(self, lat: float, month: int, z: np.ndarray, 
+                              q: Tuple[np.ndarray, np.ndarray, np.ndarray]) -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
         """Extrapolation of atmospheres to be used to determine 
         temperature, pressure and water-vapour pressure as a function 
         of altitude and latitude, for calculating gaseous attenuation when more reliable 
@@ -659,4 +659,3 @@ class _ITU835_6():
         else:
             raise ValueError("The value for argument 'season' is not correct."
                              "Valid values are 'summer' and 'winter'")
-

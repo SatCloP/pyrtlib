@@ -50,7 +50,6 @@ class AbsModel:
         .. note::
             Model must be set with `model` property before calling this method (see Example).
         """
-        pass
 
     @staticmethod
     def implemented_models() -> List[str]:

@@ -31,6 +31,7 @@ from ..utils import pressure_to_height
 
 class EUMETSATProduct:
     """Read and Download product from EUMETSAT Data Store Web Services"""
+
     def __init__(self) -> None:
         super().__init__()
         self.token = None
@@ -46,7 +47,7 @@ class EUMETSATProduct:
             lines = f.readlines()
             consumer_key = lines[0].split(":")[1].strip()
             consumer_secret = lines[1].split(":")[1].strip()
-    
+
         credentials = (consumer_key, consumer_secret)
         self.token = eumdac.AccessToken(credentials)
         self.datastore = eumdac.DataStore(self.token)
@@ -54,7 +55,7 @@ class EUMETSATProduct:
         self.tailor_models = eumdac.tailor_models
         print(f"This token '{self.token}' expires {self.token.expiration}")
 
-    def list_collections(self, keyword: str=None) -> Tuple:
+    def list_collections(self, keyword: str = None) -> Tuple:
         """_summary_
 
         Args:
@@ -75,9 +76,9 @@ class EUMETSATProduct:
         else:
             for cl in collections:
                 ids.append(cl.metadata['properties']['identifier'])
-        
+
         return (ids, collections)
-    
+
     def product_search(self, collection: eumdac.collection.Collection, **query: Any) -> eumdac.collection.SearchResults:
         """_summary_
 
@@ -88,7 +89,7 @@ class EUMETSATProduct:
             eumdac.collection.SearchResults: _description_
         """
         products = collection.search(**query)
-        
+
         return products
 
     def custom_chain(self):
@@ -123,15 +124,17 @@ class EUMETSATProduct:
 
         pres = np.asarray(nc.variables['level'][:])
         temp = np.asarray(nc.variables['t'][:, :, idx, idx])
-        rh = np.asarray(nc.variables['r'][:, :, idx, idx]) / 100 # RH in decimal
+        # RH in decimal
+        rh = np.asarray(nc.variables['r'][:, :, idx, idx]) / 100
         clwc = np.asarray(nc.variables['clwc'][:, :, idx, idx])
         ciwc = np.asarray(nc.variables['ciwc'][:, :, idx, idx])
         crwc = np.asarray(nc.variables['crwc'][:, :, idx, idx])
         cswc = np.asarray(nc.variables['cswc'][:, :, idx, idx])
         q = np.asarray(nc.variables['q'][:, :, idx, idx])
 
-        z = pressure_to_height(pres) / 1000 # Altitude in km
-        date = pd.to_datetime(nc.variables['time'][:], origin='1900-01-01 00:00:00.0', unit='h')
+        z = pressure_to_height(pres) / 1000  # Altitude in km
+        date = pd.to_datetime(
+            nc.variables['time'][:], origin='1900-01-01 00:00:00.0', unit='h')
 
         df = pd.DataFrame({'p': np.flip(pres),
                            'z': np.flip(z),
@@ -145,7 +148,7 @@ class EUMETSATProduct:
                            'time': np.repeat(date, len(z))
                            })
 
-        return df #, (idx, dist), np.stack((lons, lats))
+        return df  # , (idx, dist), np.stack((lons, lats))
 
     def find_nearest(self, lons, lats, point):
         """Find index of nearest coordinate
@@ -172,9 +175,11 @@ class EUMETSATProduct:
         # mytree = cKDTree(combined_x_y_arrays)
         # dist, indexes = mytree.query(point)
 
-        ball = BallTree(np.radians(np.stack((lats, lons), axis=-1)), metric='haversine')
-        dist, indexes = ball.query(np.radians(np.array(np.flip(point)).reshape(1, 2)), k=1)
-        
+        ball = BallTree(np.radians(
+            np.stack((lats, lons), axis=-1)), metric='haversine')
+        dist, indexes = ball.query(np.radians(
+            np.array(np.flip(point)).reshape(1, 2)), k=1)
+
         return indexes[0][0], dist
 
     @staticmethod
@@ -192,7 +197,8 @@ class EUMETSATProduct:
             str: The path to downloaded netcdf file
         """
         # North, West, South, Est
-        extent = [lonlat[1] + offset, lonlat[0] - offset, lonlat[1] - offset, lonlat[0] + offset]
+        extent = [lonlat[1] + offset, lonlat[0] - offset,
+                  lonlat[1] - offset, lonlat[0] + offset]
         nc_file_name = 'era5_reanalysis-{}.nc'.format(time.isoformat())
         nc_file = os.path.join(path, nc_file_name)
 

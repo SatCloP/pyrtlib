@@ -13,16 +13,13 @@
 
 """
 
-import os
 from copy import deepcopy
 from dataclasses import dataclass
 from typing import Tuple, Optional, Dict
-from dataclasses import dataclass, field
 
 import numpy as np
 # import scipy.interpolate as si
 from pyrtlib.absorption_model import H2OAbsModel, O2AbsModel, O3AbsModel
-from pyrtlib.utils import constants
 
 # TVEC = np.loadtxt(
 #     open(os.path.join(PATH, "tbd", "Tvec.csv"), "rb"), delimiter=",")

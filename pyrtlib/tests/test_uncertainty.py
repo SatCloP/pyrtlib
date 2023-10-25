@@ -1,6 +1,5 @@
 import os
 from unittest import TestCase
-import pytest
 import numpy as np
 import pandas as pd
 from numpy.testing import assert_allclose, assert_equal
@@ -13,12 +12,13 @@ from pyrtlib.utils import ppmv2gkg, mr2rh, ppmv_to_moleculesm3
 
 THIS_DIR = os.path.dirname(os.path.abspath(__file__))
 
+
 class Test(TestCase):
     def test_absmod_uncertainties_perturb_water_min(self):
         w_sp = SpectroscopicParameter.water_parameters('R17')
         w_sp['gamma_a'].uncer[0:2] = np.array([0.039, 0.01])
         SpectroscopicParameter.set_parameters(w_sp)
-        
+
         amu = AbsModUncertainty.parameters_perturbation(['gamma_a'], 'min', 0)
         expected0 = 2.626
         assert_equal(expected0, amu['gamma_a'].value[0])
@@ -202,4 +202,3 @@ class Test(TestCase):
             parameters['gamma_a'].uncer[0])
         expected = (2.666, 0.02256102834535695)
         assert_equal(expected, u)
-

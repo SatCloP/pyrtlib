@@ -4,12 +4,12 @@ from unittest import TestCase
 
 import numpy as np
 import pandas as pd
-from numpy.testing import assert_allclose, assert_equal
+from numpy.testing import assert_allclose
 from pyrtlib.climatology import AtmosphericProfiles as atmp
 from pyrtlib.tb_spectrum import TbCloudRTE
 from pyrtlib.absorption_model import H2OAbsModel
 from pyrtlib.apiwebservices import ERA5Reanalysis
-from pyrtlib.utils import ppmv2gkg, mr2rh, import_lineshape
+from pyrtlib.utils import ppmv2gkg, mr2rh
 
 # TEST_DIR = Path(__file__).parent
 # DATA_DIR = os.path.join(TEST_DIR, 'data')
