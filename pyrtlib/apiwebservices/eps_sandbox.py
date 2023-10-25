@@ -11,10 +11,9 @@ __copyright__ = '(C) 2021, CNR-IMAA'
 
 import os
 from pathlib import Path
-import math
 import warnings
 from datetime import datetime
-from typing import Optional, Tuple, List, Any
+from typing import Optional, Tuple, Any
 
 try:
     import eumdac
@@ -22,7 +21,7 @@ except ModuleNotFoundError as e:
     warnings.warn("Module EUMDAC must be installed to download EPS dataset.")
 import numpy as np
 # from scipy.spatial import cKDTree
-from sklearn.neighbors import BallTree, KDTree
+from sklearn.neighbors import BallTree
 import pandas as pd
 from netCDF4 import Dataset
 
@@ -197,11 +196,11 @@ class EUMETSATProduct:
             str: The path to downloaded netcdf file
         """
         # North, West, South, Est
-        extent = [lonlat[1] + offset, lonlat[0] - offset,
-                  lonlat[1] - offset, lonlat[0] + offset]
+        # extent = [lonlat[1] + offset, lonlat[0] - offset,
+        #           lonlat[1] - offset, lonlat[0] + offset]
         nc_file_name = 'era5_reanalysis-{}.nc'.format(time.isoformat())
         nc_file = os.path.join(path, nc_file_name)
 
-        variables = ['relative_humidity', 'specific_cloud_ice_water_content', 'specific_cloud_liquid_water_content',
-                     'specific_humidity', 'specific_rain_water_content', 'specific_snow_water_content', 'temperature']
+        # variables = ['relative_humidity', 'specific_cloud_ice_water_content', 'specific_cloud_liquid_water_content',
+        #              'specific_humidity', 'specific_rain_water_content', 'specific_snow_water_content', 'temperature']
         return nc_file

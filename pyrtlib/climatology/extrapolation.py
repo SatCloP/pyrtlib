@@ -294,7 +294,7 @@ class ProfileExtrapolation:
 
         return season
 
-    def profile_extrapolation(self, lat: float, month: int, z: np.ndarray, 
+    def profile_extrapolation(self, lat: float, month: int, z: np.ndarray,
                               q: Tuple[np.ndarray, np.ndarray, np.ndarray]) -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
         """Extrapolation of atmospheres to be used to determine 
         temperature, pressure and water-vapour pressure as a function 

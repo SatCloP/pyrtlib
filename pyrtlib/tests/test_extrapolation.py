@@ -27,7 +27,7 @@ class Test(TestCase):
         assert len(z) < 25
         assert min(p) > 10
         ex = ProfileExtrapolation()
-        zz, pp, tt, rhh = ex.profile_extrapolation(
+        zz, pp, _, _ = ex.profile_extrapolation(
             header.latitude.values[0], 6, z, (p, t, rh))
         assert len(zz) > 25
         assert min(pp) < 10
