@@ -521,7 +521,8 @@ class O2AbsModel(AbsModel):
 
         References
         ----------
-        .. [1] P.W. Rosenkranz, CHAP. 2 and appendix, in ATMOSPHERIC REMOTE SENSING BY MICROWAVE RADIOMETRY (M.A. Janssen, ed., 1993)(http://hdl.handle.net/1721.1/68611).
+        .. [1] P.W. Rosenkranz, CHAP. 2 and appendix, in ATMOSPHERIC REMOTE SENSING BY MICROWAVE RADIOMETRY 
+            (M.A. Janssen, ed., 1993)(http://hdl.handle.net/1721.1/68611).
         .. [2] G.Yu. Golubiatnikov & A.F. Krupnov, J. Mol. Spect. v.217, pp.282-287 (2003).
         .. [3] M.Yu. Tretyakov et al, J. Mol. Spect. v.223, pp.31-38 (2004).
         .. [4] M.Yu. Tretyakov et al, J. Mol. Spect. v.231, pp.1-14 (2005).
@@ -747,7 +748,7 @@ class O3AbsModel(AbsModel):
         # stratosphere, so lines are relatively narrow, and lorentz shape
         # factor is ok.
         if O3AbsModel.model in ["R22", "R222sd"]:
-            sum = 0.0
+            summ = 0.0
             nlines = len(self.o3ll.fl)
             for k in range(0, nlines):
                 if self.o3ll.fl[k] > (f + 1.0):
@@ -758,11 +759,11 @@ class O3AbsModel(AbsModel):
                     arg1 = (self.o3ll.fl[k]-f)/betad
                     arg2 = widthc/betad
                     s = self.o3ll.s1[k] * np.exp(self.o3ll.b[k] * (1.0 - ti))
-                    sum += s * np.real(_dcerror(arg1, arg2))/betad
+                    summ += s * np.real(_dcerror(arg1, arg2))/betad
 
-            abs_o3 = .56419e-4 * sum * qvinv * ti2 * den
+            abs_o3 = .56419e-4 * summ * qvinv * ti2 * den
         else:
-            sum = 0.0
+            summ = 0.0
             nlines = len(self.o3ll.fl)
             for k in range(0, nlines):
                 if self.o3ll.fl[k] > (f + 1.0):
@@ -776,8 +777,8 @@ class O3AbsModel(AbsModel):
                     s = self.o3ll.s1[k] * np.exp(self.o3ll.b[k] * (1.0 - ti))
                     shape = (f / self.o3ll.fl[k]) ** 2 * width / \
                         ((f - self.o3ll.fl[k]) ** 2 + width * width)
-                    sum += s * shape
+                    summ += s * shape
 
-            abs_o3 = 3.183e-05 * sum * qvinv * ti2 * den
+            abs_o3 = 3.183e-05 * summ * qvinv * ti2 * den
 
         return abs_o3

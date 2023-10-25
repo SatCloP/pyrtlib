@@ -331,7 +331,7 @@ class Test(TestCase):
         station = 'LIRE'
         df_w = WyomingUpperAir.request_data(date, station)
 
-        z, p, t, gkg = df_w.height.values / 1000, \
+        z, p, t, _ = df_w.height.values / 1000, \
             df_w.pressure.values, \
             to_kelvin(df_w.temperature.values), \
             df_w.mixr.values
@@ -355,7 +355,7 @@ class Test(TestCase):
     def test_pyrtlib_sat_R21SD_igra2_es(self):
         date = datetime(2020, 6, 1, 12)
         station = 'SPM00008221'
-        df_igra2, header = IGRAUpperAir.request_data(date, station)
+        df_igra2, _ = IGRAUpperAir.request_data(date, station)
 
         df_igra2 = df_igra2[df_igra2.pressure.notna() &
                             df_igra2.temperature.notna() &
@@ -385,7 +385,7 @@ class Test(TestCase):
     def test_pyrtlib_sat_R21SD_igra2_beg2021_es(self):
         date = datetime(2021, 10, 2, 0)
         station = 'ASM00094610'
-        df_igra2, header = IGRAUpperAir.request_data(
+        df_igra2, _ = IGRAUpperAir.request_data(
             date, station, beg2021=True)
 
         df_igra2 = df_igra2[df_igra2.pressure.notna() &
