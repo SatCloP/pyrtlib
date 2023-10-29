@@ -351,7 +351,7 @@ class H2OAbsModel(AbsModel):
         pvap = (rho * t) / 216.68
         if H2OAbsModel.model in ['R03', 'R16', 'R17', 'R98']:
             pvap = (rho * t) / 217.0
-        if H2OAbsModel.model in ['R22SD']:
+        if H2OAbsModel.model in ['R22SD', 'R23SD']:
             pvap = (constants("Rwatvap")[0] * 1e-05) * rho * t
         pda = p - pvap
         if H2OAbsModel.model in ['R03', 'R16', 'R98']:
@@ -373,7 +373,7 @@ class H2OAbsModel(AbsModel):
         ti = self.h2oll.reftline / t
         df = np.zeros((2, 1))
 
-        if H2OAbsModel.model.startswith(('R19SD', 'R20SD', 'R21SD', 'R22SD')):
+        if H2OAbsModel.model.startswith(('R19SD', 'R20SD', 'R21SD', 'R22SD', 'R23SD')):
             tiln = np.log(ti)
             ti2 = np.exp(2.5 * tiln)
             summ = 0.0
@@ -381,7 +381,7 @@ class H2OAbsModel(AbsModel):
                 width0 = self.h2oll.w0[i] * pda * ti ** self.h2oll.x[i] + \
                     self.h2oll.w0s[i] * pvap * ti ** self.h2oll.xs[i]
                 width2 = self.h2oll.w2[i] * pda + self.h2oll.w2s[i] * pvap
-                if H2OAbsModel.model in ['R21SD', 'R22SD']:
+                if H2OAbsModel.model in ['R21SD', 'R22SD', 'R23SD']:
                     if self.h2oll.w2[i] > 0:
                         width2 = self.h2oll.w2[i] * pda * ti ** self.h2oll.xw2[i] + self.h2oll.w2s[i] * pvap * ti ** \
                             self.h2oll.xw2s[i]
@@ -400,7 +400,7 @@ class H2OAbsModel(AbsModel):
                 df[0] = f - self.h2oll.fl[i] - shift
                 df[1] = f + self.h2oll.fl[i] + shift
                 base = width0 / (562500.0 + wsq)
-                if H2OAbsModel.model in ["R21SD", 'R22SD']:
+                if H2OAbsModel.model in ["R21SD", 'R22SD', 'R23SD']:
                     delta2 = self.h2oll.d2[i] * pda + self.h2oll.d2s[i] * pvap
                 res = 0.0
                 for j in range(0, 2):
