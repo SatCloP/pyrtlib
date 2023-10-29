@@ -325,16 +325,16 @@ class TbCloudRTE(object):
             # ds = [0; diff(z)]; # in alternative simple diff of z
 
             # Integrate over path (ds)
-            self.srho[k], _ = RTEquation.exponential_integration(
+            self.srho[:, k], _ = RTEquation.exponential_integration(
                 True, rho, ds, 0, self.nl, 0.1)
-            self.swet[k], _ = RTEquation.exponential_integration(
+            self.swet[:, k], _ = RTEquation.exponential_integration(
                 True, wetn, ds, 0, self.nl, 0.1)
-            self.sdry[k], _ = RTEquation.exponential_integration(
+            self.sdry[:, k], _ = RTEquation.exponential_integration(
                 True, dryn, ds, 0, self.nl, 0.1)
             if self.cloudy:
-                self.sliq[k] = RTEquation.cloud_integrated_density(
+                self.sliq[:, k] = RTEquation.cloud_integrated_density(
                     self.denliq, ds, self.beglev, self.endlev)
-                self.sice[k] = RTEquation.cloud_integrated_density(
+                self.sice[:, k] = RTEquation.cloud_integrated_density(
                     self.denice, ds, self.beglev, self.endlev)
 
             # handle each frequency
@@ -376,15 +376,19 @@ class TbCloudRTE(object):
                 self.tbatm[j, k] = RTEquation.bright(hvk, boftatm[self.nl - 1])
                 self.tmr[j, k] = RTEquation.bright(hvk, boftmr)
 
-        df = pd.DataFrame({'tbtotal': self.tbtotal.T[0],
-                           'tbatm': self.tbatm.T[0],
-                           'tmr': self.tmr.T[0],
-                           'tmrcld': self.tmrcld.T[0],
-                           'tauwet': self.sptauwet.T[0],
-                           'taudry': self.sptaudry.T[0],
-                           'tauliq': self.sptauliq.T[0],
-                           'tauice': self.sptauice.T[0]
-                           })
+        df = pd.DataFrame()
+        for i, a in enumerate(self.angles):
+            df_i = pd.DataFrame({'tbtotal': self.tbtotal.T[i],
+                                 'tbatm': self.tbatm.T[i],
+                                 'tmr': self.tmr.T[i],
+                                 'tmrcld': self.tmrcld.T[i],
+                                 'tauwet': self.sptauwet.T[i],
+                                 'taudry': self.sptaudry.T[i],
+                                 'tauliq': self.sptauliq.T[i],
+                                 'tauice': self.sptauice.T[i],
+                                 'angle': np.full((len(self.frq),), a)
+                                 })
+            df = pd.concat([df, df_i])
 
         if only_bt:
             return df

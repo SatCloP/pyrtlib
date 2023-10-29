@@ -395,7 +395,8 @@ def satmix(p: np.ndarray,
     Args:
         p (numpy.ndarray): Pressure profile (mb).
         t (numpy.ndarray): Temperature profile (K).
-        Tconvert (Optional[numpy.ndarray], optional): Threshold temperature below which saturation water pressure is calculated over ice instead of liquid water. Defaults to None.
+        Tconvert (Optional[numpy.ndarray], optional): Threshold temperature below which saturation 
+            water pressure is calculated over ice instead of liquid water. Defaults to None.
 
     Returns:
         numpy.ndarray: Saturation mixing ratio (g/kg).
