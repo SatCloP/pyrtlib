@@ -560,7 +560,7 @@ class RTEquation:
                 raise ValueError(
                     'No model avalaible with this name: {} . Sorry...'.format('model'))
 
-            if o3n.all() and O3AbsModel.model in ['R18', 'R21', 'R21SD', 'R22', 'R22SD']:
+            if isinstance(o3n, np.ndarray) and O3AbsModel.model in ['R18', 'R21', 'R21SD', 'R22', 'R22SD']:
                 aO3[i] = O3AbsModel().o3_absorption(t[i], p[i], frq, o3n[i], amu)
 
             adry[i] = aO2[i] + aN2[i] + aO3[i]
