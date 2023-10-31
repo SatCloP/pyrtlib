@@ -249,7 +249,8 @@ def mr2rh(p: np.ndarray,
         p (numpy.ndarray): Pressure profile (mb).
         t (numpy.ndarray): Temperature profile (K).
         w (numpy.ndarray): Water Vapor Mixing ratio (g/kg).
-        Tconvert (numpy.ndarray, optional): [description]. Defaults to None.
+        Tconvert (numpy.ndarray, optional): Threshold temperature below which saturation 
+            water pressure is calculated over ice instead of liquid water. Defaults to None.
 
     Returns:
         numpy.ndarray: Relative humidity using ratios of gas pressures
@@ -422,7 +423,8 @@ def satvap(t: np.ndarray, Tconvert: Optional[np.ndarray] = None) -> np.ndarray:
 
     Args:
         t (numpy.ndarray): Temperature profile (K).
-        Tconvert (Optional[numpy.ndarray], optional): _description_. Defaults to None.
+        Tconvert (Optional[numpy.ndarray], optional): Threshold temperature below which saturation 
+            water pressure is calculated over ice instead of liquid water. Defaults to None.
 
     Returns:
         numpy.ndarray: Saturation vapor pressure (mbar).
