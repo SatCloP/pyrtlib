@@ -62,8 +62,8 @@ for i in freq[0]:
 
 # ax[0].plot(rho, z, label='Vapor density [g/m3]', linestyle='--')
 
-ax[0].set_xlabel("WV [np/km]")
-ax[1].set_xlabel("DryAir [np/km]")
+ax[0].set_xlabel("WV [Np/km]")
+ax[1].set_xlabel("DryAir [Np/km]")
 ax[1].axes.get_yaxis().set_visible(False)
 ax[0].set_ylabel("Altitude [km]")
 

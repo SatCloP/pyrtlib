@@ -99,7 +99,7 @@ def constants(name: Optional[str] = None) -> Union[Tuple[float, str], List]:
     constants_dict = {
         'avogadro': [6.022140857e+23, '[mol-1]'],
         'boltzmann': [1.3806579999999998e-23, '[J K-1]'],
-        'EarthRadius': [6370.949, '[Km]'],
+        'EarthRadius': [6370.949, '[km]'],
         'gravity': [9.80665, '[m s-2]'],
         'light': [299792458.0, '[m s-1]'],
         'Np2dB': [4.342944819032518, '[dB/Np]'],
