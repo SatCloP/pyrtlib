@@ -6,7 +6,7 @@ from pyrtlib.absorption_model import H2OAbsModel
 from pyrtlib.climatology import AtmosphericProfiles as atmp
 from pyrtlib.utils import (ppmv2gkg, mr2rh, gas_mass, height_to_pressure, pressure_to_height, constants,
                            to_kelvin, to_celsius, get_frequencies_sat, eswat_goffgratch, satvap, satmix,
-                           import_lineshape, atmospheric_tickness, mr2rho, mr2e, esice_goffgratch)
+                           import_lineshape, atmospheric_tickness, mr2rho, mr2e, esice_goffgratch, rho2mr)
 
 z, p, d, t, md = atmp.gl_atm(atmp.TROPICAL)
 
@@ -72,6 +72,10 @@ class Test(TestCase):
                            4.36783378e-10, 1.31345876e-10, 4.51747476e-11, 1.62470581e-11,
                            6.24649461e-12, 2.56589160e-12])
         assert_allclose(rho, rho_ex, atol=0.001)
+
+    def test_rho2mr(self):
+        mr = rho2mr(9.48940031e-05, 275.34, 985)
+        assert_allclose(mr, 7.61434e-05, atol=0.001)
 
     def test_mr2e(self):
         gkg = ppmv2gkg(md[:, atmp.H2O], atmp.H2O)
@@ -141,8 +145,12 @@ class Test(TestCase):
             [6.14785631, 10.24931596]), decimal=5)
 
     def test_satvap(self):
-        sat_vap = satvap(273.25)
-        assert_almost_equal(sat_vap, 6.147856307200233, decimal=10)
+        t = np.array([273.25, 271.35, 269.05])
+        sat_vap = satvap(t, 270)
+        assert_almost_equal(sat_vap,
+                            np.array([6.1478563072,
+                                      5.3497964239,
+                                      4.3345083087]), decimal=10)
         sat_vap = satvap(np.array([273.25, 280.5]))
         assert_almost_equal(sat_vap, np.array(
             [6.14785631, 10.24931596]), decimal=5)
@@ -151,9 +159,9 @@ class Test(TestCase):
         sat_mix = satmix(1000, 273.25)
         assert_almost_equal(sat_mix, 3.8474392877771995, decimal=10)
         sat_mix = satmix(np.array([1000, 950, 850]),
-                         np.array([273.25, 260.34, 258.36]))
+                         np.array([273.25, 260.34, 258.36]), 260)
         assert_almost_equal(sat_mix, np.array(
-            [3.84743929, 1.4993625, 1.42541609]), decimal=5)
+            [3.84743929, 1.4993625, 1.23459]), decimal=5)
 
     def test_constants(self):
         cs = constants('R')[0]

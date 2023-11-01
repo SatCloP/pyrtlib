@@ -438,7 +438,7 @@ def satvap(t: np.ndarray, Tconvert: Optional[np.ndarray] = None) -> np.ndarray:
     if Tconvert:
         ind = np.nonzero(t <= Tconvert)
         # Goff Gratch formulation, over ice
-        esat[ind] = esice_goffgratch(t(ind))
+        esat[ind] = esice_goffgratch(t[ind])
 
     return esat
 
