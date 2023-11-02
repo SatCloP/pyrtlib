@@ -160,7 +160,6 @@ class Test(TestCase):
         parameters = SpectroscopicParameter.water_parameters("R17")
         parameters['test'] = SpectroscopicParameter(
             2.3, 0.001, 'unitless', 'Tretyakov, JMS, 2016')
-        parameters['test'].value
         assert_equal(parameters['test'].value, 2.3)
 
     # @pytest.mark.skip(reason="skipping")

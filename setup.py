@@ -14,7 +14,7 @@ setup(
     include_package_data=True,
     packages=find_packages(exclude=["*.tests", "*.tests.*", "tests.*", "tests"]),
     # package_dir={'': 'pyrtlib'},
-    python_requires='>=3.7',
+    python_requires='>=3.8',
     setup_requires=['pytest-runner'],
     tests_require=['pytest'],
     install_requires=required,

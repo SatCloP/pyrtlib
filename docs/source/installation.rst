@@ -1,7 +1,7 @@
 Installation instructions
 =========================
 
-pyrtlib can be installed on any computer supporting Python 3.7 (or higher).
+pyrtlib can be installed on any computer supporting Python 3.8 (or higher).
 The actual installation procedure depends on the operating system. The
 instructions below are for Ubuntu and MacOS.
 
@@ -24,6 +24,19 @@ Python3 installation via Homebrew
    $ brew install python3
 
 Python3 can also be installed by downloading the installer from `Python Releases for Mac OS X <https://www.python.org/downloads/mac-osx/>`_.
+
+Installing PyRTlib via PyPi
+----------------------------
+pyrtlib can be installed via pip from PyPI. To install the package using the following command:
+
+.. code-block:: console
+   
+   $ pip install pyrtlib
+
+.. note::
+
+    To get an up-to-date
+    version of pyrtlib, download it directly from `GitHub <https://github.com/SatCloP/pyrtlib>`_.
 
 
 Virtual Environment
@@ -113,20 +126,6 @@ if pyrtlib has been properly installed you should see something like
    191.7100  277.820891    0.0  277.740367     0.0   5.586945  0.021468     0.0     0.0
 
    PyRTlib successfully installed
-
-
-Installing PyRTlib via PyPi
-----------------------------
-pyrtlib can be installed via pip from PyPI. To install the package using the following command:
-
-.. code-block:: console
-   
-   $ pip install pyrtlib
-
-.. note::
-
-    To get an up-to-date
-    version of pyrtlib, download it directly from `GitHub <https://github.com/SatCloP/pyrtlib>`_.
 
 
 Build and run the Docker image

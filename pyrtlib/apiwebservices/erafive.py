@@ -73,7 +73,7 @@ class ERA5Reanalysis:
         lons = nc.variables['longitude'][:]
         # idx_lat = ERAFIVE.find_nearest(lats, lonlat[1])
         # idx_lon = ERAFIVE.find_nearest(lons, lonlat[0])
-        idx, dist = ERAFIVE._find_nearest(lons, lats, lonlat)
+        idx, _ = ERAFIVE._find_nearest(lons, lats, lonlat)
 
         pres = np.asarray(nc.variables['level'][:])
         temp = np.asarray(nc.variables['t'][:, :, idx, idx])

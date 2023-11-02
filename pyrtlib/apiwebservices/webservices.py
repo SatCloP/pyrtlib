@@ -6,7 +6,6 @@ Terms and conditions are as for siphon library license (https://github.com/Unida
 import posixpath
 from io import BytesIO
 from typing import Optional
-from urllib.parse import urlencode, urljoin  # noqa
 
 import requests
 from requests.sessions import Session
@@ -21,7 +20,7 @@ class HTTPSessionManager(object):
 
     def __init__(self):
         """Initialize ``HTTPSessionManager``."""
-        self.user_agent = 'pyrtlib ({})'.format(__version__)
+        self.user_agent = f'pyrtlib ({__version__})'
         self.options = {}
 
     def set_session_options(self, **kwargs) -> None:

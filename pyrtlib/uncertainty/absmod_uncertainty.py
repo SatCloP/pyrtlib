@@ -78,6 +78,7 @@ class SpectroscopicParameter:
     """The name or description of the parameter
     """
 
+    @staticmethod
     def _initialize() -> Dict:
         SpectroscopicParameter._parameters()
 

@@ -6,7 +6,7 @@ from pyrtlib.absorption_model import H2OAbsModel
 from pyrtlib.climatology import AtmosphericProfiles as atmp
 from pyrtlib.utils import (ppmv2gkg, mr2rh, gas_mass, height_to_pressure, pressure_to_height, constants,
                            to_kelvin, to_celsius, get_frequencies_sat, eswat_goffgratch, satvap, satmix,
-                           import_lineshape, atmospheric_tickness, mr2rho, mr2e, esice_goffgratch)
+                           import_lineshape, atmospheric_tickness, mr2rho, mr2e, esice_goffgratch, rho2mr)
 
 z, p, d, t, md = atmp.gl_atm(atmp.TROPICAL)
 
@@ -54,6 +54,21 @@ class Test(TestCase):
                               1.06922980e-06, -2.37961753e-07, -3.37297027e-07, -2.79958702e-07,
                               -2.39999751e-07, -1.99999997e-07])
         assert_allclose(rh_wmo / 100, rh_wmo_ex, atol=0)
+        rh, _ = mr2rh(p, t, gkg, Tconvert=260.34)
+        rh_tconvert = np.array([7.37904947e-01, 7.15135305e-01, 7.35076661e-01, 4.79160577e-01,
+                                3.48167127e-01, 3.76644483e-01, 3.48042202e-01, 3.74603898e-01,
+                                3.68724951e-01, 3.38673305e-01, 2.77582467e-01, 1.99521318e-01,
+                                1.48801738e-01, 1.00005189e-01, 1.32778646e-01, 1.86164431e-01,
+                                3.27255611e-01, 3.79636463e-01, 1.60817687e-01, 7.08443570e-02,
+                                3.34363366e-02, 1.64668584e-02, 8.72544907e-03, 5.63358740e-03,
+                                4.00957546e-03, 2.63992748e-03, 1.01096122e-03, 4.18900993e-04,
+                                1.72317582e-04, 7.30560487e-05, 3.18812231e-05, 1.41726958e-05,
+                                6.53171065e-06, 2.78356544e-06, 1.45692733e-06, 1.04299888e-06,
+                                9.37799033e-07, 1.39667333e-06, 3.70309156e-06, 1.13282178e-05,
+                                4.01810903e-05, 1.77270971e-04, 1.85461357e-04, 4.83376984e-05,
+                                3.11946208e-06, 3.17856184e-07, 4.78490896e-09, 5.61107246e-11,
+                                2.49011743e-13, 3.49656489e-15])
+        assert_allclose(rh / 100, rh_tconvert, atol=0.001)
 
     def test_mr2rho(self):
         gkg = ppmv2gkg(md[:, atmp.H2O], atmp.H2O)
@@ -72,6 +87,10 @@ class Test(TestCase):
                            4.36783378e-10, 1.31345876e-10, 4.51747476e-11, 1.62470581e-11,
                            6.24649461e-12, 2.56589160e-12])
         assert_allclose(rho, rho_ex, atol=0.001)
+
+    def test_rho2mr(self):
+        mr = rho2mr(9.48940031e-05, 275.34, 985)
+        assert_allclose(mr, 7.61434e-05, atol=0.001)
 
     def test_mr2e(self):
         gkg = ppmv2gkg(md[:, atmp.H2O], atmp.H2O)
@@ -141,8 +160,12 @@ class Test(TestCase):
             [6.14785631, 10.24931596]), decimal=5)
 
     def test_satvap(self):
-        sat_vap = satvap(273.25)
-        assert_almost_equal(sat_vap, 6.147856307200233, decimal=10)
+        t = np.array([273.25, 271.35, 269.05])
+        sat_vap = satvap(t, 270)
+        assert_almost_equal(sat_vap,
+                            np.array([6.1478563072,
+                                      5.3497964239,
+                                      4.3345083087]), decimal=10)
         sat_vap = satvap(np.array([273.25, 280.5]))
         assert_almost_equal(sat_vap, np.array(
             [6.14785631, 10.24931596]), decimal=5)
@@ -151,9 +174,9 @@ class Test(TestCase):
         sat_mix = satmix(1000, 273.25)
         assert_almost_equal(sat_mix, 3.8474392877771995, decimal=10)
         sat_mix = satmix(np.array([1000, 950, 850]),
-                         np.array([273.25, 260.34, 258.36]))
+                         np.array([273.25, 260.34, 258.36]), 260)
         assert_almost_equal(sat_mix, np.array(
-            [3.84743929, 1.4993625, 1.42541609]), decimal=5)
+            [3.84743929, 1.4993625, 1.23459]), decimal=5)
 
     def test_constants(self):
         cs = constants('R')[0]

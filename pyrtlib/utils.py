@@ -99,7 +99,7 @@ def constants(name: Optional[str] = None) -> Union[Tuple[float, str], List]:
     constants_dict = {
         'avogadro': [6.022140857e+23, '[mol-1]'],
         'boltzmann': [1.3806579999999998e-23, '[J K-1]'],
-        'EarthRadius': [6370.949, '[Km]'],
+        'EarthRadius': [6370.949, '[km]'],
         'gravity': [9.80665, '[m s-2]'],
         'light': [299792458.0, '[m s-1]'],
         'Np2dB': [4.342944819032518, '[dB/Np]'],
@@ -249,7 +249,8 @@ def mr2rh(p: np.ndarray,
         p (numpy.ndarray): Pressure profile (mb).
         t (numpy.ndarray): Temperature profile (K).
         w (numpy.ndarray): Water Vapor Mixing ratio (g/kg).
-        Tconvert (numpy.ndarray, optional): [description]. Defaults to None.
+        Tconvert (numpy.ndarray, optional): Threshold temperature below which saturation 
+            water pressure is calculated over ice instead of liquid water. Defaults to None.
 
     Returns:
         numpy.ndarray: Relative humidity using ratios of gas pressures
@@ -395,7 +396,8 @@ def satmix(p: np.ndarray,
     Args:
         p (numpy.ndarray): Pressure profile (mb).
         t (numpy.ndarray): Temperature profile (K).
-        Tconvert (Optional[numpy.ndarray], optional): Threshold temperature below which saturation water pressure is calculated over ice instead of liquid water. Defaults to None.
+        Tconvert (Optional[numpy.ndarray], optional): Threshold temperature below which saturation 
+            water pressure is calculated over ice instead of liquid water. Defaults to None.
 
     Returns:
         numpy.ndarray: Saturation mixing ratio (g/kg).
@@ -421,7 +423,8 @@ def satvap(t: np.ndarray, Tconvert: Optional[np.ndarray] = None) -> np.ndarray:
 
     Args:
         t (numpy.ndarray): Temperature profile (K).
-        Tconvert (Optional[numpy.ndarray], optional): _description_. Defaults to None.
+        Tconvert (Optional[numpy.ndarray], optional): Threshold temperature below which saturation 
+            water pressure is calculated over ice instead of liquid water. Defaults to None.
 
     Returns:
         numpy.ndarray: Saturation vapor pressure (mbar).
@@ -435,7 +438,7 @@ def satvap(t: np.ndarray, Tconvert: Optional[np.ndarray] = None) -> np.ndarray:
     if Tconvert:
         ind = np.nonzero(t <= Tconvert)
         # Goff Gratch formulation, over ice
-        esat[ind] = esice_goffgratch(t(ind))
+        esat[ind] = esice_goffgratch(t[ind])
 
     return esat
 
