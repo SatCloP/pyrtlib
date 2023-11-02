@@ -235,7 +235,7 @@ def mr2rh(p: np.ndarray,
           t: np.ndarray,
           w: np.ndarray,
           Tconvert: np.ndarray = None) -> np.ndarray:
-    """Determine relative humidity (rh) givenvreference pressure (mbar), temperature (K), and
+    """Determine relative humidity (rh) given reference pressure (mbar), temperature (K), and
     water vapor mass mixing ratio (g/kg)
 
     Two RHs are returned: rh1 is with RH defined as the ratio of water vapor partial pressure
