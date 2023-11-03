@@ -6,7 +6,7 @@ Main class
 ==========
 
 The main class which computes brightness temperatures (Tb), mean radiating temperature (Tmr), and integrated absorption (Tau) for 
-clear or cloudy conditions. Also returns all integrated quantities that the original TBMODEL, Cyber Version, returned.
+clear or cloudy conditions. Also returns all integrated quantities that the original TBMODEL, Cyber Version, returned ([Schroeder-Westwater-1991]_).
 
 .. autosummary::
     :toctree: generated/
