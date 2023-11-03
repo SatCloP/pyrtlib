@@ -36,7 +36,7 @@ class TbCloudRTE(object):
         profiles are not modified within this subroutine.  It is assumed
         that the input profiles start at the antenna height (zX(1)).  The
         input profiles must reach 50.0 mb.  This subroutine uses the
-        algorithms described in Schroeder and Westwater (1991).
+        algorithms described in [Schroeder-Westwater-1991]_.
 
         Args:
             z (np.ndarray): Height profile (km).
