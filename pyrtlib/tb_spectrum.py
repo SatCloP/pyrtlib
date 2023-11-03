@@ -78,7 +78,7 @@ class TbCloudRTE(object):
             raise SystemExit("ERROR: input profile seems incorrect. "
                              "It must be monotonically increasing or decreasing")
 
-        if len(self.p) < 25 or min(self.p) > 10:
+        if len(self.p) < 25 or min(self.p) >= 10:
             warnings.warn(f"Number of levels too low ({len(self.p)}) or "
                           f"minimum pressure value lower than 10 hPa ({min(self.p)}). "
                           "Please considering profile extrapolation. Levels number must be higher than 25 " 
