@@ -324,7 +324,11 @@ def mr2e(p: np.ndarray, mr: np.ndarray) -> np.ndarray:
     return e
 
 
+<<<<<<< HEAD
 def rho2rh(rho: np.ndarray, t: np.ndarray, p: np.ndarray) ->  Tuple[np.ndarray, np.ndarray]:
+=======
+def rho2rh(rho: np.ndarray, t: np.ndarray, p: np.ndarray) ->  Tuple(np.ndarray, np.ndarray):
+>>>>>>> cb56267 ([doc] fix docstring)
     """Convert water vapor density to relative humidity.
 
     Args:
