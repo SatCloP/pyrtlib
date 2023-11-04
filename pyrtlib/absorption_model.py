@@ -747,7 +747,7 @@ class O3AbsModel(AbsModel):
         # add resonances within 1 ghz of f.  most of the ozone is in the
         # stratosphere, so lines are relatively narrow, and lorentz shape
         # factor is ok.
-        if O3AbsModel.model in ["R22", "R222sd"]:
+        if O3AbsModel.model in ["R22", "R22SD"]:
             summ = 0.0
             nlines = len(self.o3ll.fl)
             for k in range(0, nlines):
