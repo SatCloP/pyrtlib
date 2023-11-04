@@ -235,7 +235,7 @@ def ppmv2gkg(ppmv: np.ndarray, gasid: int) -> np.ndarray:
 def mr2rh(p: np.ndarray,
           t: np.ndarray,
           w: np.ndarray,
-          Tconvert: np.ndarray = None) -> np.ndarray:
+          Tconvert: np.ndarray = None) -> Tuple(np.ndarray, np.ndarray):
     """Determine relative humidity (rh) given reference pressure (mbar), temperature (K), and
     water vapor mass mixing ratio (g/kg)
 
@@ -254,8 +254,8 @@ def mr2rh(p: np.ndarray,
             water pressure is calculated over ice instead of liquid water. Defaults to None.
 
     Returns:
-        numpy.ndarray: Relative humidity using ratios of gas pressures
-        numpy.ndarray: Relative humidity using WMO definition
+        numpy.ndarray: Relative humidity using ratios of gas pressures (%)
+        numpy.ndarray: Relative humidity using WMO definition (%)
     """
     # saturation pressure
     esat = satvap(t)
@@ -324,7 +324,7 @@ def mr2e(p: np.ndarray, mr: np.ndarray) -> np.ndarray:
     return e
 
 
-def rho2rh(rho: np.ndarray, t: np.ndarray, p: np.ndarray) -> np.ndarray:
+def rho2rh(rho: np.ndarray, t: np.ndarray, p: np.ndarray) ->  Tuple(np.ndarray, np.ndarray):
     """Convert water vapor density to relative humidity.
 
     Args:
@@ -333,14 +333,15 @@ def rho2rh(rho: np.ndarray, t: np.ndarray, p: np.ndarray) -> np.ndarray:
         p (np.ndarray): Pressure (mb).
 
     Returns:
-        np.ndarray: Relative humidity (fraction)
+        numpy.ndarray: Relative humidity using ratios of gas pressures (%)
+        numpy.ndarray: Relative humidity using WMO definition (%)
     """
     e = (rho * t)/216.7
     mr = e2mr(p, e)
 
-    rh = mr2rh(p, t, mr)
+    rh1, rh2 = mr2rh(p, t, mr)
 
-    return rh
+    return rh1, rh2
 
 
 def rho2mr(rho: np.ndarray, t: np.ndarray, p: np.ndarray) -> np.ndarray:
