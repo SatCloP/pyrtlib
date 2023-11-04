@@ -57,66 +57,6 @@ class Test(TestCase):
         df_expected = pd.read_csv(os.path.join(
             THIS_DIR, "data", "tb_tot_ground_ros03_19sd_21sd_era5.csv"))
         assert_allclose(df.tbtotal, df_expected.ros19sd, atol=0)
-        
-    def test_pyrtlib_ground_R23SD(self):
-        z, p, _, t, md = atmp.gl_atm(atmp.TROPICAL)
-
-        gkg = ppmv2gkg(md[:, atmp.H2O], atmp.H2O)
-        rh = mr2rh(p, t, gkg)[0] / 100
-
-        ang = np.array([90.])
-        frq = np.arange(20, 201, 1)
-
-        rte = TbCloudRTE(z, p, t, rh, frq, ang)
-        rte.satellite = False
-        rte.init_absmdl('R23SD')
-        O2AbsModel.model = 'R23'
-        O2AbsModel.set_ll()
-        df = rte.execute()
-
-        df_expected = pd.read_csv(os.path.join(THIS_DIR, "data", "tb_tot_ground_ros03_19sd_21sd_era5.csv"))
-        assert_allclose(df.tbtotal, df_expected.ros19sd, atol=0)
-        
-    def test_pyrtlib_ground_R23SD(self):
-        z, p, _, t, md = atmp.gl_atm(atmp.TROPICAL)
-
-        gkg = ppmv2gkg(md[:, atmp.H2O], atmp.H2O)
-        rh = mr2rh(p, t, gkg)[0] / 100
-
-        ang = np.array([90.])
-        frq = np.arange(20, 201, 1)
-
-        rte = TbCloudRTE(z, p, t, rh, frq, ang)
-        rte.satellite = False
-        rte.init_absmdl('R23SD')
-        O2AbsModel.model = 'R23'
-        O2AbsModel.set_ll()
-        df = rte.execute()
-
-        df_expected = pd.read_csv(os.path.join(THIS_DIR, "data", "tb_tot_ground_ros03_19sd_21sd_era5.csv"))
-        assert_allclose(df.tbtotal, df_expected.ros19sd, atol=0)
-        
-    def test_pyrtlib_ground_R23SD(self):
-        z, p, _, t, md = atmp.gl_atm(atmp.TROPICAL)
-
-        gkg = ppmv2gkg(md[:, atmp.H2O], atmp.H2O)
-        rh = mr2rh(p, t, gkg)[0] / 100
-
-        ang = np.array([90.])
-        frq = np.arange(20, 201, 1)
-
-        rte = TbCloudRTE(z, p, t, rh, frq, ang)
-        rte.satellite = False
-        rte.init_absmdl('R23SD')
-        O2AbsModel.model = 'R23'
-        O2AbsModel.set_ll()
-        df = rte.execute()
-
-        df_expected = pd.read_csv(os.path.join(THIS_DIR, "data", "tb_tot_ground_ros03_19sd_21sd_era5.csv"))
-        assert_allclose(df.tbtotal, df_expected.ros19sd, atol=0)
-
-
-
 
     # @pytest.mark.skip(reason="R03 not completly implemented yet")
     def test_pyrtlib_ground_R03(self):
