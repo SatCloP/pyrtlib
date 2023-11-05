@@ -235,7 +235,7 @@ def ppmv2gkg(ppmv: np.ndarray, gasid: int) -> np.ndarray:
 def mr2rh(p: np.ndarray,
           t: np.ndarray,
           w: np.ndarray,
-          Tconvert: np.ndarray = None) -> Tuple(np.ndarray, np.ndarray):
+          Tconvert: np.ndarray = None) -> Tuple[np.ndarray, np.ndarray]:
     """Determine relative humidity (rh) given reference pressure (mbar), temperature (K), and
     water vapor mass mixing ratio (g/kg)
 
@@ -275,7 +275,7 @@ def mr2rh(p: np.ndarray,
 
 
 def mr2rho(mr: np.ndarray, t: np.ndarray, p: np.ndarray) -> np.ndarray:
-    """Determine water vapor density (g/m3) given reference pressure (mbar), temperature (K), and
+    """Determine water vapor density (:math:`g/m^3`) given reference pressure (mbar), temperature (K), and
     water vapor mass mixing ratio (g/kg)
 
     Equations were provided by Holger Linne' from Max Planck Institute.
@@ -286,7 +286,7 @@ def mr2rho(mr: np.ndarray, t: np.ndarray, p: np.ndarray) -> np.ndarray:
         p (numpy.ndarray): Pressure profiles (mb).
 
     Returns:
-        numpy.ndarray: Water Vapor Density (g/m3)
+        numpy.ndarray: Water Vapor Density (:math:`g/m^3`)
     """
 
     rho = np.multiply(np.multiply(mr, p), 0.3477) / t
@@ -304,8 +304,8 @@ def mr2rho(mr: np.ndarray, t: np.ndarray, p: np.ndarray) -> np.ndarray:
 
 
 def mr2e(p: np.ndarray, mr: np.ndarray) -> np.ndarray:
-    """Compute H2O partial pressure (mbar) given pressure (mbar)
-    and H2O mass mixing ratio (g/kg)
+    """Compute :math:`H_2O` partial pressure (mbar) given pressure (mbar)
+    and :math:`H_2O` mass mixing ratio (g/kg)
 
     DCT 3/6/00
 
@@ -314,7 +314,7 @@ def mr2e(p: np.ndarray, mr: np.ndarray) -> np.ndarray:
         mr (numpy.ndarray): Mixing Ratio (g/kg).
 
     Returns:
-        numpy.ndarray: H2O partial pressure (mb).
+        numpy.ndarray: :math:`H_2O` partial pressure (mb).
     """
 
     # ratio of water mass to dry air mass
@@ -324,11 +324,11 @@ def mr2e(p: np.ndarray, mr: np.ndarray) -> np.ndarray:
     return e
 
 
-def rho2rh(rho: np.ndarray, t: np.ndarray, p: np.ndarray) ->  Tuple(np.ndarray, np.ndarray):
+def rho2rh(rho: np.ndarray, t: np.ndarray, p: np.ndarray) ->  Tuple[np.ndarray, np.ndarray]:
     """Convert water vapor density to relative humidity.
 
     Args:
-        rho (np.ndarray): Water vapor density (g/m3)
+        rho (np.ndarray): Water vapor density (:math:`g/m^3`)
         t (np.ndarray): Temperature (K)
         p (np.ndarray): Pressure (mb).
 
@@ -346,10 +346,10 @@ def rho2rh(rho: np.ndarray, t: np.ndarray, p: np.ndarray) ->  Tuple(np.ndarray, 
 
 def rho2mr(rho: np.ndarray, t: np.ndarray, p: np.ndarray) -> np.ndarray:
     """Determine water vapor mass mixing ratio (g/kg) given reference pressure (mbar), 
-    temperature (t,K), and water vapor density (g/m3).
+    temperature (t,K), and water vapor density (:math:`g/m^3`).
 
     Args:
-        rho (np.ndarray): Water vapor density (g/m3)
+        rho (np.ndarray): Water vapor density (:math:`g/m^3`)
         t (np.ndarray): Temperature (K)
         p (np.ndarray): Pressure (mb).
 
@@ -367,15 +367,15 @@ def rho2mr(rho: np.ndarray, t: np.ndarray, p: np.ndarray) -> np.ndarray:
 
 
 def e2mr(p: np.ndarray, e: np.ndarray) -> np.ndarray:
-    """Compute H2O mass mixing ratio (g/kg) given pressure (mbar)
-    and H2O partial pressure (mbar)
+    """Compute :math:`H_2O` mass mixing ratio (g/kg) given pressure (mbar)
+    and :math:`H_2O` partial pressure (mbar)
 
     Args:
         p (numpy.ndarray): Pressure (mb).
-        e (numpy.ndarray): H2O partial pressure (mb).
+        e (numpy.ndarray): :math:`H_2O` partial pressure (mb).
 
     Returns:
-        numpy.ndarray: H2O Mass Mixing Ratio (g/kg)
+        numpy.ndarray: :math:`H_2O` Mass Mixing Ratio (g/kg)
     """
 
     # ratio of water mass to dry air mass
@@ -822,10 +822,10 @@ def dewpoint2rh(td: float,
 
 
 def kgkg_to_kgm3(q: np.ndarray, p: np.ndarray, t: np.ndarray) -> np.ndarray:
-    r"""Utils function to convert from Kg Kg-1 to kg m-3. [Jacobson]_
+    r"""Utils function to convert from :math:`kg/kg` to :math:`kg/m^3`. [Jacobson]_
 
-    NWP models provide cloud liquid and ice water content in units kq kq-1. To convert
-    to g m-3 multiply the result of this function to the value in kg kg-1.
+    NWP models provide cloud liquid and ice water content in units :math:`kg/kg`. To convert
+    to :math:`g/m^3` multiply the result of this function to the value in :math:`kg/kg`.
 
     .. math:: LWC = q_{liq} \frac{10^2 P}{R_{moist} T}
 
@@ -844,7 +844,7 @@ def kgkg_to_kgm3(q: np.ndarray, p: np.ndarray, t: np.ndarray) -> np.ndarray:
     The same equations are used for ice clouds, by replacing LWC by IWC and :math:`q_{liq}` by :math:`q_{ice}`
 
     Args:
-        q (numpy.ndarray): specific humidity (Kg Kg-1)
+        q (numpy.ndarray): specific humidity (:math:`kg/kg`)
         p (numpy.ndarray): pressure (hPa)
         t (numpy.ndarray): temperature (K)
 
@@ -852,7 +852,7 @@ def kgkg_to_kgm3(q: np.ndarray, p: np.ndarray, t: np.ndarray) -> np.ndarray:
         numpy.ndarray: [description]
 
     References:
-        .. [1] M. Z. Jacobson. Fundamentals of atmospheric modelling. Cambridge Eds., 2005.
+        .. [1] M.Z., Jacobson. Fundamentals of atmospheric modelling. Cambridge Eds., 2005.
     """
 
     eps = 0.621970585
@@ -864,7 +864,7 @@ def kgkg_to_kgm3(q: np.ndarray, p: np.ndarray, t: np.ndarray) -> np.ndarray:
 
 def ppmv_to_moleculesm3(mr: np.ndarray, p: np.ndarray,
                         t: np.ndarray) -> np.ndarray:
-    """For any gas, this function converts mixing ratio  (in ppmv) to number density (molecules/m3).
+    """For any gas, this function converts mixing ratio  (in ppmv) to number density (:math:`molecules/m^3`).
 
     Args:
         mr (numpy.ndarray): mixing ratio in ppmv
