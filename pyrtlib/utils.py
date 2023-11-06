@@ -6,13 +6,14 @@ __author__ = ''
 __date__ = 'March 2021'
 __copyright__ = '(C) 2021, CNR-IMAA'
 
-from typing import Tuple, Optional, Union, List, Dict
+import types
+from typing import Tuple, Optional, Union, List
 import sys
 from importlib import reload
 import numpy as np
 
 
-def import_lineshape(name: str) -> Dict:
+def import_lineshape(name: str) -> types.ModuleType:
     """Import a named object from a module in the context of this function.
     Used to import line list for absorption models.
 
@@ -22,7 +23,7 @@ def import_lineshape(name: str) -> Dict:
         name (str): Absorption model name.
 
     Returns:
-        Dict: Dictionary of line list of the absorption model chose.
+        types.ModuleType: Dictionary of line list of the absorption model chose.
 
     See also:
         :py:func:`~pyrtlib.absorption_model.H2OAbsModel.set_ll`
