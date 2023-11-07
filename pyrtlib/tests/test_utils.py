@@ -196,8 +196,8 @@ class Test(TestCase):
         assert_equal(cs_list, cs_list_ex)
 
     def test_import_linelist(self):
-        model = 'R21SD'
-        h2oll = import_lineshape('h2oll_{}'.format(model))
+        H2OAbsModel.model = 'R21SD'
+        h2oll = import_lineshape('h2oll')
         aself = np.array([0., 12.6,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,
                           0.,  0.,  0.,  0.,  0.])
         assert_almost_equal(h2oll.aself, aself, decimal=5)
