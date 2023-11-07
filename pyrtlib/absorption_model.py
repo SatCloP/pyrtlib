@@ -67,22 +67,26 @@ class AbsModel:
                 'R03',
                 'R16',
                 'R17',
+                'R18',
                 'R19',
                 'R19SD',
                 'R20',
                 'R20SD',
                 'R21SD',
+                'R22',
                 'R22SD']
         """
         return list(['R98',
                      'R03',
                      'R16',
                      'R17',
+                     'R18',
                      'R19',
                      'R19SD',
                      'R20',
                      'R20SD',
                      'R21SD',
+                     'R22',
                      'R22SD'])
 
 
@@ -213,7 +217,7 @@ class H2OAbsModel(AbsModel):
 
     @staticmethod
     def set_ll() -> None:
-        H2OAbsModel.h2oll = import_lineshape(f"h2oll_{H2OAbsModel.model}")
+        H2OAbsModel.h2oll = import_lineshape(f"h2oll")
 
     def h2o_absorption(self, pdrykpa: np.ndarray, vx: np.ndarray, ekpa: np.ndarray, frq: np.ndarray, amu: Optional[dict] = None) -> Union[
             Tuple[np.ndarray, np.ndarray], None]:
@@ -490,7 +494,7 @@ class O2AbsModel(AbsModel):
 
     @staticmethod
     def set_ll() -> None:
-        O2AbsModel.o2ll = import_lineshape(f"o2ll_{O2AbsModel.model}")
+        O2AbsModel.o2ll = import_lineshape(f"o2ll")
 
     def o2_absorption(self, pdrykpa: float, vx: float, ekpa: float, frq: float, amu: Optional[dict] = None) -> Tuple[np.ndarray, np.ndarray]:
         """Returns power absorption coefficient due to oxygen in air in nepers/km.
@@ -712,7 +716,7 @@ class O3AbsModel(AbsModel):
 
     @staticmethod
     def set_ll() -> None:
-        O3AbsModel.o3ll = import_lineshape(f"o3ll_{O3AbsModel.model}")
+        O3AbsModel.o3ll = import_lineshape(f"o3ll")
 
     def o3_absorption(self, t: np.ndarray, p: np.ndarray, f: np.ndarray, o3n: np.ndarray, amu: Optional[dict] = None) -> np.ndarray:
         """This function computes power absorption coeff (Np/km) in the atmosphere 

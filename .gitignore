@@ -147,3 +147,9 @@ docs/build/doctrees/
 docs/source/_build/
 docs/source/generated/
 docs/source/examples/
+
+pyrtlib/_lineshape/h2oll_*
+pyrtlib/_lineshape/h2o_list_*
+pyrtlib/_lineshape/o2ll_*
+pyrtlib/_lineshape/o3ll_*
+pyrtlib/_lineshape/o3_list_*
