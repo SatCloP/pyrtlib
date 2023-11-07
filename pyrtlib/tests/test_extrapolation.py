@@ -1,5 +1,5 @@
 import os
-# from pathlib import Path
+import numpy as np
 from unittest import TestCase
 from datetime import datetime
 from numpy.testing import assert_allclose
@@ -47,3 +47,25 @@ class Test(TestCase):
         ex = ProfileExtrapolation()
         wv = ex.standard_water_vapour_pressure(12)
         assert_allclose(wv, 0.018586351836920856)
+        
+    def test_standard_wvd(self):
+        ex = ProfileExtrapolation()
+        wvd = ex.standard_water_vapour_density(12, 1, 7.5)
+        assert_allclose(wvd, 4.608159264996157e-05)
+        
+    def test_pressure(self):
+        ex = ProfileExtrapolation()
+        p = ex.pressure(38, np.array([1, 2, 5]), 'winter')
+        assert_allclose(p, np.array([899.398 , 789.5947, 518.1532]))
+        
+        ex = ProfileExtrapolation()
+        p = ex.pressure(38, np.array([1, 2, 5]), 'summer')
+        assert_allclose(p, np.array([905.1263, 805.1632, 551.6491]))
+        
+    def test_temperature(self):
+        ex = ProfileExtrapolation()
+        t = ex.temperature(38, np.array([1, 2, 5]), 'winter')
+        assert_allclose(t, np.array([268.9265, 264.7771, 250.2181]))
+        
+        t = ex.temperature(38, np.array([1, 2, 5]), 'summer')
+        assert_allclose(t, np.array([289.69681, 284.26764, 267.12705]))
