@@ -78,12 +78,12 @@ if H2OAbsModel.model not in ['R98', 'R03']:
     xh = mtx[:, 9]
     shs = mtx[:, 10] / 1000.0
     xhs = mtx[:, 11]
-if H2OAbsModel.model in ['R19', 'R19SD', 'R21SD']:
+if H2OAbsModel.model in ['R19', 'R19SD', 'R20', 'R20SD', 'R21SD']:
     aair = mtx[:, 12]
     aself = mtx[:, 13]
-if H2OAbsModel.model in ['R19SD', 'R21SD']:
+if H2OAbsModel.model in ['R19SD', 'R20SD', 'R21SD']:
     w2 = mtx[:, 14] / 1000.0
-if H2OAbsModel.model == 'R19SD':
+if H2OAbsModel.model in ['R19SD', 'R20SD']:
     w2s = mtx[:, 15] / 1000.0
 if H2OAbsModel.model == 'R21SD':
     xw2 = mtx[:, 15]
@@ -91,6 +91,9 @@ if H2OAbsModel.model == 'R21SD':
     xw2s = mtx[:, 17]
     d2 = mtx[:, 18] / 1000.0
     d2s = mtx[:, 19] / 1000.0
+if H2OAbsModel.model == 'R20SD':
+    d2air = d.variables['d2air'][:].data.item()
+    d2self = d.variables['d2self'][:].data.item()
 
 
 reftcon = ctr[0]
@@ -98,6 +101,8 @@ cf = ctr[1]
 xcf = ctr[2]
 cs = ctr[3]
 xcs = ctr[4]
+
+nc.close()
 
 # indx = np.where(np.isnan(xh))
 # xh[indx] = x[indx]

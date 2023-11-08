@@ -36,3 +36,5 @@ b = mtx[:, 3]
 w = mtx[:, 4] / 1000.0
 x = mtx[:, 5]
 sr = mtx[:, 6]
+
+nc.close()

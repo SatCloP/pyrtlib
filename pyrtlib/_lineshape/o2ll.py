@@ -51,3 +51,5 @@ else:
     g1 = d.variables['g1'][:].data
     dnu0 = d.variables['dnu0'][:].data
     dnu1 = d.variables['dnu1'][:].data
+    
+nc.close()
