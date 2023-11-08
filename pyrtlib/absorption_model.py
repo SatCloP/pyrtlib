@@ -99,7 +99,7 @@ class LiqAbsModel(AbsModel):
         """Computes absorption in Nepers/km by suspended liquid water droplets.
 
         Args:
-            water (numpy.ndarray): Liquid water content (g/m3) - (mass of liquid water per volume of dry air).
+            water (numpy.ndarray): Liquid water content (:math:`g/m^3`) - (mass of liquid water per volume of dry air).
             freq (numpy.ndarray): Frequency (GHz) - (valid from 0 to 1000 GHz).
             temp (numpy.ndarray): Temperature (K).
 

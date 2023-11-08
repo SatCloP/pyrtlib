@@ -202,8 +202,8 @@ class TbCloudRTE(object):
 
         Args:
             cldh (numpy.ndarray): Cloud base/top heights (km MSL)
-            denice (numpy.ndarray): Ice density profile (g/m3).
-            denliq (numpy.ndarray): Liquid density profile (g/m3).
+            denice (numpy.ndarray): Ice density profile (:math:`g/m^3`).
+            denliq (numpy.ndarray): Liquid density profile (:math:`g/m^3`).
         """
         # convert cloud base and cloud top to (km above antenna height)
         # compute (beglev) and (endlev)
