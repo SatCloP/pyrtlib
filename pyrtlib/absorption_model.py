@@ -254,7 +254,7 @@ class H2OAbsModel(AbsModel):
                 e, rho = RTEquation.vapor(tk, rh, ice)
 
                 AbsModel.model = 'R16'
-                H2OAbsModel.h2oll = import_lineshape('h2oll_{}'.format('R16'))
+                H2OAbsModel.h2oll = import_lineshape('h2oll')
                 for i in range(0, len(z)):
                     v = 300.0 / tk[i]
                     ekpa = e[i] / 10.0
