@@ -22,7 +22,7 @@
 #                 grp.createDimension(f'rows_{v}', getattr(O2AbsModel.o2ll, v).shape[0])
 #                 mtx = grp.createVariable(v, 'f8', (f'rows_{v}',))
 #             mtx[:] = getattr(O2AbsModel.o2ll, v)
-            
+
 # nc.close()
 
 import os
@@ -51,5 +51,5 @@ else:
     g1 = d.variables['g1'][:].data
     dnu0 = d.variables['dnu0'][:].data
     dnu1 = d.variables['dnu1'][:].data
-    
+
 nc.close()
