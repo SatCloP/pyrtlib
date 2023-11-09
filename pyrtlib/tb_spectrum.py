@@ -187,12 +187,12 @@ class TbCloudRTE(object):
             O2AbsModel.set_ll()
         except KeyError as e:
             warnings.warn(
-                "The lines list {} was not found. You have to define absorption model manually".format(e))
+                "The lines list {} was not found. You have to define oxygen absorption model manually".format(e))
         try:
             H2OAbsModel.model = absmdl
             H2OAbsModel.set_ll()
         except KeyError as e:
-            warnings.warn("The lines list {} was not found".format(e))
+            warnings.warn("The lines list {} was not found for water vapour absorption model".format(e))
 
         N2AbsModel.model = absmdl
         LiqAbsModel.model = absmdl
