@@ -407,10 +407,10 @@ class H2OAbsModel(AbsModel):
             summ = 0.0
             if H2OAbsModel.model.startswith('R23SD'):
                 if self.h2oll.cs > 0:
-                    npp_cs = np.zeros(1)
+                    # npp_cs = np.zeros(1)
                     con = self.h2oll.cs * ti * self.h2oll.xcs
-                    for i in len(frq):
-                        npp_cs[i] = con
+                    # for i in len(frq):
+                    npp_cs = con
                 else:
                     npp_cs = self.h2o_continuum(frq, vx, 1)
             for i in range(0, nlines):
