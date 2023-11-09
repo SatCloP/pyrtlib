@@ -78,14 +78,14 @@ if H2OAbsModel.model not in ['R98', 'R03']:
     xh = mtx[:, 9]
     shs = mtx[:, 10] / 1000.0
     xhs = mtx[:, 11]
-if H2OAbsModel.model in ['R19', 'R19SD', 'R20', 'R20SD', 'R21SD']:
+if H2OAbsModel.model in ['R19', 'R19SD', 'R20', 'R20SD', 'R21SD', 'R22SD']:
     aair = mtx[:, 12]
     aself = mtx[:, 13]
-if H2OAbsModel.model in ['R19SD', 'R20SD', 'R21SD']:
+if H2OAbsModel.model in ['R19SD', 'R20SD', 'R21SD', 'R22SD']:
     w2 = mtx[:, 14] / 1000.0
-if H2OAbsModel.model in ['R19SD', 'R20SD']:
+if H2OAbsModel.model in ['R19SD', 'R20SD', 'R22SD']:
     w2s = mtx[:, 15] / 1000.0
-if H2OAbsModel.model == 'R21SD':
+if H2OAbsModel.model in ['R21SD', 'R22SD']:
     xw2 = mtx[:, 15]
     w2s = mtx[:, 16] / 1000.0
     xw2s = mtx[:, 17]
