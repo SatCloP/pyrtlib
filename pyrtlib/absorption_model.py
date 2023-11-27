@@ -27,6 +27,21 @@ class AbsModelError(Exception):
         super().__init__(self.message)
 
 
+class AbsModelError(Exception):
+    """Exception raised for errors in the input model.
+
+    Attributes:
+        model -- input model which caused the error
+        message -- explanation of the error
+    """
+
+    def __init__(self, model, message):
+        self.model = model
+        self.message = message
+
+        super().__init__(self.message)
+
+
 class AbsModel:
     """This is an abstraction class to define the absorption model.
     """
