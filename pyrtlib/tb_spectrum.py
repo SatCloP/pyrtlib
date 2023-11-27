@@ -304,6 +304,8 @@ class TbCloudRTE(object):
         """
 
         self._init_linelist()
+
+        self._init_linelist()
         
         if self.cloudy and LiqAbsModel.model in ['R98', 'R03']:
             warnings.warn(
