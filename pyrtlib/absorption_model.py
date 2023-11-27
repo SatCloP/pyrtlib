@@ -4,12 +4,27 @@ This class contains the absorption model used in pyrtlib.
 """
 
 import types
-from typing import Tuple, Union, List, Optional
+from typing import Tuple, Union, List, Optional, Dict
 
 import numpy as np
 
 from pyrtlib.climatology import AtmosphericProfiles as atmp
 from .utils import dilec12, _dcerror, constants, gas_mass, import_lineshape
+
+
+class AbsModelError(Exception):
+    """Exception raised for errors in the input model.
+
+    Attributes:
+        model -- input model which caused the error
+        message -- explanation of the error
+    """
+
+    def __init__(self, model, message):
+        self.model = model
+        self.message = message
+
+        super().__init__(self.message)
 
 
 class AbsModel:
@@ -52,7 +67,7 @@ class AbsModel:
         """
 
     @staticmethod
-    def implemented_models() -> List[str]:
+    def implemented_models() -> Dict[str, List[str]]:
         """Return all the implemented absorption models.
 
         Returns:
@@ -63,29 +78,55 @@ class AbsModel:
 
                 >>> from pyrtlib.absorption_model import AbsModel
                 >>> AbsModel.implemented_models()
-                ['R98',
-                'R03',
-                'R16',
-                'R17',
-                'R18',
-                'R19',
-                'R19SD',
-                'R20',
-                'R20SD',
-                'R21SD',
-                'R22SD']
+                {
+                    'Oxygen': ['R98',
+                            'R03',
+                            'R16',
+                            'R17',
+                            'R18',
+                            'R19',
+                            'R19SD',
+                            'R20',
+                            'R20SD',
+                            'R22'],
+                    'WaterVapour': ['R98',
+                            'R03',
+                            'R16',
+                            'R17',
+                            'R18',
+                            'R19',
+                            'R19SD',
+                            'R20',
+                            'R20SD',
+                            'R21SD',
+                            'R22',
+                            'R22SD']}
         """
-        return list(['R98',
-                     'R03',
-                     'R16',
-                     'R17',
-                     'R18',
-                     'R19',
-                     'R19SD',
-                     'R20',
-                     'R20SD',
-                     'R21SD',
-                     'R22SD'])
+        model = {"Oxygen": ['R98',
+                            'R03',
+                            'R16',
+                            'R17',
+                            'R18',
+                            'R19',
+                            'R19SD',
+                            'R20',
+                            'R20SD',
+                            'R22'], 
+                 "WaterVapour": ['R98',
+                            'R03',
+                            'R16',
+                            'R17',
+                            'R18',
+                            'R19',
+                            'R19SD',
+                            'R20',
+                            'R20SD',
+                            'R21SD',
+                            'R22',
+                            'R22SD'],  
+                 "Ozone": ['R18', 'R22']}
+
+        return model
 
 
 class LiqAbsModel(AbsModel):
@@ -97,7 +138,7 @@ class LiqAbsModel(AbsModel):
         """Computes absorption in Nepers/km by suspended liquid water droplets.
 
         Args:
-            water (numpy.ndarray): Liquid water content (g/m3) - (mass of liquid water per volume of dry air).
+            water (numpy.ndarray): Liquid water content (:math:`g/m^3`) - (mass of liquid water per volume of dry air).
             freq (numpy.ndarray): Frequency (GHz) - (valid from 0 to 1000 GHz).
             temp (numpy.ndarray): Temperature (K).
 
@@ -215,7 +256,10 @@ class H2OAbsModel(AbsModel):
 
     @staticmethod
     def set_ll() -> None:
-        H2OAbsModel.h2oll = import_lineshape(f"h2oll_{H2OAbsModel.model}")
+        if H2OAbsModel.model not in H2OAbsModel.implemented_models()['WaterVapour']:
+            raise AbsModelError(
+                H2OAbsModel.model, f"Model {H2OAbsModel.model} is not available. It is necessary to define water vapour absorption model manually")
+        H2OAbsModel.h2oll = import_lineshape("h2oll")
 
     def h2o_absorption(self, pdrykpa: np.ndarray, vx: np.ndarray, ekpa: np.ndarray, frq: np.ndarray, amu: Optional[dict] = None) -> Union[
             Tuple[np.ndarray, np.ndarray], None]:
@@ -252,7 +296,7 @@ class H2OAbsModel(AbsModel):
                 e, rho = RTEquation.vapor(tk, rh, ice)
 
                 AbsModel.model = 'R16'
-                H2OAbsModel.h2oll = import_lineshape('h2oll_{}'.format('R16'))
+                H2OAbsModel.h2oll = import_lineshape('h2oll')
                 for i in range(0, len(z)):
                     v = 300.0 / tk[i]
                     ekpa = e[i] / 10.0
@@ -492,7 +536,10 @@ class O2AbsModel(AbsModel):
 
     @staticmethod
     def set_ll() -> None:
-        O2AbsModel.o2ll = import_lineshape(f"o2ll_{O2AbsModel.model}")
+        if O2AbsModel.model not in O2AbsModel.implemented_models()['Oxygen']:
+            raise AbsModelError(H2OAbsModel.model,
+                                f"Model {O2AbsModel.model} is not available. It is necessary to define oxygen absorption model manually")
+        O2AbsModel.o2ll = import_lineshape("o2ll")
 
     def o2_absorption(self, pdrykpa: float, vx: float, ekpa: float, frq: float, amu: Optional[dict] = None) -> Tuple[np.ndarray, np.ndarray]:
         """Returns power absorption coefficient due to oxygen in air in nepers/km.
@@ -714,7 +761,10 @@ class O3AbsModel(AbsModel):
 
     @staticmethod
     def set_ll() -> None:
-        O3AbsModel.o3ll = import_lineshape(f"o3ll_{O3AbsModel.model}")
+        if O3AbsModel.model not in O3AbsModel.implemented_models()['Ozone']:
+            raise AbsModelError(O3AbsModel.model,
+                                f"Model {O3AbsModel.model} is not available. It is necessary to define ozone absorption model manually")
+        O3AbsModel.o3ll = import_lineshape("o3ll")
 
     def o3_absorption(self, t: np.ndarray, p: np.ndarray, f: np.ndarray, o3n: np.ndarray, amu: Optional[dict] = None) -> np.ndarray:
         """This function computes power absorption coeff (Np/km) in the atmosphere 

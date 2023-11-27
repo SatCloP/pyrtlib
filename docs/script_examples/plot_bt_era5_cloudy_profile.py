@@ -56,7 +56,7 @@ ax1.set_ylabel('${T_B}$ [K]')
 rte = TbCloudRTE(df_era5.z.values, df_era5.p.values, df_era5.t.values, df_era5.rh.values, frq, ang)
 rte.init_absmdl('R20')
 H2OAbsModel.model = 'R21SD'
-H2OAbsModel.h2oll = import_lineshape('h2oll_{}'.format(H2OAbsModel.model))
+H2OAbsModel.h2oll = import_lineshape('h2oll')
 for cloudy in [False, True]:
     rte.cloudy = cloudy
     rte.emissivity = 0.6

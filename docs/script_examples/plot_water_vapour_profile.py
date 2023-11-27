@@ -31,8 +31,8 @@ e, rho = RTEquation.vapor(t, rh, ice)
 
 mdl = 'R19SD'
 AbsModel.model = mdl
-H2OAbsModel.h2oll = import_lineshape('h2oll_{}'.format(mdl))
-O2AbsModel.o2ll = import_lineshape('o2ll_{}'.format(mdl))
+H2OAbsModel.h2oll = import_lineshape('h2oll')
+O2AbsModel.o2ll = import_lineshape('o2ll')
 
 awet = np.zeros((len(frq), len(z)))
 adry = np.zeros((len(frq), len(z)))

@@ -32,7 +32,7 @@ def import_lineshape(name: str) -> types.ModuleType:
         >>> from pyrtlib.absorption_model import H2OAbsModel
         >>> from pyrtlib.utils import import_lineshape
         >>> H2OAbsModel.model = 'R21SD'
-        >>> H2OAbsModel.h2oll = import_lineshape('h2oll_{}'.format(H2OAbsModel.model))
+        >>> H2OAbsModel.h2oll = import_lineshape('h2oll')
         >>> H2OAbsModel.h2oll.aself
         array([0., 12.6,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,
         0.,  0.,  0.,  0.,  0.])

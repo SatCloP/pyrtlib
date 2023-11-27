@@ -16,7 +16,7 @@ plt.rcParams.update({'font.size': 15})
 
 from pyrtlib.tb_spectrum import TbCloudRTE
 from pyrtlib.climatology import ProfileExtrapolation
-from pyrtlib.utils import dewpoint2rh, import_lineshape, to_kelvin
+from pyrtlib.utils import dewpoint2rh, to_kelvin
 from pyrtlib.absorption_model import H2OAbsModel
 from pyrtlib.apiwebservices import IGRAUpperAir
 

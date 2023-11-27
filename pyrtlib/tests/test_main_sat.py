@@ -42,7 +42,6 @@ class Test(TestCase):
                 df.tbtotal, df_expected[v.lower().replace(" ", "_")], atol=0)
 
     # @pytest.mark.datafiles(DATA_DIR)
-    @pytest.mark.skip(reason="skipping")
     def test_pyrtlib_sat_R19SD(self):
         z, p, _, t, md = atmp.gl_atm(atmp.TROPICAL)
 
@@ -61,7 +60,6 @@ class Test(TestCase):
         assert_allclose(df.tbtotal, df_expected.ros19sd, atol=0)
 
     # @pytest.mark.datafiles(DATA_DIR)
-    @pytest.mark.skip(reason="skipping")
     def test_pyrtlib_sat_R19(self):
         z, p, _, t, md = atmp.gl_atm(atmp.TROPICAL)
 
@@ -80,7 +78,6 @@ class Test(TestCase):
         assert_allclose(df.tbtotal, df_expected.ros19, atol=0)
 
     # @pytest.mark.datafiles(DATA_DIR)
-    @pytest.mark.skip(reason="skipping")
     def test_pyrtlib_sat_R16(self):
         z, p, _, t, md = atmp.gl_atm(atmp.TROPICAL)
 
@@ -99,28 +96,6 @@ class Test(TestCase):
         assert_allclose(df.tbtotal, df_expected.ros16, atol=0)
 
     # @pytest.mark.datafiles(DATA_DIR)
-    @pytest.mark.skip(reason="skipping")
-    def test_pyrtlib_sat_makarov11(self):
-        z, p, _, t, md = atmp.gl_atm(atmp.TROPICAL)
-
-        gkg = ppmv2gkg(md[:, atmp.H2O], atmp.H2O)
-        rh = mr2rh(p, t, gkg)[0] / 100
-
-        ang = np.array([90.])
-        frq = np.arange(20, 201, 1)
-
-        rte = TbCloudRTE(z, p, t, rh, frq, ang)
-        rte.init_absmdl('R16')
-        O2AbsModel.model = 'makarov11'
-        O2AbsModel.set_ll()
-        df = rte.execute()
-
-        df_expected = pd.read_csv(
-            os.path.join(THIS_DIR, "data", "tb_tot_ros03_16_17_18_19_19sd_20_20sd_98_mak11_21sd.csv"))
-        assert_allclose(df.tbtotal, df_expected.mak11, atol=0)
-
-    # @pytest.mark.datafiles(DATA_DIR)
-    @pytest.mark.skip(reason="skipping")
     def test_pyrtlib_sat_R03(self):
         z, p, _, t, md = atmp.gl_atm(atmp.TROPICAL)
 
@@ -139,7 +114,6 @@ class Test(TestCase):
         assert_allclose(df.tbtotal, df_expected.ros03, atol=0)
 
     # @pytest.mark.datafiles(DATA_DIR)
-    @pytest.mark.skip(reason="skipping")
     def test_pyrtlib_sat_R17(self):
         z, p, _, t, md = atmp.gl_atm(atmp.TROPICAL)
 
@@ -158,7 +132,6 @@ class Test(TestCase):
         assert_allclose(df.tbtotal, df_expected.ros17, atol=0)
 
     # @pytest.mark.datafiles(DATA_DIR)
-    @pytest.mark.skip(reason="skipping")
     def test_pyrtlib_sat_R20(self):
         z, p, _, t, md = atmp.gl_atm(atmp.TROPICAL)
 
@@ -177,7 +150,6 @@ class Test(TestCase):
         assert_allclose(df.tbtotal, df_expected.ros20, atol=0)
 
     # @pytest.mark.datafiles(DATA_DIR)
-    @pytest.mark.skip(reason="skipping")
     def test_pyrtlib_sat_R20SD(self):
         z, p, _, t, md = atmp.gl_atm(atmp.TROPICAL)
 
@@ -196,7 +168,6 @@ class Test(TestCase):
         assert_allclose(df.tbtotal, df_expected.ros20sd, atol=0)
 
     # @pytest.mark.datafiles(DATA_DIR)
-    @pytest.mark.skip(reason="skipping")
     def test_pyrtlib_sat_R21SD(self):
         z, p, _, t, md = atmp.gl_atm(atmp.TROPICAL)
 
@@ -247,7 +218,7 @@ class Test(TestCase):
 
         df_expected = pd.read_csv(
             os.path.join(THIS_DIR, "data", "tb_tot_ros03_16_17_18_19_19sd_20_20sd_98_mak11_21sd.csv"))
-        assert_allclose(df.tbtotal, df_expected.rosen, atol=0)
+        assert_allclose(df.tbtotal, df_expected.rosen)
 
     # @pytest.mark.datafiles(DATA_DIR)
     def test_pyrtlib_sat_R98_cloudy(self):
@@ -444,3 +415,21 @@ class Test(TestCase):
         df_expected = pd.read_csv(
             os.path.join(THIS_DIR, "data", "tb_tot_rose21sd_RAOB_es.csv"))
         assert_allclose(df.tbtotal, df_expected.tbtotal, atol=0)
+
+    def test_pyrtlib_sat_R22SD(self):
+        z, p, _, t, md = atmp.gl_atm(atmp.TROPICAL)
+
+        gkg = ppmv2gkg(md[:, atmp.H2O], atmp.H2O)
+        rh = mr2rh(p, t, gkg)[0] / 100
+
+        frq = np.arange(20, 201, 1)
+
+        rte = TbCloudRTE(z, p, t, rh, frq)
+        rte.init_absmdl('R22SD')
+        O2AbsModel.model = 'R22'
+        O2AbsModel.set_ll()
+
+        df = rte.execute()
+        df_expected = pd.read_csv(
+            os.path.join(THIS_DIR, "data", "tb_tot_r22sd.csv"))
+        assert_allclose(df.tbtotal, df_expected.rose22sd, atol=0)

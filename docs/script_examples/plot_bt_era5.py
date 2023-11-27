@@ -34,7 +34,7 @@ nf = len(frq)
 rte = TbCloudRTE(df_era5.z.values, df_era5.p.values, df_era5.t.values, df_era5.rh.values, frq, ang)
 rte.init_absmdl('R20')
 H2OAbsModel.model = 'R21SD'
-H2OAbsModel.h2oll = import_lineshape('h2oll_{}'.format(H2OAbsModel.model))
+H2OAbsModel.h2oll = import_lineshape('h2oll')
 df = rte.execute()
 df = df.set_index(frq)
 

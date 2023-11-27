@@ -81,7 +81,7 @@ class TbCloudRTE(object):
         if len(self.p) < 25 or min(self.p) >= 10:
             warnings.warn(f"Number of levels too low ({len(self.p)}) or "
                           f"minimum pressure value lower than 10 hPa ({min(self.p)}). "
-                          "Please considering profile extrapolation. Levels number must be higher than 25 " 
+                          "Please considering profile extrapolation. Levels number must be higher than 25 "
                           "and pressure value lower than 10 hPa")
 
         self.ray_tracing = ray_tracing
@@ -182,28 +182,22 @@ class TbCloudRTE(object):
             absmdl (str): Absorption model.
         """
         # Defines models
-        try:
-            O2AbsModel.model = absmdl
-            O2AbsModel.set_ll()
-        except KeyError as e:
-            warnings.warn(
-                "The lines list {} was not found. You have to define absorption model manually".format(e))
-        try:
-            H2OAbsModel.model = absmdl
-            H2OAbsModel.set_ll()
-        except KeyError as e:
-            warnings.warn("The lines list {} was not found".format(e))
-
+        H2OAbsModel.model = absmdl
+        O2AbsModel.model = absmdl
         N2AbsModel.model = absmdl
         LiqAbsModel.model = absmdl
+
+    def _init_linelist(self):
+        H2OAbsModel.set_ll()
+        O2AbsModel.set_ll()
 
     def init_cloudy(self, cldh: np.ndarray, denice: np.ndarray, denliq: np.ndarray) -> None:
         """Initialize cloudy conditions parameters.
 
         Args:
             cldh (numpy.ndarray): Cloud base/top heights (km MSL)
-            denice (numpy.ndarray): Ice density profile (g/m3).
-            denliq (numpy.ndarray): Liquid density profile (g/m3).
+            denice (numpy.ndarray): Ice density profile (:math:`g/m^3`).
+            denliq (numpy.ndarray): Liquid density profile (:math:`g/m^3`).
         """
         # convert cloud base and cloud top to (km above antenna height)
         # compute (beglev) and (endlev)
@@ -308,6 +302,8 @@ class TbCloudRTE(object):
             Union[pandas.DataFrame, Tuple[pandas.DataFrame, Dict[str, numpy.ndarray]]]: A pandas Dataframe with the brigthness temperature simulated.
             If only_bt = False it also returns all intermediate RT variables.
         """
+
+        self._init_linelist()
 
         # Set RTE
         RTEquation._from_sat = self._satellite

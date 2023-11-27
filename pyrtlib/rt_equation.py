@@ -37,7 +37,7 @@ class RTEquation:
         Returns:
             Tuple[numpy.ndarray, numpy.ndarray]: 
             * e (np.ndarray): Vapor pressure (mb)
-            * rho (np.ndarray): Vapor density (g/m3)
+            * rho (np.ndarray): Vapor density (:math:`g/m^3`)
         """
 
         rvap = constants('Rwatvap')[0]
@@ -343,7 +343,7 @@ class RTEquation:
         """Integrates cloud water density over path ds (linear algorithm).
 
         Args:
-            dencld (np.ndarray): Cloud cloud water density profile (g/m3)
+            dencld (np.ndarray): Cloud cloud water density profile (:math:`g/m^3`)
             ds (np.ndarray): Vector containing layer depth profiles (km)
             lbase (np.ndarray): Array containing profile levels corresponding to cloud bases.
             ltop (np.ndarray): Array containing profile levels corresponding to cloud tops.
@@ -468,8 +468,8 @@ class RTEquation:
 
         Args:
             t (numpy.ndarray): Temperature profile (k).
-            denl (numpy.ndarray): Liquid density profile (g/m3).
-            deni (numpy.ndarray): Ice density profile (g/m3).
+            denl (numpy.ndarray): Liquid density profile (:math:`g/m^3`).
+            deni (numpy.ndarray): Ice density profile (:math:`g/m^3`).
             frq (numpy.ndarray): Frequency array (GHz).
 
         Returns:

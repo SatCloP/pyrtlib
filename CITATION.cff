@@ -1,5 +1,13 @@
 title: "PyRTlib: A python package for non-scattering line-by-line microwave Radiative Transfer simulations."
-abstract: "PyRTlib is an attractive educational software to simulate observations from ground-based, airborne, and satellite microwave sensors. It provides a flexible and user-friendly tool to broadly simulate how electromagnetic radiation travels through the atmosphere as it interacts with atmospheric constituents."
+abstract: 
+  "PyRTlib is an attractive educational software to simulate observations from ground-based, 
+  airborne, and satellite microwave sensors. It provides a flexible and user-friendly tool to broadly 
+  simulate how electromagnetic radiation travels through the atmosphere as it interacts with atmospheric constituents.
+  
+  Reference:
+  Larosa, S., Cimini, D., Gallucci, D., Nilo, S. T., and Romano, F.: PyRTlib: an educational Python-based library 
+  for non-scattering atmospheric microwave Radiative Transfer computations, Geosci. 
+  Model Dev. Discuss. (preprint), https://doi.org/10.5194/gmd-2023-171, in review, 2023."
 cff-version: 1.2.0
 message: "If you use this software, please cite it as below."
 authors:
