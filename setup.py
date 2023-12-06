@@ -10,7 +10,7 @@ def read_file(filename):
 
 setup(
     name='pyrtlib',
-    version='1.0.3',
+    version='1.0.4',
     include_package_data=True,
     packages=find_packages(exclude=["*.tests", "*.tests.*", "tests.*", "tests"]),
     # package_dir={'': 'pyrtlib'},
