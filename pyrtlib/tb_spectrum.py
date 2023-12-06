@@ -304,6 +304,11 @@ class TbCloudRTE(object):
         """
 
         self._init_linelist()
+        
+        if self.cloudy and LiqAbsModel.model in ['R98', 'R03']:
+            warnings.warn(
+                "Model {} for liquid cloud absorption is outdated. " \
+                "Use the more recent model by Rosenkranz, 2015, from R16 model onwards".format(LiqAbsModel.model), stacklevel=2)
 
         # Set RTE
         RTEquation._from_sat = self._satellite

@@ -150,6 +150,7 @@ class LiqAbsModel(AbsModel):
         .. [1] [Liebe-Hufford-Manabe]_.
         .. [2] [Liebe-Hufford-Cotton]_.
         .. [3] [Rosenkranz-1988]_.
+        .. [4] [Rosenkranz-2015]_.
 
         .. note::
             Revision history:
