@@ -88,7 +88,8 @@ class AbsModel:
                             'R19SD',
                             'R20',
                             'R20SD',
-                            'R22'],
+                            'R22',
+                            'R23'],
                     'WaterVapour': ['R98',
                             'R03',
                             'R16',
@@ -100,7 +101,8 @@ class AbsModel:
                             'R20SD',
                             'R21SD',
                             'R22',
-                            'R22SD']}
+                            'R22SD',
+                            'R23SD']}
         """
         model = {"Oxygen": ['R98',
                             'R03',
@@ -111,7 +113,8 @@ class AbsModel:
                             'R19SD',
                             'R20',
                             'R20SD',
-                            'R22'], 
+                            'R22',
+                            'R23'], 
                  "WaterVapour": ['R98',
                             'R03',
                             'R16',
@@ -123,8 +126,9 @@ class AbsModel:
                             'R20SD',
                             'R21SD',
                             'R22',
-                            'R22SD'],  
-                 "Ozone": ['R18', 'R22']}
+                            'R22SD',
+                            'R23SD'],  
+                 "Ozone": ['R18', 'R22', 'R23']}
 
         return model
 
@@ -579,7 +583,7 @@ class O2AbsModel(AbsModel):
     @staticmethod
     def set_ll() -> None:
         if O2AbsModel.model not in O2AbsModel.implemented_models()['Oxygen']:
-            raise AbsModelError(H2OAbsModel.model,
+            raise AbsModelError(O2AbsModel.model,
                                 f"Model {O2AbsModel.model} is not available. It is necessary to define oxygen absorption model manually")
         O2AbsModel.o2ll = import_lineshape("o2ll")
 
@@ -881,9 +885,9 @@ class O3AbsModel(AbsModel):
         # add resonances within 1 ghz of f.  most of the ozone is in the
         # stratosphere, so lines are relatively narrow, and lorentz shape
         # factor is ok.
-        if O3AbsModel.model in ["R22", "R222sd"]:
-            summ = 0.0
-            nlines = len(self.o3ll.fl)
+        summ = 0.0
+        nlines = len(self.o3ll.fl)
+        if O3AbsModel.model in ["R22", "R22SD"]:
             for k in range(0, nlines):
                 if self.o3ll.fl[k] > (f + 1.0):
                     break

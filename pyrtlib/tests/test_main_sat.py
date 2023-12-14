@@ -427,8 +427,7 @@ class Test(TestCase):
 
         rte = TbCloudRTE(z, p, t, rh, frq, ang)
         rte.init_absmdl('R23SD')
-        # O2AbsModel.model = 'R20'
-        # O2AbsModel.set_ll()
+        O2AbsModel.model = 'R23'
         df = rte.execute()
 
         df_expected = pd.read_csv(

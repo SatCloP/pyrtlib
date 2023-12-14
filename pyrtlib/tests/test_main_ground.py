@@ -37,7 +37,7 @@ class Test(TestCase):
             THIS_DIR, "data", "tb_tot_ground_ros03_19sd_21sd_era5.csv"))
         assert_allclose(df.tbtotal, df_expected.ros19sd, atol=0)
 
-    @pytest.mark.skip(reason="R03 not completly implemented yet")
+    # @pytest.mark.skip(reason="R03 not completly implemented yet")
     def test_pyrtlib_ground_R23SD(self):
         z, p, _, t, md = atmp.gl_atm(atmp.TROPICAL)
 
