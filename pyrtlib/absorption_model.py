@@ -191,7 +191,7 @@ class LiqAbsModel(AbsModel):
             fs = np.dot(39.8, fp)
             eps = (eps0 - eps1) / complex(1.0, freq / fp) + \
                 (eps1 - eps2) / complex(1.0, freq / fs) + eps2
-        elif LiqAbsModel.model in ['R17', 'R16', 'R19', 'R20', 'R19SD', 'R22SD']:
+        elif LiqAbsModel.model in ['R17', 'R16', 'R19', 'R20', 'R19SD', 'R22SD', 'R23', 'R23SD']:
             eps = dilec12(freq, temp)
         else:
             raise ValueError(
