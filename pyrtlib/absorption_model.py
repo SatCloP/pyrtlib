@@ -169,6 +169,8 @@ class LiqAbsModel(AbsModel):
             eps1 = np.dot(0.0671, eps0)
             eps2 = 3.52
             fp = np.dot((np.dot(316.0, theta1) + 146.4), theta1) + 20.2
+            if LiqAbsModel.model == 'R03':
+                fp = 20.1 * np.exp(7.88 * theta1)
             fs = np.dot(39.8, fp)
             eps = (eps0 - eps1) / complex(1.0, freq / fp) + \
                 (eps1 - eps2) / complex(1.0, freq / fs) + eps2

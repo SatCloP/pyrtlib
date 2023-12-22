@@ -1,4 +1,4 @@
-title: "PyRTlib: A python package for non-scattering line-by-line microwave Radiative Transfer simulations."
+title: "PyRTlib: a python package for non-scattering line-by-line microwave Radiative Transfer simulations."
 abstract: 
   "PyRTlib is an attractive educational software to simulate observations from ground-based, 
   airborne, and satellite microwave sensors. It provides a flexible and user-friendly tool to broadly 
