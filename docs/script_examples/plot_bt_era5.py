@@ -1,6 +1,6 @@
 """
-Performing BT calculation from satellite using ERA5 Reanalysis Observations
-===========================================================================
+Performing Upwelling Brightness Temperature calculation using ERA5 Reanalysis Observations.
+===========================================================================================
 """
 
 # %%
