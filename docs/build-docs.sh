@@ -5,9 +5,9 @@ set -x
 ###################
 
 sudo apt-get update
-sudo apt-get -y install git rsync python3-sphinx python3-git python3-pip python3-virtualenv python3-setuptools pandoc zlib1g-dev
+sudo apt-get -y install git rsync python3-git python3-pip python3-virtualenv python3-setuptools pandoc zlib1g-dev # python3-sphinx
 python3 -m pip install --upgrade pygments #rinohtype[PDF] #sphinxcontrib-bibtex
-pip3 install pydata-sphinx-theme==0.13.3 sphinx-toggleprompt nbconvert==5.6.1 nbsphinx sphinx-gallery sphinx-copybutton ipython_genutils sphinx-toggleprompt sphinx-panels pandas scipy scikit-learn netcdf4 matplotlib
+pip3 install sphinx pydata-sphinx-theme==0.13.3 sphinx-toggleprompt nbconvert==5.6.1 nbsphinx sphinx-gallery sphinx-copybutton ipython_genutils sphinx-toggleprompt sphinx-panels pandas scipy scikit-learn netcdf4 matplotlib
 
 #####################
 # DECLARE VARIABLES #
