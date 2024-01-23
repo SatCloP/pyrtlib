@@ -58,25 +58,32 @@ axes[0, 1].tick_params(axis='both', direction='in', length=10, width=.5)
 axes[0, 1].plot(np.log2(m), tb_0183, linestyle='--', linewidth=3, color='black')
 axes[0, 1].plot(np.log2(m), tb_0183, marker='+', linestyle='None', color='r', ms=20, markeredgewidth=5)
 axes[0, 1].set_title(f"{frq[1]} GHz")
+axes[0, 1].grid(True, 'both')
+axes[0, 1].annotate("c)", xy=(0.02, 0.05), xycoords='axes fraction', fontsize=40)
 
 axes[0, 0].set_ylabel('$\Delta T_b$ [K]')
 axes[0, 0].tick_params(axis='both', direction='in', length=10, width=.5)
 axes[0, 0].plot(np.log2(m), tb_023, linestyle='--', linewidth=3, color='black')
 axes[0, 0].plot(np.log2(m), tb_023, marker='+', linestyle='None', color='r', ms=20, markeredgewidth=5)
 axes[0, 0].set_title(f"{frq[0]} GHz")
+axes[0, 0].grid(True, 'both')
+axes[0, 0].annotate("a)", xy=(0.02, 0.05), xycoords='axes fraction', fontsize=40)
 
-axes[1, 1].set_xlabel('$log_2(q_{H_2O}))$')
+axes[1, 1].set_xlabel('$log_2(SF_{q_{H_2O}}))$')
 axes[1, 1].tick_params(axis='both', direction='in', length=10, width=.5)
 axes[1, 1].plot(np.log2(m), tau_183, linestyle='--', linewidth=3, color='black')
 axes[1, 1].plot(np.log2(m), tau_183, marker='+', linestyle='None', color='blue', ms=20, markeredgewidth=5)
+axes[1, 1].grid(True, 'both')
+axes[1, 1].annotate("d)", xy=(0.02, 0.88), xycoords='axes fraction', fontsize=40)
 
-axes[1, 0].set_xlabel('$log_2(q_{H_2O})$')
+axes[1, 0].set_xlabel('$log_2(SF_{q_{H_2O}})$')
 axes[1, 0].set_ylabel('$\\tau$ [Np]')
 axes[1, 0].tick_params(axis='both', direction='in', length=10, width=.5)
 axes[1, 0].plot(np.log2(m), tau_23, linestyle='--', linewidth=3, color='black')
 axes[1, 0].plot(np.log2(m), tau_23, marker='+', linestyle='None', color='blue', ms=20, markeredgewidth=5)
+axes[1, 0].grid(True, 'both')
+axes[1, 0].annotate("b)", xy=(0.02, 0.88), xycoords='axes fraction', fontsize=40)
+
 plt.tight_layout()
-
-
 
 plt.show()
