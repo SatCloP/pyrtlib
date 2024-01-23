@@ -61,7 +61,8 @@ extensions = [
     'nbsphinx',
     'sphinx_gallery.gen_gallery',
     'sphinx.ext.coverage',
-    'sphinx_panels',
+    # 'sphinx_panels',
+    "sphinx_design",
     # 'sphinx.ext.graphviz',
     # 'rst2pdf.pdfbuilder',
     # 'autoapi.extension'

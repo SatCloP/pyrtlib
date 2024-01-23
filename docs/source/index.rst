@@ -16,44 +16,55 @@ PyRTlib also allows to quantify absorption model uncertainty due to uncertainty 
 The approach is applied to a widely used microwave absorption model [Rosenkranz-2017]_, on which PyRTlib is based, and radiative transfer calculations at any frequencies range, 
 which are commonly exploited for atmospheric sounding by microwave radiometer (MWR).  
 
-.. panels::
-   :card: + intro-card text-center
+.. grid:: 2 2 2 2
+    :gutter: 4
+    :padding: 0 0 2 2
+    :class-container: sd-text-center
 
-   ---
-   :img-top: _static/shuttle.svg
+    .. grid-item-card:: Getting started
+        :img-top: _static/shuttle.svg
+        :class-card: intro-card
+        :shadow: md
 
-   Getting started
+        +++
 
-   +++
+        .. button-link:: installation.html
+            :ref-type: ref
+            :click-parent:
+            :color: primary
+            :expand:
 
-   .. link-button:: installation
-      :type: ref
-      :text: Go To Reference
-      :classes: btn-block btn-outline-primary 
+            To the getting started guides
 
-   ---
-   :img-top: _static/api.svg
+    .. grid-item-card:: API reference
+        :img-top: _static/api.svg
+        :class-card: intro-card
+        :shadow: md
 
-   API references
+        +++
 
-   +++
+        .. button-link:: api.html
+            :ref-type: ref
+            :click-parent:
+            :color: primary
+            :expand:
 
-   .. link-button:: api
-      :type: ref
-      :text: Go To Reference
-      :classes: btn-block btn-outline-primary 
-   
-   ---
-   :img-top: _static/code.svg
-   
-   Gallery example
+            To the API references
+       
+    .. grid-item-card:: Gallery examples
+        :img-top: _static/code.svg
+        :class-card: intro-card
+        :shadow: md
 
-   +++
+        +++
 
-   .. link-button:: examples/index
-      :type: ref
-      :text: Go To Reference
-      :classes: btn-outline-primary btn-block
+        .. button-link:: examples/index.html
+            :ref-type: ref
+            :click-parent:
+            :color: primary
+            :expand:
+
+            To the Gallery examples
 
 .. pyrtlib is a python tool that provides a set of calsses and methods for simulating ........
 

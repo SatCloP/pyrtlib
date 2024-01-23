@@ -22,6 +22,11 @@ table {
     margin-right: 200px;
 } */
 
+.sd-card-img, .sd-card-img-top {
+    height: 100px;
+    margin-top: 5px;
+}
+
 @media(max-width: 960px) {
     .bd-header .navbar-header-items__start {
         margin-right: auto;
