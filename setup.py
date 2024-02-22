@@ -13,6 +13,7 @@ setup(
     version='1.0.4',
     include_package_data=True,
     packages=find_packages(exclude=["*.tests", "*.tests.*", "tests.*", "tests"]),
+    package_data={'pyrtlib': ['_lineshape/*', 'climatology/*', 'uncertainty/covariance_matrix/*/*']},
     # package_dir={'': 'pyrtlib'},
     python_requires='>=3.8',
     setup_requires=['pytest-runner'],
