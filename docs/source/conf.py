@@ -71,6 +71,7 @@ extensions = [
     # 'myst_nb'
 ]
 
+nbsphinx_allow_errors = True
 toggleprompt_offset_right = 35
 
 # Configuration of sphinx.ext.coverage

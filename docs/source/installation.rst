@@ -165,8 +165,6 @@ To run the example script in a Google Colab Notebook, you can use the following 
 
     The example script is available at `this link <https://colab.research.google.com/github/SatCloP/pyrtlib/blob/main/docs/source/notebook/first_run.ipynb>`_.
 
-.. _`this link`: 
-
 .. code-block:: console
 
    !wget https://raw.githubusercontent.com/SatCloP/pyrtlib/main/pyrtlib/hello_spectrum.py
