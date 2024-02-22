@@ -145,8 +145,30 @@ From within pyrtlib folder run the following docker command to build the docker 
    $ docker build --pull --rm -f "Dockerfile" -t pyrtlib:latest "." 
    $ docker run --rm -it  pyrtlib:latest
 
-To test run the exaple script from within the docker image
+To test run the example script from within the docker image
 
 .. code-block:: console
 
    $ root@993587e5fea9:/home/dev/pyrtlib# python3 hello_spectrum.py
+
+My first run with PyRTlib (Colab Notebook)
+==========================================
+
+To run the example script in a Google Colab Notebook, you can use the following code:
+
+.. code-block:: console
+
+   !pip install pyrtlib
+   !python3 hello_spectrum.py
+
+.. note::
+
+    The example script is available at `this link <https://colab.research.google.com/github/SatCloP/pyrtlib/blob/main/docs/source/notebook/first_run.ipynb>`_.
+
+.. _`this link`: 
+
+.. code-block:: console
+
+   !wget https://raw.githubusercontent.com/SatCloP/pyrtlib/main/pyrtlib/hello_spectrum.py
+   !python3 hello_spectrum.py
+
