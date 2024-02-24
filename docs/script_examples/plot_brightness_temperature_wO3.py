@@ -1,5 +1,5 @@
 """
-Performing Brightness Temperature calculation from ground with Ozone
+Performing Downwelling Brightness Temperature calculation with Ozone
 ====================================================================
 """
 

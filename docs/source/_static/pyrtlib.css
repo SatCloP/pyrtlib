@@ -16,10 +16,15 @@ table {
     text-align: center !important;
 }
 
-.bd-header .navbar-header-items__start {
+/* .bd-header .navbar-header-items__start {
     flex-shrink: 0;
     gap: .5rem;
     margin-right: 200px;
+} */
+
+.sd-card-img, .sd-card-img-top {
+    height: 100px;
+    margin-top: 5px;
 }
 
 @media(max-width: 960px) {

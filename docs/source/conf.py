@@ -61,7 +61,8 @@ extensions = [
     'nbsphinx',
     'sphinx_gallery.gen_gallery',
     'sphinx.ext.coverage',
-    'sphinx_panels',
+    # 'sphinx_panels',
+    "sphinx_design",
     # 'sphinx.ext.graphviz',
     # 'rst2pdf.pdfbuilder',
     # 'autoapi.extension'
@@ -70,6 +71,7 @@ extensions = [
     # 'myst_nb'
 ]
 
+nbsphinx_allow_errors = True
 toggleprompt_offset_right = 35
 
 # Configuration of sphinx.ext.coverage

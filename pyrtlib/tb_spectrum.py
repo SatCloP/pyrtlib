@@ -26,7 +26,7 @@ class TbCloudRTE(object):
                  o3n: Optional[np.ndarray] = None,
                  amu: Optional[Tuple] = None,
                  absmdl: Optional[str] = '',
-                 ray_tracing: Optional[bool] = True,
+                 ray_tracing: Optional[bool] = False,
                  from_sat: Optional[bool] = True,
                  cloudy: Optional[bool] = False):
         """Main class which computes brightness temperatures (Tb), mean
@@ -48,9 +48,9 @@ class TbCloudRTE(object):
             o3n (Optional[np.ndarray], optional): Ozone profile. Defaults to None.
             amu (Optional[Tuple], optional): Absorption model uncertainties. Defined by :py:func:`~pyrtlib.uncertainty.SpectroscopicParameter`. Defaults to None.
             absmdl (Optional[str], optional): Absorption model. Defaults to ''.
-            ray_tracing (Optional[bool], optional): Wether True (default) it computes ray tracing for
+            ray_tracing (Optional[bool], optional): Wether True it computes ray tracing for
                                             distance between layers, otherwise use simple plane
-                                            parallel assumption. Defaults to True.
+                                            parallel assumption. Defaults to False.
             from_sat (Optional[bool], optional): Wether True (default) compute upwelling Tb, 
                                             otherwise downwelling Tb are computed. Defaults to True.
             cloudy (Optional[bool], optional): Wether True CLW must be passed. Defaults to False.
@@ -304,6 +304,11 @@ class TbCloudRTE(object):
         """
 
         self._init_linelist()
+        
+        if self.cloudy and LiqAbsModel.model in ['R98', 'R03']:
+            warnings.warn(
+                "Model {} for liquid cloud absorption is outdated. " \
+                "Use the more recent model by Rosenkranz, 2015, from R16 model onwards".format(LiqAbsModel.model), stacklevel=2)
 
         # Set RTE
         RTEquation._from_sat = self._satellite

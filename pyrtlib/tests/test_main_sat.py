@@ -259,17 +259,19 @@ class Test(TestCase):
         gkg = ppmv2gkg(md[:, atmp.H2O], atmp.H2O)
         rh = mr2rh(p, t, gkg)[0] / 100
 
-        ang = np.array([90.])
+        ang = np.array([90., 37.])
         frq = np.arange(20, 201, 1)
 
         rte = TbCloudRTE(z, p, t, rh, frq, ang)
-        rte.ray_tracing = False
+        rte.ray_tracing = True
         rte.init_absmdl('R19SD')
 
         df = rte.execute()
         df_expected = pd.read_csv(
             os.path.join(THIS_DIR, "data", "tb_tot_ros03_16_17_18_19_19sd_20_20sd_98_mak11_21sd.csv"))
-        assert_allclose(df.tbtotal, df_expected.ros19sd, atol=0)
+
+        assert_allclose(df[df.angle==90.].tbtotal, df_expected.ros19sd, atol=0)
+        assert_allclose(df[df.angle==37.].tbtotal, df_expected.rayt_37_19sd, atol=0)
 
     def test_pyrtlib_sat_rose21_wO3(self):
         z, p, _, t, md = atmp.gl_atm(atmp.US_STANDARD)

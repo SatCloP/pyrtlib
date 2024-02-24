@@ -1,6 +1,6 @@
 """
-Performing BT calculation from satellite using IGRA2 Upper Air Observations (with Extrapolation)
-================================================================================================
+Performing Upwelling Brightness Temperature calculation using IGRA2 Upper Air Observations (with Extrapolation).
+================================================================================================================
 """
 
 # %%

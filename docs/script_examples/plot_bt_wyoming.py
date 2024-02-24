@@ -1,6 +1,6 @@
 """
-Performing BT calculation from satellite using Wyoming Upper Air Observations
-=============================================================================
+Performing Upwelling Brightness Temperature calculation using Wyoming Upper Air Observations.
+=============================================================================================
 """
 
 # %%

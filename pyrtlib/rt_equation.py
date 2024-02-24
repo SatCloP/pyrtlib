@@ -153,7 +153,7 @@ class RTEquation:
         by Bean and Dutton (Fig. 3.20 and surrounding text) [Bean-Dutton]_.
 
         Args:
-            z (numpy.ndarray): Eight profile (km above observation height, z0).
+            z (numpy.ndarray): Height profile (km above observation height, z0).
             refindx (numpy.ndarray): Refractive index profile.
             angle (float): Elevation angle (degrees).
             z0 (float): Observation height (km msl).
