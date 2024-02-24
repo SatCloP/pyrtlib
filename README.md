@@ -2,9 +2,9 @@
 
 # A Radiative Transfer Python Library (non-scattering)
 
-[![docker-image-ci](https://github.com/SatCloP/pyrtlib/workflows/docker-image-ci/badge.svg)](https://github.com/SatCloP/pyrtlib/actions/workflows/docker-image.yml)
-[![run-python-tests](https://github.com/SatCloP/pyrtlib/workflows/run-python-tests/badge.svg)](https://github.com/SatCloP/pyrtlib/actions/workflows/ci.yml)
-[![build-docs-action](https://github.com/SatCloP/pyrtlib/workflows/build-docs-action/badge.svg)](https://github.com/SatCloP/pyrtlib/actions/workflows/build_docs.yml)
+[![docker-image-ci](https://github.com/SatCloP/pyrtlib/actions/workflows/docker-image.yml/badge.svg)](https://github.com/SatCloP/pyrtlib/actions/workflows/docker-image.yml)
+[![run-python-tests](https://github.com/SatCloP/pyrtlib/actions/workflows/ci.yml/badge.svg)](https://github.com/SatCloP/pyrtlib/actions/workflows/ci.yml)
+[![build-docs-action](https://github.com/SatCloP/pyrtlib/actions/workflows/build_docs.yml/badge.svg)](https://github.com/SatCloP/pyrtlib/actions/workflows/build_docs.yml)
 
 [![Project Status: WIP – Initial development is in progress, but there has not yet been a stable, usable release suitable for the public.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![PyPI Latest Release](https://img.shields.io/pypi/v/pyrtlib.svg)](https://pypi.org/project/pyrtlib/)
