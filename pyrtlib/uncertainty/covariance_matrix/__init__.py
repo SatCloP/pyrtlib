@@ -37,7 +37,7 @@ R17_112 = np.asarray(nc.variables['Cov_p'][:])
 nc.close()
 
 # This file contains uncertainty covariance matrix for oxygen and water vapor parameters 
-# as estimated in Gallucci et al. ACPD 2023. 
+# as estimated in Gallucci et al. ACPD 2023 (https://doi.org/10.5194/egusphere-2023-3160).
 # The reference code is Rosenkranz 2019 - version of 2019-02-01, 
 # available at: http://cetemps.aquila.infn.it/mwrnet/lblmrt_ns.html, 
 # Note that this is an extension to the one developed in Cimini et al. ACP 2018, 
