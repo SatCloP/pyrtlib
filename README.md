@@ -94,6 +94,11 @@ Execute model by computing upwelling radiances:
    Name: tbtotal, Length: 981, dtype: float64
 ```
 
+## My first run with PyRTlib
+
+You can get started with PyRTlib by installing and executing the first radiative transfer calculation from the following Colab Notebook [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/SatCloP/pyrtlib/blob/main/docs/source/notebook/first_run.ipynb)
+
+
 ## Cite as
 
 Larosa, S., Cimini, D., Gallucci, D., Nilo, S. T., and Romano, F.: PyRTlib: an educational Python-based library for non-scattering atmospheric microwave Radiative Transfer computations, Geosci. Model Dev. Discuss. (preprint), https://doi.org/10.5194/gmd-2023-171, in review, 2023.
