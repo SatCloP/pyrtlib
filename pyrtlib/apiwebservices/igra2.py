@@ -55,7 +55,7 @@ class IGRAUpperAir(HTTPEndPoint):
         self.end_date = ''
         self.site_id = ''
         self.folder = ''
-        super().__init__('https://www1.ncdc.noaa.gov/pub/data/igra/')
+        super().__init__('https://www.ncei.noaa.gov/data/integrated-global-radiosonde-archive/access/')
 
     @classmethod
     def request_data(cls, time: datetime, site_id: str, beg2021: Optional[bool] = False, derived: Optional[bool] = False) -> Tuple[pd.DataFrame, pd.DataFrame]:
@@ -99,14 +99,14 @@ class IGRAUpperAir(HTTPEndPoint):
 
         # Set parameters for data query
         if beg2021:
-            igra2.folder = 'data/data-y2d/'
+            igra2.folder = 'data-y2d/'
             igra2.suffix = igra2.suffix + '-data-beg2021.txt'
         else:
-            igra2.folder = 'data/data-por/'
+            igra2.folder = 'data-por/'
             igra2.suffix = igra2.suffix + '-data.txt'
 
         if derived:
-            igra2.folder = 'derived/derived-por/'
+            igra2.folder = 'derived-por/'
             igra2.suffix = igra2.suffix + '-drvd.txt'
 
         if isinstance(time, datetime):
