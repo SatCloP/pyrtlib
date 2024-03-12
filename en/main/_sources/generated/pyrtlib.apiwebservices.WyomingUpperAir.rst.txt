@@ -1,0 +1,31 @@
+pyrtlib.apiwebservices.WyomingUpperAir
+======================================
+
+.. currentmodule:: pyrtlib.apiwebservices
+
+.. autoclass:: WyomingUpperAir
+    :show-inheritance: 
+    
+    
+    
+    .. rubric:: Methods
+
+    .. autosummary::
+        :toctree:
+        :recursive:
+    
+        ~WyomingUpperAir.__init__
+        ~WyomingUpperAir.get_stations
+        ~WyomingUpperAir.request_data
+    
+    
+
+    
+    
+    
+
+    
+    
+    
+
+.. include:: gallery_backreferences/pyrtlib.apiwebservices.WyomingUpperAir.examples

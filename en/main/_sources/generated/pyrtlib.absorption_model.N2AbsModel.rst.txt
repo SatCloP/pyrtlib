@@ -1,0 +1,38 @@
+pyrtlib.absorption\_model.N2AbsModel
+====================================
+
+.. currentmodule:: pyrtlib.absorption_model
+
+.. autoclass:: N2AbsModel
+    :show-inheritance: 
+    
+    
+    
+    .. rubric:: Methods
+
+    .. autosummary::
+        :toctree:
+        :recursive:
+    
+        ~N2AbsModel.__init__
+        ~N2AbsModel.implemented_models
+        ~N2AbsModel.n2_absorption
+        ~N2AbsModel.set_ll
+    
+    
+
+    
+    
+    .. rubric:: Attributes
+
+    .. autosummary::
+    
+        ~N2AbsModel.model
+    
+    
+
+    
+    
+    
+
+.. include:: gallery_backreferences/pyrtlib.absorption_model.N2AbsModel.examples

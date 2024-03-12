@@ -1,0 +1,89 @@
+pyrtlib.climatology.AtmosphericProfiles
+=======================================
+
+.. currentmodule:: pyrtlib.climatology
+
+.. autoclass:: AtmosphericProfiles
+    :show-inheritance: 
+    
+    
+    
+    .. rubric:: Methods
+
+    .. autosummary::
+        :toctree:
+        :recursive:
+    
+        ~AtmosphericProfiles.__init__
+        ~AtmosphericProfiles.atm_profiles
+        ~AtmosphericProfiles.gl_atm
+        ~AtmosphericProfiles.gl_atm_minor
+        ~AtmosphericProfiles.gl_atm_trace
+    
+    
+
+    
+    
+    .. rubric:: Attributes
+
+    .. autosummary::
+    
+        ~AtmosphericProfiles.AIR
+        ~AtmosphericProfiles.C2CL2F4
+        ~AtmosphericProfiles.C2CL3F3
+        ~AtmosphericProfiles.C2CLF5
+        ~AtmosphericProfiles.C2H2
+        ~AtmosphericProfiles.C2H6
+        ~AtmosphericProfiles.CCL2F2
+        ~AtmosphericProfiles.CCL3F
+        ~AtmosphericProfiles.CCL4
+        ~AtmosphericProfiles.CCLF3
+        ~AtmosphericProfiles.CF4
+        ~AtmosphericProfiles.CH3CL
+        ~AtmosphericProfiles.CH4
+        ~AtmosphericProfiles.CHCLF2
+        ~AtmosphericProfiles.CHCl2F
+        ~AtmosphericProfiles.CLO
+        ~AtmosphericProfiles.CLONO2
+        ~AtmosphericProfiles.CO
+        ~AtmosphericProfiles.CO2
+        ~AtmosphericProfiles.COF2
+        ~AtmosphericProfiles.H2CO
+        ~AtmosphericProfiles.H2O
+        ~AtmosphericProfiles.H2O2
+        ~AtmosphericProfiles.H2S
+        ~AtmosphericProfiles.HBR
+        ~AtmosphericProfiles.HCL
+        ~AtmosphericProfiles.HCN
+        ~AtmosphericProfiles.HF
+        ~AtmosphericProfiles.HI
+        ~AtmosphericProfiles.HNO3
+        ~AtmosphericProfiles.HNO4
+        ~AtmosphericProfiles.HOCL
+        ~AtmosphericProfiles.MIDLATITUDE_SUMMER
+        ~AtmosphericProfiles.MIDLATITUDE_WINTER
+        ~AtmosphericProfiles.N2
+        ~AtmosphericProfiles.N2O
+        ~AtmosphericProfiles.N2O5
+        ~AtmosphericProfiles.NH3
+        ~AtmosphericProfiles.NO
+        ~AtmosphericProfiles.NO2
+        ~AtmosphericProfiles.O2
+        ~AtmosphericProfiles.O3
+        ~AtmosphericProfiles.OCS
+        ~AtmosphericProfiles.OH
+        ~AtmosphericProfiles.PH3
+        ~AtmosphericProfiles.SF6
+        ~AtmosphericProfiles.SO2
+        ~AtmosphericProfiles.SUBARCTIC_SUMMER
+        ~AtmosphericProfiles.SUBARCTIC_WINTER
+        ~AtmosphericProfiles.TROPICAL
+        ~AtmosphericProfiles.US_STANDARD
+    
+    
+
+    
+    
+    
+
+.. include:: gallery_backreferences/pyrtlib.climatology.AtmosphericProfiles.examples

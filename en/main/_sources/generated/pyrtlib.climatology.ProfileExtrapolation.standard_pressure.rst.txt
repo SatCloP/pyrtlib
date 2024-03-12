@@ -1,0 +1,12 @@
+pyrtlib.climatology.ProfileExtrapolation.standard\_pressure
+===========================================================
+
+.. currentmodule:: pyrtlib.climatology
+
+.. automethod:: pyrtlib.climatology.ProfileExtrapolation.standard_pressure
+
+
+
+
+
+.. include:: gallery_backreferences/pyrtlib.climatology.ProfileExtrapolation.standard_pressure.examples
