@@ -101,9 +101,9 @@ You can get started with PyRTlib by installing and executing the first radiative
 
 ## Cite as
 
-Larosa, S., Cimini, D., Gallucci, D., Nilo, S. T., and Romano, F.: PyRTlib: an educational Python-based library for non-scattering atmospheric microwave Radiative Transfer computations, Geosci. Model Dev. Discuss. (preprint), https://doi.org/10.5194/gmd-2023-171, in review, 2023.
+Larosa, S., Cimini, D., Gallucci, D., Nilo, S. T., and Romano, F.: PyRTlib: an educational Python-based library for non-scattering atmospheric microwave radiative transfer computations, Geosci. Model Dev., 17, 2053–2076, https://doi.org/10.5194/gmd-17-2053-2024, 2024.
 
-Larosa, S., Cimini, D., Gallucci, D., Nilo, S. T., & Romano, F. (2023). PyRTlib: a python package for non-scattering line-by-line microwave Radiative Transfer simulations. (Computer software). https://doi.org/10.5281/zenodo.8219145
+Larosa, S., Cimini, D., Gallucci, D., Nilo, S. T., & Romano, F. (2024). PyRTlib: a python package for non-scattering line-by-line microwave Radiative Transfer simulations. (Computer software). https://doi.org/10.5281/zenodo.8219145
 
 ## Contributors
 <a href="https://github.com/SatCloP/pyrtlib/graphs/contributors"><img align="" src="https://contrib.rocks/image?repo=SatCloP/pyrtlib"></a>

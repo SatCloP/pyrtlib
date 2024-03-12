@@ -35,12 +35,7 @@ abstract: >-
   as it interacts with atmospheric constituents.
 
 
-  Reference: Larosa, S., Cimini, D., Gallucci, D., Nilo, S.
-  T., and Romano, F.: PyRTlib: an educational Python-based
-  library  for non-scattering atmospheric microwave
-  Radiative Transfer computations, Geosci.  Model Dev.
-  Discuss. (preprint), https://doi.org/10.5194/gmd-2023-171,
-  in review, 2023.
+  Reference: Larosa, S., Cimini, D., Gallucci, D., Nilo, S. T., and Romano, F.: PyRTlib: an educational Python-based library for non-scattering atmospheric microwave radiative transfer computations, Geosci. Model Dev., 17, 2053–2076, https://doi.org/10.5194/gmd-17-2053-2024, 2024.
 keywords:
   - atmospheric-modelling
   - microwave

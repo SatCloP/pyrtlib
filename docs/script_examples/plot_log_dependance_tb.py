@@ -61,7 +61,7 @@ axes[0, 1].set_title(f"{frq[1]} GHz")
 axes[0, 1].grid(True, 'both')
 axes[0, 1].annotate("c)", xy=(0.02, 0.05), xycoords='axes fraction', fontsize=40)
 
-axes[0, 0].set_ylabel('$\Delta T_b$ [K]')
+axes[0, 0].set_ylabel('$\Delta T_B$ [K]')
 axes[0, 0].tick_params(axis='both', direction='in', length=10, width=.5)
 axes[0, 0].plot(np.log2(m), tb_023, linestyle='--', linewidth=3, color='black')
 axes[0, 0].plot(np.log2(m), tb_023, marker='+', linestyle='None', color='r', ms=20, markeredgewidth=5)
