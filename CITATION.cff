@@ -4,7 +4,7 @@
 cff-version: 1.2.0
 title: >-
   PyRTlib: a python package for non-scattering line-by-line
-  microwave Radiative Transfer simulations.
+  microwave radiative transfer simulations.
 message: 'If you use this software, please cite it as below.
 
 Larosa, S., Cimini, D., Gallucci, D., Nilo, S. T., and Romano, F.: PyRTlib: an educational Python-based library for non-scattering atmospheric microwave radiative transfer computations, Geosci. Model Dev., 17, 2053–2076, https://doi.org/10.5194/gmd-17-2053-2024, 2024.

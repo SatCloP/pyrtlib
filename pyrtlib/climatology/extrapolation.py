@@ -310,31 +310,32 @@ class ProfileExtrapolation:
         Returns:
             Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]: Height, Pressure, Temperature, RH extrapolated profiles
         """
+    
         if np.max(z) < 50:
-            h_km = np.append(z, np.arange(max(z)+5, 50, 5))
+            h_km = np.append(z, np.arange(max(z)+3.2, 50, 3.2))
             idx = np.where(self._height > np.max(h_km))
             self._height = np.append(h_km, self._height[idx])
         else:
             self._height = np.append(z, self._height[idx])
 
-        idx = np.where(self._height > np.max(z))
         season = self._get_season(lat, month)
+        idx = np.where(self._height > np.max(z))
 
         p, t, rh = q
 
         if season != 'standard':
-            tt = self.instance.temperature(lat, self._height, season)
-            pp = self.instance.pressure(lat, self._height, season)
-            wvd = self.instance.water_vapour_density(lat, self._height, season)
+            tt = self.temperature(lat, self._height, season)
+            pp = self.pressure(lat, self._height, season)
+            wvd = self.water_vapour_density(lat, self._height, season)
         else:
-            tt = self.instance.standard_temperature(self._height, season)
-            pp = self.instance.standard_pressure(self._height, season)
+            tt = self.instance.standard_temperature(self._height)
+            pp = self.instance.standard_pressure(self._height)
             wvd = self.instance.standard_water_vapour_density(
-                self._height, season)
+                self._height)
 
         pres = np.append(p, pp[idx])
         temp = np.append(t, tt[idx])
-        _rh = rho2rh(wvd, tt, pp)[0]
+        _rh = rho2rh(wvd, temp, pres)[0]
         rh = np.append(rh, _rh[idx])
 
         return self._height, pres, temp, rh
@@ -432,7 +433,7 @@ class _ITU835_6():
         """
 
         """
-        return rho_0 * np.exp(-h / h_0)
+        return rho_0 * np.exp(-h / float(h_0))
 
     def standard_water_vapour_pressure(self, h, h_0=2, rho_0=7.5):
         """
