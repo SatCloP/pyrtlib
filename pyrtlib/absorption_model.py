@@ -4,13 +4,16 @@ This class contains the absorption model used in pyrtlib.
 """
 
 import types
+import os
 from typing import Tuple, Union, List, Optional, Dict
+from netCDF4 import Dataset
 
 import numpy as np
 
 from pyrtlib.climatology import AtmosphericProfiles as atmp
 from .utils import dilec12, _dcerror, constants, gas_mass, import_lineshape
 
+PATH = os.path.dirname(os.path.abspath(__file__))
 
 class AbsModelError(Exception):
     """Exception raised for errors in the input model.
@@ -78,53 +81,36 @@ class AbsModel:
 
                 >>> from pyrtlib.absorption_model import AbsModel
                 >>> AbsModel.implemented_models()
-                {
-                    'Oxygen': ['R98',
-                            'R03',
-                            'R16',
-                            'R17',
-                            'R18',
-                            'R19',
-                            'R19SD',
-                            'R20',
-                            'R20SD',
-                            'R22'],
+                {'Oxygen': ['R98',
+                    'R03',
+                    'R16',
+                    'R17',
+                    'R18',
+                    'R19',
+                    'R19SD',
+                    'R20',
+                    'R20SD',
+                    'R22'],
                     'WaterVapour': ['R98',
-                            'R03',
-                            'R16',
-                            'R17',
-                            'R18',
-                            'R19',
-                            'R19SD',
-                            'R20',
-                            'R20SD',
-                            'R21SD',
-                            'R22',
-                            'R22SD']}
+                    'R03',
+                    'R16',
+                    'R17',
+                    'R18',
+                    'R19',
+                    'R19SD',
+                    'R20',
+                    'R20SD',
+                    'R21SD',
+                    'R22SD'],
+                    'Ozone': ['R18', 'R22']}
         """
-        model = {"Oxygen": ['R98',
-                            'R03',
-                            'R16',
-                            'R17',
-                            'R18',
-                            'R19',
-                            'R19SD',
-                            'R20',
-                            'R20SD',
-                            'R22'], 
-                 "WaterVapour": ['R98',
-                            'R03',
-                            'R16',
-                            'R17',
-                            'R18',
-                            'R19',
-                            'R19SD',
-                            'R20',
-                            'R20SD',
-                            'R21SD',
-                            'R22',
-                            'R22SD'],  
-                 "Ozone": ['R18', 'R22']}
+        oxygen_netcdf =  Dataset(os.path.join(PATH, '_lineshape', 'o2_lineshape.nc'), mode='r')
+        wv_netcdf =  Dataset(os.path.join(PATH, '_lineshape', 'h2o_lineshape.nc'), mode='r')
+        ozone_netcdf =  Dataset(os.path.join(PATH, '_lineshape', 'o3_lineshape.nc'), mode='r')
+        
+        model = {"Oxygen": list(oxygen_netcdf.groups.keys()), 
+                 "WaterVapour": list(wv_netcdf.groups.keys()), 
+                 "Ozone": list(ozone_netcdf.groups.keys())}
 
         return model
 
