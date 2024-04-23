@@ -43,6 +43,6 @@ keywords:
   - radiative-transfer-models
   - python
 license: GPL-3.0
-version: 1.0.5
-date-released: '2024-02-29'
+version: 1.0.6
+date-released: '2024-04-23'
 doi: 10.5281/zenodo.8219145
