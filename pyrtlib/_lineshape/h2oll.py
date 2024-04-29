@@ -66,14 +66,14 @@ x = mtx[:, 5]
 w0s = mtx[:, 6] / 1000.0
 xs = mtx[:, 7]
 if H2OAbsModel.model == 'R03':
-    w0s = mtx[:, 6] / 1000.0
-    xs = mtx[:, 7]
-    sr = mtx[:, 8]
+    w0s = mtx[:, 7] / 1000.0
+    xs = mtx[:, 8]
+    sr = mtx[:, 6]
 elif H2OAbsModel.model in ['R16', 'R17']:
     sr = mtx[:, 6]
     w0s = mtx[:, 7] / 1000.0
     xs = mtx[:, 8]
-if H2OAbsModel.model not in ['R98', 'R03']:
+if H2OAbsModel.model not in ['R98', 'R03', 'R16', 'R17']:
     sh = mtx[:, 8] / 1000.0
     xh = mtx[:, 9]
     shs = mtx[:, 10] / 1000.0
