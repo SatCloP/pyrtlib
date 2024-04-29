@@ -491,9 +491,9 @@ class H2OAbsModel(AbsModel):
         # separate the following original equ. into line and continuum
         # terms, and change the units from np/km to ppm
         # abh2o = .3183e-4*den*sum + con
-        if H2OAbsModel == 'R22SD':
-            npp = (1.e-10 * rho * summ / (np.pi * gas_mass(atmp.H2O)
-                   * 1000) / db2np) / factor
+        if H2OAbsModel.model == 'R22SD':
+            h20m = 2.9915075E-23 # mass of water molecule (g)
+            npp = (1.e-10 * rho * summ / (np.pi * h20m) / db2np) / factor
         else:
             npp = (3.1831e-05 * den * summ / db2np) / factor
 
