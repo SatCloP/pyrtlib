@@ -55,7 +55,6 @@ ax[1].axes.get_yaxis().set_visible(False)
 ax[0].set_ylabel("Altitude [km]")
 
 new_tick_locations_pressure = np.arange(0, 140, 20)
-print(ax[0])
 ax3 = ax[0].twinx()
 rspine = ax3.spines['left'].set_position(('axes', -0.2))
 ax3.yaxis.set_ticks_position("left")
