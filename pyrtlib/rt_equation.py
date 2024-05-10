@@ -181,6 +181,7 @@ class RTEquation:
             ds[0] = 0.0
             for i in range(1, nl):
                 ds[i] = z[i] - z[i - 1]
+            return ds
 
         # The rest of the subroutine applies only to angle other than 90 degrees.
         # Convert angle degrees to radians.  Initialize constant values.
