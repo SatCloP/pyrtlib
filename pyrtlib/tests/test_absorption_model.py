@@ -1,5 +1,8 @@
 import os
 # from pathlib import Path
+import numpy as np
+from numpy.testing import assert_allclose
+
 from unittest import TestCase
 from pyrtlib.absorption_model import (H2OAbsModel, O2AbsModel,
                                       N2AbsModel, LiqAbsModel)
@@ -46,3 +49,12 @@ class Test(TestCase):
         LiqAbsModel.model = 'R98'
         absliq = LiqAbsModel.liquid_water_absorption(0.05, 183.0034, 270.)
         assert absliq != 0.09822164244021624
+        
+    def test_h20continum(self):
+        H2OAbsModel.model = 'R23SD'
+        H2OAbsModel.set_ll()
+        assert H2OAbsModel.h2oll.ctr[0] == 296.0
+        
+        cs = H2OAbsModel().h2o_continuum(183, 1.09, 1)
+        assert_allclose(cs, np.array([3.791294e-08]))
+
