@@ -349,19 +349,19 @@ class TbCloudRTE(object):
                                                             self.o3n, self.amu if self._uncertainty else None)
                 self.sptauwet[j, k], \
                     self.ptauwet[j, k, :] = RTEquation.exponential_integration(
-                        1, awet, ds, 0, self.nl, 1)
+                        True, awet, ds, 1, self.nl, 1)
                 self.sptaudry[j, k], \
                     self.ptaudry[j, k, :] = RTEquation.exponential_integration(
-                        1, adry, ds, 0, self.nl, 1)
+                        True, adry, ds, 1, self.nl, 1)
                 if self.cloudy:
                     aliq, aice = RTEquation.cloudy_absorption(
                         self.tk, self.denliq, self.denice, self.frq[j])
                     self.sptauliq[j, k], \
                         self.ptauliq[j, k, :] = RTEquation.exponential_integration(
-                            0, aliq, ds, 0, self.nl, 1)
+                            False, aliq, ds, 1, self.nl, 1)
                     self.sptauice[j, k], \
                         self.ptauice[j, k, :] = RTEquation.exponential_integration(
-                            0, aice, ds, 0, self.nl, 1)
+                            False, aice, ds, 1, self.nl, 1)
 
                 self.ptaulay[j, k, :] = self.ptauwet[j, k, :] + \
                     self.ptaudry[j, k, :] + \
