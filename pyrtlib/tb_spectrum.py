@@ -106,6 +106,8 @@ class TbCloudRTE(object):
         self.sptauwet = np.zeros((self.nf, self.nang))
         self.sptauliq = np.zeros((self.nf, self.nang))
         self.sptauice = np.zeros((self.nf, self.nang))
+        self.awet = np.zeros((self.nf, self.nang, self.nl))
+        self.adry = np.zeros((self.nf, self.nang, self.nl))
         self.ptaudry = np.zeros((self.nf, self.nang, self.nl))
         self.ptaulay = np.zeros((self.nf, self.nang, self.nl))
         self.ptauwet = np.zeros((self.nf, self.nang, self.nl))
@@ -345,14 +347,14 @@ class TbCloudRTE(object):
             for j in range(0, self.nf):
                 RTEquation._emissivity = self._es[j]
                 # Rosenkranz, personal communication, 2019/02/12 (email)
-                awet, adry = RTEquation.clearsky_absorption(self.p, self.tk, e, self.frq[j],
+                self.awet[j, k, :], self.adry[j, k, :] = RTEquation.clearsky_absorption(self.p, self.tk, e, self.frq[j],
                                                             self.o3n, self.amu if self._uncertainty else None)
                 self.sptauwet[j, k], \
                     self.ptauwet[j, k, :] = RTEquation.exponential_integration(
-                        True, awet, ds, 1, self.nl, 1)
+                        True, self.awet[j, k, :], ds, 1, self.nl, 1)
                 self.sptaudry[j, k], \
                     self.ptaudry[j, k, :] = RTEquation.exponential_integration(
-                        True, adry, ds, 1, self.nl, 1)
+                        True, self.adry[j, k, :], ds, 1, self.nl, 1)
                 if self.cloudy:
                     aliq, aice = RTEquation.cloudy_absorption(
                         self.tk, self.denliq, self.denice, self.frq[j])
@@ -398,5 +400,6 @@ class TbCloudRTE(object):
         else:
             return df, {'taulaywet': self.ptauwet, 'taulaydry': self.ptaudry,
                         'taulayliq': self.ptauliq, 'taulayice': self.ptauice,
+                        'awet': self.awet, 'adry': self.adry,
                         'srho': self.srho, 'swet': self.swet, 'sdry': self.sdry,
                         'sliq': self.sliq, 'sice': self.sice}

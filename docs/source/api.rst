@@ -168,6 +168,41 @@ To get all implemented models use the following code:
      'R21SD',
      'R22SD']
 
+Weighting Functions
+===================
+
+Computes the weighting functions to assess the vertical sensitivity of the brightness temperature to the atmospheric profile.
+
+.. note::
+    The weighting functions are computed always using last absorption model available.
+
+.. autosummary::
+    :toctree: generated/
+
+    pyrtlib.weighting_functions.WeightingFunctions
+
+.. plot::
+    :include-source: true
+
+    from pyrtlib.weighting_functions import WeightingFunctions
+    from pyrtlib.climatology import AtmosphericProfiles as atmp
+    from pyrtlib.utils import ppmv2gkg, mr2rh, get_frequencies_sat
+
+    z, p, _, t, md = atmp.gl_atm(atmp.TROPICAL)
+    gkg = ppmv2gkg(md[:, atmp.H2O], atmp.H2O)
+    rh = mr2rh(p, t, gkg)[0] / 100
+
+    wf = WeightingFunctions(z, p, t, rh, .1)
+    wf.satellite = True
+    wf.angle = 48.
+    wf.frequencies = get_frequencies_sat('ICI')
+    wgt = wf.generate_wf()
+
+    wf.plot_wf_grouped(wgt, '', ylim=[0, 20], 
+                       grouped_frequencies=[8, 2, 6, 6, 2],
+                       grouped_labels=['176-190', '240-245', '315-334', '440-455', '659-668'])
+
+
 Utility Functions
 =================
 
