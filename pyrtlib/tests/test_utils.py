@@ -1,11 +1,11 @@
 from unittest import TestCase
-
+import pytest
 import numpy as np
 from numpy.testing import assert_allclose, assert_almost_equal, assert_equal
 from pyrtlib.absorption_model import H2OAbsModel
 from pyrtlib.climatology import AtmosphericProfiles as atmp
 from pyrtlib.utils import (ppmv2gkg, mr2rh, gas_mass, height_to_pressure, pressure_to_height, constants,
-                           to_kelvin, to_celsius, get_frequencies_sat, eswat_goffgratch, satvap, satmix,
+                           to_kelvin, to_celsius, get_frequencies_sat, get_frequencies, eswat_goffgratch, satvap, satmix,
                            import_lineshape, atmospheric_tickness, mr2rho, mr2e, esice_goffgratch, rho2mr)
 
 z, p, d, t, md = atmp.gl_atm(atmp.TROPICAL)
@@ -188,6 +188,19 @@ class Test(TestCase):
                                 186.71, 188.21, 189.41, 191.71])
 
         assert_almost_equal(frequencies, get_frequencies_sat('MWI'), decimal=4)
+        
+        with pytest.raises(Exception):
+            frq = get_frequencies_sat('MMWI')
+        
+    def test_get_frequencies(self):
+        frequencies = np.array([22.235, 23.035, 23.835, 26.235, 30.000, 51.250, 52.280, 53.850, 54.940,
+                56.660, 57.290, 58.800])
+
+        assert_almost_equal(frequencies, get_frequencies('ARM'), decimal=4)
+        
+        with pytest.raises(Exception):
+            frq = get_frequencies('mARM')
+
 
     def test_eswat_goffgratch(self):
         eswat = eswat_goffgratch(273.25)
