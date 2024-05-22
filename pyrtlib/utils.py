@@ -909,8 +909,11 @@ def get_frequencies(instrument: Optional[str] = 'hat') -> List:
         ],
         'k2w': [23.8400, 31.4000, 72.5000, 82.5000, 90.0000, 150.000]
     }
-
-    return frequencies.get(instrument)
+    
+    try:
+        return frequencies[instrument.lower()]
+    except KeyError:
+        raise ValueError(f"Invalid instrument name. Available instruments are: {list(frequencies.keys())}")
 
 
 def to_kelvin(t: np.ndarray) -> np.ndarray:
@@ -1004,5 +1007,7 @@ def get_frequencies_sat(instrument: str) -> np.ndarray:
                         cf3-9.5, cf3-3.5, cf3-1.5, cf3+1.5, cf3+3.5, cf3+9.5,
                         cf4-7.2, cf4-3.0, cf4-1.4, cf4+1.4, cf4+3.0, cf4+7.2,
                         cf6-4.2, cf6+4.2])
+    else:
+        raise ValueError("Instrument not found")
 
     return freq
