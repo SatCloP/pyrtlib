@@ -911,7 +911,7 @@ def get_frequencies(instrument: Optional[str] = 'hat') -> List:
     }
     
     try:
-        return frequencies[instrument.lower()]
+        return np.array(frequencies[instrument.lower()])
     except KeyError:
         raise ValueError(f"Invalid instrument name. Available instruments are: {list(frequencies.keys())}")
 
@@ -971,6 +971,8 @@ def get_frequencies_sat(instrument: str) -> np.ndarray:
     cf165 = 165.5
     cf53 = 57.290344
     cf57 = 57.290344
+    
+    instrument = instrument.upper()
 
     if instrument == 'SAPHIR':
         freq = np.array([cf-11, cf-6.8, cf-4.2, cf-2.8, cf-1.1, cf-0.2,
