@@ -1,11 +1,10 @@
 .. _uncert_example:
 
-================
-Notebook example
-================
+==================
+Community examples
+==================
 
 .. toctree::
    :maxdepth: 3
 
-   tutorial
-   uncertainty
+   Pressure_Broadening_effect

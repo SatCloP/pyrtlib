@@ -64,7 +64,22 @@ which are commonly exploited for atmospheric sounding by microwave radiometer (M
             :color: primary
             :expand:
 
-            To the Gallery examples
+            To the Gallery examples page
+
+    .. grid-item-card:: Community examples
+        :img-top: _static/community.svg
+        :class-card: intro-card
+        :shadow: md
+
+        +++
+
+        .. button-link:: notebook/index.html
+            :ref-type: ref
+            :click-parent:
+            :color: primary
+            :expand:
+
+            To the Community examples page
 
 .. pyrtlib is a python tool that provides a set of calsses and methods for simulating ........
 
@@ -231,6 +246,15 @@ Gallery Example
    :maxdepth: 2
    
    examples/index
+
+Community Example
+-----------------
+
+.. toctree::
+   :maxdepth: 2
+   
+   notebook/index
+
 
 References
 ----------
