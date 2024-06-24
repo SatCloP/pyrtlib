@@ -1,0 +1,12 @@
+pyrtlib.rt\_equation.RTEquation.planck
+======================================
+
+.. currentmodule:: pyrtlib.rt_equation
+
+.. automethod:: pyrtlib.rt_equation.RTEquation.planck
+
+
+
+
+
+.. include:: gallery_backreferences/pyrtlib.rt_equation.RTEquation.planck.examples

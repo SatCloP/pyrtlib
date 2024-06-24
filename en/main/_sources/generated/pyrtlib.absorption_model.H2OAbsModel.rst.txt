@@ -1,0 +1,39 @@
+pyrtlib.absorption\_model.H2OAbsModel
+=====================================
+
+.. currentmodule:: pyrtlib.absorption_model
+
+.. autoclass:: H2OAbsModel
+    :show-inheritance: 
+    
+    
+    
+    .. rubric:: Methods
+
+    .. autosummary::
+        :toctree:
+        :recursive:
+    
+        ~H2OAbsModel.__init__
+        ~H2OAbsModel.h2o_absorption
+        ~H2OAbsModel.implemented_models
+        ~H2OAbsModel.set_ll
+    
+    
+
+    
+    
+    .. rubric:: Attributes
+
+    .. autosummary::
+    
+        ~H2OAbsModel.h2oll
+        ~H2OAbsModel.model
+    
+    
+
+    
+    
+    
+
+.. include:: gallery_backreferences/pyrtlib.absorption_model.H2OAbsModel.examples

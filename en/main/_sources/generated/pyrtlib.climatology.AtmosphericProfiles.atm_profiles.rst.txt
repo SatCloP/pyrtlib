@@ -1,0 +1,12 @@
+pyrtlib.climatology.AtmosphericProfiles.atm\_profiles
+=====================================================
+
+.. currentmodule:: pyrtlib.climatology
+
+.. automethod:: pyrtlib.climatology.AtmosphericProfiles.atm_profiles
+
+
+
+
+
+.. include:: gallery_backreferences/pyrtlib.climatology.AtmosphericProfiles.atm_profiles.examples

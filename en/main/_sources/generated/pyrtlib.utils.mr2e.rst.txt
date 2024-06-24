@@ -1,0 +1,12 @@
+pyrtlib.utils.mr2e
+==================
+
+.. currentmodule:: pyrtlib.utils
+
+.. autofunction:: pyrtlib.utils.mr2e
+
+
+
+
+
+.. include:: gallery_backreferences/pyrtlib.utils.mr2e.examples
