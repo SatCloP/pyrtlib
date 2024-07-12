@@ -30,6 +30,21 @@ class AbsModelError(Exception):
         super().__init__(self.message)
 
 
+class AbsModelError(Exception):
+    """Exception raised for errors in the input model.
+
+    Attributes:
+        model -- input model which caused the error
+        message -- explanation of the error
+    """
+
+    def __init__(self, model, message):
+        self.model = model
+        self.message = message
+
+        super().__init__(self.message)
+
+
 class AbsModel:
     """This is an abstraction class to define the absorption model.
     """
@@ -160,7 +175,7 @@ class LiqAbsModel(AbsModel):
             fs = np.dot(39.8, fp)
             eps = (eps0 - eps1) / complex(1.0, freq / fp) + \
                 (eps1 - eps2) / complex(1.0, freq / fs) + eps2
-        elif LiqAbsModel.model in ['R17', 'R16', 'R19', 'R20', 'R19SD', 'R22SD']:
+        elif LiqAbsModel.model in ['R17', 'R16', 'R19', 'R20', 'R19SD', 'R22SD', 'R23', 'R23SD', 'R24']:
             eps = dilec12(freq, temp)
         else:
             raise ValueError(
@@ -204,7 +219,7 @@ class N2AbsModel(AbsModel):
         fdepen = 0.5 + 0.5 / (1.0 + (f / 450.0) ** 2)
         if N2AbsModel.model in ['R16', 'R17', 'R18', 'R19', 'R19SD']:
             l, m, n = 6.5e-14, 3.6, 1.34
-        elif N2AbsModel.model in ['R20', 'R20SD', 'R21SD', 'R22', 'R22SD']:
+        elif N2AbsModel.model in ['R20', 'R20SD', 'R21SD', 'R22', 'R22SD', 'R23', 'R23SD', 'R24']:
             l, m, n = 9.95e-14, 3.22, 1
         elif N2AbsModel.model == 'R03':
             l, m, n = 6.5e-14, 3.6, 1.29
@@ -249,6 +264,34 @@ class H2OAbsModel(AbsModel):
             raise AbsModelError(
                 H2OAbsModel.model, f"Model {H2OAbsModel.model} is not available. It is necessary to define water vapour absorption model manually")
         H2OAbsModel.h2oll = import_lineshape("h2oll")
+
+    def h2o_continuum(self, frq: np.ndarray, vx: np.ndarray, nfreq: int):
+        nf = 6
+        deltaf = 299.792458
+        selfcon = np.array([2.877e-21, 2.855e-21, 2.731e-21,
+                           2.49e-21, 2.178e-21, 1.863e-21])
+        selftexp = np.array([6.413, 6.414, 6.275, 6.049, 5.789, 5.557])
+        t = 300.0 / vx
+        theta = 296./t
+
+        a = np.zeros((nf))
+        cs = np.zeros((nfreq))
+        for j in range(nf):
+            a[j] = 6.532e+12*selfcon[j]*theta**(selftexp[j]+3.)
+        a = np.insert(a, 0, a[1], axis=0)
+        
+        for i in range(nfreq):
+            fj = frq/deltaf
+            j = int(fj)
+            j = np.minimum(j, nf-2)
+            p = fj - j
+            c = (3.-2.*p)*p*p
+            b = 0.5*p*(1.-p)
+            b1 = b*(1.-p)
+            b2 = b*p
+            cs[i] = -a[j]*b1+a[j+1]*(1.-c+b2)+a[j+2]*(c+b1)-a[j+3]*b2
+
+        return cs
 
     def h2o_absorption(self, pdrykpa: np.ndarray, vx: np.ndarray, ekpa: np.ndarray, frq: np.ndarray, amu: Optional[dict] = None) -> Union[
             Tuple[np.ndarray, np.ndarray], None]:
@@ -339,7 +382,7 @@ class H2OAbsModel(AbsModel):
         pvap = (rho * t) / 216.68
         if H2OAbsModel.model in ['R03', 'R16', 'R17', 'R98']:
             pvap = (rho * t) / 217.0
-        if H2OAbsModel.model in ['R22SD']:
+        if H2OAbsModel.model in ['R22SD', 'R23SD', 'R24']:
             pvap = (constants("Rwatvap")[0] * 1e-05) * rho * t
         pda = p - pvap
         if H2OAbsModel.model in ['R03', 'R16', 'R98']:
@@ -361,15 +404,23 @@ class H2OAbsModel(AbsModel):
         ti = self.h2oll.reftline / t
         df = np.zeros((2, 1))
 
-        if H2OAbsModel.model.startswith(('R19SD', 'R20SD', 'R21SD', 'R22SD')):
+        if H2OAbsModel.model.startswith(('R19SD', 'R20SD', 'R21SD', 'R22SD', 'R23SD', 'R24')):
             tiln = np.log(ti)
             ti2 = np.exp(2.5 * tiln)
             summ = 0.0
+            if H2OAbsModel.model in ['R23SD', 'R24']:
+                if self.h2oll.cs > 0:
+                    # npp_cs = np.zeros(1)
+                    con = self.h2oll.cs * ti * self.h2oll.xcs
+                    # for i in len(frq):
+                    npp_cs = con
+                else:
+                    npp_cs = self.h2o_continuum(frq, vx, 1)
             for i in range(0, nlines):
                 width0 = self.h2oll.w0[i] * pda * ti ** self.h2oll.x[i] + \
                     self.h2oll.w0s[i] * pvap * ti ** self.h2oll.xs[i]
                 width2 = self.h2oll.w2[i] * pda + self.h2oll.w2s[i] * pvap
-                if H2OAbsModel.model in ['R21SD', 'R22SD']:
+                if H2OAbsModel.model in ['R21SD', 'R22SD', 'R23SD', 'R24']:
                     if self.h2oll.w2[i] > 0:
                         width2 = self.h2oll.w2[i] * pda * ti ** self.h2oll.xw2[i] + self.h2oll.w2s[i] * pvap * ti ** \
                             self.h2oll.xw2s[i]
@@ -388,7 +439,7 @@ class H2OAbsModel(AbsModel):
                 df[0] = f - self.h2oll.fl[i] - shift
                 df[1] = f + self.h2oll.fl[i] + shift
                 base = width0 / (562500.0 + wsq)
-                if H2OAbsModel.model in ["R21SD", 'R22SD']:
+                if H2OAbsModel.model in ["R21SD", 'R22SD', 'R23SD', 'R24']:
                     delta2 = self.h2oll.d2[i] * pda + self.h2oll.d2s[i] * pvap
                 res = 0.0
                 for j in range(0, 2):
@@ -404,7 +455,7 @@ class H2OAbsModel(AbsModel):
                                 delta2 = 0.0
                             xc = complex((width0 - np.dot(1.5, width2)), df[j] + np.dot(1.5, delta2)) / complex(
                                 width2, -delta2)
-                        elif H2OAbsModel.model in ["R21SD", 'R22SD']:
+                        elif H2OAbsModel.model in ["R21SD", 'R22SD', 'R23SD', 'R24']:
                             xc = complex(
                                 (width0 - 1.5 * width2), df[j] + 1.5 * delta2) / complex(width2, -delta2)
 
@@ -412,7 +463,7 @@ class H2OAbsModel(AbsModel):
                         pxw = 1.77245385090551603 * xrt * \
                             _dcerror(-np.imag(xrt), np.real(xrt))
                         sd = 2.0 * (1.0 - pxw) / (
-                            width2 if H2OAbsModel.model not in ['R20SD', 'R21SD', 'R22SD'] else complex(width2, -delta2))
+                            width2 if H2OAbsModel.model not in ['R20SD', 'R21SD', 'R22SD', 'R23SD', 'R24'] else complex(width2, -delta2))
                         res += np.real(sd) - base
                     elif np.abs(df[j]) < 750.0:
                         res += width0 / (df[j] ** 2 + wsq) - base
@@ -445,7 +496,7 @@ class H2OAbsModel(AbsModel):
                 summ += s * res * (f / self.h2oll.fl[i]) ** 2
         elif H2OAbsModel.model in ['R19', 'R20']:
             tiln = np.log(ti)
-            ti2 = np.exp(2.5 * tiln)
+            ti2 = ti ** 2.5
             summ = 0.0
             for i in range(0, nlines):
                 widthf = self.h2oll.w0[i] * pda * ti ** self.h2oll.x[i]
@@ -491,9 +542,16 @@ class H2OAbsModel(AbsModel):
         # separate the following original equ. into line and continuum
         # terms, and change the units from np/km to ppm
         # abh2o = .3183e-4*den*sum + con
-        if H2OAbsModel.model == 'R22SD':
-            h20m = 2.9915075E-23 # mass of water molecule (g)
-            npp = (1.e-10 * rho * summ / (np.pi * h20m) / db2np) / factor
+        
+        if H2OAbsModel.model in ['R23SD', 'R24']:
+            conf = self.h2oll.cf * ti**self.h2oll.xcf
+            con = (conf * pda + npp_cs * pvap) * pvap * f**2
+
+        h20m = 2.9915075E-23 # mass of water molecule (g)
+        if H2OAbsModel.model in ['R22SD', 'R23SD']:
+            npp = 1.e-10 * rho * summ / (np.pi * h20m) / db2np / factor
+        elif H2OAbsModel.model == 'R24':
+            npp = 1.e-10 * (rho/h20m) * (summ/np.pi) / db2np / factor
         else:
             npp = (3.1831e-05 * den * summ / db2np) / factor
 
@@ -526,7 +584,7 @@ class O2AbsModel(AbsModel):
     @staticmethod
     def set_ll() -> None:
         if O2AbsModel.model not in O2AbsModel.implemented_models()['Oxygen']:
-            raise AbsModelError(H2OAbsModel.model,
+            raise AbsModelError(O2AbsModel.model,
                                 f"Model {O2AbsModel.model} is not available. It is necessary to define oxygen absorption model manually")
         O2AbsModel.o2ll = import_lineshape("o2ll")
 
@@ -622,22 +680,28 @@ class O2AbsModel(AbsModel):
 
         th = 300.0 / temp
         th1 = th - 1.0
-        b = th ** self.o2ll.x
+        b = th**self.o2ll.x
         preswv = vapden * temp / 216.68
         if O2AbsModel.model in ['R03', 'R16', 'R17', 'R18', 'R98']:
             preswv = vapden * temp / 217.0
-        if O2AbsModel.model in ['R22', 'R22SD']:
+        if O2AbsModel.model in ['R22', 'R22SD', 'R23', 'R23SD', 'R24']:
             preswv = 4.615228e-3 * vapden * temp
         presda = pres - preswv
-        den = 0.001 * (presda * b + 1.2 * preswv * th)
+        den = .001 * (presda * b + 1.2 * preswv * th)
         if O2AbsModel.model in ['R03', 'R16', 'R98']:
             den = 0.001 * (presda * b + 1.1 * preswv * th)
         if O2AbsModel.model == 'R03':
             den = 0.001 * (presda * th ** 0.9 + 1.1 * preswv * th)
         if O2AbsModel.model == 'R98':
             den = 0.001 * (presda + 1.1 * preswv) * th
-        dfnr = self.o2ll.wb300 * den
         pe2 = den * den
+        if O2AbsModel.model in ['R23', 'R23SD']:
+            pe1 = .99 * den
+            pe2 = pe1**2
+        if O2AbsModel.model in ['R24']:
+            pe1 = den # [8] includes common TEMP-dependence
+            pe2 = pe1**2
+        dfnr = self.o2ll.wb300 * den
 
         # intensities of the non-resonant transitions for o16-o16 and o16-o18, from jpl's line compilation
         # 1.571e-17 (o16-o16) + 1.3e-19 (o16-o18) = 1.584e-17
@@ -671,6 +735,90 @@ class O2AbsModel(AbsModel):
                 sf2 = (df - (freq + fcen) * y) / \
                     ((freq + self.o2ll.f[k]) ** 2 + df * df)
                 summ += strr * (sf1 + sf2) * (freq / self.o2ll.f[k]) ** 2
+        elif O2AbsModel.model in ['R23']:
+            summ = 0.
+            anorm = 0.
+            a = np.zeros(nlines)
+            g = np.zeros(nlines)
+            for k in range(0, nlines):
+                a[k] = self.o2ll.s300[k]*np.exp(-self.o2ll.be[k] * th1)/self.o2ll.f[k]**2
+                g[k] = self.o2ll.g0[k] + self.o2ll.g1[k]*th1
+                if k > 0 and k <= 37:
+                    summ += a[k]*g[k]
+                    anorm += a[k]
+            off = summ/anorm
+            summ = (1.584e-17/th) * dfnr/ (freq * freq + dfnr * dfnr)
+            for k in range(0, nlines):
+                width = self.o2ll.w300[k] * den
+                y = pe1*(self.o2ll.y300[k]+self.o2ll.y1[k]*th1)
+                if k > 0 and k <= 37:
+                    gfac = 1. + pe2 * (g[k] - off)
+                else:
+                    gfac = 1.
+                fcen = self.o2ll.f[k] + pe2 * (self.o2ll.dnu0[k] + self.o2ll.dnu1[k] * th1)
+                if k == 0 and np.abs(freq-fcen) < 10. * width:
+                    width2 = .076 * width
+                    xc = complex(width-1.5*width2, freq-fcen)/width2
+                    xrt = np.sqrt(xc)
+                    pxw = 1.77245385090551603 * xrt * \
+                            _dcerror(-np.imag(xrt), np.real(xrt))
+                    asd = complex(1.,y)*2.*(1.-pxw)/width2
+                    sf1 = np.real(asd)
+                else:
+                    sf1 = (width*gfac + (freq-fcen)*y)/((freq-fcen)**2 + width**2)
+                sf2 = (width*gfac - (freq+fcen)*y)/((freq+fcen)**2 + width**2)
+                summ += a[k] * (sf1+sf2)
+                if k == 37:
+                    summ = np.maximum(summ, 0.)
+        elif O2AbsModel.model in ['R24']:
+            anorm = 0.
+            wnr = self.o2ll.wb300 * pe1
+            sumy = 1.584e-17 * self.o2ll.wb300
+            sumg = 0.
+            asq = 0.
+            adjy = .99 # adjustment following update of line intensities
+            a = np.zeros(nlines)
+            y = np.zeros(nlines)
+            g = np.zeros(nlines)
+            for k in range(0, nlines):
+                a[k] = self.o2ll.s300[k] * np.exp(-self.o2ll.be[k] * th1) * th/self.o2ll.f[k]**2
+                y[k] = adjy * (self.o2ll.y300[k] + self.o2ll.y1[k]*th1)
+                if k <= 37:
+                    sumy += 2. * a[k] * (self.o2ll.w300[k] + y[k] * self.o2ll.f[k])
+                g[k] = self.o2ll.g0[k] + self.o2ll.g1[k] * th1
+                if k > 0 and k <= 37:
+                    sumg += a[k] * g[k]
+                    asq += a[k]**2
+                    anorm += a[k]
+            # The bias adjustment for Y is applied
+            # from K=2 to 38; therefore it is normalized by ANORM summed from 2 to 38.
+            sumy2 = sumy/(2. * anorm)
+            ratio = sumg/asq
+            for k in range(1, 38):
+                y[k] -= sumy2/self.o2ll.f[k] # bias adjustment
+                g[k] -= a[k] * ratio # makes G orthogonal to A
+            
+            summ = 1.584e-17 * wnr/(freq * freq + wnr * wnr)
+            for k in range(0, nlines):
+                width = self.o2ll.w300[k] * pe1
+                yk = pe1 * y[k]
+                if k > 0 and k <= 37:
+                    gfac = 1. + pe2 * g[k]
+                else:
+                    gfac = 1.
+                fcen = self.o2ll.f[k] + pe2 * (self.o2ll.dnu0[k] + self.o2ll.dnu1[k] * th1)
+                if k == 0 and np.abs(freq-fcen) < 10. * width:
+                    width2 = .076 * width
+                    xc = complex(width - 1.5*width2, (freq-fcen))/width2
+                    xrt = np.sqrt(xc)
+                    pxw = 1.77245385090551603 * xrt * \
+                            _dcerror(-np.imag(xrt), np.real(xrt))
+                    asd = complex(1.,yk) * 2. * (1.-pxw)/width2
+                    sf1 = np.real(asd)
+                else:
+                    sf1 = (width*gfac + (freq-fcen)*yk)/((freq-fcen)**2 + width**2)
+                sf2 = (width*gfac - (freq+fcen)*yk)/((freq+fcen)**2 + width**2)
+                summ += a[k] * (sf1+sf2)
         else:
             for k in range(0, nlines):
                 df = self.o2ll.w300[k] * den
@@ -687,6 +835,10 @@ class O2AbsModel(AbsModel):
                 summ += strr * (sf1 + sf2) * (freq / self.o2ll.f[k]) ** 2
 
         o2abs = 1.6097e+11 * summ * presda * th ** 3
+        if O2AbsModel.model in ['R23']:
+            o2abs = 1.6097e+11 * summ * presda * freq * freq * th**3
+        if O2AbsModel.model in ['R24']:
+            o2abs = 1.6097e+11 * summ * presda * (freq * th)**2
         if O2AbsModel.model in ['R03', 'R98']:
             o2abs = 5.034e+11 * summ * presda * th ** 3 / 3.14159
         # o2abs = 1.004 * np.maximum(o2abs, 0.0)
@@ -716,13 +868,11 @@ class O2AbsModel(AbsModel):
             ncpp *= 5.034e+11 * presda * th ** 3 / 3.14159
         else:
             ncpp *= 1.6097e11 * presda * th ** 3  # n/pi*sum0
-        if O2AbsModel.model in ['R03', 'R16', 'R17', 'R18', 'R98']:
-            ncpp += N2AbsModel.n2_absorption(temp, pres, freq)
         # change the units from np/km to ppm
         npp = (o2abs / db2np) / factor
         ncpp = (ncpp / db2np) / factor
         ncpp = 0 if O2AbsModel.model in [
-            'R19', 'R19SD', 'R20', 'R20SD', 'R22', 'R22SD'] else ncpp
+            'R19', 'R19SD', 'R20', 'R20SD', 'R22', 'R22SD', 'R23', 'R24'] else ncpp
 
         return npp, ncpp
 
@@ -779,7 +929,7 @@ class O3AbsModel(AbsModel):
 
         if o3n.any() <= 0:
             abs_o3 = 0
-            return
+            return abs_o3
 
         den = 1e-06 * o3n
         ti = self.o3ll.reftline / t
@@ -788,9 +938,9 @@ class O3AbsModel(AbsModel):
         # add resonances within 1 ghz of f.  most of the ozone is in the
         # stratosphere, so lines are relatively narrow, and lorentz shape
         # factor is ok.
+        summ = 0.0
+        nlines = len(self.o3ll.fl)
         if O3AbsModel.model in ["R22", "R22SD"]:
-            summ = 0.0
-            nlines = len(self.o3ll.fl)
             for k in range(0, nlines):
                 if self.o3ll.fl[k] > (f + 1.0):
                     break
@@ -804,8 +954,6 @@ class O3AbsModel(AbsModel):
 
             abs_o3 = .56419e-4 * summ * qvinv * ti2 * den
         else:
-            summ = 0.0
-            nlines = len(self.o3ll.fl)
             for k in range(0, nlines):
                 if self.o3ll.fl[k] > (f + 1.0):
                     break
