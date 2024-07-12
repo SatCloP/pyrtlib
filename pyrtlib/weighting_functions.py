@@ -20,7 +20,7 @@ from .absorption_model import O2AbsModel
 class WeightingFunctions(object):
     """
     This class is used to compute the weighting functions
-    
+
     .. note::
         The weighting functions are computed always using last absorption model available.
     """
@@ -138,25 +138,25 @@ class WeightingFunctions(object):
         _, other = rte.execute(False)
 
         return other
-    
+
     def _mean_channel(self, a: np.ndarray, bandpass: np.ndarray) -> np.ndarray:
         """
         Compute the mean of the input array based on bandpass.
-        
+
         Args:
             a (np.ndarray): The input array.
             bandpass (np.ndarray): The bandpass array.
-            
+
         Returns:
             np.ndarray: The mean of the input array based on bandpass.
         """
-        
+
         channel_mean = np.zeros((len(bandpass), a.shape[1]))
         cnt = 0
         for i in range(len(bandpass)):
             channel_mean[i, :] = np.mean(a[cnt:bandpass[i]+cnt, :], axis=0)
             cnt += bandpass[i]
-            
+
         return channel_mean
 
     def generate_wf(self) -> np.ndarray:
@@ -228,10 +228,11 @@ class WeightingFunctions(object):
         # plt.rc('font', family=['cmr10'])
         # plt.rc('mathtext', fontset='cm')
         # plt.rc('axes.formatter', use_mathtext=False)
-        
+
         if self.bandpass is not None:
             wgt = self._mean_channel(wgt, self.bandpass)
-            self.frequencies = np.array([np.mean(self.frequencies[i:i+j]) for i,j in enumerate(self.bandpass)])
+            self.frequencies = np.array(
+                [np.mean(self.frequencies[i:i+j]) for i, j in enumerate(self.bandpass)])
 
         if yaxis == 'p':
             y = self.pinterp[:-1]
@@ -245,7 +246,8 @@ class WeightingFunctions(object):
         normalize = np.max(
             wgt, axis=1) if normalized else np.ones(wgt.shape[1])
 
-        plt.figure(figsize=kwargs.get('figsize', (5, 10)), dpi=kwargs.get('dpi', 150))
+        plt.figure(figsize=kwargs.get('figsize', (5, 10)),
+                   dpi=kwargs.get('dpi', 150))
         for i in range(len(self.frequencies)):
             if self.satellite:
                 line_s = 'dashed' if y[np.argmax(wgt[i, 1:])] == 0. else None
@@ -269,7 +271,7 @@ class WeightingFunctions(object):
             plt.ylim(ylim[0], ylim[1])
         if xlim:
             plt.xlim(xlim[0], xlim[1])
-        
+
         if title:
             plt.title(title)
         plt.grid(color='#d6d6d6', linestyle='dashed')
@@ -279,7 +281,7 @@ class WeightingFunctions(object):
                            self.pinterp[np.where(self.zinterp == np.max(self.zinterp))]))
         if ylim:
             ax_twinx.set_ylim((self.pinterp[np.where(self.zinterp == ylim[0])],
-                           self.pinterp[np.where(self.zinterp == ylim[1])]))
+                               self.pinterp[np.where(self.zinterp == ylim[1])]))
         ax_twinx.set_yscale('log')
         ax_twinx.set_ylabel('Pressure [$hPa$]')
         ax_twinx.tick_params(axis='both', which='both', direction='in')
@@ -321,8 +323,9 @@ class WeightingFunctions(object):
 
         y = self.zinterp[:-1]
         y_label = 'Height [$km$]'
-        
-        plt.figure(figsize=kwargs.get('figsize', (10, 4)), dpi=kwargs.get('dpi', 150))
+
+        plt.figure(figsize=kwargs.get('figsize', (10, 4)),
+                   dpi=kwargs.get('dpi', 150))
         cnt = 0
         max_increment = np.array([])
         for i in grouped_frequencies:
@@ -364,7 +367,7 @@ class WeightingFunctions(object):
                            self.pinterp[np.where(self.zinterp == np.max(self.zinterp))]))
         if ylim:
             ax_twinx.set_ylim((self.pinterp[np.where(self.zinterp == ylim[0])],
-                           self.pinterp[np.where(self.zinterp == ylim[1])]))
+                               self.pinterp[np.where(self.zinterp == ylim[1])]))
         ax_twinx.set_yscale('log')
         ax_twinx.set_ylabel('Pressure [$hPa$]')
         ax_twinx.tick_params(axis='both', which='both', direction='in')
