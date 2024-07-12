@@ -43,11 +43,11 @@ x = d.variables['x'][:].data.item()
 w300 = d.variables['w300'][:].data
 if O2AbsModel.model in ['R98', 'R03', 'R17', 'R18', 'R19', 'R19SD']:
     v = d.variables['v'][:].data
-if O2AbsModel.model in ['R98', 'R03', 'R17', 'R18', 'R19', 'R19SD', 'R23']:
+if O2AbsModel.model in ['R98', 'R03', 'R17', 'R18', 'R19', 'R19SD', 'R23', 'R24']:
     y300 = d.variables['y300'][:].data
-if O2AbsModel.model not in ['R98', 'R03', 'R17', 'R18', 'R19', 'R19SD', 'R23']:
+if O2AbsModel.model not in ['R98', 'R03', 'R17', 'R18', 'R19', 'R19SD', 'R23', 'R24']:
     y0 = d.variables['y0'][:].data
-if O2AbsModel.model in ['R16', 'R20', 'R20SD', 'R21', 'R22', 'R23']:
+if O2AbsModel.model in ['R16', 'R20', 'R20SD', 'R21', 'R22', 'R23', 'R24']:
     y1 = d.variables['y1'][:].data
     g0 = d.variables['g0'][:].data
     g1 = d.variables['g1'][:].data
