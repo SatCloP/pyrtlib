@@ -46,3 +46,12 @@ class Test(TestCase):
         wf.satellite = False
         wf.plot_wf(wgt, 'Multiple Frequencies',
                    legend=True, figsize=(8, 6), dpi=100)
+        
+    def test_plot_wf_bandpass(self):
+        cf53 = 53.596
+        cf57 = 57.290344
+        freqs = np.array([52.8, cf53-0.115, cf53+0.115, 54.4, 54.94, 55.5, cf57, cf57-0.217, cf57+0.217, cf57-0.3222-0.048, cf57-0.3222+0.048, cf57+0.3222-0.048, cf57+0.3222+0.048])
+        wgt, z, wf = self.wf_computation(freqs)
+        wf.bandpass = np.array([1, 2, 1, 1, 1, 1, 2, 4])
+        wf.plot_wf(wgt, 'Bandpass',
+                   legend=True, figsize=(8, 6), dpi=100)
