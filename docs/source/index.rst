@@ -51,7 +51,7 @@ which are commonly exploited for atmospheric sounding by microwave radiometer (M
 
             To the API references
        
-    .. grid-item-card:: Gallery examples
+    .. grid-item-card:: Gallery example
         :img-top: _static/code.svg
         :class-card: intro-card
         :shadow: md
@@ -64,9 +64,9 @@ which are commonly exploited for atmospheric sounding by microwave radiometer (M
             :color: primary
             :expand:
 
-            To the Gallery examples page
+            To the Gallery example page
 
-    .. grid-item-card:: Community examples
+    .. grid-item-card:: Community example
         :img-top: _static/community.svg
         :class-card: intro-card
         :shadow: md
@@ -79,7 +79,7 @@ which are commonly exploited for atmospheric sounding by microwave radiometer (M
             :color: primary
             :expand:
 
-            To the Community examples page
+            To the Community example page
 
 .. pyrtlib is a python tool that provides a set of calsses and methods for simulating ........
 

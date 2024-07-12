@@ -157,16 +157,32 @@ To get all implemented models use the following code:
     from pyrtlib.absorption_model import AbsModel
 
     AbsModel.implemented_models()
-    ['R98',
-     'R03',
-     'R16',
-     'R17',
-     'R19',
-     'R19SD',
-     'R20',
-     'R20SD',
-     'R21SD',
-     'R22SD']
+    {'Oxygen': ['R98',
+    'R03',
+    'R16',
+    'R17',
+    'R18',
+    'R19',
+    'R19SD',
+    'R20',
+    'R20SD',
+    'R22',
+    'R23',
+    'R24'],
+    'WaterVapour': ['R98',
+    'R03',
+    'R16',
+    'R17',
+    'R18',
+    'R19',
+    'R19SD',
+    'R20',
+    'R20SD',
+    'R21SD',
+    'R22SD',
+    'R23SD',
+    'R24'],
+    'Ozone': ['R18', 'R22', 'R23']}
 
 Weighting Functions
 ===================

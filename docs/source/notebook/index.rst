@@ -1,8 +1,8 @@
 .. _uncert_example:
 
-==================
-Community examples
-==================
+=================
+Community example
+=================
 
 .. toctree::
    :maxdepth: 3
