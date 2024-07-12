@@ -33,7 +33,7 @@ class Test(TestCase):
 
     def test_plot_wf(self):
         wgt, z, wf = self.wf_computation(np.array([57.660544]))
-        wf.plot_wf(wgt, 'Test', legend=True, figsize=(8, 6), dpi=100)
+        wf.plot_wf(wgt, 'Test', legend=True, ylim=(0, 60), xlim=(0, .1), figsize=(8, 6), dpi=100)
 
     def test_plot_wf_grouped(self):
         wgt, z, wf = self.wf_computation(np.array([57.660544]))
@@ -43,5 +43,6 @@ class Test(TestCase):
     def test_plot_wf_multiple(self):
         freqs = np.array([57.290344, 57.660544, 89.0])
         wgt, z, wf = self.wf_computation(freqs)
+        wf.satellite = False
         wf.plot_wf(wgt, 'Multiple Frequencies',
                    legend=True, figsize=(8, 6), dpi=100)

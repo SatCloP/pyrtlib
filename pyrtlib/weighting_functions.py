@@ -153,7 +153,7 @@ class WeightingFunctions(object):
 
         channel_mean = np.zeros((len(bandpass), a.shape[1]))
         cnt = 0
-        for i, bndpass in enumerate(bandpass):
+        for i, _ in enumerate(bandpass):
             channel_mean[i, :] = np.mean(a[cnt:bandpass[i]+cnt, :], axis=0)
             cnt += bandpass[i]
 
@@ -201,7 +201,7 @@ class WeightingFunctions(object):
         return wgt
 
     def plot_wf(self, wgt: np.ndarray, title: Optional[str] = '', ylim: Optional[Tuple[int, int]] = None,
-                xlim: Optional[Tuple[int, int]] = None, yaxis: Optional[str] = 'z',
+                xlim: Optional[Tuple[int, int]] = None,
                 legend: Optional[bool] = True,
                 normalized: Optional[bool] = False,
                 **kwargs) -> None:
@@ -213,7 +213,6 @@ class WeightingFunctions(object):
             title (Optional[str], optional): The title of the plot. Defaults to ''.
             ylim (Optional[Tuple[int, int]], optional): The y-axis limits of the plot. Defaults to None.
             xlim (Optional[Tuple[int, int]], optional): The x-axis limits of the plot. Defaults to None.
-            yaxis (Optional[str], optional): The y-axis type. Can be 'z' for height or 'p' for pressure. Defaults to 'z'.
             legend (Optional[bool], optional): Whether to show the legend. Defaults to True.
             normalized (Optional[bool], optional): Whether to normalize to the max the weighting functions. Defaults to False.
             **kwargs: Additional keyword arguments (figsize, dpi)
@@ -234,14 +233,14 @@ class WeightingFunctions(object):
             self.frequencies = np.array(
                 [np.mean(self.frequencies[i:i+j]) for i, j in enumerate(self.bandpass)])
 
-        if yaxis == 'p':
-            y = self.pinterp[:-1]
-            y_label = 'Pressure [$hPa$]'
-            units = 'hPa'
-        else:
-            y = self.zinterp[:-1]
-            y_label = 'Height [$km$]'
-            units = 'km'
+        # if yaxis == 'p':
+        #     y = self.pinterp[:-1]
+        #     y_label = 'Pressure [$hPa$]'
+        #     units = 'hPa'
+        # else:
+        y = self.zinterp[:-1]
+        y_label = 'Height [$km$]'
+        units = 'km'
 
         normalize = np.max(
             wgt, axis=1) if normalized else np.ones(wgt.shape[1])
@@ -257,9 +256,9 @@ class WeightingFunctions(object):
                 plt.plot(wgt[i, :], self.zinterp,
                          label=f'{frequenciy:.2f} GHz')
 
-        if yaxis == 'p':
-            plt.gca().invert_yaxis()
-            plt.yscale('log')
+        # if yaxis == 'p':
+        #     plt.gca().invert_yaxis()
+        #     plt.yscale('log')
         plt.xlabel('Weighting Function [$km^{-1}$]')
         plt.ylabel(y_label)
         if legend:
