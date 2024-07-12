@@ -15,6 +15,7 @@ from .utils import dilec12, _dcerror, constants, gas_mass, import_lineshape
 
 PATH = os.path.dirname(os.path.abspath(__file__))
 
+
 class AbsModelError(Exception):
     """Exception raised for errors in the input model.
 
@@ -119,12 +120,15 @@ class AbsModel:
                     'R22SD'],
                     'Ozone': ['R18', 'R22']}
         """
-        oxygen_netcdf =  Dataset(os.path.join(PATH, '_lineshape', 'o2_lineshape.nc'), mode='r')
-        wv_netcdf =  Dataset(os.path.join(PATH, '_lineshape', 'h2o_lineshape.nc'), mode='r')
-        ozone_netcdf =  Dataset(os.path.join(PATH, '_lineshape', 'o3_lineshape.nc'), mode='r')
-        
-        model = {"Oxygen": list(oxygen_netcdf.groups.keys()), 
-                 "WaterVapour": list(wv_netcdf.groups.keys()), 
+        oxygen_netcdf = Dataset(os.path.join(
+            PATH, '_lineshape', 'o2_lineshape.nc'), mode='r')
+        wv_netcdf = Dataset(os.path.join(
+            PATH, '_lineshape', 'h2o_lineshape.nc'), mode='r')
+        ozone_netcdf = Dataset(os.path.join(
+            PATH, '_lineshape', 'o3_lineshape.nc'), mode='r')
+
+        model = {"Oxygen": list(oxygen_netcdf.groups.keys()),
+                 "WaterVapour": list(wv_netcdf.groups.keys()),
                  "Ozone": list(ozone_netcdf.groups.keys())}
 
         return model
@@ -279,7 +283,7 @@ class H2OAbsModel(AbsModel):
         for j in range(nf):
             a[j] = 6.532e+12*selfcon[j]*theta**(selftexp[j]+3.)
         a = np.insert(a, 0, a[1], axis=0)
-        
+
         for i in range(nfreq):
             fj = frq/deltaf
             j = int(fj)
@@ -542,12 +546,12 @@ class H2OAbsModel(AbsModel):
         # separate the following original equ. into line and continuum
         # terms, and change the units from np/km to ppm
         # abh2o = .3183e-4*den*sum + con
-        
+
         if H2OAbsModel.model in ['R23SD', 'R24']:
             conf = self.h2oll.cf * ti**self.h2oll.xcf
             con = (conf * pda + npp_cs * pvap) * pvap * f**2
 
-        h20m = 2.9915075E-23 # mass of water molecule (g)
+        h20m = 2.9915075E-23  # mass of water molecule (g)
         if H2OAbsModel.model in ['R22SD', 'R23SD']:
             npp = 1.e-10 * rho * summ / (np.pi * h20m) / db2np / factor
         elif H2OAbsModel.model == 'R24':
@@ -699,7 +703,7 @@ class O2AbsModel(AbsModel):
             pe1 = .99 * den
             pe2 = pe1**2
         if O2AbsModel.model in ['R24']:
-            pe1 = den # [8] includes common TEMP-dependence
+            pe1 = den  # [8] includes common TEMP-dependence
             pe2 = pe1**2
         dfnr = self.o2ll.wb300 * den
 
@@ -741,13 +745,14 @@ class O2AbsModel(AbsModel):
             a = np.zeros(nlines)
             g = np.zeros(nlines)
             for k in range(0, nlines):
-                a[k] = self.o2ll.s300[k]*np.exp(-self.o2ll.be[k] * th1)/self.o2ll.f[k]**2
+                a[k] = self.o2ll.s300[k] * \
+                    np.exp(-self.o2ll.be[k] * th1)/self.o2ll.f[k]**2
                 g[k] = self.o2ll.g0[k] + self.o2ll.g1[k]*th1
                 if k > 0 and k <= 37:
                     summ += a[k]*g[k]
                     anorm += a[k]
             off = summ/anorm
-            summ = (1.584e-17/th) * dfnr/ (freq * freq + dfnr * dfnr)
+            summ = (1.584e-17/th) * dfnr / (freq * freq + dfnr * dfnr)
             for k in range(0, nlines):
                 width = self.o2ll.w300[k] * den
                 y = pe1*(self.o2ll.y300[k]+self.o2ll.y1[k]*th1)
@@ -755,17 +760,19 @@ class O2AbsModel(AbsModel):
                     gfac = 1. + pe2 * (g[k] - off)
                 else:
                     gfac = 1.
-                fcen = self.o2ll.f[k] + pe2 * (self.o2ll.dnu0[k] + self.o2ll.dnu1[k] * th1)
+                fcen = self.o2ll.f[k] + pe2 * \
+                    (self.o2ll.dnu0[k] + self.o2ll.dnu1[k] * th1)
                 if k == 0 and np.abs(freq-fcen) < 10. * width:
                     width2 = .076 * width
                     xc = complex(width-1.5*width2, freq-fcen)/width2
                     xrt = np.sqrt(xc)
                     pxw = 1.77245385090551603 * xrt * \
-                            _dcerror(-np.imag(xrt), np.real(xrt))
-                    asd = complex(1.,y)*2.*(1.-pxw)/width2
+                        _dcerror(-np.imag(xrt), np.real(xrt))
+                    asd = complex(1., y)*2.*(1.-pxw)/width2
                     sf1 = np.real(asd)
                 else:
-                    sf1 = (width*gfac + (freq-fcen)*y)/((freq-fcen)**2 + width**2)
+                    sf1 = (width*gfac + (freq-fcen)*y) / \
+                        ((freq-fcen)**2 + width**2)
                 sf2 = (width*gfac - (freq+fcen)*y)/((freq+fcen)**2 + width**2)
                 summ += a[k] * (sf1+sf2)
                 if k == 37:
@@ -776,15 +783,17 @@ class O2AbsModel(AbsModel):
             sumy = 1.584e-17 * self.o2ll.wb300
             sumg = 0.
             asq = 0.
-            adjy = .99 # adjustment following update of line intensities
+            adjy = .99  # adjustment following update of line intensities
             a = np.zeros(nlines)
             y = np.zeros(nlines)
             g = np.zeros(nlines)
             for k in range(0, nlines):
-                a[k] = self.o2ll.s300[k] * np.exp(-self.o2ll.be[k] * th1) * th/self.o2ll.f[k]**2
+                a[k] = self.o2ll.s300[k] * \
+                    np.exp(-self.o2ll.be[k] * th1) * th/self.o2ll.f[k]**2
                 y[k] = adjy * (self.o2ll.y300[k] + self.o2ll.y1[k]*th1)
                 if k <= 37:
-                    sumy += 2. * a[k] * (self.o2ll.w300[k] + y[k] * self.o2ll.f[k])
+                    sumy += 2. * a[k] * \
+                        (self.o2ll.w300[k] + y[k] * self.o2ll.f[k])
                 g[k] = self.o2ll.g0[k] + self.o2ll.g1[k] * th1
                 if k > 0 and k <= 37:
                     sumg += a[k] * g[k]
@@ -795,9 +804,9 @@ class O2AbsModel(AbsModel):
             sumy2 = sumy/(2. * anorm)
             ratio = sumg/asq
             for k in range(1, 38):
-                y[k] -= sumy2/self.o2ll.f[k] # bias adjustment
-                g[k] -= a[k] * ratio # makes G orthogonal to A
-            
+                y[k] -= sumy2/self.o2ll.f[k]  # bias adjustment
+                g[k] -= a[k] * ratio  # makes G orthogonal to A
+
             summ = 1.584e-17 * wnr/(freq * freq + wnr * wnr)
             for k in range(0, nlines):
                 width = self.o2ll.w300[k] * pe1
@@ -806,17 +815,19 @@ class O2AbsModel(AbsModel):
                     gfac = 1. + pe2 * g[k]
                 else:
                     gfac = 1.
-                fcen = self.o2ll.f[k] + pe2 * (self.o2ll.dnu0[k] + self.o2ll.dnu1[k] * th1)
+                fcen = self.o2ll.f[k] + pe2 * \
+                    (self.o2ll.dnu0[k] + self.o2ll.dnu1[k] * th1)
                 if k == 0 and np.abs(freq-fcen) < 10. * width:
                     width2 = .076 * width
                     xc = complex(width - 1.5*width2, (freq-fcen))/width2
                     xrt = np.sqrt(xc)
                     pxw = 1.77245385090551603 * xrt * \
-                            _dcerror(-np.imag(xrt), np.real(xrt))
-                    asd = complex(1.,yk) * 2. * (1.-pxw)/width2
+                        _dcerror(-np.imag(xrt), np.real(xrt))
+                    asd = complex(1., yk) * 2. * (1.-pxw)/width2
                     sf1 = np.real(asd)
                 else:
-                    sf1 = (width*gfac + (freq-fcen)*yk)/((freq-fcen)**2 + width**2)
+                    sf1 = (width*gfac + (freq-fcen)*yk) / \
+                        ((freq-fcen)**2 + width**2)
                 sf2 = (width*gfac - (freq+fcen)*yk)/((freq+fcen)**2 + width**2)
                 summ += a[k] * (sf1+sf2)
         else:
