@@ -323,7 +323,8 @@ def mr2e(p: np.ndarray, mr: np.ndarray) -> np.ndarray:
 
     return e
 
-def rho2rh(rho: np.ndarray, t: np.ndarray, p: np.ndarray) ->  Tuple[np.ndarray, np.ndarray]:
+
+def rho2rh(rho: np.ndarray, t: np.ndarray, p: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
     """Convert water vapor density to relative humidity.
 
     Args:
@@ -908,11 +909,12 @@ def get_frequencies(instrument: Optional[str] = 'hat') -> List:
         ],
         'k2w': [23.8400, 31.4000, 72.5000, 82.5000, 90.0000, 150.000]
     }
-    
+
     try:
         return np.array(frequencies[instrument.lower()])
     except KeyError:
-        raise ValueError(f"Invalid instrument name. Available instruments are: {list(frequencies.keys())}")
+        raise ValueError(
+            f"Invalid instrument name. Available instruments are: {list(frequencies.keys())}")
 
 
 def to_kelvin(t: np.ndarray) -> np.ndarray:
@@ -970,7 +972,7 @@ def get_frequencies_sat(instrument: str) -> np.ndarray:
     cf165 = 165.5
     cf53 = 57.290344
     cf57 = 57.290344
-    
+
     instrument = instrument.upper()
 
     if instrument == 'SAPHIR':

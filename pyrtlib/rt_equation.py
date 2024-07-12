@@ -357,7 +357,8 @@ class RTEquation:
         scld = 0.0
         for i in range(0, ncld):
             for j in range(int(lbase[i]) + 1, int(ltop[i])):
-                scld += np.dot(ds[j], (np.dot(0.5, (dencld[j] + dencld[j - 1]))))
+                scld += np.dot(ds[j],
+                               (np.dot(0.5, (dencld[j] + dencld[j - 1]))))
 
         # convert the integrated value to cm.
         scld = np.dot(scld, 0.1)
@@ -562,7 +563,8 @@ class RTEquation:
                     'No model avalaible with this name: {} . Sorry...'.format('model'))
 
             if isinstance(o3n, np.ndarray) and O3AbsModel.model in ['R18', 'R21', 'R21SD', 'R22', 'R22SD', 'R23', 'R23SD', 'R24']:
-                aO3[i] = O3AbsModel().o3_absorption(t[i], p[i], frq, o3n[i], amu)
+                aO3[i] = O3AbsModel().o3_absorption(
+                    t[i], p[i], frq, o3n[i], amu)
 
             adry[i] = aO2[i] + aN2[i] + aO3[i]
 
