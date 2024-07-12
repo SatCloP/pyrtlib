@@ -218,10 +218,10 @@ class WeightingFunctions(object):
             **kwargs: Additional keyword arguments (figsize, dpi)
 
         """
-        plt.rcdefaults()
+        # plt.rcdefaults()
         plt.rcParams.update({'font.size': 15})
-        plt.rcParams['font.family'] = 'Arial'
-        plt.rcParams['font.stretch'] = 'condensed'
+        # plt.rcParams['font.family'] = 'Arial'
+        # plt.rcParams['font.stretch'] = 'condensed'
         # plt.rcParams["font.weight"] = "bold"
         # plt.rcParams["axes.labelweight"] = "bold"
         # plt.rc('font', family=['cmr10'])
@@ -310,11 +310,11 @@ class WeightingFunctions(object):
         if not self.satellite:
             raise ValueError("This plot is only available for satellite mode")
 
-        plt.rcdefaults()
+        # plt.rcdefaults()
         plt.rcParams.update({'font.size': 15})
         # plt.rc('font', family=['Sans Serif'])
-        plt.rcParams['font.family'] = 'Arial'
-        plt.rcParams['font.stretch'] = 'condensed'
+        # plt.rcParams['font.family'] = 'Arial'
+        # plt.rcParams['font.stretch'] = 'condensed'
         # plt.rcParams["font.weight"] = "bold"
         # plt.rcParams["axes.labelweight"] = "bold"
         # plt.rc('mathtext', fontset='cm')
@@ -351,7 +351,7 @@ class WeightingFunctions(object):
             incr_wgt = np.min(wgt[index_wgt[i], 1:]) + \
                 max_increment[index_wgt[i]]
             plt.text(.02 + incr_wgt, height-perc_height,
-                     f'{grouped_labels[i]}', ha='left', va='top')
+                     f'{grouped_labels[i]}', ha='left', va='top', fontsize=12)
 
         plt.xlabel('Weighting Function [$km^{-1}$]')
         plt.ylabel(y_label)
