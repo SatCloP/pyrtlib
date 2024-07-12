@@ -7,7 +7,7 @@ __author__ = ''
 __date__ = 'May 2024'
 __copyright__ = '(C) 2024, CNR-IMAA'
 
-from typing import Dict, Tuple, Union, Optional, List
+from typing import Dict, Tuple, Optional, List
 import warnings
 # warnings.filterwarnings("ignore", category=UserWarning)
 import numpy as np
@@ -153,7 +153,7 @@ class WeightingFunctions(object):
 
         channel_mean = np.zeros((len(bandpass), a.shape[1]))
         cnt = 0
-        for i in range(len(bandpass)):
+        for i, bndpass in enumerate(bandpass):
             channel_mean[i, :] = np.mean(a[cnt:bandpass[i]+cnt, :], axis=0)
             cnt += bandpass[i]
 
@@ -248,14 +248,14 @@ class WeightingFunctions(object):
 
         plt.figure(figsize=kwargs.get('figsize', (5, 10)),
                    dpi=kwargs.get('dpi', 150))
-        for i in range(len(self.frequencies)):
+        for i, frequenciy in enumerate(self.frequencies):
             if self.satellite:
                 line_s = 'dashed' if y[np.argmax(wgt[i, 1:])] == 0. else None
                 plt.plot(wgt[i, 1:]/normalize[i], y, linestyle=line_s,
-                         label=f'{self.frequencies[i]:.2f} GHz {y[np.argmax(wgt[i, 1:])]:.0f} {units}')
+                         label=f'{frequenciy:.2f} GHz {y[np.argmax(wgt[i, 1:])]:.0f} {units}')
             else:
                 plt.plot(wgt[i, :], self.zinterp,
-                         label=f'{self.frequencies[i]:.2f} GHz')
+                         label=f'{frequenciy:.2f} GHz')
 
         if yaxis == 'p':
             plt.gca().invert_yaxis()
@@ -335,8 +335,8 @@ class WeightingFunctions(object):
 
         cnt = 0
         g_labels = np.array([], dtype='object')
-        for i in range(len(grouped_frequencies)):
-            a = np.repeat(grouped_labels[i], grouped_frequencies[i])
+        for i, grouped_frequency in enumerate(grouped_frequencies):
+            a = np.repeat(grouped_labels[i], grouped_frequency)
             g_labels = np.append(g_labels, a)
             cnt += 1
 
