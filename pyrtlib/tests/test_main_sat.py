@@ -434,3 +434,19 @@ class Test(TestCase):
         df_expected = pd.read_csv(
             os.path.join(THIS_DIR, "data", "tb_tot_ros03_16_17_18_19_19sd_20_20sd_98_mak11_21sd.csv"))
         assert_allclose(df.tbtotal, df_expected.r23sd)
+
+    def test_pyrtlib_sat_R24(self):
+        z, p, _, t, md = atmp.gl_atm(atmp.TROPICAL)
+
+        gkg = ppmv2gkg(md[:, atmp.H2O], atmp.H2O)
+        rh = mr2rh(p, t, gkg)[0] / 100
+
+        frq = np.arange(20, 201, 1)
+
+        rte = TbCloudRTE(z, p, t, rh, frq)
+        rte.init_absmdl('R24')
+        df = rte.execute()
+
+        df_expected = pd.read_csv(
+            os.path.join(THIS_DIR, "data", "tb_tot_ros03_16_17_18_19_19sd_20_20sd_98_mak11_21sd.csv"))
+        assert_allclose(df.tbtotal, df_expected.r24)

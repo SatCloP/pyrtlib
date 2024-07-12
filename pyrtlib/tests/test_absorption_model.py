@@ -56,5 +56,5 @@ class Test(TestCase):
         assert H2OAbsModel.h2oll.ctr[0] == 296.0
         
         cs = H2OAbsModel().h2o_continuum(183, 1.09, 1)
-        assert_allclose(cs, np.array([3.791294e-08]))
+        assert_allclose(cs, np.array([3.724996e-08]))
 
