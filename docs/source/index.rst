@@ -214,6 +214,11 @@ Plotting result:
 
 .. image:: ../../resources/spectrum_r22.jpeg
 
+
+Plotting of upwelling :math:`\Delta T_b` using the last two absorption models available in PyRTlib for six reference atmosphere climatology.
+
+.. image:: ../../resources/spectrum_r23_r24.png
+
 Cite as
 -------
 
@@ -221,7 +226,7 @@ Please cite us:
 
 Larosa, S., Cimini, D., Gallucci, D., Nilo, S. T., and Romano, F.: PyRTlib: an educational Python-based library for non-scattering atmospheric microwave radiative transfer computations, Geosci. Model Dev., 17, 2053–2076, https://doi.org/10.5194/gmd-17-2053-2024, 2024.
 
-Larosa, S., Cimini, D., Gallucci, D., Nilo, S. T., & Romano, F. (2024). PyRTlib: a python package for non-scattering line-by-line microwave Radiative Transfer simulations. (v1.0.5). Zenodo. https://doi.org/10.5281/zenodo.10729195
+Larosa, S., Cimini, D., Gallucci, D., Nilo, S. T., & Romano, F. (2024). PyRTlib: a python package for non-scattering line-by-line microwave Radiative Transfer simulations.. Zenodo. https://doi.org/10.5281/zenodo.8219145
 
 Installation
 ------------

@@ -9,7 +9,7 @@ message: 'If you use this software, please cite it as below.
 
 Larosa, S., Cimini, D., Gallucci, D., Nilo, S. T., and Romano, F.: PyRTlib: an educational Python-based library for non-scattering atmospheric microwave radiative transfer computations, Geosci. Model Dev., 17, 2053–2076, https://doi.org/10.5194/gmd-17-2053-2024, 2024.
 
-Larosa, S., Cimini, D., Gallucci, D., Nilo, S. T., & Romano, F. (2024). PyRTlib: a python package for non-scattering line-by-line microwave Radiative Transfer simulations. (v1.0.5). Zenodo. https://doi.org/10.5281/zenodo.10729195'
+Larosa, S., Cimini, D., Gallucci, D., Nilo, S. T., & Romano, F. (2024). PyRTlib: a python package for non-scattering line-by-line microwave Radiative Transfer simulations.. Zenodo. https://doi.org/10.5281/zenodo.8219145'
 type: software
 authors:
   - family-names: Larosa
@@ -43,6 +43,6 @@ keywords:
   - radiative-transfer-models
   - python
 license: GPL-3.0
-version: 1.0.7
-date-released: '2024-05-24'
+version: 1.1.0
+date-released: '2024-07-13'
 doi: 10.5281/zenodo.8219145

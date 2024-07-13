@@ -24,6 +24,11 @@ PyRTlib is a Python package, for non-scattering line-by-line microwave RT simula
 
 ![spectrum](https://raw.githubusercontent.com/SatCloP/pyrtlib/main/resources/spectrum_r22.jpeg)
 
+Plotting of nadir upwelling $\Delta T_b$ using the last two absorption models available in PyRTlib for six reference atmosphere climatology.
+
+![spectrum](https://raw.githubusercontent.com/SatCloP/pyrtlib/main/resources/spectrum_r23_r24.png)
+
+
 # Installation
 
 Use pip package to install quicly the pyrtlib library. See [installation instructions](https://satclop.github.io/pyrtlib/en/main/installation.html) for more info on how instaling pyrtlib. 
