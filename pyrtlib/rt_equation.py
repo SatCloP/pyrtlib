@@ -555,7 +555,7 @@ class RTEquation:
             aO2[i] = factor * (npp + ncpp) * db2np
             # add N2 term
             if N2AbsModel.model not in ['R03', 'R16', 'R17', 'R18', 'R98']:
-                aN2[i] = N2AbsModel.n2_absorption(
+                aN2[i] = N2AbsModel().n2_absorption(
                     t[i], np.dot(pdrykpa, 10), frq)
 
             if not N2AbsModel.model:
