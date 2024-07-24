@@ -57,4 +57,12 @@ class Test(TestCase):
         
         cs = H2OAbsModel().h2o_continuum(183, 1.09, 1)
         assert_allclose(cs, np.array([3.724996e-08]))
+        
+    def test_h20continum_mwl24(self):
+        H2OAbsModel.model = 'MWL24'
+        H2OAbsModel.set_ll()
+        assert H2OAbsModel.h2oll.ctr[0] == 300.0
+        
+        cs = H2OAbsModel().h2o_continuum_mwl24(22, 1.09)
+        assert_allclose(cs, np.array([4.370745e-05]))
 

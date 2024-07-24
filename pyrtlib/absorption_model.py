@@ -290,7 +290,7 @@ class N2AbsModel(AbsModel):
                 '[AbsN2] No model available with this name: {} . Sorry...'.format(N2AbsModel.model))
 
         if N2AbsModel.model == 'MWL24':
-            bf = N2AbsModel.n2_absorption_mwl24(f, p, t) * 1.E5
+            bf = N2AbsModel.n2_absorption_mwl24(t, p, f) * 1.E5
         else:
             bf = l * fdepen * p * p * f * f * th ** m
 
@@ -533,7 +533,6 @@ class H2OAbsModel(AbsModel):
             con_frgn = 7.1e-10 * (300./t)**4.4 * f**1.96 * pda * pvap
             con = con_self + con_frgn
         else:
-
             con = (self.h2oll.cf * pda * ti ** self.h2oll.xcf + self.h2oll.cs * pvap * ti ** self.h2oll.xcs) * \
                 pvap * f * f
         # 2019/03/18 *********************************************************

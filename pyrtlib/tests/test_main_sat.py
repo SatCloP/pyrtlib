@@ -6,7 +6,7 @@ import numpy as np
 import pandas as pd
 from datetime import datetime
 from numpy.testing import assert_allclose
-from pyrtlib.absorption_model import H2OAbsModel, O2AbsModel, O3AbsModel
+from pyrtlib.absorption_model import H2OAbsModel, N2AbsModel, O2AbsModel, O3AbsModel
 from pyrtlib.climatology import AtmosphericProfiles as atmp
 from pyrtlib.tb_spectrum import TbCloudRTE
 from pyrtlib.apiwebservices import WyomingUpperAir, ERA5Reanalysis, IGRAUpperAir
@@ -89,6 +89,7 @@ class Test(TestCase):
 
         rte = TbCloudRTE(z, p, t, rh, frq, ang)
         rte.init_absmdl('R16')
+        N2AbsModel.model = None
         df = rte.execute()
 
         df_expected = pd.read_csv(
@@ -107,6 +108,7 @@ class Test(TestCase):
 
         rte = TbCloudRTE(z, p, t, rh, frq, ang)
         rte.init_absmdl('R03')
+        N2AbsModel.model = None
         df = rte.execute()
 
         df_expected = pd.read_csv(
@@ -125,6 +127,7 @@ class Test(TestCase):
 
         rte = TbCloudRTE(z, p, t, rh, frq, ang)
         rte.init_absmdl('R17')
+        N2AbsModel.model = None
         df = rte.execute()
 
         df_expected = pd.read_csv(
@@ -197,6 +200,7 @@ class Test(TestCase):
 
         rte = TbCloudRTE(z, p, t, rh, frq, ang)
         rte.init_absmdl('R18')
+        N2AbsModel.model = None
         df = rte.execute()
 
         df_expected = pd.read_csv(
@@ -214,6 +218,7 @@ class Test(TestCase):
 
         rte = TbCloudRTE(z, p, t, rh, frq, ang)
         rte.init_absmdl('R98')
+        N2AbsModel.model = None
         df = rte.execute()
 
         df_expected = pd.read_csv(
@@ -245,6 +250,7 @@ class Test(TestCase):
 
         rte = TbCloudRTE(z, p, t, rh, frq, ang)
         rte.init_absmdl('R98')
+        N2AbsModel.model = None
         rte.cloudy = True
         rte.init_cloudy(cldh, denice, denliq)
         df = rte.execute()
@@ -450,3 +456,21 @@ class Test(TestCase):
         df_expected = pd.read_csv(
             os.path.join(THIS_DIR, "data", "tb_tot_ros03_16_17_18_19_19sd_20_20sd_98_mak11_21sd.csv"))
         assert_allclose(df.tbtotal, df_expected.r24)
+        
+    def test_pyrtlib_sat_MWL24(self):
+        z, p, _, t, md = atmp.gl_atm(atmp.TROPICAL)
+
+        gkg = ppmv2gkg(md[:, atmp.H2O], atmp.H2O)
+        rh = mr2rh(p, t, gkg)[0] / 100
+
+        frq = np.arange(20, 201, 1)
+
+        rte = TbCloudRTE(z, p, t, rh, frq)
+        rte.init_absmdl('MWL24')
+        O2AbsModel.model = 'R22'
+        O2AbsModel.set_ll()
+        df = rte.execute()
+
+        df_expected = pd.read_csv(
+            os.path.join(THIS_DIR, "data", "tb_tot_ros03_16_17_18_19_19sd_20_20sd_98_mak11_21sd.csv"))
+        assert_allclose(df.tbtotal, df_expected.mwl24)

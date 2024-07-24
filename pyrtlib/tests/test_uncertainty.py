@@ -3,7 +3,7 @@ from unittest import TestCase
 import numpy as np
 import pandas as pd
 from numpy.testing import assert_allclose, assert_equal
-from pyrtlib.absorption_model import H2OAbsModel, O2AbsModel, O3AbsModel
+from pyrtlib.absorption_model import H2OAbsModel, N2AbsModel, O2AbsModel, O3AbsModel
 from pyrtlib.uncertainty import AbsModUncertainty, SpectroscopicParameter
 from pyrtlib.uncertainty import covariance_matrix
 from pyrtlib.climatology import AtmosphericProfiles as atmp
@@ -73,6 +73,7 @@ class Test(TestCase):
 
         rte = TbCloudRTE(z, p, t, rh, frq, amu=amu)
         rte.init_absmdl('R17')
+        N2AbsModel.model = None
         O2AbsModel.model = 'R18'
         O2AbsModel.set_ll()
         df = rte.execute()
