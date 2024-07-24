@@ -61,7 +61,7 @@ class WeightingFunctions(object):
         self._frequencies = None
         self._satellite = True
         self.emissivity = 1.
-        self.model = AbsModel.implemented_models()['WaterVapour'][-1]
+        self.model = 'R24'
         self.angle = 90.
         self.bandpass = None
         self.legend_labels = None

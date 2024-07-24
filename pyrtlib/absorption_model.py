@@ -195,57 +195,62 @@ class LiqAbsModel(AbsModel):
 class N2AbsModel(AbsModel):
     """This class contains the absorption model used in pyrtlib.
     """
-    
-    def n2_absor_mwl24(self, f, p, t):
+
+    @staticmethod
+    def n2_absorption_mwl24(t: np.ndarray, p: np.ndarray, f: np.ndarray) -> np.ndarray:
         """
         Calculation of the collision-induced absorption by N2-N2 molecular pairs
         Based on the Classic Trajectory Calcs by Vigasin/Chistikov/Finenko
+        
         Args:
-            f (float): frequency (Ghz)
-            p (float): dry air pressure (mbar) (recalculations to Torr are used inside)
-            t (float): air temperature (K)
+            f (np.ndarray): frequency (Ghz)
+            p (np.ndarray): dry air pressure (mbar) (recalculations to Torr are used inside)
+            t (np.ndarray): air temperature (K)
+        
         Returns:
-            float: N2-N2 absorption coefficient in 1/cm 
+            np.ndarray: N2-N2 absorption coefficient in 1/cm 
 
-        Convert to Np/km by multiplying by 1.E5
-        Convert to dry air absorption by multiplying by 0.84 (see [Meshkov, DeLucia 2007 10.1016/j.jqsrt.2007.04.001])
+        Note:
+            Convert to Np/km by multiplying by 1.E5.
+            Convert to dry air absorption by multiplying by 0.84 (see [Meshkov-DeLucia-2007]_)
 
         References:
-            [Serov et al, JQSRT 2024]
+            .. [1] [Serov et al, JQSRT 2024]
         """
         t0 = 300.
         ti = t0 / t
         p_torr = p * 0.7500616827
-        
-        kbcm = 0.6950354549  # boltzmann in (1/cm)/K 
-        
+
+        kbcm = 0.6950354549  # boltzmann in (1/cm)/K
+
         d0 = 108. / (kbcm * t)
-        d_ref = 108. / (kbcm * 300.)    
+        d_ref = 108. / (kbcm * 300.)
         potential = (np.exp(d0) - (1 + d0)) / (np.exp(d_ref) - (1 + d_ref))
-        
-        a_e = [1.4359, -0.0005385, 1.6182e-7, 1.8845e-10]        
-        b_e = [0.07988, -0.0005165, 1.131e-6, -5.738e-10]                
-        a0e, a1e, a2e, a3e = [1.754e-18, 1.033, 0.1510, 0.1420]                
-        f1e, f2e, f3e, f4e, f5e = [44., 568., 358., 127., 92.]        
-        
+
+        a_e = [1.4359, -0.0005385, 1.6182e-7, 1.8845e-10]
+        b_e = [0.07988, -0.0005165, 1.131e-6, -5.738e-10]
+        a0e, a1e, a2e, a3e = [1.754e-18, 1.033, 0.1510, 0.1420]
+        f1e, f2e, f3e, f4e, f5e = [44., 568., 358., 127., 92.]
+
         m0 = 0.
         aa = 0.
-        
+
         t2 = a3e * np.exp(-(f/f5e - 1)**2)
         t1_denom = 1. + ((f - f1e)/f2e)**2
         t1_num_denom = 1. + ((f - f3e)/f4e)**2
         t1_num = 1 + a2e / t1_num_denom
         spec_fun = a0e * 0.5 * (1 + a1e * t1_num / t1_denom + t2)
-        
+
         for i in range(4):
             m0 += a_e[i] * f**i
             aa += b_e[i] * f**i
-        
-        t_dep = ti ** (m0 + aa * np.log(ti))        
-            
+
+        t_dep = ti ** (m0 + aa * np.log(ti))
+
         return spec_fun * t_dep * potential * p_torr**2 * f**2
-        
-    def n2_absorption(self, t: np.ndarray, p: np.ndarray, f: np.ndarray) -> np.ndarray:
+
+    @staticmethod
+    def n2_absorption(t: np.ndarray, p: np.ndarray, f: np.ndarray) -> np.ndarray:
         """Collision-Induced Power Absorption Coefficient (Neper/km) in air
         with modification of 1.34 to account for O2-O2 and O2-N2 collisions, as calculated by [Boissoles-2003]_.
 
@@ -283,9 +288,9 @@ class N2AbsModel(AbsModel):
         else:
             raise ValueError(
                 '[AbsN2] No model available with this name: {} . Sorry...'.format(N2AbsModel.model))
-        
+
         if N2AbsModel.model == 'MWL24':
-            bf = self.n2_absor_mwl24(f, p, t) * 1.E5
+            bf = N2AbsModel.n2_absorption_mwl24(f, p, t) * 1.E5
         else:
             bf = l * fdepen * p * p * f * f * th ** m
 
@@ -320,9 +325,20 @@ class H2OAbsModel(AbsModel):
         if H2OAbsModel.model not in H2OAbsModel.implemented_models()['WaterVapour']:
             raise AbsModelError(
                 H2OAbsModel.model, f"Model {H2OAbsModel.model} is not available. It is necessary to define water vapour absorption model manually")
-        H2OAbsModel.h2oll = import_lineshape("h2oll")        
+        H2OAbsModel.h2oll = import_lineshape("h2oll")
 
-    def h2o_continuum(self, frq: np.ndarray, vx: np.ndarray, nfreq: int):
+    def h2o_continuum(self, frq: np.ndarray, vx: np.ndarray, nfreq: int) -> np.ndarray:
+        """Compute the self-continuum absorption of water vapor.
+        Fit a curve to mtckd 4.1 self-continuum adapted from mt_ckd_h2o_module.f90 (March 20, 2023)
+
+        Args:
+            frq (np.ndarray): Frequency (GHz)
+            vx (np.ndarray): Theta (adim) - (normalised temperature 300/t(K))
+            nfreq (int): Number of frequencies
+
+        Returns:
+            np.ndarray: self-continuum term ((1/cm)/mbar**2)
+        """
         nf = 6
         deltaf = 299.792458
         selfcon = np.array([2.877e-21, 2.855e-21, 2.731e-21,
@@ -346,63 +362,64 @@ class H2OAbsModel(AbsModel):
             b = 0.5*p*(1.-p)
             b1 = b*(1.-p)
             b2 = b*p
-            cs[i] = -a[j]*b1+a[j+1]*(1.-c+b2)+a[j+2]*(c+b1)-a[j+3]*b2        
+            cs[i] = -a[j]*b1+a[j+1]*(1.-c+b2)+a[j+2]*(c+b1)-a[j+3]*b2
         return cs
-    
-    def h2o_continuum_mwl24(self, frq: np.ndarray, vx: np.ndarray):
+
+    def h2o_continuum_mwl24(self, frq: np.ndarray, vx: np.ndarray) -> np.ndarray:
         """
         H2O self-continuum absorption normalized to the squared water vapor pressure (1/cm)/mbar**2
         Based on the known measurements meta-analysis and theoretical calculations
 
         Args:
-            frq (float): Frequency (GHz)
-            vx (float): Theta (adim) - (normalised temperature 300/t(K))
+            frq (np.ndarray): Frequency (GHz)
+            vx (np.ndarray): Theta (adim) - (normalised temperature 300/t(K))
 
         Returns:
-            float: self-continuum term ((1/cm)/mbar**2), multiply by pvap**2 * 1.E5 to get Np/km
+            np.ndarray: self-continuum term ((1/cm)/mbar**2), multiply by pvap**2 * 1.E5 to get Np/km
 
         Reference:
-            [Tretyakov, Galanina, Koroleva et al 2024] (not published currently)
-            [Odintsova 2022 10.1016/j.jms.2022.111603]
-            [Galanina 2022 10.1016/j.jms.2022.111691]
+            .. [1] [Tretyakov, Galanina, Koroleva et al 2024] (not published currently)
+            .. [2] [Odintsova-2022]_.
+            .. [3] [Galanina-2022]_.
         """
-        
+
         atm2mbar = 1013.25
         t = 300.0 / vx
         ti_bd = 268.0 / t
         ti_md = 266.0 / t
         ti_fw = 296.0 / t
         # constants of bound dimers absorption (A0-5) and other components (see Tretyakov et al 2024)
-        (A0, A1, A2, A3, A4, A5, N_D, C_W, N_BD, N_MD, N_FW, PF_FW) = (5.55E-8, 434.8, 
-                                                                    219.5, 4.93E-10, 
-                                                                    21.06, 1.34E-14, 
-                                                                    0.7, 8.5E-15, 
-                                                                    10.0, 2.9, 1.5, 2.2)
+        (A0, A1, A2, A3, A4, A5, N_D, C_W, N_BD, N_MD, N_FW, PF_FW) = (5.55E-8, 434.8,
+                                                                       219.5, 4.93E-10,
+                                                                       21.06, 1.34E-14,
+                                                                       0.7, 8.5E-15,
+                                                                       10.0, 2.9, 1.5, 2.2)
         # calculations for dimer equilibrium constants
         # second virial coef-t parameters
         b_svc = (-7.804242E+6, 8.345651E+4, -4.212794E+2, 1.242946, -2.409822E-3,
-                    3.017768E-6, -2.518957E-9, 1.350628E-12, -4.134191E-16, 5.530774E-20)
-        b_t = b_svc[0]                        
+                 3.017768E-6, -2.518957E-9, 1.350628E-12, -4.134191E-16, 5.530774E-20)
+        b_t = b_svc[0]
         for i in range(1, len(b_svc)):
             b_t += b_svc[i] * t**i
         b_t *= -(100./t)**6
-        r_t = 82.05746 * t # molar gas constant multiplied by temperature            
-        k_bd = 4.7856E-4 * np.exp(1669.8 / t - 5.10485E-3 * t ) # K_BD from paper, in 1/atm            
+        r_t = 82.05746 * t  # molar gas constant multiplied by temperature
+        # K_BD from paper, in 1/atm
+        k_bd = 4.7856E-4 * np.exp(1669.8 / t - 5.10485E-3 * t)
         k_md = ((b_t - 30.5) / r_t - k_bd) / atm2mbar  # K_MD, in 1/mbar
         k_bd = k_bd / atm2mbar  # recalc to 1/mbar
 
         # bound dimers contribution
-        
+
         CON_BD = A0 / (A1 * A1 + (frq - A2) * (frq - A2))
         CON_BD += A3 / (A4 * A4 + frq * frq) + A5
-        CON_BD = CON_BD * ti_bd**N_BD 
+        CON_BD = CON_BD * ti_bd**N_BD
 
-        # metastable dimers contribution        
+        # metastable dimers contribution
         S2MON = 1.E-13 * (4.06 + 7.12E-3 * frq) * (1 / atm2mbar)
         CON_MD = (S2MON * (1 - N_D) * ti_md**N_MD + N_D * CON_BD / k_bd) * k_md
 
         # far wings contribution (note that it uses not f**2 but some different power)
-        CON_FW = C_W * frq**PF_FW * ti_fw**N_FW   
+        CON_FW = C_W * frq**PF_FW * ti_fw**N_FW
 
         cs_mwl24 = ((CON_BD + CON_MD) * frq**2 + CON_FW)
 
@@ -488,7 +505,7 @@ class H2OAbsModel(AbsModel):
         rho = ekpa * 10.0 / (rvap * t)
         f = frq
         # cyh ***********************************************
-        
+
         if rho.any() <= 0.0:
             npp = 0
             ncpp = 0
@@ -516,15 +533,13 @@ class H2OAbsModel(AbsModel):
             con_frgn = 7.1e-10 * (300./t)**4.4 * f**1.96 * pda * pvap
             con = con_self + con_frgn
         else:
-            
+
             con = (self.h2oll.cf * pda * ti ** self.h2oll.xcf + self.h2oll.cs * pvap * ti ** self.h2oll.xcs) * \
                 pvap * f * f
         # 2019/03/18 *********************************************************
         # add resonances
         nlines = len(self.h2oll.fl)
 
-
-        
         ti = self.h2oll.reftline / t
         df = np.zeros((2, 1))
 
@@ -534,18 +549,18 @@ class H2OAbsModel(AbsModel):
             summ = 0.0
             if H2OAbsModel.model in ['R23SD', 'R24']:
                 if self.h2oll.cs > 0:
-                    
+
                     # npp_cs = np.zeros(1)
                     con = self.h2oll.cs * ti * self.h2oll.xcs
                     # for i in len(frq):
                     npp_cs = con
                 else:
-                    
+
                     npp_cs = self.h2o_continuum(frq, vx, 1)
-            for i in range(0, nlines):                
+            for i in range(0, nlines):
                 width0 = self.h2oll.w0[i] * pda * ti ** self.h2oll.x[i] + \
                     self.h2oll.w0s[i] * pvap * ti ** self.h2oll.xs[i]
-                width2 = self.h2oll.w2[i] * pda + self.h2oll.w2s[i] * pvap                
+                width2 = self.h2oll.w2[i] * pda + self.h2oll.w2s[i] * pvap
                 if H2OAbsModel.model in ['R21SD', 'R22SD', 'R23SD', 'R24', 'MWL24']:
                     if self.h2oll.w2[i] > 0:
                         width2 = self.h2oll.w2[i] * pda * ti ** self.h2oll.xw2[i] + self.h2oll.w2s[i] * pvap * ti ** \

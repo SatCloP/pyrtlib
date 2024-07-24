@@ -63,3 +63,9 @@ References
 .. [Tretyakov-2016] Tretyakov, M. Yu.: Spectroscopy underlying microwave remote sensing of atmospheric water vapor, J. Mol. Spectrosc., 328, 7–26, https://doi.org/10.1016/j.jms.2016.06.006, 2016. 
 
 .. [Alduchov-1996] Alduchov, O. A., and R. E. Eskridge, 1996: Improved Magnus Form Approximation of Saturation Vapor Pressure. J. Appl. Meteor. Climatol., 35, 601–609, https://doi.org/10.1175/1520-0450(1996)035<0601:IMFAOS>2.0.CO;2.
+
+.. [Odintsova-2022] T.A. Odintsova, A.O. Koroleva, A.A. Simonova, A. Campargue, M.Yu. Tretyakov. The atmospheric continuum in the “terahertz gap” region (15–700 cm−1): Review of experiments at SOLEIL synchrotron and modeling. Journal of Molecular Spectroscopy, 2022, 386, pp.111603. ⟨https://doi.org/10.1016/j.jms.2022.111603⟩. ⟨hal-03865589⟩
+
+.. [Galanina-2022] Galanina, T. A., Koroleva, A. O., Simonova, A. A., Campargue, A., and Tretyakov, M. Y., “The water vapor self-continuum in the "terahertz gap" region (15-700 cm-1): Experiment versus MT_CKD-3.5 model”, Journal of Molecular Spectroscopy, vol. 389, 2022. https://doi.org/10.1016/j.jms.2022.111691.
+
+.. [Meshkov-DeLucia-2007] Andrey I. Meshkov, Frank C. De Lucia, Laboratory measurements of dry air atmospheric absorption with a millimeter wave cavity ringdown spectrometer, Journal of Quantitative Spectroscopy and Radiative Transfer, Volume 108, Issue 2, 2007, Pages 256-276, ISSN 0022-4073, https://doi.org/10.1016/j.jqsrt.2007.04.001.
