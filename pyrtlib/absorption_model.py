@@ -195,10 +195,24 @@ class LiqAbsModel(AbsModel):
 class N2AbsModel(AbsModel):
     """This class contains the absorption model used in pyrtlib.
     """
-
-    @staticmethod    
-
+    
     def n2_absor_mwl24(self, f, p, t):
+        """
+        Calculation of the collision-induced absorption by N2-N2 molecular pairs
+        Based on the Classic Trajectory Calcs by Vigasin/Chistikov/Finenko
+        Args:
+            f (float): frequency (Ghz)
+            p (float): dry air pressure (mbar) (recalculations to Torr are used inside)
+            t (float): air temperature (K)
+        Returns:
+            float: N2-N2 absorption coefficient in 1/cm 
+
+        Convert to Np/km by multiplying by 1.E5
+        Convert to dry air absorption by multiplying by 0.84 (see [Meshkov, DeLucia 2007 10.1016/j.jqsrt.2007.04.001])
+
+        References:
+            [Serov et al, JQSRT 2024]
+        """
         t0 = 300.
         ti = t0 / t
         p_torr = p * 0.7500616827
@@ -230,7 +244,7 @@ class N2AbsModel(AbsModel):
         t_dep = ti ** (m0 + aa * np.log(ti))        
             
         return spec_fun * t_dep * potential * p_torr**2 * f**2
-    
+        
     def n2_absorption(self, t: np.ndarray, p: np.ndarray, f: np.ndarray) -> np.ndarray:
         """Collision-Induced Power Absorption Coefficient (Neper/km) in air
         with modification of 1.34 to account for O2-O2 and O2-N2 collisions, as calculated by [Boissoles-2003]_.
@@ -269,8 +283,9 @@ class N2AbsModel(AbsModel):
         else:
             raise ValueError(
                 '[AbsN2] No model available with this name: {} . Sorry...'.format(N2AbsModel.model))
+        
         if N2AbsModel.model == 'MWL24':
-            bf = self.n2_absor_mwl24(self, f=f, p=p, t=t) * 1.E5
+            bf = self.n2_absor_mwl24(f, p, t) * 1.E5
         else:
             bf = l * fdepen * p * p * f * f * th ** m
 
@@ -331,11 +346,26 @@ class H2OAbsModel(AbsModel):
             b = 0.5*p*(1.-p)
             b1 = b*(1.-p)
             b2 = b*p
-            cs[i] = -a[j]*b1+a[j+1]*(1.-c+b2)+a[j+2]*(c+b1)-a[j+3]*b2
-        # print('h2o_continuum called')
+            cs[i] = -a[j]*b1+a[j+1]*(1.-c+b2)+a[j+2]*(c+b1)-a[j+3]*b2        
         return cs
     
     def h2o_continuum_mwl24(self, frq: np.ndarray, vx: np.ndarray):
+        """
+        H2O self-continuum absorption normalized to the squared water vapor pressure (1/cm)/mbar**2
+        Based on the known measurements meta-analysis and theoretical calculations
+
+        Args:
+            frq (float): Frequency (GHz)
+            vx (float): Theta (adim) - (normalised temperature 300/t(K))
+
+        Returns:
+            float: self-continuum term ((1/cm)/mbar**2), multiply by pvap**2 * 1.E5 to get Np/km
+
+        Reference:
+            [Tretyakov, Galanina, Koroleva et al 2024] (not published currently)
+            [Odintsova 2022 10.1016/j.jms.2022.111603]
+            [Galanina 2022 10.1016/j.jms.2022.111691]
+        """
         
         atm2mbar = 1013.25
         t = 300.0 / vx
