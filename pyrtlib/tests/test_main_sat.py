@@ -424,6 +424,23 @@ class Test(TestCase):
             os.path.join(THIS_DIR, "data", "tb_tot_rose21sd_RAOB_es.csv"))
         assert_allclose(df.tbtotal, df_expected.tbtotal, atol=0)
         
+    def test_pyrtlib_sat_R22SD(self):
+        z, p, _, t, md = atmp.gl_atm(atmp.TROPICAL)
+        gkg = ppmv2gkg(md[:, atmp.H2O], atmp.H2O)
+        rh = mr2rh(p, t, gkg)[0] / 100
+        
+        frq = np.arange(20, 201, 1)
+        rte = TbCloudRTE(z, p, t, rh, frq)
+        rte.init_absmdl('R22SD')
+        
+        O2AbsModel.model = 'R22'
+        O2AbsModel.set_ll()
+        
+        df = rte.execute()
+        df_expected = pd.read_csv(
+            os.path.join(THIS_DIR, "data", "tb_tot_r22sd.csv"))
+        assert_allclose(df.tbtotal, df_expected.rose22sd, atol=0)
+        
     def test_pyrtlib_sat_R23(self):
         z, p, _, t, md = atmp.gl_atm(atmp.TROPICAL)
 
