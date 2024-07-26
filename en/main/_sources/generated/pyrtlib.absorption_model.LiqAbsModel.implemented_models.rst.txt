@@ -1,0 +1,12 @@
+pyrtlib.absorption\_model.LiqAbsModel.implemented\_models
+=========================================================
+
+.. currentmodule:: pyrtlib.absorption_model
+
+.. automethod:: pyrtlib.absorption_model.LiqAbsModel.implemented_models
+
+
+
+
+
+.. include:: gallery_backreferences/pyrtlib.absorption_model.LiqAbsModel.implemented_models.examples

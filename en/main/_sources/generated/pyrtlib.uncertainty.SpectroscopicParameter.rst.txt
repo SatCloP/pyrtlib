@@ -1,0 +1,43 @@
+pyrtlib.uncertainty.SpectroscopicParameter
+==========================================
+
+.. currentmodule:: pyrtlib.uncertainty
+
+.. autoclass:: SpectroscopicParameter
+    :show-inheritance: 
+    
+    
+    
+    .. rubric:: Methods
+
+    .. autosummary::
+        :toctree:
+        :recursive:
+    
+        ~SpectroscopicParameter.__init__
+        ~SpectroscopicParameter.oxygen_parameters
+        ~SpectroscopicParameter.ozono_parameters
+        ~SpectroscopicParameter.set_parameters
+        ~SpectroscopicParameter.water_parameters
+    
+    
+
+    
+    
+    .. rubric:: Attributes
+
+    .. autosummary::
+    
+        ~SpectroscopicParameter.name
+        ~SpectroscopicParameter.refer
+        ~SpectroscopicParameter.units
+        ~SpectroscopicParameter.value
+        ~SpectroscopicParameter.uncer
+    
+    
+
+    
+    
+    
+
+.. include:: gallery_backreferences/pyrtlib.uncertainty.SpectroscopicParameter.examples

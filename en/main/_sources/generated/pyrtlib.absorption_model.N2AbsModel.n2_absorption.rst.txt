@@ -1,0 +1,12 @@
+pyrtlib.absorption\_model.N2AbsModel.n2\_absorption
+===================================================
+
+.. currentmodule:: pyrtlib.absorption_model
+
+.. automethod:: pyrtlib.absorption_model.N2AbsModel.n2_absorption
+
+
+
+
+
+.. include:: gallery_backreferences/pyrtlib.absorption_model.N2AbsModel.n2_absorption.examples

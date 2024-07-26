@@ -1,0 +1,12 @@
+pyrtlib.rt\_equation.RTEquation.exponential\_integration
+========================================================
+
+.. currentmodule:: pyrtlib.rt_equation
+
+.. automethod:: pyrtlib.rt_equation.RTEquation.exponential_integration
+
+
+
+
+
+.. include:: gallery_backreferences/pyrtlib.rt_equation.RTEquation.exponential_integration.examples
