@@ -310,7 +310,7 @@ class ProfileExtrapolation:
         Returns:
             Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]: Height, Pressure, Temperature, RH extrapolated profiles
         """
-    
+
         if np.max(z) < 50:
             h_km = np.append(z, np.arange(max(z)+3.2, 50, 3.2))
             idx = np.where(self._height > np.max(h_km))

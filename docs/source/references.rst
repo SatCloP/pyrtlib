@@ -69,3 +69,5 @@ References
 .. [Galanina-2022] Galanina, T. A., Koroleva, A. O., Simonova, A. A., Campargue, A., and Tretyakov, M. Y., “The water vapor self-continuum in the "terahertz gap" region (15-700 cm-1): Experiment versus MT_CKD-3.5 model”, Journal of Molecular Spectroscopy, vol. 389, 2022. https://doi.org/10.1016/j.jms.2022.111691.
 
 .. [Meshkov-DeLucia-2007] Andrey I. Meshkov, Frank C. De Lucia, Laboratory measurements of dry air atmospheric absorption with a millimeter wave cavity ringdown spectrometer, Journal of Quantitative Spectroscopy and Radiative Transfer, Volume 108, Issue 2, 2007, Pages 256-276, ISSN 0022-4073, https://doi.org/10.1016/j.jqsrt.2007.04.001.
+
+.. [Serov-2024] E.A. Serov, T.A. Galanina, A.O. Koroleva, D.S. Makarov, I.S. Amerkhanov, M.A. Koshelev, M.Yu. Tretyakov, D.N. Chistikov, A.A. Finenko, A.A. Vigasin, Continuum absorption in pure N2 gas and in its mixture with Ar, Journal of Quantitative Spectroscopy and Radiative Transfer, Volume 328, 2024, 109172, ISSN 0022-4073, https://doi.org/10.1016/j.jqsrt.2024.109172.

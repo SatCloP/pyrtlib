@@ -10,25 +10,9 @@ from netCDF4 import Dataset
 
 import numpy as np
 
-from pyrtlib.climatology import AtmosphericProfiles as atmp
-from .utils import dilec12, _dcerror, constants, gas_mass, import_lineshape
+from .utils import dilec12, _dcerror, constants, import_lineshape
 
 PATH = os.path.dirname(os.path.abspath(__file__))
-
-
-class AbsModelError(Exception):
-    """Exception raised for errors in the input model.
-
-    Attributes:
-        model -- input model which caused the error
-        message -- explanation of the error
-    """
-
-    def __init__(self, model, message):
-        self.model = model
-        self.message = message
-
-        super().__init__(self.message)
 
 
 class AbsModelError(Exception):
@@ -215,7 +199,7 @@ class N2AbsModel(AbsModel):
             Convert to dry air absorption by multiplying by 0.84 (see [Meshkov-DeLucia-2007]_)
 
         References:
-            .. [1] [Serov et al, JQSRT 2024]
+            .. [1] [Serov-2024]_
         """
         t0 = 300.
         ti = t0 / t
