@@ -1,0 +1,79 @@
+
+:orphan:
+
+.. _sphx_glr_examples_sg_execution_times:
+
+
+Computation times
+=================
+**09:08.777** total execution time for 15 files **from examples**:
+
+.. container::
+
+  .. raw:: html
+
+    <style scoped>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet" />
+    </style>
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+    <script type="text/javascript" class="init">
+    $(document).ready( function () {
+        $('table.sg-datatable').DataTable({order: [[1, 'desc']]});
+    } );
+    </script>
+
+  .. list-table::
+   :header-rows: 1
+   :class: table table-striped sg-datatable
+
+   * - Example
+     - Time
+     - Mem (MB)
+   * - :ref:`sphx_glr_examples_uncertainty_tutorial.py` (``uncertainty_tutorial.py``)
+     - 04:31.371
+     - 0.0
+   * - :ref:`sphx_glr_examples_plot_brightness_temperature_uncertainties.py` (``plot_brightness_temperature_uncertainties.py``)
+     - 03:03.841
+     - 0.0
+   * - :ref:`sphx_glr_examples_generic_tutorial.py` (``generic_tutorial.py``)
+     - 00:15.012
+     - 0.0
+   * - :ref:`sphx_glr_examples_plot_bt_wyoming.py` (``plot_bt_wyoming.py``)
+     - 00:14.256
+     - 0.0
+   * - :ref:`sphx_glr_examples_plot_brightness_temperature_down.py` (``plot_brightness_temperature_down.py``)
+     - 00:12.680
+     - 0.0
+   * - :ref:`sphx_glr_examples_plot_brightness_temperature_wO3.py` (``plot_brightness_temperature_wO3.py``)
+     - 00:12.127
+     - 0.0
+   * - :ref:`sphx_glr_examples_plot_weighting_functions.py` (``plot_weighting_functions.py``)
+     - 00:09.727
+     - 0.0
+   * - :ref:`sphx_glr_examples_plot_brightness_temperature_up.py` (``plot_brightness_temperature_up.py``)
+     - 00:07.780
+     - 0.0
+   * - :ref:`sphx_glr_examples_plot_bt_igra2.py` (``plot_bt_igra2.py``)
+     - 00:07.631
+     - 0.0
+   * - :ref:`sphx_glr_examples_plot_bt_era5.py` (``plot_bt_era5.py``)
+     - 00:04.539
+     - 0.0
+   * - :ref:`sphx_glr_examples_plot_bt_era5_cloudy_profile.py` (``plot_bt_era5_cloudy_profile.py``)
+     - 00:04.233
+     - 0.0
+   * - :ref:`sphx_glr_examples_plot_model_cloudy.py` (``plot_model_cloudy.py``)
+     - 00:02.609
+     - 0.0
+   * - :ref:`sphx_glr_examples_plot_water_vapour_profile.py` (``plot_water_vapour_profile.py``)
+     - 00:01.503
+     - 0.0
+   * - :ref:`sphx_glr_examples_plot_log_dependance_tb.py` (``plot_log_dependance_tb.py``)
+     - 00:01.254
+     - 0.0
+   * - :ref:`sphx_glr_examples_plot_atmosphere.py` (``plot_atmosphere.py``)
+     - 00:00.211
+     - 0.0

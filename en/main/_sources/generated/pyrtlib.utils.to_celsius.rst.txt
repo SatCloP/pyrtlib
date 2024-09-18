@@ -1,0 +1,12 @@
+pyrtlib.utils.to\_celsius
+=========================
+
+.. currentmodule:: pyrtlib.utils
+
+.. autofunction:: pyrtlib.utils.to_celsius
+
+
+
+
+
+.. include:: gallery_backreferences/pyrtlib.utils.to_celsius.examples

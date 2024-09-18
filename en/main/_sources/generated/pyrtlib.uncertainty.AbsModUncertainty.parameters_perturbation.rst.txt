@@ -1,0 +1,12 @@
+pyrtlib.uncertainty.AbsModUncertainty.parameters\_perturbation
+==============================================================
+
+.. currentmodule:: pyrtlib.uncertainty
+
+.. automethod:: pyrtlib.uncertainty.AbsModUncertainty.parameters_perturbation
+
+
+
+
+
+.. include:: gallery_backreferences/pyrtlib.uncertainty.AbsModUncertainty.parameters_perturbation.examples

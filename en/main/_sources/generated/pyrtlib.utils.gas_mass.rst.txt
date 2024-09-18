@@ -1,0 +1,12 @@
+pyrtlib.utils.gas\_mass
+=======================
+
+.. currentmodule:: pyrtlib.utils
+
+.. autofunction:: pyrtlib.utils.gas_mass
+
+
+
+
+
+.. include:: gallery_backreferences/pyrtlib.utils.gas_mass.examples

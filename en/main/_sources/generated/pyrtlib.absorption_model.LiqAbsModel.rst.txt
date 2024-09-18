@@ -1,0 +1,38 @@
+pyrtlib.absorption\_model.LiqAbsModel
+=====================================
+
+.. currentmodule:: pyrtlib.absorption_model
+
+.. autoclass:: LiqAbsModel
+    :show-inheritance: 
+    
+    
+    
+    .. rubric:: Methods
+
+    .. autosummary::
+        :toctree:
+        :recursive:
+    
+        ~LiqAbsModel.__init__
+        ~LiqAbsModel.implemented_models
+        ~LiqAbsModel.liquid_water_absorption
+        ~LiqAbsModel.set_ll
+    
+    
+
+    
+    
+    .. rubric:: Attributes
+
+    .. autosummary::
+    
+        ~LiqAbsModel.model
+    
+    
+
+    
+    
+    
+
+.. include:: gallery_backreferences/pyrtlib.absorption_model.LiqAbsModel.examples
