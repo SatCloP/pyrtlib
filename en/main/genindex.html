@@ -1,0 +1,903 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Index &#8212; pyrtlib 1.1.1 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/noscrollbar.css" />
+    <link rel="stylesheet" type="text/css" href="_static/refs_format.css" />
+    <link rel="stylesheet" type="text/css" href="_static/pyrtlib.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery-dataframe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery-rendered-html.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.5ea377869091fd0449014c60fc090103.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/toggleprompt.js"></script>
+    <script src="_static/design-tabs.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'genindex';</script>
+    <link rel="shortcut icon" href="_static/thumb_logo.svg"/>
+    <link rel="index" title="Index" href="#" />
+    <link rel="search" title="Search" href="search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+    <meta name="docbuild:last-update" content="01/02/2025"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+<aside class="bd-header-announcement" aria-label="Announcement">
+  <div class="bd-header-announcement__content">Official PyRTlib 1.1.1 Documentation</div>
+</aside>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/thumb_logo.png" class="logo__image only-light" alt=""/>
+    <script>document.write(`<img src="_static/thumb_white_logo.png" class="logo__image only-dark" alt=""/>`);</script>
+  
+  
+    <p class="title logo__title">PyRTlib</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="installation.html">
+    Installation instructions
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="api.html">
+    API references
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="examples/index.html">
+    Gallery example
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="notebook/index.html">
+    Community example
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="references.html">
+    References
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/SatCloP/pyrtlib" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <div class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="installation.html">
+    Installation instructions
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="api.html">
+    API references
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="examples/index.html">
+    Gallery example
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="notebook/index.html">
+    Community example
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="references.html">
+    References
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/SatCloP/pyrtlib" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none"></div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+
+<h1 id="index">Index</h1>
+
+<div class="genindex-jumpbox">
+ <a href="#_"><strong>_</strong></a>
+ | <a href="#A"><strong>A</strong></a>
+ | <a href="#B"><strong>B</strong></a>
+ | <a href="#C"><strong>C</strong></a>
+ | <a href="#D"><strong>D</strong></a>
+ | <a href="#E"><strong>E</strong></a>
+ | <a href="#G"><strong>G</strong></a>
+ | <a href="#H"><strong>H</strong></a>
+ | <a href="#I"><strong>I</strong></a>
+ | <a href="#K"><strong>K</strong></a>
+ | <a href="#L"><strong>L</strong></a>
+ | <a href="#M"><strong>M</strong></a>
+ | <a href="#N"><strong>N</strong></a>
+ | <a href="#O"><strong>O</strong></a>
+ | <a href="#P"><strong>P</strong></a>
+ | <a href="#R"><strong>R</strong></a>
+ | <a href="#S"><strong>S</strong></a>
+ | <a href="#T"><strong>T</strong></a>
+ | <a href="#U"><strong>U</strong></a>
+ | <a href="#V"><strong>V</strong></a>
+ | <a href="#W"><strong>W</strong></a>
+ 
+</div>
+<h2 id="_">_</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="generated/pyrtlib.absorption_model.AbsModel.__init__.html#pyrtlib.absorption_model.AbsModel.__init__">__init__() (pyrtlib.absorption_model.AbsModel method)</a>
+
+      <ul>
+        <li><a href="generated/pyrtlib.absorption_model.H2OAbsModel.__init__.html#pyrtlib.absorption_model.H2OAbsModel.__init__">(pyrtlib.absorption_model.H2OAbsModel method)</a>
+</li>
+        <li><a href="generated/pyrtlib.absorption_model.LiqAbsModel.__init__.html#pyrtlib.absorption_model.LiqAbsModel.__init__">(pyrtlib.absorption_model.LiqAbsModel method)</a>
+</li>
+        <li><a href="generated/pyrtlib.absorption_model.N2AbsModel.__init__.html#pyrtlib.absorption_model.N2AbsModel.__init__">(pyrtlib.absorption_model.N2AbsModel method)</a>
+</li>
+        <li><a href="generated/pyrtlib.absorption_model.O2AbsModel.__init__.html#pyrtlib.absorption_model.O2AbsModel.__init__">(pyrtlib.absorption_model.O2AbsModel method)</a>
+</li>
+        <li><a href="generated/pyrtlib.absorption_model.O3AbsModel.__init__.html#pyrtlib.absorption_model.O3AbsModel.__init__">(pyrtlib.absorption_model.O3AbsModel method)</a>
+</li>
+        <li><a href="generated/pyrtlib.apiwebservices.ERA5Reanalysis.__init__.html#pyrtlib.apiwebservices.ERA5Reanalysis.__init__">(pyrtlib.apiwebservices.ERA5Reanalysis method)</a>
+</li>
+        <li><a href="generated/pyrtlib.apiwebservices.IGRAUpperAir.__init__.html#pyrtlib.apiwebservices.IGRAUpperAir.__init__">(pyrtlib.apiwebservices.IGRAUpperAir method)</a>
+</li>
+        <li><a href="generated/pyrtlib.apiwebservices.WyomingUpperAir.__init__.html#pyrtlib.apiwebservices.WyomingUpperAir.__init__">(pyrtlib.apiwebservices.WyomingUpperAir method)</a>
+</li>
+        <li><a href="generated/pyrtlib.climatology.AtmosphericProfiles.__init__.html#pyrtlib.climatology.AtmosphericProfiles.__init__">(pyrtlib.climatology.AtmosphericProfiles method)</a>
+</li>
+        <li><a href="generated/pyrtlib.climatology.ProfileExtrapolation.__init__.html#pyrtlib.climatology.ProfileExtrapolation.__init__">(pyrtlib.climatology.ProfileExtrapolation method)</a>
+</li>
+        <li><a href="generated/pyrtlib.rt_equation.RTEquation.__init__.html#pyrtlib.rt_equation.RTEquation.__init__">(pyrtlib.rt_equation.RTEquation method)</a>
+</li>
+        <li><a href="generated/pyrtlib.tb_spectrum.TbCloudRTE.__init__.html#pyrtlib.tb_spectrum.TbCloudRTE.__init__">(pyrtlib.tb_spectrum.TbCloudRTE method)</a>
+</li>
+        <li><a href="generated/pyrtlib.uncertainty.AbsModUncertainty.__init__.html#pyrtlib.uncertainty.AbsModUncertainty.__init__">(pyrtlib.uncertainty.AbsModUncertainty method)</a>
+</li>
+        <li><a href="generated/pyrtlib.uncertainty.SpectroscopicParameter.__init__.html#pyrtlib.uncertainty.SpectroscopicParameter.__init__">(pyrtlib.uncertainty.SpectroscopicParameter method)</a>
+</li>
+        <li><a href="generated/pyrtlib.weighting_functions.WeightingFunctions.__init__.html#pyrtlib.weighting_functions.WeightingFunctions.__init__">(pyrtlib.weighting_functions.WeightingFunctions method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+</tr></table>
+
+<h2 id="A">A</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="generated/pyrtlib.absorption_model.AbsModel.html#pyrtlib.absorption_model.AbsModel">AbsModel (class in pyrtlib.absorption_model)</a>
+</li>
+      <li><a href="generated/pyrtlib.uncertainty.AbsModUncertainty.html#pyrtlib.uncertainty.AbsModUncertainty">AbsModUncertainty (class in pyrtlib.uncertainty)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="generated/pyrtlib.climatology.AtmosphericProfiles.atm_profiles.html#pyrtlib.climatology.AtmosphericProfiles.atm_profiles">atm_profiles() (pyrtlib.climatology.AtmosphericProfiles static method)</a>
+</li>
+      <li><a href="generated/pyrtlib.utils.atmospheric_tickness.html#pyrtlib.utils.atmospheric_tickness">atmospheric_tickness() (in module pyrtlib.utils)</a>
+</li>
+      <li><a href="generated/pyrtlib.climatology.AtmosphericProfiles.html#pyrtlib.climatology.AtmosphericProfiles">AtmosphericProfiles (class in pyrtlib.climatology)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="B">B</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="generated/pyrtlib.rt_equation.RTEquation.bright.html#pyrtlib.rt_equation.RTEquation.bright">bright() (pyrtlib.rt_equation.RTEquation static method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="C">C</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="generated/pyrtlib.rt_equation.RTEquation.clearsky_absorption.html#pyrtlib.rt_equation.RTEquation.clearsky_absorption">clearsky_absorption() (pyrtlib.rt_equation.RTEquation static method)</a>
+</li>
+      <li><a href="generated/pyrtlib.rt_equation.RTEquation.cloud_integrated_density.html#pyrtlib.rt_equation.RTEquation.cloud_integrated_density">cloud_integrated_density() (pyrtlib.rt_equation.RTEquation static method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="generated/pyrtlib.rt_equation.RTEquation.cloud_radiating_temperature.html#pyrtlib.rt_equation.RTEquation.cloud_radiating_temperature">cloud_radiating_temperature() (pyrtlib.rt_equation.RTEquation static method)</a>
+</li>
+      <li><a href="generated/pyrtlib.rt_equation.RTEquation.cloudy_absorption.html#pyrtlib.rt_equation.RTEquation.cloudy_absorption">cloudy_absorption() (pyrtlib.rt_equation.RTEquation static method)</a>
+</li>
+      <li><a href="generated/pyrtlib.utils.constants.html#pyrtlib.utils.constants">constants() (in module pyrtlib.utils)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="D">D</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="generated/pyrtlib.utils.dewpoint2rh.html#pyrtlib.utils.dewpoint2rh">dewpoint2rh() (in module pyrtlib.utils)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="generated/pyrtlib.utils.dilec12.html#pyrtlib.utils.dilec12">dilec12() (in module pyrtlib.utils)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="E">E</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="generated/pyrtlib.utils.e2mr.html#pyrtlib.utils.e2mr">e2mr() (in module pyrtlib.utils)</a>
+</li>
+      <li><a href="generated/pyrtlib.apiwebservices.ERA5Reanalysis.html#pyrtlib.apiwebservices.ERA5Reanalysis">ERA5Reanalysis (class in pyrtlib.apiwebservices)</a>
+</li>
+      <li><a href="generated/pyrtlib.utils.esice_goffgratch.html#pyrtlib.utils.esice_goffgratch">esice_goffgratch() (in module pyrtlib.utils)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="generated/pyrtlib.utils.eswat_goffgratch.html#pyrtlib.utils.eswat_goffgratch">eswat_goffgratch() (in module pyrtlib.utils)</a>
+</li>
+      <li><a href="generated/pyrtlib.tb_spectrum.TbCloudRTE.execute.html#pyrtlib.tb_spectrum.TbCloudRTE.execute">execute() (pyrtlib.tb_spectrum.TbCloudRTE method)</a>
+</li>
+      <li><a href="generated/pyrtlib.rt_equation.RTEquation.exponential_integration.html#pyrtlib.rt_equation.RTEquation.exponential_integration">exponential_integration() (pyrtlib.rt_equation.RTEquation static method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="G">G</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="generated/pyrtlib.utils.gas_mass.html#pyrtlib.utils.gas_mass">gas_mass() (in module pyrtlib.utils)</a>
+</li>
+      <li><a href="generated/pyrtlib.weighting_functions.WeightingFunctions.generate_wf.html#pyrtlib.weighting_functions.WeightingFunctions.generate_wf">generate_wf() (pyrtlib.weighting_functions.WeightingFunctions method)</a>
+</li>
+      <li><a href="generated/pyrtlib.utils.get_frequencies.html#pyrtlib.utils.get_frequencies">get_frequencies() (in module pyrtlib.utils)</a>
+</li>
+      <li><a href="generated/pyrtlib.utils.get_frequencies_sat.html#pyrtlib.utils.get_frequencies_sat">get_frequencies_sat() (in module pyrtlib.utils)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="generated/pyrtlib.apiwebservices.WyomingUpperAir.get_stations.html#pyrtlib.apiwebservices.WyomingUpperAir.get_stations">get_stations() (pyrtlib.apiwebservices.WyomingUpperAir class method)</a>
+</li>
+      <li><a href="generated/pyrtlib.climatology.AtmosphericProfiles.gl_atm.html#pyrtlib.climatology.AtmosphericProfiles.gl_atm">gl_atm() (pyrtlib.climatology.AtmosphericProfiles static method)</a>
+</li>
+      <li><a href="generated/pyrtlib.climatology.AtmosphericProfiles.gl_atm_minor.html#pyrtlib.climatology.AtmosphericProfiles.gl_atm_minor">gl_atm_minor() (pyrtlib.climatology.AtmosphericProfiles static method)</a>
+</li>
+      <li><a href="generated/pyrtlib.climatology.AtmosphericProfiles.gl_atm_trace.html#pyrtlib.climatology.AtmosphericProfiles.gl_atm_trace">gl_atm_trace() (pyrtlib.climatology.AtmosphericProfiles static method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="H">H</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="generated/pyrtlib.absorption_model.H2OAbsModel.h2o_absorption.html#pyrtlib.absorption_model.H2OAbsModel.h2o_absorption">h2o_absorption() (pyrtlib.absorption_model.H2OAbsModel method)</a>
+</li>
+      <li><a href="generated/pyrtlib.absorption_model.H2OAbsModel.h2o_continuum.html#pyrtlib.absorption_model.H2OAbsModel.h2o_continuum">h2o_continuum() (pyrtlib.absorption_model.H2OAbsModel method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="generated/pyrtlib.absorption_model.H2OAbsModel.h2o_continuum_mwl24.html#pyrtlib.absorption_model.H2OAbsModel.h2o_continuum_mwl24">h2o_continuum_mwl24() (pyrtlib.absorption_model.H2OAbsModel method)</a>
+</li>
+      <li><a href="generated/pyrtlib.absorption_model.H2OAbsModel.html#pyrtlib.absorption_model.H2OAbsModel">H2OAbsModel (class in pyrtlib.absorption_model)</a>
+</li>
+      <li><a href="generated/pyrtlib.utils.height_to_pressure.html#pyrtlib.utils.height_to_pressure">height_to_pressure() (in module pyrtlib.utils)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="I">I</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="generated/pyrtlib.apiwebservices.IGRAUpperAir.html#pyrtlib.apiwebservices.IGRAUpperAir">IGRAUpperAir (class in pyrtlib.apiwebservices)</a>
+</li>
+      <li><a href="generated/pyrtlib.absorption_model.AbsModel.implemented_models.html#pyrtlib.absorption_model.AbsModel.implemented_models">implemented_models() (pyrtlib.absorption_model.AbsModel static method)</a>
+
+      <ul>
+        <li><a href="generated/pyrtlib.absorption_model.H2OAbsModel.implemented_models.html#pyrtlib.absorption_model.H2OAbsModel.implemented_models">(pyrtlib.absorption_model.H2OAbsModel static method)</a>
+</li>
+        <li><a href="generated/pyrtlib.absorption_model.LiqAbsModel.implemented_models.html#pyrtlib.absorption_model.LiqAbsModel.implemented_models">(pyrtlib.absorption_model.LiqAbsModel static method)</a>
+</li>
+        <li><a href="generated/pyrtlib.absorption_model.N2AbsModel.implemented_models.html#pyrtlib.absorption_model.N2AbsModel.implemented_models">(pyrtlib.absorption_model.N2AbsModel static method)</a>
+</li>
+        <li><a href="generated/pyrtlib.absorption_model.O2AbsModel.implemented_models.html#pyrtlib.absorption_model.O2AbsModel.implemented_models">(pyrtlib.absorption_model.O2AbsModel static method)</a>
+</li>
+        <li><a href="generated/pyrtlib.absorption_model.O3AbsModel.implemented_models.html#pyrtlib.absorption_model.O3AbsModel.implemented_models">(pyrtlib.absorption_model.O3AbsModel static method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="generated/pyrtlib.utils.import_lineshape.html#pyrtlib.utils.import_lineshape">import_lineshape() (in module pyrtlib.utils)</a>
+</li>
+      <li><a href="generated/pyrtlib.tb_spectrum.TbCloudRTE.init_absmdl.html#pyrtlib.tb_spectrum.TbCloudRTE.init_absmdl">init_absmdl() (pyrtlib.tb_spectrum.TbCloudRTE method)</a>
+</li>
+      <li><a href="generated/pyrtlib.tb_spectrum.TbCloudRTE.init_cloudy.html#pyrtlib.tb_spectrum.TbCloudRTE.init_cloudy">init_cloudy() (pyrtlib.tb_spectrum.TbCloudRTE method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="K">K</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="generated/pyrtlib.utils.kgkg_to_kgm3.html#pyrtlib.utils.kgkg_to_kgm3">kgkg_to_kgm3() (in module pyrtlib.utils)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="L">L</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="generated/pyrtlib.absorption_model.LiqAbsModel.html#pyrtlib.absorption_model.LiqAbsModel">LiqAbsModel (class in pyrtlib.absorption_model)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="generated/pyrtlib.absorption_model.LiqAbsModel.liquid_water_absorption.html#pyrtlib.absorption_model.LiqAbsModel.liquid_water_absorption">liquid_water_absorption() (pyrtlib.absorption_model.LiqAbsModel static method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="M">M</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li>
+    module
+
+      <ul>
+        <li><a href="generated/pyrtlib.utils.html#module-pyrtlib.utils">pyrtlib.utils</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="generated/pyrtlib.utils.mr2e.html#pyrtlib.utils.mr2e">mr2e() (in module pyrtlib.utils)</a>
+</li>
+      <li><a href="generated/pyrtlib.utils.mr2rh.html#pyrtlib.utils.mr2rh">mr2rh() (in module pyrtlib.utils)</a>
+</li>
+      <li><a href="generated/pyrtlib.utils.mr2rho.html#pyrtlib.utils.mr2rho">mr2rho() (in module pyrtlib.utils)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="N">N</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="generated/pyrtlib.absorption_model.N2AbsModel.n2_absorption.html#pyrtlib.absorption_model.N2AbsModel.n2_absorption">n2_absorption() (pyrtlib.absorption_model.N2AbsModel static method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="generated/pyrtlib.absorption_model.N2AbsModel.n2_absorption_mwl24.html#pyrtlib.absorption_model.N2AbsModel.n2_absorption_mwl24">n2_absorption_mwl24() (pyrtlib.absorption_model.N2AbsModel static method)</a>
+</li>
+      <li><a href="generated/pyrtlib.absorption_model.N2AbsModel.html#pyrtlib.absorption_model.N2AbsModel">N2AbsModel (class in pyrtlib.absorption_model)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="O">O</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="generated/pyrtlib.absorption_model.O2AbsModel.o2_absorption.html#pyrtlib.absorption_model.O2AbsModel.o2_absorption">o2_absorption() (pyrtlib.absorption_model.O2AbsModel method)</a>
+</li>
+      <li><a href="generated/pyrtlib.absorption_model.O2AbsModel.html#pyrtlib.absorption_model.O2AbsModel">O2AbsModel (class in pyrtlib.absorption_model)</a>
+</li>
+      <li><a href="generated/pyrtlib.absorption_model.O3AbsModel.o3_absorption.html#pyrtlib.absorption_model.O3AbsModel.o3_absorption">o3_absorption() (pyrtlib.absorption_model.O3AbsModel method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="generated/pyrtlib.absorption_model.O3AbsModel.html#pyrtlib.absorption_model.O3AbsModel">O3AbsModel (class in pyrtlib.absorption_model)</a>
+</li>
+      <li><a href="generated/pyrtlib.uncertainty.SpectroscopicParameter.oxygen_parameters.html#pyrtlib.uncertainty.SpectroscopicParameter.oxygen_parameters">oxygen_parameters() (pyrtlib.uncertainty.SpectroscopicParameter static method)</a>
+</li>
+      <li><a href="generated/pyrtlib.uncertainty.SpectroscopicParameter.ozono_parameters.html#pyrtlib.uncertainty.SpectroscopicParameter.ozono_parameters">ozono_parameters() (pyrtlib.uncertainty.SpectroscopicParameter static method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="P">P</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="generated/pyrtlib.uncertainty.AbsModUncertainty.parameters_perturbation.html#pyrtlib.uncertainty.AbsModUncertainty.parameters_perturbation">parameters_perturbation() (pyrtlib.uncertainty.AbsModUncertainty static method)</a>
+</li>
+      <li><a href="generated/pyrtlib.rt_equation.RTEquation.planck.html#pyrtlib.rt_equation.RTEquation.planck">planck() (pyrtlib.rt_equation.RTEquation static method)</a>
+</li>
+      <li><a href="generated/pyrtlib.weighting_functions.WeightingFunctions.plot_wf.html#pyrtlib.weighting_functions.WeightingFunctions.plot_wf">plot_wf() (pyrtlib.weighting_functions.WeightingFunctions method)</a>
+</li>
+      <li><a href="generated/pyrtlib.weighting_functions.WeightingFunctions.plot_wf_grouped.html#pyrtlib.weighting_functions.WeightingFunctions.plot_wf_grouped">plot_wf_grouped() (pyrtlib.weighting_functions.WeightingFunctions method)</a>
+</li>
+      <li><a href="generated/pyrtlib.utils.ppmv2gkg.html#pyrtlib.utils.ppmv2gkg">ppmv2gkg() (in module pyrtlib.utils)</a>
+</li>
+      <li><a href="generated/pyrtlib.utils.ppmv_to_moleculesm3.html#pyrtlib.utils.ppmv_to_moleculesm3">ppmv_to_moleculesm3() (in module pyrtlib.utils)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="generated/pyrtlib.climatology.ProfileExtrapolation.pressure.html#pyrtlib.climatology.ProfileExtrapolation.pressure">pressure() (pyrtlib.climatology.ProfileExtrapolation method)</a>
+</li>
+      <li><a href="generated/pyrtlib.utils.pressure_to_height.html#pyrtlib.utils.pressure_to_height">pressure_to_height() (in module pyrtlib.utils)</a>
+</li>
+      <li><a href="generated/pyrtlib.climatology.ProfileExtrapolation.profile_extrapolation.html#pyrtlib.climatology.ProfileExtrapolation.profile_extrapolation">profile_extrapolation() (pyrtlib.climatology.ProfileExtrapolation method)</a>
+</li>
+      <li><a href="generated/pyrtlib.climatology.ProfileExtrapolation.html#pyrtlib.climatology.ProfileExtrapolation">ProfileExtrapolation (class in pyrtlib.climatology)</a>
+</li>
+      <li>
+    pyrtlib.utils
+
+      <ul>
+        <li><a href="generated/pyrtlib.utils.html#module-pyrtlib.utils">module</a>
+</li>
+      </ul></li>
+  </ul></td>
+</tr></table>
+
+<h2 id="R">R</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="generated/pyrtlib.rt_equation.RTEquation.ray_tracing.html#pyrtlib.rt_equation.RTEquation.ray_tracing">ray_tracing() (pyrtlib.rt_equation.RTEquation static method)</a>
+</li>
+      <li><a href="generated/pyrtlib.apiwebservices.ERA5Reanalysis.read_data.html#pyrtlib.apiwebservices.ERA5Reanalysis.read_data">read_data() (pyrtlib.apiwebservices.ERA5Reanalysis class method)</a>
+</li>
+      <li><a href="generated/pyrtlib.rt_equation.RTEquation.refractivity.html#pyrtlib.rt_equation.RTEquation.refractivity">refractivity() (pyrtlib.rt_equation.RTEquation static method)</a>
+</li>
+      <li><a href="generated/pyrtlib.apiwebservices.ERA5Reanalysis.request_data.html#pyrtlib.apiwebservices.ERA5Reanalysis.request_data">request_data() (pyrtlib.apiwebservices.ERA5Reanalysis static method)</a>
+
+      <ul>
+        <li><a href="generated/pyrtlib.apiwebservices.IGRAUpperAir.request_data.html#pyrtlib.apiwebservices.IGRAUpperAir.request_data">(pyrtlib.apiwebservices.IGRAUpperAir class method)</a>
+</li>
+        <li><a href="generated/pyrtlib.apiwebservices.WyomingUpperAir.request_data.html#pyrtlib.apiwebservices.WyomingUpperAir.request_data">(pyrtlib.apiwebservices.WyomingUpperAir class method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="generated/pyrtlib.utils.rho2mr.html#pyrtlib.utils.rho2mr">rho2mr() (in module pyrtlib.utils)</a>
+</li>
+      <li><a href="generated/pyrtlib.utils.rho2rh.html#pyrtlib.utils.rho2rh">rho2rh() (in module pyrtlib.utils)</a>
+</li>
+      <li><a href="generated/pyrtlib.rt_equation.RTEquation.html#pyrtlib.rt_equation.RTEquation">RTEquation (class in pyrtlib.rt_equation)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="S">S</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="generated/pyrtlib.utils.satmix.html#pyrtlib.utils.satmix">satmix() (in module pyrtlib.utils)</a>
+</li>
+      <li><a href="generated/pyrtlib.utils.satvap.html#pyrtlib.utils.satvap">satvap() (in module pyrtlib.utils)</a>
+</li>
+      <li><a href="generated/pyrtlib.tb_spectrum.TbCloudRTE.set_amu.html#pyrtlib.tb_spectrum.TbCloudRTE.set_amu">set_amu() (pyrtlib.tb_spectrum.TbCloudRTE method)</a>
+</li>
+      <li><a href="generated/pyrtlib.absorption_model.AbsModel.set_ll.html#pyrtlib.absorption_model.AbsModel.set_ll">set_ll() (pyrtlib.absorption_model.AbsModel static method)</a>
+
+      <ul>
+        <li><a href="generated/pyrtlib.absorption_model.H2OAbsModel.set_ll.html#pyrtlib.absorption_model.H2OAbsModel.set_ll">(pyrtlib.absorption_model.H2OAbsModel static method)</a>
+</li>
+        <li><a href="generated/pyrtlib.absorption_model.LiqAbsModel.set_ll.html#pyrtlib.absorption_model.LiqAbsModel.set_ll">(pyrtlib.absorption_model.LiqAbsModel static method)</a>
+</li>
+        <li><a href="generated/pyrtlib.absorption_model.N2AbsModel.set_ll.html#pyrtlib.absorption_model.N2AbsModel.set_ll">(pyrtlib.absorption_model.N2AbsModel static method)</a>
+</li>
+        <li><a href="generated/pyrtlib.absorption_model.O2AbsModel.set_ll.html#pyrtlib.absorption_model.O2AbsModel.set_ll">(pyrtlib.absorption_model.O2AbsModel static method)</a>
+</li>
+        <li><a href="generated/pyrtlib.absorption_model.O3AbsModel.set_ll.html#pyrtlib.absorption_model.O3AbsModel.set_ll">(pyrtlib.absorption_model.O3AbsModel static method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="generated/pyrtlib.uncertainty.SpectroscopicParameter.set_parameters.html#pyrtlib.uncertainty.SpectroscopicParameter.set_parameters">set_parameters() (pyrtlib.uncertainty.SpectroscopicParameter static method)</a>
+</li>
+      <li><a href="generated/pyrtlib.uncertainty.SpectroscopicParameter.html#pyrtlib.uncertainty.SpectroscopicParameter">SpectroscopicParameter (class in pyrtlib.uncertainty)</a>
+</li>
+      <li><a href="generated/pyrtlib.climatology.ProfileExtrapolation.standard_pressure.html#pyrtlib.climatology.ProfileExtrapolation.standard_pressure">standard_pressure() (pyrtlib.climatology.ProfileExtrapolation method)</a>
+</li>
+      <li><a href="generated/pyrtlib.climatology.ProfileExtrapolation.standard_temperature.html#pyrtlib.climatology.ProfileExtrapolation.standard_temperature">standard_temperature() (pyrtlib.climatology.ProfileExtrapolation method)</a>
+</li>
+      <li><a href="generated/pyrtlib.climatology.ProfileExtrapolation.standard_water_vapour_density.html#pyrtlib.climatology.ProfileExtrapolation.standard_water_vapour_density">standard_water_vapour_density() (pyrtlib.climatology.ProfileExtrapolation method)</a>
+</li>
+      <li><a href="generated/pyrtlib.climatology.ProfileExtrapolation.standard_water_vapour_pressure.html#pyrtlib.climatology.ProfileExtrapolation.standard_water_vapour_pressure">standard_water_vapour_pressure() (pyrtlib.climatology.ProfileExtrapolation method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="T">T</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="generated/pyrtlib.tb_spectrum.TbCloudRTE.html#pyrtlib.tb_spectrum.TbCloudRTE">TbCloudRTE (class in pyrtlib.tb_spectrum)</a>
+</li>
+      <li><a href="generated/pyrtlib.climatology.ProfileExtrapolation.temperature.html#pyrtlib.climatology.ProfileExtrapolation.temperature">temperature() (pyrtlib.climatology.ProfileExtrapolation method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="generated/pyrtlib.utils.tk2b_mod.html#pyrtlib.utils.tk2b_mod">tk2b_mod() (in module pyrtlib.utils)</a>
+</li>
+      <li><a href="generated/pyrtlib.utils.to_celsius.html#pyrtlib.utils.to_celsius">to_celsius() (in module pyrtlib.utils)</a>
+</li>
+      <li><a href="generated/pyrtlib.utils.to_kelvin.html#pyrtlib.utils.to_kelvin">to_kelvin() (in module pyrtlib.utils)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="U">U</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="generated/pyrtlib.uncertainty.AbsModUncertainty.uncertainty_propagation.html#pyrtlib.uncertainty.AbsModUncertainty.uncertainty_propagation">uncertainty_propagation() (pyrtlib.uncertainty.AbsModUncertainty static method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="V">V</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="generated/pyrtlib.rt_equation.RTEquation.vapor.html#pyrtlib.rt_equation.RTEquation.vapor">vapor() (pyrtlib.rt_equation.RTEquation static method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="generated/pyrtlib.utils.virtual_temperature.html#pyrtlib.utils.virtual_temperature">virtual_temperature() (in module pyrtlib.utils)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="W">W</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="generated/pyrtlib.uncertainty.SpectroscopicParameter.water_parameters.html#pyrtlib.uncertainty.SpectroscopicParameter.water_parameters">water_parameters() (pyrtlib.uncertainty.SpectroscopicParameter static method)</a>
+</li>
+      <li><a href="generated/pyrtlib.climatology.ProfileExtrapolation.water_vapour_density.html#pyrtlib.climatology.ProfileExtrapolation.water_vapour_density">water_vapour_density() (pyrtlib.climatology.ProfileExtrapolation method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="generated/pyrtlib.weighting_functions.WeightingFunctions.html#pyrtlib.weighting_functions.WeightingFunctions">WeightingFunctions (class in pyrtlib.weighting_functions)</a>
+</li>
+      <li><a href="generated/pyrtlib.apiwebservices.WyomingUpperAir.html#pyrtlib.apiwebservices.WyomingUpperAir">WyomingUpperAir (class in pyrtlib.apiwebservices)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+
+
+                </article>
+              
+              
+              
+              
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2021-2025, SatCloP - CNR-IMAA.
+      <br/>
+    
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

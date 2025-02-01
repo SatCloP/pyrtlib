@@ -1,0 +1,12 @@
+pyrtlib.apiwebservices.WyomingUpperAir.\_\_init\_\_
+===================================================
+
+.. currentmodule:: pyrtlib.apiwebservices
+
+.. automethod:: pyrtlib.apiwebservices.WyomingUpperAir.__init__
+
+
+
+
+
+.. include:: gallery_backreferences/pyrtlib.apiwebservices.WyomingUpperAir.__init__.examples

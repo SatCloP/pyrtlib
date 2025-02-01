@@ -1,0 +1,977 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>API references &#8212; pyrtlib 1.1.1 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/noscrollbar.css" />
+    <link rel="stylesheet" type="text/css" href="_static/refs_format.css" />
+    <link rel="stylesheet" type="text/css" href="_static/pyrtlib.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery-dataframe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery-rendered-html.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.5ea377869091fd0449014c60fc090103.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/toggleprompt.js"></script>
+    <script src="_static/design-tabs.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'api';</script>
+    <link rel="shortcut icon" href="_static/thumb_logo.svg"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="pyrtlib.tb_spectrum.TbCloudRTE" href="generated/pyrtlib.tb_spectrum.TbCloudRTE.html" />
+    <link rel="prev" title="Installation instructions" href="installation.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+    <meta name="docbuild:last-update" content="01/02/2025"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+<aside class="bd-header-announcement" aria-label="Announcement">
+  <div class="bd-header-announcement__content">Official PyRTlib 1.1.1 Documentation</div>
+</aside>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/thumb_logo.png" class="logo__image only-light" alt=""/>
+    <script>document.write(`<img src="_static/thumb_white_logo.png" class="logo__image only-dark" alt=""/>`);</script>
+  
+  
+    <p class="title logo__title">PyRTlib</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="installation.html">
+    Installation instructions
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="#">
+    API references
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="examples/index.html">
+    Gallery example
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="notebook/index.html">
+    Community example
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="references.html">
+    References
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/SatCloP/pyrtlib" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="installation.html">
+    Installation instructions
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="#">
+    API references
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="examples/index.html">
+    Gallery example
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="notebook/index.html">
+    Community example
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="references.html">
+    References
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/SatCloP/pyrtlib" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="generated/pyrtlib.tb_spectrum.TbCloudRTE.html">pyrtlib.tb_spectrum.TbCloudRTE</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrtlib.tb_spectrum.TbCloudRTE.__init__.html">pyrtlib.tb_spectrum.TbCloudRTE.__init__</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrtlib.tb_spectrum.TbCloudRTE.execute.html">pyrtlib.tb_spectrum.TbCloudRTE.execute</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrtlib.tb_spectrum.TbCloudRTE.init_absmdl.html">pyrtlib.tb_spectrum.TbCloudRTE.init_absmdl</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrtlib.tb_spectrum.TbCloudRTE.init_cloudy.html">pyrtlib.tb_spectrum.TbCloudRTE.init_cloudy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrtlib.tb_spectrum.TbCloudRTE.set_amu.html">pyrtlib.tb_spectrum.TbCloudRTE.set_amu</a></li>
+</ul>
+</details></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="generated/pyrtlib.climatology.AtmosphericProfiles.html">pyrtlib.climatology.AtmosphericProfiles</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrtlib.climatology.AtmosphericProfiles.__init__.html">pyrtlib.climatology.AtmosphericProfiles.__init__</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrtlib.climatology.AtmosphericProfiles.atm_profiles.html">pyrtlib.climatology.AtmosphericProfiles.atm_profiles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrtlib.climatology.AtmosphericProfiles.gl_atm.html">pyrtlib.climatology.AtmosphericProfiles.gl_atm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrtlib.climatology.AtmosphericProfiles.gl_atm_minor.html">pyrtlib.climatology.AtmosphericProfiles.gl_atm_minor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrtlib.climatology.AtmosphericProfiles.gl_atm_trace.html">pyrtlib.climatology.AtmosphericProfiles.gl_atm_trace</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="generated/pyrtlib.climatology.ProfileExtrapolation.html">pyrtlib.climatology.ProfileExtrapolation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrtlib.climatology.ProfileExtrapolation.__init__.html">pyrtlib.climatology.ProfileExtrapolation.__init__</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrtlib.climatology.ProfileExtrapolation.pressure.html">pyrtlib.climatology.ProfileExtrapolation.pressure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrtlib.climatology.ProfileExtrapolation.profile_extrapolation.html">pyrtlib.climatology.ProfileExtrapolation.profile_extrapolation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrtlib.climatology.ProfileExtrapolation.standard_pressure.html">pyrtlib.climatology.ProfileExtrapolation.standard_pressure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrtlib.climatology.ProfileExtrapolation.standard_temperature.html">pyrtlib.climatology.ProfileExtrapolation.standard_temperature</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrtlib.climatology.ProfileExtrapolation.standard_water_vapour_density.html">pyrtlib.climatology.ProfileExtrapolation.standard_water_vapour_density</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrtlib.climatology.ProfileExtrapolation.standard_water_vapour_pressure.html">pyrtlib.climatology.ProfileExtrapolation.standard_water_vapour_pressure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrtlib.climatology.ProfileExtrapolation.temperature.html">pyrtlib.climatology.ProfileExtrapolation.temperature</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrtlib.climatology.ProfileExtrapolation.water_vapour_density.html">pyrtlib.climatology.ProfileExtrapolation.water_vapour_density</a></li>
+</ul>
+</details></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="generated/pyrtlib.rt_equation.RTEquation.html">pyrtlib.rt_equation.RTEquation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrtlib.rt_equation.RTEquation.__init__.html">pyrtlib.rt_equation.RTEquation.__init__</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrtlib.rt_equation.RTEquation.bright.html">pyrtlib.rt_equation.RTEquation.bright</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrtlib.rt_equation.RTEquation.clearsky_absorption.html">pyrtlib.rt_equation.RTEquation.clearsky_absorption</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrtlib.rt_equation.RTEquation.cloud_integrated_density.html">pyrtlib.rt_equation.RTEquation.cloud_integrated_density</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrtlib.rt_equation.RTEquation.cloud_radiating_temperature.html">pyrtlib.rt_equation.RTEquation.cloud_radiating_temperature</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrtlib.rt_equation.RTEquation.cloudy_absorption.html">pyrtlib.rt_equation.RTEquation.cloudy_absorption</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrtlib.rt_equation.RTEquation.exponential_integration.html">pyrtlib.rt_equation.RTEquation.exponential_integration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrtlib.rt_equation.RTEquation.planck.html">pyrtlib.rt_equation.RTEquation.planck</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrtlib.rt_equation.RTEquation.ray_tracing.html">pyrtlib.rt_equation.RTEquation.ray_tracing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrtlib.rt_equation.RTEquation.refractivity.html">pyrtlib.rt_equation.RTEquation.refractivity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrtlib.rt_equation.RTEquation.vapor.html">pyrtlib.rt_equation.RTEquation.vapor</a></li>
+</ul>
+</details></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="generated/pyrtlib.absorption_model.AbsModel.html">pyrtlib.absorption_model.AbsModel</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrtlib.absorption_model.AbsModel.__init__.html">pyrtlib.absorption_model.AbsModel.__init__</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrtlib.absorption_model.AbsModel.implemented_models.html">pyrtlib.absorption_model.AbsModel.implemented_models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrtlib.absorption_model.AbsModel.set_ll.html">pyrtlib.absorption_model.AbsModel.set_ll</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="generated/pyrtlib.absorption_model.H2OAbsModel.html">pyrtlib.absorption_model.H2OAbsModel</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrtlib.absorption_model.H2OAbsModel.__init__.html">pyrtlib.absorption_model.H2OAbsModel.__init__</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrtlib.absorption_model.H2OAbsModel.h2o_absorption.html">pyrtlib.absorption_model.H2OAbsModel.h2o_absorption</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrtlib.absorption_model.H2OAbsModel.h2o_continuum.html">pyrtlib.absorption_model.H2OAbsModel.h2o_continuum</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrtlib.absorption_model.H2OAbsModel.h2o_continuum_mwl24.html">pyrtlib.absorption_model.H2OAbsModel.h2o_continuum_mwl24</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrtlib.absorption_model.H2OAbsModel.implemented_models.html">pyrtlib.absorption_model.H2OAbsModel.implemented_models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrtlib.absorption_model.H2OAbsModel.set_ll.html">pyrtlib.absorption_model.H2OAbsModel.set_ll</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="generated/pyrtlib.absorption_model.O2AbsModel.html">pyrtlib.absorption_model.O2AbsModel</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrtlib.absorption_model.O2AbsModel.__init__.html">pyrtlib.absorption_model.O2AbsModel.__init__</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrtlib.absorption_model.O2AbsModel.implemented_models.html">pyrtlib.absorption_model.O2AbsModel.implemented_models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrtlib.absorption_model.O2AbsModel.o2_absorption.html">pyrtlib.absorption_model.O2AbsModel.o2_absorption</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrtlib.absorption_model.O2AbsModel.set_ll.html">pyrtlib.absorption_model.O2AbsModel.set_ll</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="generated/pyrtlib.absorption_model.O3AbsModel.html">pyrtlib.absorption_model.O3AbsModel</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrtlib.absorption_model.O3AbsModel.__init__.html">pyrtlib.absorption_model.O3AbsModel.__init__</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrtlib.absorption_model.O3AbsModel.implemented_models.html">pyrtlib.absorption_model.O3AbsModel.implemented_models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrtlib.absorption_model.O3AbsModel.o3_absorption.html">pyrtlib.absorption_model.O3AbsModel.o3_absorption</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrtlib.absorption_model.O3AbsModel.set_ll.html">pyrtlib.absorption_model.O3AbsModel.set_ll</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="generated/pyrtlib.absorption_model.N2AbsModel.html">pyrtlib.absorption_model.N2AbsModel</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrtlib.absorption_model.N2AbsModel.__init__.html">pyrtlib.absorption_model.N2AbsModel.__init__</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrtlib.absorption_model.N2AbsModel.implemented_models.html">pyrtlib.absorption_model.N2AbsModel.implemented_models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrtlib.absorption_model.N2AbsModel.n2_absorption.html">pyrtlib.absorption_model.N2AbsModel.n2_absorption</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrtlib.absorption_model.N2AbsModel.n2_absorption_mwl24.html">pyrtlib.absorption_model.N2AbsModel.n2_absorption_mwl24</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrtlib.absorption_model.N2AbsModel.set_ll.html">pyrtlib.absorption_model.N2AbsModel.set_ll</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="generated/pyrtlib.absorption_model.LiqAbsModel.html">pyrtlib.absorption_model.LiqAbsModel</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrtlib.absorption_model.LiqAbsModel.__init__.html">pyrtlib.absorption_model.LiqAbsModel.__init__</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrtlib.absorption_model.LiqAbsModel.implemented_models.html">pyrtlib.absorption_model.LiqAbsModel.implemented_models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrtlib.absorption_model.LiqAbsModel.liquid_water_absorption.html">pyrtlib.absorption_model.LiqAbsModel.liquid_water_absorption</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrtlib.absorption_model.LiqAbsModel.set_ll.html">pyrtlib.absorption_model.LiqAbsModel.set_ll</a></li>
+</ul>
+</details></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="generated/pyrtlib.weighting_functions.WeightingFunctions.html">pyrtlib.weighting_functions.WeightingFunctions</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrtlib.weighting_functions.WeightingFunctions.__init__.html">pyrtlib.weighting_functions.WeightingFunctions.__init__</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrtlib.weighting_functions.WeightingFunctions.generate_wf.html">pyrtlib.weighting_functions.WeightingFunctions.generate_wf</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrtlib.weighting_functions.WeightingFunctions.plot_wf.html">pyrtlib.weighting_functions.WeightingFunctions.plot_wf</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrtlib.weighting_functions.WeightingFunctions.plot_wf_grouped.html">pyrtlib.weighting_functions.WeightingFunctions.plot_wf_grouped</a></li>
+</ul>
+</details></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="generated/pyrtlib.utils.html">pyrtlib.utils</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrtlib.utils.atmospheric_tickness.html">pyrtlib.utils.atmospheric_tickness</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrtlib.utils.constants.html">pyrtlib.utils.constants</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrtlib.utils.dewpoint2rh.html">pyrtlib.utils.dewpoint2rh</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrtlib.utils.dilec12.html">pyrtlib.utils.dilec12</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrtlib.utils.e2mr.html">pyrtlib.utils.e2mr</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrtlib.utils.esice_goffgratch.html">pyrtlib.utils.esice_goffgratch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrtlib.utils.eswat_goffgratch.html">pyrtlib.utils.eswat_goffgratch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrtlib.utils.gas_mass.html">pyrtlib.utils.gas_mass</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrtlib.utils.get_frequencies.html">pyrtlib.utils.get_frequencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrtlib.utils.get_frequencies_sat.html">pyrtlib.utils.get_frequencies_sat</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrtlib.utils.height_to_pressure.html">pyrtlib.utils.height_to_pressure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrtlib.utils.import_lineshape.html">pyrtlib.utils.import_lineshape</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrtlib.utils.kgkg_to_kgm3.html">pyrtlib.utils.kgkg_to_kgm3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrtlib.utils.mr2e.html">pyrtlib.utils.mr2e</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrtlib.utils.mr2rh.html">pyrtlib.utils.mr2rh</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrtlib.utils.mr2rho.html">pyrtlib.utils.mr2rho</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrtlib.utils.ppmv2gkg.html">pyrtlib.utils.ppmv2gkg</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrtlib.utils.ppmv_to_moleculesm3.html">pyrtlib.utils.ppmv_to_moleculesm3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrtlib.utils.pressure_to_height.html">pyrtlib.utils.pressure_to_height</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrtlib.utils.rho2mr.html">pyrtlib.utils.rho2mr</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrtlib.utils.rho2rh.html">pyrtlib.utils.rho2rh</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrtlib.utils.satmix.html">pyrtlib.utils.satmix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrtlib.utils.satvap.html">pyrtlib.utils.satvap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrtlib.utils.tk2b_mod.html">pyrtlib.utils.tk2b_mod</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrtlib.utils.to_celsius.html">pyrtlib.utils.to_celsius</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrtlib.utils.to_kelvin.html">pyrtlib.utils.to_kelvin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrtlib.utils.virtual_temperature.html">pyrtlib.utils.virtual_temperature</a></li>
+</ul>
+</details></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="generated/pyrtlib.uncertainty.AbsModUncertainty.html">pyrtlib.uncertainty.AbsModUncertainty</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrtlib.uncertainty.AbsModUncertainty.__init__.html">pyrtlib.uncertainty.AbsModUncertainty.__init__</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrtlib.uncertainty.AbsModUncertainty.parameters_perturbation.html">pyrtlib.uncertainty.AbsModUncertainty.parameters_perturbation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrtlib.uncertainty.AbsModUncertainty.uncertainty_propagation.html">pyrtlib.uncertainty.AbsModUncertainty.uncertainty_propagation</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="generated/pyrtlib.uncertainty.SpectroscopicParameter.html">pyrtlib.uncertainty.SpectroscopicParameter</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrtlib.uncertainty.SpectroscopicParameter.__init__.html">pyrtlib.uncertainty.SpectroscopicParameter.__init__</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrtlib.uncertainty.SpectroscopicParameter.oxygen_parameters.html">pyrtlib.uncertainty.SpectroscopicParameter.oxygen_parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrtlib.uncertainty.SpectroscopicParameter.ozono_parameters.html">pyrtlib.uncertainty.SpectroscopicParameter.ozono_parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrtlib.uncertainty.SpectroscopicParameter.set_parameters.html">pyrtlib.uncertainty.SpectroscopicParameter.set_parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrtlib.uncertainty.SpectroscopicParameter.water_parameters.html">pyrtlib.uncertainty.SpectroscopicParameter.water_parameters</a></li>
+</ul>
+</details></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="generated/pyrtlib.apiwebservices.WyomingUpperAir.html">pyrtlib.apiwebservices.WyomingUpperAir</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrtlib.apiwebservices.WyomingUpperAir.__init__.html">pyrtlib.apiwebservices.WyomingUpperAir.__init__</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrtlib.apiwebservices.WyomingUpperAir.get_stations.html">pyrtlib.apiwebservices.WyomingUpperAir.get_stations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrtlib.apiwebservices.WyomingUpperAir.request_data.html">pyrtlib.apiwebservices.WyomingUpperAir.request_data</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="generated/pyrtlib.apiwebservices.IGRAUpperAir.html">pyrtlib.apiwebservices.IGRAUpperAir</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrtlib.apiwebservices.IGRAUpperAir.__init__.html">pyrtlib.apiwebservices.IGRAUpperAir.__init__</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrtlib.apiwebservices.IGRAUpperAir.request_data.html">pyrtlib.apiwebservices.IGRAUpperAir.request_data</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="generated/pyrtlib.apiwebservices.ERA5Reanalysis.html">pyrtlib.apiwebservices.ERA5Reanalysis</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrtlib.apiwebservices.ERA5Reanalysis.__init__.html">pyrtlib.apiwebservices.ERA5Reanalysis.__init__</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrtlib.apiwebservices.ERA5Reanalysis.read_data.html">pyrtlib.apiwebservices.ERA5Reanalysis.read_data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrtlib.apiwebservices.ERA5Reanalysis.request_data.html">pyrtlib.apiwebservices.ERA5Reanalysis.request_data</a></li>
+</ul>
+</details></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page">API references</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="api-references">
+<h1>API references<a class="headerlink" href="#api-references" title="Permalink to this heading">#</a></h1>
+<section id="main-class">
+<h2>Main class<a class="headerlink" href="#main-class" title="Permalink to this heading">#</a></h2>
+<p>The main class which computes brightness temperatures (Tb), mean radiating temperature (Tmr), and integrated absorption (Tau) for
+clear or cloudy conditions. Also returns all integrated quantities that the original TBMODEL, Cyber Version, returned (<a class="reference internal" href="references.html#schroeder-westwater-1991" id="id1"><span>[Schroeder-Westwater-1991]</span></a>).</p>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pyrtlib.tb_spectrum.TbCloudRTE.html#pyrtlib.tb_spectrum.TbCloudRTE" title="pyrtlib.tb_spectrum.TbCloudRTE"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyrtlib.tb_spectrum.TbCloudRTE</span></code></a>(z, p, t, rh, frq)</p></td>
+<td><p>Initialize TbCloudRTE</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Example:</p>
+<p>Compute downwelling (<code class="code docutils literal notranslate"><span class="pre">rte.satellite</span> <span class="pre">==</span> <span class="pre">False</span></code>) brightness temperature for a typical Tropical Atmosphere.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pyrtlib.tb_spectrum</span><span class="w"> </span><span class="kn">import</span> <span class="n">TbCloudRTE</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyrtlib.climatology</span><span class="w"> </span><span class="kn">import</span> <span class="n">AtmosphericProfiles</span> <span class="k">as</span> <span class="n">atmp</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyrtlib.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">ppmv2gkg</span><span class="p">,</span> <span class="n">mr2rh</span>
+
+<span class="n">z</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">md</span> <span class="o">=</span> <span class="n">atmp</span><span class="o">.</span><span class="n">gl_atm</span><span class="p">(</span><span class="n">atmp</span><span class="o">.</span><span class="n">TROPICAL</span><span class="p">)</span>
+<span class="n">gkg</span> <span class="o">=</span> <span class="n">ppmv2gkg</span><span class="p">(</span><span class="n">md</span><span class="p">[:,</span> <span class="n">atmp</span><span class="o">.</span><span class="n">H2O</span><span class="p">],</span> <span class="n">atmp</span><span class="o">.</span><span class="n">H2O</span><span class="p">)</span>
+<span class="n">rh</span> <span class="o">=</span> <span class="n">mr2rh</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">gkg</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="mi">100</span>
+
+<span class="n">ang</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">90.</span><span class="p">])</span>
+<span class="n">frq</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">201</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="n">rte</span> <span class="o">=</span> <span class="n">TbCloudRTE</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">rh</span><span class="p">,</span> <span class="n">frq</span><span class="p">,</span> <span class="n">ang</span><span class="p">)</span>
+<span class="n">rte</span><span class="o">.</span><span class="n">init_absmdl</span><span class="p">(</span><span class="s1">&#39;R19SD&#39;</span><span class="p">)</span>
+<span class="n">rte</span><span class="o">.</span><span class="n">satellite</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">rte</span><span class="o">.</span><span class="n">execute</span><span class="p">()</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="n">frq</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">tbtotal</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="mi">8</span><span class="p">),</span> <span class="n">xlabel</span><span class="o">=</span><span class="s2">&quot;Frequency [GHz]&quot;</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="s2">&quot;Brightness Temperature [K]&quot;</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<figure class="align-default">
+<img alt="_images/api-1.png" class="plot-directive" src="_images/api-1.png" />
+</figure>
+<p>Also, it is possible to execute a combination of absorption models. The following example use <code class="code docutils literal notranslate"><span class="pre">R19SD</span></code> model for <span class="math notranslate nohighlight">\(O_2\)</span> and
+<code class="code docutils literal notranslate"><span class="pre">R16</span></code> for <span class="math notranslate nohighlight">\(H_2O\)</span>: to compute upwelling brightness temperature using emissivity surface.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pyrtlib.tb_spectrum</span><span class="w"> </span><span class="kn">import</span> <span class="n">TbCloudRTE</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyrtlib.absorption_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">H2OAbsModel</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyrtlib.climatology</span><span class="w"> </span><span class="kn">import</span> <span class="n">AtmosphericProfiles</span> <span class="k">as</span> <span class="n">atmp</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyrtlib.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">ppmv2gkg</span><span class="p">,</span> <span class="n">mr2rh</span>
+
+<span class="n">z</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">md</span> <span class="o">=</span> <span class="n">atmp</span><span class="o">.</span><span class="n">gl_atm</span><span class="p">(</span><span class="n">atmp</span><span class="o">.</span><span class="n">TROPICAL</span><span class="p">)</span>
+<span class="n">gkg</span> <span class="o">=</span> <span class="n">ppmv2gkg</span><span class="p">(</span><span class="n">md</span><span class="p">[:,</span> <span class="n">atmp</span><span class="o">.</span><span class="n">H2O</span><span class="p">],</span> <span class="n">atmp</span><span class="o">.</span><span class="n">H2O</span><span class="p">)</span>
+<span class="n">rh</span> <span class="o">=</span> <span class="n">mr2rh</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">gkg</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="mi">100</span>
+
+<span class="n">ang</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">90.</span><span class="p">])</span>
+<span class="n">frq</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">201</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="n">rte</span> <span class="o">=</span> <span class="n">TbCloudRTE</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">rh</span><span class="p">,</span> <span class="n">frq</span><span class="p">,</span> <span class="n">ang</span><span class="p">)</span>
+<span class="n">rte</span><span class="o">.</span><span class="n">emissivity</span> <span class="o">=</span> <span class="mf">0.9</span>
+<span class="n">rte</span><span class="o">.</span><span class="n">init_absmdl</span><span class="p">(</span><span class="s1">&#39;R19SD&#39;</span><span class="p">)</span>
+<span class="n">H2OAbsModel</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="s1">&#39;R16&#39;</span>
+<span class="n">H2OAbsModel</span><span class="o">.</span><span class="n">set_ll</span><span class="p">()</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">rte</span><span class="o">.</span><span class="n">execute</span><span class="p">()</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="n">frq</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">tbtotal</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="mi">8</span><span class="p">),</span> <span class="n">xlabel</span><span class="o">=</span><span class="s2">&quot;Frequency [GHz]&quot;</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="s2">&quot;Brightness Temperature [K]&quot;</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<figure class="align-default">
+<img alt="_images/api-2.png" class="plot-directive" src="_images/api-2.png" />
+</figure>
+</section>
+<section id="standard-atmospheric-profiles">
+<h2>Standard Atmospheric Profiles<a class="headerlink" href="#standard-atmospheric-profiles" title="Permalink to this heading">#</a></h2>
+<p>Atmospheric constituent profiles (0-120km) (suplimented with other data) <a class="reference internal" href="references.html#anderson" id="id2"><span>[ANDERSON]</span></a>
+This file was partly copied from FASCOD2 routine MLATMB 10/11/87</p>
+<p>The file contains 6 model profiles:</p>
+<ul class="simple">
+<li><p>Model 1. Tropical</p></li>
+<li><p>Model 2. Midlatitude Summer</p></li>
+<li><p>Model 3. Midlatitude Winter</p></li>
+<li><p>Model 4. Subarctic Summer</p></li>
+<li><p>Model 5. Subarctic Winter</p></li>
+<li><p>Model 6. U.S. Standard</p></li>
+</ul>
+<p>Each of these profile contains data at 50 atmospheric levels:
+Altitude (km), Pressure (mb), Density (cm-3), Molec. densities (ppmv):
+1(<span class="math notranslate nohighlight">\(H_2O\)</span>),  2(<span class="math notranslate nohighlight">\(CO_2\)</span>),  3(<span class="math notranslate nohighlight">\(O_3\)</span>), 4(<span class="math notranslate nohighlight">\(N_2O\)</span>),   5(<span class="math notranslate nohighlight">\(CO\)</span>),    6(<span class="math notranslate nohighlight">\(CH_4\)</span>),   7(<span class="math notranslate nohighlight">\(O_2\)</span>)
+Plus suplimental profiles where available.</p>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pyrtlib.climatology.AtmosphericProfiles.html#pyrtlib.climatology.AtmosphericProfiles" title="pyrtlib.climatology.AtmosphericProfiles"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyrtlib.climatology.AtmosphericProfiles</span></code></a>()</p></td>
+<td><p>AFGL Atmospheric Constituent Profiles (0-120km)</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/pyrtlib.climatology.ProfileExtrapolation.html#pyrtlib.climatology.ProfileExtrapolation" title="pyrtlib.climatology.ProfileExtrapolation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyrtlib.climatology.ProfileExtrapolation</span></code></a>([mode])</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pyrtlib.climatology</span><span class="w"> </span><span class="kn">import</span> <span class="n">AtmosphericProfiles</span> <span class="k">as</span> <span class="n">atmp</span>
+
+<span class="n">z</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">md</span> <span class="o">=</span> <span class="n">atmp</span><span class="o">.</span><span class="n">gl_atm</span><span class="p">(</span><span class="n">atmp</span><span class="o">.</span><span class="n">TROPICAL</span><span class="p">)</span>
+<span class="c1"># index of available profiles</span>
+<span class="n">atmp</span><span class="o">.</span><span class="n">atm_profiles</span><span class="p">()</span>
+<span class="p">{</span><span class="mi">0</span><span class="p">:</span> <span class="s1">&#39;Tropical&#39;</span><span class="p">,</span>
+ <span class="mi">1</span><span class="p">:</span> <span class="s1">&#39;Midlatitude Summer&#39;</span><span class="p">,</span>
+ <span class="mi">2</span><span class="p">:</span> <span class="s1">&#39;Midlatitude Winter&#39;</span><span class="p">,</span>
+ <span class="mi">3</span><span class="p">:</span> <span class="s1">&#39;Subarctic Summer&#39;</span><span class="p">,</span>
+ <span class="mi">4</span><span class="p">:</span> <span class="s1">&#39;Subarctic Winter&#39;</span><span class="p">,</span>
+ <span class="mi">5</span><span class="p">:</span> <span class="s1">&#39;US Standard&#39;</span><span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="radiative-transfer-equation">
+<h2>Radiative Transfer Equation<a class="headerlink" href="#radiative-transfer-equation" title="Permalink to this heading">#</a></h2>
+<p>RTE functions called from <a class="reference internal" href="generated/pyrtlib.rt_equation.RTEquation.html#pyrtlib.rt_equation.RTEquation" title="pyrtlib.rt_equation.RTEquation"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyrtlib.rt_equation.RTEquation</span></code></a>:</p>
+<ul class="simple">
+<li><p><code class="code docutils literal notranslate"><span class="pre">bright</span></code> = compute temperature for the modified Planck radiance</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">cloudy_absorption</span></code>   = computes cloud (liquid and ice) absorption profiles</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">cloud_integrated_density</span></code>   = integrates cloud water density of path ds (linear)</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">cloud_radiating_temperature</span></code>   = computes mean radiating temperature of a cloud</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">clearsky_absorption</span></code>   = computes clear-sky (<span class="math notranslate nohighlight">\(H_2O\)</span> and <span class="math notranslate nohighlight">\(O_2\)</span>) absorption profiles</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">exponential_integration</span></code>   = integrates (ln) absorption over profile layers</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">planck</span></code>   = computes modified planck radiance and related quantities</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">ray_tracing</span></code>  = computes refracted path length between profile levels</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">refractivity</span></code>  = computes vapor pressure and refractivity profiles</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">vapor</span></code>    = computes vapor pressure and vapor density</p></li>
+</ul>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pyrtlib.rt_equation.RTEquation.html#pyrtlib.rt_equation.RTEquation" title="pyrtlib.rt_equation.RTEquation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyrtlib.rt_equation.RTEquation</span></code></a>()</p></td>
+<td><p>This class contains the main Radiative Transfer Equation functions.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="absorption-models">
+<h2>Absorption Models<a class="headerlink" href="#absorption-models" title="Permalink to this heading">#</a></h2>
+<p>Computes absorption coefficient in atmosphere due to water vapor (<span class="math notranslate nohighlight">\(H_2O\)</span>), oxygen in air (<span class="math notranslate nohighlight">\(O_2\)</span>), ozone in air (<span class="math notranslate nohighlight">\(O_3\)</span>), suspended cloud liquid water droplets and
+collision-induced power absorption coefficient (neper/km) in air (“dry continuum”, mostly due to <span class="math notranslate nohighlight">\(N_2\)</span>-<span class="math notranslate nohighlight">\(N_2\)</span>, but also contributions from <span class="math notranslate nohighlight">\(O_2\)</span>-<span class="math notranslate nohighlight">\(N_2\)</span> and <span class="math notranslate nohighlight">\(O_2\)</span>-<span class="math notranslate nohighlight">\(O_2\)</span>)</p>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pyrtlib.absorption_model.AbsModel.html#pyrtlib.absorption_model.AbsModel" title="pyrtlib.absorption_model.AbsModel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyrtlib.absorption_model.AbsModel</span></code></a>()</p></td>
+<td><p>This is an abstraction class to define the absorption model.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/pyrtlib.absorption_model.H2OAbsModel.html#pyrtlib.absorption_model.H2OAbsModel" title="pyrtlib.absorption_model.H2OAbsModel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyrtlib.absorption_model.H2OAbsModel</span></code></a>()</p></td>
+<td><p>This class contains the <span class="math notranslate nohighlight">\(H_2O\)</span> absorption model used in pyrtlib.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pyrtlib.absorption_model.O2AbsModel.html#pyrtlib.absorption_model.O2AbsModel" title="pyrtlib.absorption_model.O2AbsModel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyrtlib.absorption_model.O2AbsModel</span></code></a>()</p></td>
+<td><p>This class contains the <span class="math notranslate nohighlight">\(O_2\)</span> absorption model used in pyrtlib.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/pyrtlib.absorption_model.O3AbsModel.html#pyrtlib.absorption_model.O3AbsModel" title="pyrtlib.absorption_model.O3AbsModel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyrtlib.absorption_model.O3AbsModel</span></code></a>()</p></td>
+<td><p>This class contains the <span class="math notranslate nohighlight">\(O_3\)</span> absorption model used in pyrtlib.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pyrtlib.absorption_model.N2AbsModel.html#pyrtlib.absorption_model.N2AbsModel" title="pyrtlib.absorption_model.N2AbsModel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyrtlib.absorption_model.N2AbsModel</span></code></a>()</p></td>
+<td><p>This class contains the absorption model used in pyrtlib.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/pyrtlib.absorption_model.LiqAbsModel.html#pyrtlib.absorption_model.LiqAbsModel" title="pyrtlib.absorption_model.LiqAbsModel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyrtlib.absorption_model.LiqAbsModel</span></code></a>()</p></td>
+<td><p>This class contains the absorption model used in pyrtlib.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>To get all implemented models use the following code:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pyrtlib.absorption_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">AbsModel</span>
+
+<span class="n">AbsModel</span><span class="o">.</span><span class="n">implemented_models</span><span class="p">()</span>
+<span class="p">{</span><span class="s1">&#39;Oxygen&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;R98&#39;</span><span class="p">,</span>
+<span class="s1">&#39;R03&#39;</span><span class="p">,</span>
+<span class="s1">&#39;R16&#39;</span><span class="p">,</span>
+<span class="s1">&#39;R17&#39;</span><span class="p">,</span>
+<span class="s1">&#39;R18&#39;</span><span class="p">,</span>
+<span class="s1">&#39;R19&#39;</span><span class="p">,</span>
+<span class="s1">&#39;R19SD&#39;</span><span class="p">,</span>
+<span class="s1">&#39;R20&#39;</span><span class="p">,</span>
+<span class="s1">&#39;R20SD&#39;</span><span class="p">,</span>
+<span class="s1">&#39;R22&#39;</span><span class="p">,</span>
+<span class="s1">&#39;R23&#39;</span><span class="p">,</span>
+<span class="s1">&#39;R24&#39;</span><span class="p">],</span>
+<span class="s1">&#39;WaterVapour&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;R98&#39;</span><span class="p">,</span>
+<span class="s1">&#39;R03&#39;</span><span class="p">,</span>
+<span class="s1">&#39;R16&#39;</span><span class="p">,</span>
+<span class="s1">&#39;R17&#39;</span><span class="p">,</span>
+<span class="s1">&#39;R18&#39;</span><span class="p">,</span>
+<span class="s1">&#39;R19&#39;</span><span class="p">,</span>
+<span class="s1">&#39;R19SD&#39;</span><span class="p">,</span>
+<span class="s1">&#39;R20&#39;</span><span class="p">,</span>
+<span class="s1">&#39;R20SD&#39;</span><span class="p">,</span>
+<span class="s1">&#39;R21SD&#39;</span><span class="p">,</span>
+<span class="s1">&#39;R22SD&#39;</span><span class="p">,</span>
+<span class="s1">&#39;R23SD&#39;</span><span class="p">,</span>
+<span class="s1">&#39;R24&#39;</span><span class="p">],</span>
+<span class="s1">&#39;Ozone&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;R18&#39;</span><span class="p">,</span> <span class="s1">&#39;R22&#39;</span><span class="p">,</span> <span class="s1">&#39;R23&#39;</span><span class="p">]}</span>
+</pre></div>
+</div>
+</section>
+<section id="weighting-functions">
+<h2>Weighting Functions<a class="headerlink" href="#weighting-functions" title="Permalink to this heading">#</a></h2>
+<p>Computes the weighting functions to assess the vertical sensitivity of the brightness temperature to the atmospheric profile.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The weighting functions are computed always using last absorption model available.</p>
+</div>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pyrtlib.weighting_functions.WeightingFunctions.html#pyrtlib.weighting_functions.WeightingFunctions" title="pyrtlib.weighting_functions.WeightingFunctions"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyrtlib.weighting_functions.WeightingFunctions</span></code></a>(z, ...)</p></td>
+<td><p>This class is used to compute the weighting functions</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pyrtlib.weighting_functions</span><span class="w"> </span><span class="kn">import</span> <span class="n">WeightingFunctions</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyrtlib.climatology</span><span class="w"> </span><span class="kn">import</span> <span class="n">AtmosphericProfiles</span> <span class="k">as</span> <span class="n">atmp</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyrtlib.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">ppmv2gkg</span><span class="p">,</span> <span class="n">mr2rh</span><span class="p">,</span> <span class="n">get_frequencies_sat</span>
+
+<span class="n">z</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">md</span> <span class="o">=</span> <span class="n">atmp</span><span class="o">.</span><span class="n">gl_atm</span><span class="p">(</span><span class="n">atmp</span><span class="o">.</span><span class="n">TROPICAL</span><span class="p">)</span>
+<span class="n">gkg</span> <span class="o">=</span> <span class="n">ppmv2gkg</span><span class="p">(</span><span class="n">md</span><span class="p">[:,</span> <span class="n">atmp</span><span class="o">.</span><span class="n">H2O</span><span class="p">],</span> <span class="n">atmp</span><span class="o">.</span><span class="n">H2O</span><span class="p">)</span>
+<span class="n">rh</span> <span class="o">=</span> <span class="n">mr2rh</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">gkg</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="mi">100</span>
+
+<span class="n">wf</span> <span class="o">=</span> <span class="n">WeightingFunctions</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">rh</span><span class="p">,</span> <span class="mf">.1</span><span class="p">)</span>
+<span class="n">wf</span><span class="o">.</span><span class="n">satellite</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="n">wf</span><span class="o">.</span><span class="n">angle</span> <span class="o">=</span> <span class="mf">48.</span>
+<span class="n">wf</span><span class="o">.</span><span class="n">frequencies</span> <span class="o">=</span> <span class="n">get_frequencies_sat</span><span class="p">(</span><span class="s1">&#39;ICI&#39;</span><span class="p">)</span>
+<span class="n">wgt</span> <span class="o">=</span> <span class="n">wf</span><span class="o">.</span><span class="n">generate_wf</span><span class="p">()</span>
+
+<span class="n">wf</span><span class="o">.</span><span class="n">plot_wf_grouped</span><span class="p">(</span><span class="n">wgt</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">ylim</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">20</span><span class="p">],</span>
+                   <span class="n">grouped_frequencies</span><span class="o">=</span><span class="p">[</span><span class="mi">8</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
+                   <span class="n">grouped_labels</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;176-190&#39;</span><span class="p">,</span> <span class="s1">&#39;240-245&#39;</span><span class="p">,</span> <span class="s1">&#39;315-334&#39;</span><span class="p">,</span> <span class="s1">&#39;440-455&#39;</span><span class="p">,</span> <span class="s1">&#39;659-668&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+<figure class="align-default">
+<img alt="_images/api-3.png" class="plot-directive" src="_images/api-3.png" />
+</figure>
+</section>
+<section id="utility-functions">
+<h2>Utility Functions<a class="headerlink" href="#utility-functions" title="Permalink to this heading">#</a></h2>
+<p>The utils module contains funtions of general utility used in multiple places throughout <em>pyrtlib</em>.</p>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pyrtlib.utils.html#module-pyrtlib.utils" title="pyrtlib.utils"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyrtlib.utils</span></code></a></p></td>
+<td><p>This module contains the utils functions.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="uncertainty">
+<h2>Uncertainty<a class="headerlink" href="#uncertainty" title="Permalink to this heading">#</a></h2>
+<p>This module has some tool to compute the absorption model sensitivity to the uncertainty of spectroscopic parameters,
+with the purpose of identifying the most significant contributions to the total uncertainty of modeled upwelling/downwelling
+brightness temperture.</p>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pyrtlib.uncertainty.AbsModUncertainty.html#pyrtlib.uncertainty.AbsModUncertainty" title="pyrtlib.uncertainty.AbsModUncertainty"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyrtlib.uncertainty.AbsModUncertainty</span></code></a>()</p></td>
+<td><p>This module provides the uncertainties affecting absorption model coefficients found in the litterature.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/pyrtlib.uncertainty.SpectroscopicParameter.html#pyrtlib.uncertainty.SpectroscopicParameter" title="pyrtlib.uncertainty.SpectroscopicParameter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyrtlib.uncertainty.SpectroscopicParameter</span></code></a>(...)</p></td>
+<td><p>Absorption model uncertainties for the spectroscopic parameters</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="api-web-services">
+<h2>API Web Services<a class="headerlink" href="#api-web-services" title="Permalink to this heading">#</a></h2>
+<p>Observations dataset web services which may be used in pyrtlib.
+Available datasets are the Wyoming Upper Air Archive (University of Wyoming), NCEI’s Integrated Radiosonde Archive version 2 (IGRA2) or the
+ERA5 Reanalysis model data (Copernicus Climate Change Service). See examples to get started to use these services.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Parts of the code have been reused from the <a class="reference external" href="https://github.com/Unidata/siphon">Siphon</a> library.</p>
+</div>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pyrtlib.apiwebservices.WyomingUpperAir.html#pyrtlib.apiwebservices.WyomingUpperAir" title="pyrtlib.apiwebservices.WyomingUpperAir"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyrtlib.apiwebservices.WyomingUpperAir</span></code></a>()</p></td>
+<td><p>Download and parse data from the University of Wyoming's upper air archive.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/pyrtlib.apiwebservices.IGRAUpperAir.html#pyrtlib.apiwebservices.IGRAUpperAir" title="pyrtlib.apiwebservices.IGRAUpperAir"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyrtlib.apiwebservices.IGRAUpperAir</span></code></a>()</p></td>
+<td><p>Download and parse data from NCEI's Integrated Radiosonde Archive version 2.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pyrtlib.apiwebservices.ERA5Reanalysis.html#pyrtlib.apiwebservices.ERA5Reanalysis" title="pyrtlib.apiwebservices.ERA5Reanalysis"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyrtlib.apiwebservices.ERA5Reanalysis</span></code></a>()</p></td>
+<td><p>Read and Download data from ERA5 CDS Reanalysis model data</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#main-class">Main class</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#standard-atmospheric-profiles">Standard Atmospheric Profiles</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#radiative-transfer-equation">Radiative Transfer Equation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#absorption-models">Absorption Models</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#weighting-functions">Weighting Functions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#utility-functions">Utility Functions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#uncertainty">Uncertainty</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#api-web-services">API Web Services</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2021-2025, SatCloP - CNR-IMAA.
+      <br/>
+    
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

@@ -1,0 +1,43 @@
+pyrtlib.climatology.ProfileExtrapolation
+========================================
+
+.. currentmodule:: pyrtlib.climatology
+
+.. autoclass:: ProfileExtrapolation
+    :show-inheritance: 
+    
+    
+    
+    .. rubric:: Methods
+
+    .. autosummary::
+        :toctree:
+        :recursive:
+    
+        ~ProfileExtrapolation.__init__
+        ~ProfileExtrapolation.pressure
+        ~ProfileExtrapolation.profile_extrapolation
+        ~ProfileExtrapolation.standard_pressure
+        ~ProfileExtrapolation.standard_temperature
+        ~ProfileExtrapolation.standard_water_vapour_density
+        ~ProfileExtrapolation.standard_water_vapour_pressure
+        ~ProfileExtrapolation.temperature
+        ~ProfileExtrapolation.water_vapour_density
+    
+    
+
+    
+    
+    .. rubric:: Attributes
+
+    .. autosummary::
+    
+        ~ProfileExtrapolation.height
+    
+    
+
+    
+    
+    
+
+.. include:: gallery_backreferences/pyrtlib.climatology.ProfileExtrapolation.examples

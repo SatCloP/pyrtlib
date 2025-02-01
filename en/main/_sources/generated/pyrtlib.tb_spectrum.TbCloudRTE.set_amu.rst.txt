@@ -1,0 +1,12 @@
+pyrtlib.tb\_spectrum.TbCloudRTE.set\_amu
+========================================
+
+.. currentmodule:: pyrtlib.tb_spectrum
+
+.. automethod:: pyrtlib.tb_spectrum.TbCloudRTE.set_amu
+
+
+
+
+
+.. include:: gallery_backreferences/pyrtlib.tb_spectrum.TbCloudRTE.set_amu.examples

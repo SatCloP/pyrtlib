@@ -1,0 +1,12 @@
+pyrtlib.utils.e2mr
+==================
+
+.. currentmodule:: pyrtlib.utils
+
+.. autofunction:: pyrtlib.utils.e2mr
+
+
+
+
+
+.. include:: gallery_backreferences/pyrtlib.utils.e2mr.examples

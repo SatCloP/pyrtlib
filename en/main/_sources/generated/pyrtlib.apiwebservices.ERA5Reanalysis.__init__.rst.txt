@@ -1,0 +1,12 @@
+pyrtlib.apiwebservices.ERA5Reanalysis.\_\_init\_\_
+==================================================
+
+.. currentmodule:: pyrtlib.apiwebservices
+
+.. automethod:: pyrtlib.apiwebservices.ERA5Reanalysis.__init__
+
+
+
+
+
+.. include:: gallery_backreferences/pyrtlib.apiwebservices.ERA5Reanalysis.__init__.examples

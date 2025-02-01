@@ -1,0 +1,12 @@
+pyrtlib.uncertainty.AbsModUncertainty.uncertainty\_propagation
+==============================================================
+
+.. currentmodule:: pyrtlib.uncertainty
+
+.. automethod:: pyrtlib.uncertainty.AbsModUncertainty.uncertainty_propagation
+
+
+
+
+
+.. include:: gallery_backreferences/pyrtlib.uncertainty.AbsModUncertainty.uncertainty_propagation.examples

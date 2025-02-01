@@ -1,0 +1,12 @@
+pyrtlib.rt\_equation.RTEquation.refractivity
+============================================
+
+.. currentmodule:: pyrtlib.rt_equation
+
+.. automethod:: pyrtlib.rt_equation.RTEquation.refractivity
+
+
+
+
+
+.. include:: gallery_backreferences/pyrtlib.rt_equation.RTEquation.refractivity.examples

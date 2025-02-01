@@ -1,0 +1,12 @@
+pyrtlib.absorption\_model.O2AbsModel.set\_ll
+============================================
+
+.. currentmodule:: pyrtlib.absorption_model
+
+.. automethod:: pyrtlib.absorption_model.O2AbsModel.set_ll
+
+
+
+
+
+.. include:: gallery_backreferences/pyrtlib.absorption_model.O2AbsModel.set_ll.examples

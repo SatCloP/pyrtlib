@@ -1,0 +1,12 @@
+pyrtlib.absorption\_model.LiqAbsModel.liquid\_water\_absorption
+===============================================================
+
+.. currentmodule:: pyrtlib.absorption_model
+
+.. automethod:: pyrtlib.absorption_model.LiqAbsModel.liquid_water_absorption
+
+
+
+
+
+.. include:: gallery_backreferences/pyrtlib.absorption_model.LiqAbsModel.liquid_water_absorption.examples

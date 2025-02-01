@@ -1,0 +1,743 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>PyRTlib documentation &#8212; pyrtlib 1.1.1 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/noscrollbar.css" />
+    <link rel="stylesheet" type="text/css" href="_static/refs_format.css" />
+    <link rel="stylesheet" type="text/css" href="_static/pyrtlib.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery-dataframe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery-rendered-html.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.5ea377869091fd0449014c60fc090103.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/toggleprompt.js"></script>
+    <script src="_static/design-tabs.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'index';</script>
+    <link rel="shortcut icon" href="_static/thumb_logo.svg"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Installation instructions" href="installation.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+    <meta name="docbuild:last-update" content="01/02/2025"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+<aside class="bd-header-announcement" aria-label="Announcement">
+  <div class="bd-header-announcement__content">Official PyRTlib 1.1.1 Documentation</div>
+</aside>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="#">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/thumb_logo.png" class="logo__image only-light" alt=""/>
+    <script>document.write(`<img src="_static/thumb_white_logo.png" class="logo__image only-dark" alt=""/>`);</script>
+  
+  
+    <p class="title logo__title">PyRTlib</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="installation.html">
+    Installation instructions
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="api.html">
+    API references
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="examples/index.html">
+    Gallery example
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="notebook/index.html">
+    Community example
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="references.html">
+    References
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/SatCloP/pyrtlib" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <div class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="installation.html">
+    Installation instructions
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="api.html">
+    API references
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="examples/index.html">
+    Gallery example
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="notebook/index.html">
+    Community example
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="references.html">
+    References
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/SatCloP/pyrtlib" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none"></div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="pyrtlib-documentation">
+<h1>PyRTlib documentation<a class="headerlink" href="#pyrtlib-documentation" title="Permalink to this heading">#</a></h1>
+<p>PyRTlib allows to simulate and calculate radiometric parameters and estimting propogation parameters using as input meteorological data.
+Some meteorological dataset are built-in in PyRTlib which can be download and used directly in PyRTlib. It considers atmospheric profiles from both radiosounding observations (RAOB) and model reanalysis (ERA5).
+RAOB profiles come from Wyoming Upper Air Archive (University of Wyoming) and NCEI’s Integrated Radiosonde Archive version 2 (IGRA2) by the National Climatic Data Center (NCDC) of the National Oceanic and Atmospheric Administration (NOAA).</p>
+<p>PyRTlib also allows to quantify absorption model uncertainty due to uncertainty in the underlying spectroscopic parameters. <a class="reference internal" href="references.html#cimini-2018" id="id1"><span>[Cimini-2018]</span></a>
+The approach is applied to a widely used microwave absorption model <a class="reference internal" href="references.html#rosenkranz-2017" id="id2"><span>[Rosenkranz-2017]</span></a>, on which PyRTlib is based, and radiative transfer calculations at any frequencies range,
+which are commonly exploited for atmospheric sounding by microwave radiometer (MWR).</p>
+<div class="sd-container-fluid sd-sphinx-override sd-mb-4 sd-pt-0 sd-pb-0 sd-pl-2 sd-pr-2 sd-text-center docutils">
+<div class="sd-row sd-row-cols-2 sd-row-cols-xs-2 sd-row-cols-sm-2 sd-row-cols-md-2 sd-row-cols-lg-2 sd-g-4 sd-g-xs-4 sd-g-sm-4 sd-g-md-4 sd-g-lg-4 docutils">
+<div class="sd-col sd-d-flex-row docutils">
+<div class="sd-card sd-sphinx-override sd-w-100 sd-shadow-md intro-card docutils">
+<img alt="" class="sd-card-img-top" src="_images/shuttle.svg" /><div class="sd-card-body docutils">
+<div class="sd-card-title sd-font-weight-bold docutils">
+Getting started</div>
+</div>
+<div class="sd-card-footer docutils">
+<p class="sd-card-text"><span class="sd-d-grid"><a class="sd-sphinx-override sd-btn sd-text-wrap sd-btn-primary sd-stretched-link reference external" href="installation.html"><span>To the getting started guides</span></a></span></p>
+</div>
+</div>
+</div>
+<div class="sd-col sd-d-flex-row docutils">
+<div class="sd-card sd-sphinx-override sd-w-100 sd-shadow-md intro-card docutils">
+<img alt="" class="sd-card-img-top" src="_images/api.svg" /><div class="sd-card-body docutils">
+<div class="sd-card-title sd-font-weight-bold docutils">
+API reference</div>
+</div>
+<div class="sd-card-footer docutils">
+<p class="sd-card-text"><span class="sd-d-grid"><a class="sd-sphinx-override sd-btn sd-text-wrap sd-btn-primary sd-stretched-link reference external" href="api.html"><span>To the API references</span></a></span></p>
+</div>
+</div>
+</div>
+<div class="sd-col sd-d-flex-row docutils">
+<div class="sd-card sd-sphinx-override sd-w-100 sd-shadow-md intro-card docutils">
+<img alt="" class="sd-card-img-top" src="_images/code.svg" /><div class="sd-card-body docutils">
+<div class="sd-card-title sd-font-weight-bold docutils">
+Gallery example</div>
+</div>
+<div class="sd-card-footer docutils">
+<p class="sd-card-text"><span class="sd-d-grid"><a class="sd-sphinx-override sd-btn sd-text-wrap sd-btn-primary sd-stretched-link reference external" href="examples/index.html"><span>To the Gallery example page</span></a></span></p>
+</div>
+</div>
+</div>
+<div class="sd-col sd-d-flex-row docutils">
+<div class="sd-card sd-sphinx-override sd-w-100 sd-shadow-md intro-card docutils">
+<img alt="" class="sd-card-img-top" src="_images/community.svg" /><div class="sd-card-body docutils">
+<div class="sd-card-title sd-font-weight-bold docutils">
+Community example</div>
+</div>
+<div class="sd-card-footer docutils">
+<p class="sd-card-text"><span class="sd-d-grid"><a class="sd-sphinx-override sd-btn sd-text-wrap sd-btn-primary sd-stretched-link reference external" href="notebook/index.html"><span>To the Community example page</span></a></span></p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>The source code for pyrtlib python package is hosted on <a class="reference external" href="https://github.com/SatCloP/pyrtlib">github</a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The software is intended as an educational tool with limited ranges of
+applicability, so no guarantees are attached to any of the codes.</p>
+</div>
+<section id="quick-start">
+<h2>Quick start<a class="headerlink" href="#quick-start" title="Permalink to this heading">#</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pyrtlib.tb_spectrum</span><span class="w"> </span><span class="kn">import</span> <span class="n">TbCloudRTE</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyrtlib.climatology</span><span class="w"> </span><span class="kn">import</span> <span class="n">AtmosphericProfiles</span> <span class="k">as</span> <span class="n">atmp</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyrtlib.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">mr2rh</span><span class="p">,</span> <span class="n">ppmv2gkg</span>
+</pre></div>
+</div>
+<p>Atmospheric profile definition:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">z</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">md</span> <span class="o">=</span> <span class="n">atmp</span><span class="o">.</span><span class="n">gl_atm</span><span class="p">(</span><span class="n">atmp</span><span class="o">.</span><span class="n">MIDLATITUDE_SUMMER</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Units conversion:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">gkg</span> <span class="o">=</span> <span class="n">ppmv2gkg</span><span class="p">(</span><span class="n">md</span><span class="p">[:,</span> <span class="n">atmp</span><span class="o">.</span><span class="n">H2O</span><span class="p">],</span> <span class="n">atmp</span><span class="o">.</span><span class="n">H2O</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Relative humidity of <span class="math notranslate nohighlight">\(H_2O\)</span> (water vapor)</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">rh</span> <span class="o">=</span> <span class="n">mr2rh</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">gkg</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="mi">100</span>
+</pre></div>
+</div>
+<p>Deifinition of angles and frequencies:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ang</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">90.</span><span class="p">])</span>
+<span class="n">frq</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">1001</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Initialize parameters for main execution:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">rte</span> <span class="o">=</span> <span class="n">TbCloudRTE</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">rh</span><span class="p">,</span> <span class="n">frq</span><span class="p">,</span> <span class="n">ang</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Set absorption model:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">rte</span><span class="o">.</span><span class="n">init_absmdl</span><span class="p">(</span><span class="s1">&#39;R22SD&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Execute model by computing upwelling radiances:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">rte</span><span class="o">.</span><span class="n">execute</span><span class="p">()</span>
+<span class="n">df</span><span class="o">.</span><span class="n">tbtotal</span>
+<span class="mi">0</span>      <span class="mf">293.119811</span>
+<span class="mi">1</span>      <span class="mf">292.538088</span>
+<span class="mi">2</span>      <span class="mf">291.736672</span>
+<span class="mi">3</span>      <span class="mf">291.913658</span>
+<span class="mi">4</span>      <span class="mf">292.493971</span>
+         <span class="o">...</span>
+<span class="mi">976</span>    <span class="mf">230.179993</span>
+<span class="mi">977</span>    <span class="mf">231.435965</span>
+<span class="mi">978</span>    <span class="mf">232.592915</span>
+<span class="mi">979</span>    <span class="mf">233.666322</span>
+<span class="mi">980</span>    <span class="mf">234.667522</span>
+<span class="n">Name</span><span class="p">:</span> <span class="n">tbtotal</span><span class="p">,</span> <span class="n">Length</span><span class="p">:</span> <span class="mi">981</span><span class="p">,</span> <span class="n">dtype</span><span class="p">:</span> <span class="n">float64</span>
+</pre></div>
+</div>
+<p>Preview of the output dataframe (see <a class="reference internal" href="generated/pyrtlib.tb_spectrum.TbCloudRTE.execute.html#pyrtlib.tb_spectrum.TbCloudRTE.execute" title="pyrtlib.tb_spectrum.TbCloudRTE.execute"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pyrtlib.tb_spectrum.TbCloudRTE.execute()</span></code></a> for more info):</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<colgroup>
+<col style="width: 12.5%" />
+<col style="width: 12.5%" />
+<col style="width: 12.5%" />
+<col style="width: 12.5%" />
+<col style="width: 12.5%" />
+<col style="width: 12.5%" />
+<col style="width: 12.5%" />
+<col style="width: 12.5%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>tbtotal</p></th>
+<th class="head"><p>tbatm</p></th>
+<th class="head"><p>tmr</p></th>
+<th class="head"><p>tmrcld</p></th>
+<th class="head"><p>tauwet</p></th>
+<th class="head"><p>taudry</p></th>
+<th class="head"><p>tauliq</p></th>
+<th class="head"><p>tauice</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>293.119811</p></td>
+<td><p>0.0</p></td>
+<td><p>282.644145</p></td>
+<td><p>0.0</p></td>
+<td><p>0.085189</p></td>
+<td><p>0.012949</p></td>
+<td><p>0.0</p></td>
+<td><p>0.0</p></td>
+</tr>
+<tr class="row-odd"><td><p>292.538088</p></td>
+<td><p>0.0</p></td>
+<td><p>282.188067</p></td>
+<td><p>0.0</p></td>
+<td><p>0.135297</p></td>
+<td><p>0.013615</p></td>
+<td><p>0.0</p></td>
+<td><p>0.0</p></td>
+</tr>
+<tr class="row-even"><td><p>…</p></td>
+<td><p>…</p></td>
+<td><p>…</p></td>
+<td><p>…</p></td>
+<td><p>…</p></td>
+<td><p>…</p></td>
+<td><p>…</p></td>
+<td><p>…</p></td>
+</tr>
+<tr class="row-odd"><td><p>234.667522</p></td>
+<td><p>0.0</p></td>
+<td><p>234.667522</p></td>
+<td><p>0.0</p></td>
+<td><p>474.835275</p></td>
+<td><p>0.329120</p></td>
+<td><p>0.0</p></td>
+<td><p>0.0</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Plotting result:</p>
+<img alt="_images/spectrum_r22.jpeg" src="_images/spectrum_r22.jpeg" />
+<p>Plotting of upwelling <span class="math notranslate nohighlight">\(\Delta T_b\)</span> using the last two absorption models available in PyRTlib for six reference atmosphere climatology.</p>
+<img alt="_images/spectrum_r23_r24.png" src="_images/spectrum_r23_r24.png" />
+</section>
+<section id="cite-as">
+<h2>Cite as<a class="headerlink" href="#cite-as" title="Permalink to this heading">#</a></h2>
+<p>Please cite us:</p>
+<p>Larosa, S., Cimini, D., Gallucci, D., Nilo, S. T., and Romano, F.: PyRTlib: an educational Python-based library for non-scattering atmospheric microwave radiative transfer computations, Geosci. Model Dev., 17, 2053–2076, <a class="reference external" href="https://doi.org/10.5194/gmd-17-2053-2024">https://doi.org/10.5194/gmd-17-2053-2024</a>, 2024.</p>
+<p>Larosa, S., Cimini, D., Gallucci, D., Nilo, S. T., &amp; Romano, F. (2024). PyRTlib: a python package for non-scattering line-by-line microwave Radiative Transfer simulations.. Zenodo. <a class="reference external" href="https://doi.org/10.5281/zenodo.8219145">https://doi.org/10.5281/zenodo.8219145</a></p>
+</section>
+<section id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this heading">#</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation instructions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#python-installation-ubuntu">Python Installation (ubuntu)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#python-installation-macos">Python Installation (macos)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#installing-pyrtlib-via-pypi">Installing PyRTlib via PyPi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#virtual-environment">Virtual Environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#installing-pyrtlib-from-source">Installing PyRTlib from source</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html#build-and-run-the-docker-image">Build and run the Docker image</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html#my-first-run-with-pyrtlib-colab-notebook">My first run with PyRTlib (Colab Notebook)</a></li>
+</ul>
+</div>
+</section>
+<section id="api-references">
+<h2>API References<a class="headerlink" href="#api-references" title="Permalink to this heading">#</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API references</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api.html#main-class">Main class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#standard-atmospheric-profiles">Standard Atmospheric Profiles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#radiative-transfer-equation">Radiative Transfer Equation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#absorption-models">Absorption Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#weighting-functions">Weighting Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#utility-functions">Utility Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#uncertainty">Uncertainty</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#api-web-services">API Web Services</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="gallery-example">
+<h2>Gallery Example<a class="headerlink" href="#gallery-example" title="Permalink to this heading">#</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="examples/index.html">Gallery example</a></li>
+</ul>
+</div>
+</section>
+<section id="community-example">
+<h2>Community Example<a class="headerlink" href="#community-example" title="Permalink to this heading">#</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="notebook/index.html">Community example</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="notebook/Pressure_Broadening_effect.html">Example by Loretta-Pearl-Poku</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="references">
+<h2>References<a class="headerlink" href="#references" title="Permalink to this heading">#</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="references.html">References</a></li>
+</ul>
+</div>
+</section>
+<section id="indices-and-search">
+<h2>Indices and search<a class="headerlink" href="#indices-and-search" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
+<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
+</ul>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#quick-start">Quick start</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cite-as">Cite as</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installation">Installation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#api-references">API References</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gallery-example">Gallery Example</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#community-example">Community Example</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#references">References</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#indices-and-search">Indices and search</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2021-2025, SatCloP - CNR-IMAA.
+      <br/>
+    
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

@@ -1,0 +1,12 @@
+pyrtlib.rt\_equation.RTEquation.cloud\_radiating\_temperature
+=============================================================
+
+.. currentmodule:: pyrtlib.rt_equation
+
+.. automethod:: pyrtlib.rt_equation.RTEquation.cloud_radiating_temperature
+
+
+
+
+
+.. include:: gallery_backreferences/pyrtlib.rt_equation.RTEquation.cloud_radiating_temperature.examples

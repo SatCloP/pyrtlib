@@ -1,0 +1,12 @@
+pyrtlib.tb\_spectrum.TbCloudRTE.init\_absmdl
+============================================
+
+.. currentmodule:: pyrtlib.tb_spectrum
+
+.. automethod:: pyrtlib.tb_spectrum.TbCloudRTE.init_absmdl
+
+
+
+
+
+.. include:: gallery_backreferences/pyrtlib.tb_spectrum.TbCloudRTE.init_absmdl.examples

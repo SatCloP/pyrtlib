@@ -1,0 +1,12 @@
+pyrtlib.utils.dilec12
+=====================
+
+.. currentmodule:: pyrtlib.utils
+
+.. autofunction:: pyrtlib.utils.dilec12
+
+
+
+
+
+.. include:: gallery_backreferences/pyrtlib.utils.dilec12.examples

@@ -1,0 +1,40 @@
+pyrtlib.tb\_spectrum.TbCloudRTE
+===============================
+
+.. currentmodule:: pyrtlib.tb_spectrum
+
+.. autoclass:: TbCloudRTE
+    :show-inheritance: 
+    
+    
+    
+    .. rubric:: Methods
+
+    .. autosummary::
+        :toctree:
+        :recursive:
+    
+        ~TbCloudRTE.__init__
+        ~TbCloudRTE.execute
+        ~TbCloudRTE.init_absmdl
+        ~TbCloudRTE.init_cloudy
+        ~TbCloudRTE.set_amu
+    
+    
+
+    
+    
+    .. rubric:: Attributes
+
+    .. autosummary::
+    
+        ~TbCloudRTE.emissivity
+        ~TbCloudRTE.satellite
+    
+    
+
+    
+    
+    
+
+.. include:: gallery_backreferences/pyrtlib.tb_spectrum.TbCloudRTE.examples

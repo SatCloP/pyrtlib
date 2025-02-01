@@ -1,0 +1,39 @@
+pyrtlib.absorption\_model.O2AbsModel
+====================================
+
+.. currentmodule:: pyrtlib.absorption_model
+
+.. autoclass:: O2AbsModel
+    :show-inheritance: 
+    
+    
+    
+    .. rubric:: Methods
+
+    .. autosummary::
+        :toctree:
+        :recursive:
+    
+        ~O2AbsModel.__init__
+        ~O2AbsModel.implemented_models
+        ~O2AbsModel.o2_absorption
+        ~O2AbsModel.set_ll
+    
+    
+
+    
+    
+    .. rubric:: Attributes
+
+    .. autosummary::
+    
+        ~O2AbsModel.model
+        ~O2AbsModel.o2ll
+    
+    
+
+    
+    
+    
+
+.. include:: gallery_backreferences/pyrtlib.absorption_model.O2AbsModel.examples

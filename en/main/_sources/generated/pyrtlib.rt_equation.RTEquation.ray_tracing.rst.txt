@@ -1,0 +1,12 @@
+pyrtlib.rt\_equation.RTEquation.ray\_tracing
+============================================
+
+.. currentmodule:: pyrtlib.rt_equation
+
+.. automethod:: pyrtlib.rt_equation.RTEquation.ray_tracing
+
+
+
+
+
+.. include:: gallery_backreferences/pyrtlib.rt_equation.RTEquation.ray_tracing.examples

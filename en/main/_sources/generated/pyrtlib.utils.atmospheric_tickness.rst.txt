@@ -1,0 +1,12 @@
+pyrtlib.utils.atmospheric\_tickness
+===================================
+
+.. currentmodule:: pyrtlib.utils
+
+.. autofunction:: pyrtlib.utils.atmospheric_tickness
+
+
+
+
+
+.. include:: gallery_backreferences/pyrtlib.utils.atmospheric_tickness.examples

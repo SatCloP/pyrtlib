@@ -1,0 +1,31 @@
+pyrtlib.uncertainty.AbsModUncertainty
+=====================================
+
+.. currentmodule:: pyrtlib.uncertainty
+
+.. autoclass:: AbsModUncertainty
+    :show-inheritance: 
+    
+    
+    
+    .. rubric:: Methods
+
+    .. autosummary::
+        :toctree:
+        :recursive:
+    
+        ~AbsModUncertainty.__init__
+        ~AbsModUncertainty.parameters_perturbation
+        ~AbsModUncertainty.uncertainty_propagation
+    
+    
+
+    
+    
+    
+
+    
+    
+    
+
+.. include:: gallery_backreferences/pyrtlib.uncertainty.AbsModUncertainty.examples

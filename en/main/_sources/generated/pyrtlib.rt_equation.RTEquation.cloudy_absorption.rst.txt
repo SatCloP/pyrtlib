@@ -1,0 +1,12 @@
+pyrtlib.rt\_equation.RTEquation.cloudy\_absorption
+==================================================
+
+.. currentmodule:: pyrtlib.rt_equation
+
+.. automethod:: pyrtlib.rt_equation.RTEquation.cloudy_absorption
+
+
+
+
+
+.. include:: gallery_backreferences/pyrtlib.rt_equation.RTEquation.cloudy_absorption.examples
