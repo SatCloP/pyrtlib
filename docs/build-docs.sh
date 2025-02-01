@@ -7,7 +7,7 @@ set -x
 sudo apt-get update
 sudo apt-get -y install git rsync python3-git python3-pip python3-virtualenv python3-setuptools pandoc zlib1g-dev # python3-sphinx
 python3 -m pip install --upgrade pygments #rinohtype[PDF] #sphinxcontrib-bibtex
-pip3 install sphinx==5.3.0 pydata-sphinx-theme sphinx-toggleprompt nbconvert==5.6.1 nbsphinx sphinx-gallery sphinx-copybutton ipython_genutils sphinx-toggleprompt sphinx_design pandas scipy scikit-learn netcdf4 matplotlib jupyter_client ipykernel
+pip3 install sphinx==5.3.0 pydata-sphinx-theme sphinx-toggleprompt nbconvert==5.6.1 nbsphinx jinja2==3.0.3 sphinx-gallery sphinx-copybutton ipython_genutils sphinx-toggleprompt sphinx_design pandas scipy scikit-learn netcdf4 matplotlib jupyter_client ipykernel
 
 #####################
 # DECLARE VARIABLES #
