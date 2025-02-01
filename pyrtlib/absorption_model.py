@@ -362,7 +362,7 @@ class H2OAbsModel(AbsModel):
             np.ndarray: self-continuum term ((1/cm)/mbar**2), multiply by pvap**2 * 1.E5 to get Np/km
 
         Reference:
-            .. [1] [Tretyakov, Galanina, Koroleva et al 2024] (not published currently)
+            .. [1] [Tretyakov-2025]_.
             .. [2] [Odintsova-2022]_.
             .. [3] [Galanina-2022]_.
         """

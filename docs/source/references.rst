@@ -71,3 +71,5 @@ References
 .. [Meshkov-DeLucia-2007] Andrey I. Meshkov, Frank C. De Lucia, Laboratory measurements of dry air atmospheric absorption with a millimeter wave cavity ringdown spectrometer, Journal of Quantitative Spectroscopy and Radiative Transfer, Volume 108, Issue 2, 2007, Pages 256-276, ISSN 0022-4073, https://doi.org/10.1016/j.jqsrt.2007.04.001.
 
 .. [Serov-2024] E.A. Serov, T.A. Galanina, A.O. Koroleva, D.S. Makarov, I.S. Amerkhanov, M.A. Koshelev, M.Yu. Tretyakov, D.N. Chistikov, A.A. Finenko, A.A. Vigasin, Continuum absorption in pure N2 gas and in its mixture with Ar, Journal of Quantitative Spectroscopy and Radiative Transfer, Volume 328, 2024, 109172, ISSN 0022-4073, https://doi.org/10.1016/j.jqsrt.2024.109172.
+
+.. [Tretyakov-2025] M.Yu. Tretyakov, T.A. Galanina, A.O. Koroleva, D.S. Makarov, D.N. Chistikov, A.A. Finenko, A.A. Vigasin, Atmospheric water vapor continuum model for the sub-THz range, Journal of Quantitative Spectroscopy and Radiative Transfer, Volume 333, 2025, 109319, ISSN 0022-4073, https://doi.org/10.1016/j.jqsrt.2024.109319.
