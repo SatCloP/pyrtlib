@@ -1,0 +1,12 @@
+pyrtlib.weighting\_functions.WeightingFunctions.generate\_wf
+============================================================
+
+.. currentmodule:: pyrtlib.weighting_functions
+
+.. automethod:: pyrtlib.weighting_functions.WeightingFunctions.generate_wf
+
+
+
+
+
+.. include:: gallery_backreferences/pyrtlib.weighting_functions.WeightingFunctions.generate_wf.examples

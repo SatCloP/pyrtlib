@@ -1,0 +1,12 @@
+pyrtlib.climatology.ProfileExtrapolation.\_\_init\_\_
+=====================================================
+
+.. currentmodule:: pyrtlib.climatology
+
+.. automethod:: pyrtlib.climatology.ProfileExtrapolation.__init__
+
+
+
+
+
+.. include:: gallery_backreferences/pyrtlib.climatology.ProfileExtrapolation.__init__.examples

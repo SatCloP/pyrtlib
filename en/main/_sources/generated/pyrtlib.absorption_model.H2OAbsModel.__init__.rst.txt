@@ -1,0 +1,12 @@
+pyrtlib.absorption\_model.H2OAbsModel.\_\_init\_\_
+==================================================
+
+.. currentmodule:: pyrtlib.absorption_model
+
+.. automethod:: pyrtlib.absorption_model.H2OAbsModel.__init__
+
+
+
+
+
+.. include:: gallery_backreferences/pyrtlib.absorption_model.H2OAbsModel.__init__.examples

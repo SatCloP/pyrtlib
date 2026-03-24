@@ -1,0 +1,12 @@
+pyrtlib.utils.virtual\_temperature
+==================================
+
+.. currentmodule:: pyrtlib.utils
+
+.. autofunction:: pyrtlib.utils.virtual_temperature
+
+
+
+
+
+.. include:: gallery_backreferences/pyrtlib.utils.virtual_temperature.examples

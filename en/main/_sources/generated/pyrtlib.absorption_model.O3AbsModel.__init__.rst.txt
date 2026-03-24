@@ -1,0 +1,12 @@
+pyrtlib.absorption\_model.O3AbsModel.\_\_init\_\_
+=================================================
+
+.. currentmodule:: pyrtlib.absorption_model
+
+.. automethod:: pyrtlib.absorption_model.O3AbsModel.__init__
+
+
+
+
+
+.. include:: gallery_backreferences/pyrtlib.absorption_model.O3AbsModel.__init__.examples

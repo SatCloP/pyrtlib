@@ -1,0 +1,12 @@
+pyrtlib.rt\_equation.RTEquation.clearsky\_absorption
+====================================================
+
+.. currentmodule:: pyrtlib.rt_equation
+
+.. automethod:: pyrtlib.rt_equation.RTEquation.clearsky_absorption
+
+
+
+
+
+.. include:: gallery_backreferences/pyrtlib.rt_equation.RTEquation.clearsky_absorption.examples

@@ -1,0 +1,12 @@
+pyrtlib.absorption\_model.H2OAbsModel.h2o\_continuum\_mwl24
+===========================================================
+
+.. currentmodule:: pyrtlib.absorption_model
+
+.. automethod:: pyrtlib.absorption_model.H2OAbsModel.h2o_continuum_mwl24
+
+
+
+
+
+.. include:: gallery_backreferences/pyrtlib.absorption_model.H2OAbsModel.h2o_continuum_mwl24.examples

@@ -1,0 +1,12 @@
+pyrtlib.tb\_spectrum.TbCloudRTE.\_\_init\_\_
+============================================
+
+.. currentmodule:: pyrtlib.tb_spectrum
+
+.. automethod:: pyrtlib.tb_spectrum.TbCloudRTE.__init__
+
+
+
+
+
+.. include:: gallery_backreferences/pyrtlib.tb_spectrum.TbCloudRTE.__init__.examples

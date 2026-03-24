@@ -1,0 +1,12 @@
+pyrtlib.utils.to\_kelvin
+========================
+
+.. currentmodule:: pyrtlib.utils
+
+.. autofunction:: pyrtlib.utils.to_kelvin
+
+
+
+
+
+.. include:: gallery_backreferences/pyrtlib.utils.to_kelvin.examples

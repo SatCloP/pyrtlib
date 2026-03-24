@@ -1,0 +1,12 @@
+pyrtlib.absorption\_model.O2AbsModel.o2\_absorption
+===================================================
+
+.. currentmodule:: pyrtlib.absorption_model
+
+.. automethod:: pyrtlib.absorption_model.O2AbsModel.o2_absorption
+
+
+
+
+
+.. include:: gallery_backreferences/pyrtlib.absorption_model.O2AbsModel.o2_absorption.examples

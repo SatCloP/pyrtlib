@@ -1,0 +1,12 @@
+pyrtlib.apiwebservices.WyomingUpperAir.request\_data
+====================================================
+
+.. currentmodule:: pyrtlib.apiwebservices
+
+.. automethod:: pyrtlib.apiwebservices.WyomingUpperAir.request_data
+
+
+
+
+
+.. include:: gallery_backreferences/pyrtlib.apiwebservices.WyomingUpperAir.request_data.examples

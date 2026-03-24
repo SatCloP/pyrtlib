@@ -1,0 +1,37 @@
+pyrtlib.absorption\_model.AbsModel
+==================================
+
+.. currentmodule:: pyrtlib.absorption_model
+
+.. autoclass:: AbsModel
+    :show-inheritance: 
+    
+    
+    
+    .. rubric:: Methods
+
+    .. autosummary::
+        :toctree:
+        :recursive:
+    
+        ~AbsModel.__init__
+        ~AbsModel.implemented_models
+        ~AbsModel.set_ll
+    
+    
+
+    
+    
+    .. rubric:: Attributes
+
+    .. autosummary::
+    
+        ~AbsModel.model
+    
+    
+
+    
+    
+    
+
+.. include:: gallery_backreferences/pyrtlib.absorption_model.AbsModel.examples

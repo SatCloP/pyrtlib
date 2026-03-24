@@ -1,0 +1,12 @@
+pyrtlib.uncertainty.AbsModUncertainty.\_\_init\_\_
+==================================================
+
+.. currentmodule:: pyrtlib.uncertainty
+
+.. automethod:: pyrtlib.uncertainty.AbsModUncertainty.__init__
+
+
+
+
+
+.. include:: gallery_backreferences/pyrtlib.uncertainty.AbsModUncertainty.__init__.examples

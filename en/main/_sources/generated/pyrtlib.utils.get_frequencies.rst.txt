@@ -1,0 +1,12 @@
+pyrtlib.utils.get\_frequencies
+==============================
+
+.. currentmodule:: pyrtlib.utils
+
+.. autofunction:: pyrtlib.utils.get_frequencies
+
+
+
+
+
+.. include:: gallery_backreferences/pyrtlib.utils.get_frequencies.examples

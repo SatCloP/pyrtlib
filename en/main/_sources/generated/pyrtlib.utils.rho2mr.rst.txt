@@ -1,0 +1,12 @@
+pyrtlib.utils.rho2mr
+====================
+
+.. currentmodule:: pyrtlib.utils
+
+.. autofunction:: pyrtlib.utils.rho2mr
+
+
+
+
+
+.. include:: gallery_backreferences/pyrtlib.utils.rho2mr.examples

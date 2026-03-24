@@ -1,0 +1,30 @@
+pyrtlib.apiwebservices.IGRAUpperAir
+===================================
+
+.. currentmodule:: pyrtlib.apiwebservices
+
+.. autoclass:: IGRAUpperAir
+    :show-inheritance: 
+    
+    
+    
+    .. rubric:: Methods
+
+    .. autosummary::
+        :toctree:
+        :recursive:
+    
+        ~IGRAUpperAir.__init__
+        ~IGRAUpperAir.request_data
+    
+    
+
+    
+    
+    
+
+    
+    
+    
+
+.. include:: gallery_backreferences/pyrtlib.apiwebservices.IGRAUpperAir.examples

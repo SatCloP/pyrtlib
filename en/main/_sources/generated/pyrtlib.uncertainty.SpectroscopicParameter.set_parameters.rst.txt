@@ -1,0 +1,12 @@
+pyrtlib.uncertainty.SpectroscopicParameter.set\_parameters
+==========================================================
+
+.. currentmodule:: pyrtlib.uncertainty
+
+.. automethod:: pyrtlib.uncertainty.SpectroscopicParameter.set_parameters
+
+
+
+
+
+.. include:: gallery_backreferences/pyrtlib.uncertainty.SpectroscopicParameter.set_parameters.examples
