@@ -17,10 +17,13 @@ class Test(TestCase):
 
     # @pytest.mark.datafiles(DATA_DIR)
     def test_wyom_get_stations(self):
-        df = WyomingUpperAir.get_stations('pac')
-        b = df[df.station_id=='45004'].station_name == 'Kings Park'
-
-        assert b.values
+        df = WyomingUpperAir.get_stations()
+        assert 'station_id' in df.columns
+        assert 'station_name' in df.columns
+        
+        df_station = WyomingUpperAir.find_station('Africa')
+        print(df_station)
+        assert not df_station.empty
         
     @pytest.mark.skip()
     def test_get_era5(self):

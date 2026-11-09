@@ -307,7 +307,8 @@ class Test(TestCase):
 
     def test_pyrtlib_sat_R21SD_wyoming_es(self):
         date = datetime(2021, 4, 22, 12)
-        station = 'LIRE'
+        station = '16245'
+        
         df_w = WyomingUpperAir.request_data(date, station)
 
         z, p, t, _ = df_w.height.values / 1000, \
@@ -362,10 +363,10 @@ class Test(TestCase):
         assert_allclose(df.tbtotal, df_expected.tbtotal_igra2, atol=0)
 
     def test_pyrtlib_sat_R21SD_igra2_beg2025_es(self):
-        date = datetime(2025, 10, 2, 0)
+        date = datetime(2026, 10, 2, 0)
         station = 'ASM00094610'
         df_igra2, _ = IGRAUpperAir.request_data(
-            date, station, beg2025=True)
+            date, station, beg_year=2026)
 
         df_igra2 = df_igra2[df_igra2.pressure.notna() &
                             df_igra2.temperature.notna() &

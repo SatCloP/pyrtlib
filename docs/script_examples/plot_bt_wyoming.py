@@ -20,7 +20,7 @@ from pyrtlib.absorption_model import H2OAbsModel
 from pyrtlib.apiwebservices import WyomingUpperAir
 
 date = datetime(2021, 4, 22, 12)
-station = 'LIRE'
+station = '16245'
 df_w = WyomingUpperAir.request_data(date, station)
 
 z, p, t, q = df_w.height.values / 1000, \
