@@ -71,19 +71,24 @@ class WyomingUpperAir(HTTPEndPoint):
         return df
 
     @classmethod
-    def get_stations(cls, region: Optional[str] = None) -> pd.DataFrame:
-        """Retrieve list of available stations from the Wyoming archive.
+    def get_stations(cls, time: Optional[datetime] = None) -> pd.DataFrame:
+        """Retrieve available stations from the Wyoming archive.
 
         Args:
-            region (Optional[str], optional): Not used, kept for backward compatibility.
-                Defaults to None.
+            time (Optional[datetime]): Requested sounding date and time.
+                If provided, retrieve stations available for that time.
 
         Returns:
-            pandas.DataFrame: A DataFrame of stations id and name
+            pandas.DataFrame: A DataFrame of station IDs and names.
         """
 
         url = 'https://weather.uwyo.edu/cgi-bin/sounding_json'
-        resp = requests.get(url, timeout=30)
+
+        params = {}
+        if time is not None:
+            params['datetime'] = time.strftime('%Y-%m-%d %H:%M:%S')
+
+        resp = requests.get(url, params=params, timeout=30)
         resp.raise_for_status()
 
         data = resp.json()
@@ -93,22 +98,36 @@ class WyomingUpperAir(HTTPEndPoint):
 
         df['name'] = df['name'].replace('', 'UNKNOWN').fillna('UNKNOWN')
 
-        df = df.rename(columns={'stationid': 'station_id', 'name': 'station_name'})
+        df = df.rename(columns={
+            'stationid': 'station_id',
+            'name': 'station_name'
+        })
+
         return df
 
     @classmethod
-    def find_station(cls, name: str) -> pd.DataFrame:
+    def find_station(
+        cls,
+        name: str,
+        time: Optional[datetime] = None
+    ) -> pd.DataFrame:
         """Search for stations by name (case-insensitive).
 
         Args:
             name (str): The station name (or part of it) to search for.
+            time (Optional[datetime]): Requested sounding date and time.
+                If provided, search within stations available for that time.
 
         Returns:
             pandas.DataFrame: A DataFrame of matching stations.
-        """
+        """ 
 
-        df = cls.get_stations()
-        mask = df['station_name'].str.contains(name, case=False, na=False)
+        df = cls.get_stations(time=time)
+
+        mask = df['station_name'].str.contains(
+            name, case=False, na=False
+        )
+
         return df[mask].reset_index(drop=True)
 
     def _get_data(self, time: datetime, site_id: Union[str, int], src: str = 'FM35') -> pd.DataFrame:
