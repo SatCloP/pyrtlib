@@ -25,7 +25,8 @@ class WyomingUpperAir(HTTPEndPoint):
 
     @classmethod
     def request_data(cls, time: datetime, site_id: Union[str, int], **kwargs) -> pd.DataFrame:
-        """Retrieve upper air observations from the Wyoming archive.
+        """
+        Retrieve upper air observations from the Wyoming archive.
 
         Args:
             time (datetime.datetime): The date and time of the desired observation.
@@ -59,8 +60,8 @@ class WyomingUpperAir(HTTPEndPoint):
                  'latitude': 'degrees',
                  'longitude': 'degrees',
                  'elevation': 'meter'}
-        """
 
+        """
         endpoint = cls()
         src = kwargs.get('src', 'FM35')
         df = endpoint._get_data(time, site_id, src=src)
@@ -68,7 +69,8 @@ class WyomingUpperAir(HTTPEndPoint):
 
     @classmethod
     def get_stations(cls, time: Optional[datetime] = None) -> pd.DataFrame:
-        """Retrieve available stations from the Wyoming archive.
+        """
+        Retrieve available stations from the Wyoming archive.
 
         Args:
             time (Optional[datetime]): Requested sounding date and time.
@@ -76,8 +78,8 @@ class WyomingUpperAir(HTTPEndPoint):
 
         Returns:
             pandas.DataFrame: A DataFrame of station IDs and names.
-        """
 
+        """
         url = 'https://weather.uwyo.edu/cgi-bin/sounding_json'
 
         params = {}
@@ -107,7 +109,8 @@ class WyomingUpperAir(HTTPEndPoint):
         name: str,
         time: Optional[datetime] = None
     ) -> pd.DataFrame:
-        """Search for stations by name (case-insensitive).
+        """
+        Search for stations by name (case-insensitive).
 
         Args:
             name (str): The station name (or part of it) to search for.
@@ -116,8 +119,8 @@ class WyomingUpperAir(HTTPEndPoint):
 
         Returns:
             pandas.DataFrame: A DataFrame of matching stations.
-        """ 
 
+        """
         df = cls.get_stations(time=time)
 
         mask = df['station_name'].str.contains(
@@ -127,7 +130,8 @@ class WyomingUpperAir(HTTPEndPoint):
         return df[mask].reset_index(drop=True)
 
     def _get_data(self, time: datetime, site_id: Union[str, int], src: str = 'FM35') -> pd.DataFrame:
-        r"""Download and parse upper air observations from an online archive.
+        r"""
+        Download and parse upper air observations from an online archive.
 
         Parameters
         ----------
@@ -144,8 +148,8 @@ class WyomingUpperAir(HTTPEndPoint):
         -------
             df :  pandas.DataFrame
                 containing the data
-        """
 
+        """
         raw = self._get_data_raw(time, site_id, src=src)
         df = pd.read_csv(StringIO(raw))
 
@@ -190,7 +194,6 @@ class WyomingUpperAir(HTTPEndPoint):
                              'latitude': 'degrees',
                              'longitude': 'degrees',
                              'title': None}
-        
         return df
 
     def _get_data_raw(self, time: datetime, site_id: Union[str, int], src: str = 'FM35') -> str:
@@ -210,7 +213,6 @@ class WyomingUpperAir(HTTPEndPoint):
         text of the server response
 
         """
-
         formatted_time = time.strftime('%Y-%m-%d %H:%M:%S')
         path = (f'?datetime={quote(formatted_time)}'
                 f'&id={site_id}'

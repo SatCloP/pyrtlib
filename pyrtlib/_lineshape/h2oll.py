@@ -95,7 +95,7 @@ if H2OAbsModel.model in ['R21SD', 'R22SD', 'R23', 'R23SD', 'R24', 'MWL24']:
 if H2OAbsModel.model == 'R20SD':
     d2air = d.variables['d2air'][:].data.item()
     d2self = d.variables['d2self'][:].data.item()
-    
+
 if H2OAbsModel.model not in ['R98', 'R03', 'R16', 'R17']:
     xh = np.where(xh <= 0., x, xh)
     xhs = np.where(xhs <= 0., xs, xhs)
