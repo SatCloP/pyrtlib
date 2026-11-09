@@ -7,6 +7,10 @@ RUN apt-get update \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/*
 
+RUN python3 -m venv /opt/venv
+
+ENV PATH="/opt/venv/bin:$PATH"
+
 RUN git clone https://github.com/SatCloP/pyrtlib.git && \
     cd pyrtlib && \
     pip install .
