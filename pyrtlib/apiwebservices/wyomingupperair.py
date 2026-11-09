@@ -160,6 +160,7 @@ class WyomingUpperAir(HTTPEndPoint):
 
         df['station'] = site_id
         df['time'] = time
+        df['title'] = f"{site_id} Observations at {time.strftime('%d %b %Y, %HZ')}"
 
         df.attrs['units'] = {'pressure': 'hPa',
                              'height': 'meter',
@@ -172,7 +173,9 @@ class WyomingUpperAir(HTTPEndPoint):
                              'station': None,
                              'time': None,
                              'latitude': 'degrees',
-                             'longitude': 'degrees'}
+                             'longitude': 'degrees',
+                             'title': None}
+        
         return df
 
     def _get_data_raw(self, time: datetime, site_id: Union[str, int], src: str = 'FM35') -> str:
