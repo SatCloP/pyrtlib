@@ -9,6 +9,6 @@ RUN apt-get update \
 
 RUN git clone https://github.com/SatCloP/pyrtlib.git && \
     cd pyrtlib && \
-    python3 setup.py install
+    pip install .
 
 ENTRYPOINT ["/bin/bash"]
