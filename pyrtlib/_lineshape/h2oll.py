@@ -79,6 +79,10 @@ if H2OAbsModel.model not in ['R98', 'R03', 'R16', 'R17']:
     xh = mtx[:, 9]
     shs = mtx[:, 10] / 1000.0
     xhs = mtx[:, 11]
+
+    #fallback
+    xh = np.where(xh <= 0., x, xh)
+    xhs = np.where(xhs <= 0., xs, xhs)
 if H2OAbsModel.model in ['R19', 'R19SD', 'R20', 'R20SD', 'R21SD', 'R22SD', 'R23', 'R23SD', 'R24', 'MWL24']:
     aair = mtx[:, 12]
     aself = mtx[:, 13]
@@ -92,17 +96,13 @@ if H2OAbsModel.model in ['R21SD', 'R22SD', 'R23', 'R23SD', 'R24', 'MWL24']:
     xw2s = mtx[:, 17]
     d2 = mtx[:, 18] / 1000.0
     d2s = mtx[:, 19] / 1000.0
+
+    # fallback
+    xw2 = np.where(xw2 <= 0., x, xw2)
+    xw2s = np.where(xw2s <= 0., xs, xw2s)
 if H2OAbsModel.model == 'R20SD':
     d2air = d.variables['d2air'][:].data.item()
     d2self = d.variables['d2self'][:].data.item()
-
-if H2OAbsModel.model not in ['R98', 'R03', 'R16', 'R17']:
-    xh = np.where(xh <= 0., x, xh)
-    xhs = np.where(xhs <= 0., xs, xhs)
-if H2OAbsModel.model in ['R21SD', 'R22SD', 'R23SD', 'R24', 'MWL24']:
-    xw2 = np.where(xw2 <= 0., x, xw2)
-    xw2s = np.where(xw2s <= 0., xs, xw2s)
-
 
 reftcon = ctr[0]
 cf = ctr[1]
