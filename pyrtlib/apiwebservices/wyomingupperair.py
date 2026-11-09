@@ -130,8 +130,7 @@ class WyomingUpperAir(HTTPEndPoint):
         return df[mask].reset_index(drop=True)
 
     def _get_data(self, time: datetime, site_id: Union[str, int], src: str = 'FM35') -> pd.DataFrame:
-        r"""
-        Download and parse upper air observations from an online archive.
+        r"""Download and parse upper air observations from an online archive.
 
         Parameters
         ----------
