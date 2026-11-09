@@ -391,7 +391,7 @@ class Test(TestCase):
 
         df_expected = pd.read_csv(
             os.path.join(THIS_DIR, "data", "tb_tot_rose21sd_RAOB_es.csv"))
-        assert_allclose(df.tbtotal, df_expected.tbtotal_igra2_beg2025, atol=0)
+        assert_allclose(df.tbtotal, df_expected.tbtotal_igra2_beg2026, atol=0)
 
     def test_pyrtlib_sat_R21SD_ERA5_cloudy(self):
         lonlat = (15.8158, 38.2663)

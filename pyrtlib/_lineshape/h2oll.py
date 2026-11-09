@@ -46,6 +46,7 @@
 # nc.close()
 
 import os
+import numpy as np
 from netCDF4 import Dataset
 
 from pyrtlib.absorption_model import H2OAbsModel
@@ -94,6 +95,13 @@ if H2OAbsModel.model in ['R21SD', 'R22SD', 'R23', 'R23SD', 'R24', 'MWL24']:
 if H2OAbsModel.model == 'R20SD':
     d2air = d.variables['d2air'][:].data.item()
     d2self = d.variables['d2self'][:].data.item()
+    
+if H2OAbsModel.model not in ['R98', 'R03', 'R16', 'R17']:
+    xh = np.where(xh <= 0., x, xh)
+    xhs = np.where(xhs <= 0., xs, xhs)
+if H2OAbsModel.model in ['R21SD', 'R22SD', 'R23SD', 'R24', 'MWL24']:
+    xw2 = np.where(xw2 <= 0., x, xw2)
+    xw2s = np.where(xw2s <= 0., xs, xw2s)
 
 
 reftcon = ctr[0]
