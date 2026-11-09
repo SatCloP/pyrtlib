@@ -13,7 +13,9 @@ from urllib.parse import quote
 import pandas as pd
 from ..apiwebservices.webservices import HTTPEndPoint
 
-warnings.filterwarnings('ignore', 'Pandas doesn\'t allow columns to be created', UserWarning)
+warnings.filterwarnings(
+    "ignore", "Pandas doesn't allow columns to be created", UserWarning
+)
 
 
 class WyomingUpperAir(HTTPEndPoint):
@@ -21,10 +23,12 @@ class WyomingUpperAir(HTTPEndPoint):
 
     def __init__(self) -> None:
         """Set up endpoint."""
-        super().__init__('https://weather.arcc.uwyo.edu/wsgi/sounding')
+        super().__init__("https://weather.arcc.uwyo.edu/wsgi/sounding")
 
     @classmethod
-    def request_data(cls, time: datetime, site_id: Union[str, int], **kwargs) -> pd.DataFrame:
+    def request_data(
+        cls, time: datetime, site_id: Union[str, int], **kwargs
+    ) -> pd.DataFrame:
         """
         Retrieve upper air observations from the Wyoming archive.
 
@@ -63,7 +67,7 @@ class WyomingUpperAir(HTTPEndPoint):
 
         """
         endpoint = cls()
-        src = kwargs.get('src', 'FM35')
+        src = kwargs.get("src", "FM35")
         df = endpoint._get_data(time, site_id, src=src)
         return df
 
@@ -80,35 +84,28 @@ class WyomingUpperAir(HTTPEndPoint):
             pandas.DataFrame: A DataFrame of station IDs and names.
 
         """
-        url = 'https://weather.uwyo.edu/cgi-bin/sounding_json'
+        url = "https://weather.uwyo.edu/cgi-bin/sounding_json"
 
         params = {}
         if time is not None:
-            params['datetime'] = time.strftime('%Y-%m-%d %H:%M:%S')
+            params["datetime"] = time.strftime("%Y-%m-%d %H:%M:%S")
 
         resp = requests.get(url, params=params, timeout=30)
         resp.raise_for_status()
 
         data = resp.json()
-        stations = data['stations']
+        stations = data["stations"]
 
         df = pd.DataFrame(stations)
 
-        df['name'] = df['name'].replace('', 'UNKNOWN').fillna('UNKNOWN')
+        df["name"] = df["name"].replace("", "UNKNOWN").fillna("UNKNOWN")
 
-        df = df.rename(columns={
-            'stationid': 'station_id',
-            'name': 'station_name'
-        })
+        df = df.rename(columns={"stationid": "station_id", "name": "station_name"})
 
         return df
 
     @classmethod
-    def find_station(
-        cls,
-        name: str,
-        time: Optional[datetime] = None
-    ) -> pd.DataFrame:
+    def find_station(cls, name: str, time: Optional[datetime] = None) -> pd.DataFrame:
         """
         Search for stations by name (case-insensitive).
 
@@ -123,13 +120,13 @@ class WyomingUpperAir(HTTPEndPoint):
         """
         df = cls.get_stations(time=time)
 
-        mask = df['station_name'].str.contains(
-            name, case=False, na=False
-        )
+        mask = df["station_name"].str.contains(name, case=False, na=False)
 
         return df[mask].reset_index(drop=True)
 
-    def _get_data(self, time: datetime, site_id: Union[str, int], src: str = 'FM35') -> pd.DataFrame:
+    def _get_data(
+        self, time: datetime, site_id: Union[str, int], src: str = "FM35"
+    ) -> pd.DataFrame:
         r"""Download and parse upper air observations from an online archive.
 
         Parameters
@@ -153,49 +150,56 @@ class WyomingUpperAir(HTTPEndPoint):
         df = pd.read_csv(StringIO(raw))
 
         rename_map = {
-            'pressure_hPa': 'pressure',
-            'geopotential height_m': 'height',
-            'temperature_C': 'temperature',
-            'dew point temperature_C': 'dewpoint',
-            'ice point temperature_C': 'ice_point_temperature',
-            'relative humidity_%': 'rh',
-            'humidity wrt ice_%': 'humidity_wrt_ice',
-            'mixing ratio_g/kg': 'mixr',
-            'wind direction_degree': 'direction',
-            'wind speed_m/s': 'speed',
+            "pressure_hPa": "pressure",
+            "geopotential height_m": "height",
+            "temperature_C": "temperature",
+            "dew point temperature_C": "dewpoint",
+            "ice point temperature_C": "ice_point_temperature",
+            "relative humidity_%": "rh",
+            "humidity wrt ice_%": "humidity_wrt_ice",
+            "mixing ratio_g/kg": "mixr",
+            "wind direction_degree": "direction",
+            "wind speed_m/s": "speed",
         }
         df = df.rename(columns=rename_map)
 
-        if 'pressure' not in df.columns and 'pressure_hPa' in df.columns:
-            df = df.rename(columns={'pressure_hPa': 'pressure'})
+        if "pressure" not in df.columns and "pressure_hPa" in df.columns:
+            df = df.rename(columns={"pressure_hPa": "pressure"})
 
-        missing = [c for c in ('pressure', 'height', 'temperature', 'mixr') if c not in df.columns]
+        missing = [
+            c
+            for c in ("pressure", "height", "temperature", "mixr")
+            if c not in df.columns
+        ]
         if missing:
             raise KeyError(
-                f"Missing columns: {missing}. "
-                f"Available columns: {list(df.columns)}"
+                f"Missing columns: {missing}. " f"Available columns: {list(df.columns)}"
             )
 
-        df['station'] = site_id
-        df['time'] = time
-        df['title'] = f"{site_id} Observations at {time.strftime('%d %b %Y, %HZ')}"
+        df["station"] = site_id
+        df["time"] = time
+        df["title"] = f"{site_id} Observations at {time.strftime('%d %b %Y, %HZ')}"
 
-        df.attrs['units'] = {'pressure': 'hPa',
-                             'height': 'meter',
-                             'temperature': 'degC',
-                             'dewpoint': 'degC',
-                             'rh': '%',
-                             'mixr': 'g/kg',
-                             'direction': 'degrees',
-                             'speed': 'm/s',
-                             'station': None,
-                             'time': None,
-                             'latitude': 'degrees',
-                             'longitude': 'degrees',
-                             'title': None}
+        df.attrs["units"] = {
+            "pressure": "hPa",
+            "height": "meter",
+            "temperature": "degC",
+            "dewpoint": "degC",
+            "rh": "%",
+            "mixr": "g/kg",
+            "direction": "degrees",
+            "speed": "m/s",
+            "station": None,
+            "time": None,
+            "latitude": "degrees",
+            "longitude": "degrees",
+            "title": None,
+        }
         return df
 
-    def _get_data_raw(self, time: datetime, site_id: Union[str, int], src: str = 'FM35') -> str:
+    def _get_data_raw(
+        self, time: datetime, site_id: Union[str, int], src: str = "FM35"
+    ) -> str:
         """Download data from the University of Wyoming's upper air archive.
 
         Parameters
@@ -212,14 +216,19 @@ class WyomingUpperAir(HTTPEndPoint):
         text of the server response
 
         """
-        formatted_time = time.strftime('%Y-%m-%d %H:%M:%S')
-        path = (f'?datetime={quote(formatted_time)}'
-                f'&id={site_id}'
-                f'&type=TEXT:CSV'
-                f'&src={src}')
+        formatted_time = time.strftime("%Y-%m-%d %H:%M:%S")
+        path = (
+            f"?datetime={quote(formatted_time)}"
+            f"&id={site_id}"
+            f"&type=TEXT:CSV"
+            f"&src={src}"
+        )
         resp = self._get_path(path)
-        if '<HTML>' in resp.text[:200] or 'Other data for Station' in resp.text:
+        if "<HTML>" in resp.text[:200] or "Other data for Station" in resp.text:
             raise ValueError(
-                'No data available for {time:%Y-%m-%d %HZ} '
-                'for station {stid} (src={src}).'.format(time=time, stid=site_id, src=src))
+                "No data available for {time:%Y-%m-%d %HZ} "
+                "for station {stid} (src={src}).".format(
+                    time=time, stid=site_id, src=src
+                )
+            )
         return resp.text

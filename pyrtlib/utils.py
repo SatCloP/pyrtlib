@@ -975,7 +975,6 @@ def get_frequencies_sat(instrument: str) -> np.ndarray:
     cf6 = 664.00
     cf118 = 118.7503
     cf165 = 165.5
-    cf53 = 57.290344
     cf57 = 57.290344
 
     instrument = instrument.upper()
