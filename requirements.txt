@@ -5,5 +5,4 @@ scipy
 scikit-learn
 netCDF4
 requests
-bs4
 matplotlib

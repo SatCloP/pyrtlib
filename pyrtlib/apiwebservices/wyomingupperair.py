@@ -11,10 +11,6 @@ import requests
 from urllib.parse import quote
 
 import pandas as pd
-try:
-    from bs4 import BeautifulSoup
-except ModuleNotFoundError as e:
-    warnings.warn("Module BS4 must be installed to download Wyoming RAOB dataset.")
 from ..apiwebservices.webservices import HTTPEndPoint
 
 warnings.filterwarnings('ignore', 'Pandas doesn\'t allow columns to be created', UserWarning)
