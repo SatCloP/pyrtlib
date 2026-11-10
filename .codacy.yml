@@ -1,5 +1,5 @@
 ---
-exclude_paths:
-  - "**"
 include_paths:
   - "pyrtlib/**"
+exclude_paths:
+  - "pyrtlib/tests/**"
