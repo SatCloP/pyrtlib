@@ -290,14 +290,15 @@ class ProfileExtrapolation:
         return self.instance.standard_water_vapour_pressure(h, h_0, rho_0)
 
     def _get_season(self, lat: float, month: int) -> str:
-        """Determine the season based on latitude and month.
+        """
+        Determine the season based on latitude and month.
 
         Args:
             lat (float): Latitude (degree)
             month (int): Month of the year
 
         Returns:
-            str: _description_
+            str: Season ("summer", "winter", or "standard") based on latitude and month.
         """
         if (lat > 20 and month in [6, 7, 8]) or (lat < -20 and month in [1, 2, 12]):
             season = "summer"
@@ -384,8 +385,22 @@ class _ITU835_6:
         )
 
     @staticmethod
-    def standard_temperature(h, T_0=288.15):
-        """ """
+    def standard_temperature(h: np.ndarray, T_0: float = 288.15) -> np.ndarray:
+        """
+        Compute the standard temperature at a given height.
+
+        Parameters:
+        -----------
+        h : np.ndarray
+            Height above sea level (km).
+        T_0 : float, optional
+            Reference temperature at sea level (K). Default is 288.15 K.
+
+        Returns:
+        --------
+        T : np.ndarray
+            Standard temperature at the given height (K).
+        """
         h_p = 6356.766 * h / (6356.766 + h)
         # Warnings because of sqrt are expected
         with np.errstate(invalid="ignore"):
