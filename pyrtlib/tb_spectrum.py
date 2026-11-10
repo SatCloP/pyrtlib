@@ -2,9 +2,9 @@
 Main class to compute Tb.
 """
 
-__author__ = ''
-__date__ = 'March 2021'
-__copyright__ = '(C) 2021, CNR-IMAA'
+__author__ = ""
+__date__ = "March 2021"
+__copyright__ = "(C) 2021, CNR-IMAA"
 
 import warnings
 from typing import Dict, Tuple, Union, Optional
@@ -21,16 +21,23 @@ class TbCloudRTE(object):
     Initialize TbCloudRTE
     """
 
-    def __init__(self, z: np.ndarray, p: np.ndarray, t: np.ndarray, rh: np.ndarray, frq: np.ndarray,
-                 angles: Optional[np.ndarray] = np.array([90.]),
-                 o3n: Optional[np.ndarray] = None,
-                 amu: Optional[Tuple] = None,
-                 absmdl: Optional[str] = '',
-                 ray_tracing: Optional[bool] = False,
-                 from_sat: Optional[bool] = True,
-                 cloudy: Optional[bool] = False):
+    def __init__(
+        self,
+        z: np.ndarray,
+        p: np.ndarray,
+        t: np.ndarray,
+        rh: np.ndarray,
+        frq: np.ndarray,
+        angles: Optional[np.ndarray] = np.array([90.0]),
+        o3n: Optional[np.ndarray] = None,
+        amu: Optional[Tuple] = None,
+        absmdl: Optional[str] = "",
+        ray_tracing: Optional[bool] = False,
+        from_sat: Optional[bool] = True,
+        cloudy: Optional[bool] = False,
+    ):
         """Main class which computes brightness temperatures (Tb), mean
-        radiating temperature (Tmr), and integrated absorption (Tau) for 
+        radiating temperature (Tmr), and integrated absorption (Tau) for
         clear or cloudy conditions. Also returns all integrated quantities
         that the original TBMODEL, Cyber Version, returned.  The input
         profiles are not modified within this subroutine.  It is assumed
@@ -46,12 +53,14 @@ class TbCloudRTE(object):
             frq (np.ndarray): Channel frequencies (GHz).
             angles (Optional[np.ndarray], optional): Elevation anglesX (deg).. Defaults to 90.
             o3n (Optional[np.ndarray], optional): Ozone profile. Defaults to None.
-            amu (Optional[Tuple], optional): Absorption model uncertainties. Defined by :py:func:`~pyrtlib.uncertainty.SpectroscopicParameter`. Defaults to None.
+            amu (Optional[Tuple], optional): Absorption model uncertainties. 
+                                            Defined by :py:func:`~pyrtlib.uncertainty.SpectroscopicParameter`. 
+                                            Defaults to None.
             absmdl (Optional[str], optional): Absorption model. Defaults to ''.
             ray_tracing (Optional[bool], optional): Wether True it computes ray tracing for
                                             distance between layers, otherwise use simple plane
                                             parallel assumption. Defaults to False.
-            from_sat (Optional[bool], optional): Wether True (default) compute upwelling Tb, 
+            from_sat (Optional[bool], optional): Wether True (default) compute upwelling Tb,
                                             otherwise downwelling Tb are computed. Defaults to True.
             cloudy (Optional[bool], optional): Wether True CLW must be passed. Defaults to False.
         """
@@ -75,14 +84,18 @@ class TbCloudRTE(object):
             self.rh = rh[::-1]
             print("Profile flipped up/douwn")
         else:
-            raise SystemExit("ERROR: input profile seems incorrect. "
-                             "It must be monotonically increasing or decreasing")
+            raise SystemExit(
+                "ERROR: input profile seems incorrect. "
+                "It must be monotonically increasing or decreasing"
+            )
 
         if len(self.p) < 25 or min(self.p) >= 10:
-            warnings.warn(f"Number of levels too low ({len(self.p)}) or "
-                          f"minimum pressure value lower than 10 hPa ({min(self.p)}). "
-                          "Please considering profile extrapolation. Levels number must be higher than 25 "
-                          "and pressure value lower than 10 hPa")
+            warnings.warn(
+                f"Number of levels too low ({len(self.p)}) or "
+                f"minimum pressure value lower than 10 hPa ({min(self.p)}). "
+                "Please considering profile extrapolation. Levels number must be higher than 25 "
+                "and pressure value lower than 10 hPa"
+            )
 
         self.ray_tracing = ray_tracing
         self._satellite = from_sat
@@ -99,7 +112,9 @@ class TbCloudRTE(object):
 
         # convert height profile to (km above antenna height)
         self.z0 = self.z[0]
-        self.z = self.z - self.z0  # copy of z is modified to be relative to antenna height
+        self.z = (
+            self.z - self.z0
+        )  # copy of z is modified to be relative to antenna height
 
         # Allocation
         self.sptaudry = np.zeros((self.nf, self.nang))
@@ -129,7 +144,7 @@ class TbCloudRTE(object):
     @property
     def satellite(self) -> bool:
         """If :code:`True` computes an upward-propagating brightness-temperature spectrum
-        otherwise a downward-propagating brightness-temperature 
+        otherwise a downward-propagating brightness-temperature
         spectrum at the bottom of the atmosphere will be performed.
         """
         return self._satellite
@@ -143,8 +158,7 @@ class TbCloudRTE(object):
 
     @property
     def emissivity(self) -> Union[float, np.ndarray]:
-        """Surface emissivity. Default to 1.0
-        """
+        """Surface emissivity. Default to 1.0"""
         return self._es
 
     @emissivity.setter
@@ -162,8 +176,7 @@ class TbCloudRTE(object):
         elif isinstance(emissivity, np.ndarray):
             self._es = emissivity
         else:
-            raise ValueError(
-                "Please enter a valid value or array for emissivity")
+            raise ValueError("Please enter a valid value or array for emissivity")
 
     def set_amu(self, amu: Tuple) -> None:
         """Set absorption model uncertainties
@@ -193,7 +206,9 @@ class TbCloudRTE(object):
         H2OAbsModel.set_ll()
         O2AbsModel.set_ll()
 
-    def init_cloudy(self, cldh: np.ndarray, denice: np.ndarray, denliq: np.ndarray) -> None:
+    def init_cloudy(
+        self, cldh: np.ndarray, denice: np.ndarray, denliq: np.ndarray
+    ) -> None:
         """Initialize cloudy conditions parameters.
 
         Args:
@@ -207,7 +222,7 @@ class TbCloudRTE(object):
         self.cldh = cldh - self.z0
         self.beglev = np.zeros((ncld,))
         self.endlev = np.zeros((ncld,))
-        if getattr(self, 'cloudy'):
+        if getattr(self, "cloudy"):
             for j in range(0, ncld):
                 for i in range(0, self.nl):
                     if self.z[i] == self.cldh[0, j]:
@@ -218,11 +233,15 @@ class TbCloudRTE(object):
             self.denice = denice
             self.denliq = denliq
         else:
-            warnings.warn("It seems that TbCloudRTE.cloudy attribute is not set to True. "
-                          "Sets it to True for running model in cloudy condition.")
+            warnings.warn(
+                "It seems that TbCloudRTE.cloudy attribute is not set to True. "
+                "Sets it to True for running model in cloudy condition."
+            )
             # raise AttributeError("Set cloudy to True before running init_cloudy()")
 
-    def execute(self, only_bt: bool = True) -> Union[pd.DataFrame, Tuple[pd.DataFrame, Dict[str, np.ndarray]]]:
+    def execute(
+        self, only_bt: bool = True
+    ) -> Union[pd.DataFrame, Tuple[pd.DataFrame, Dict[str, np.ndarray]]]:
         """This function computes Brightness Temperature and other radiometric parameters.
 
         Args:
@@ -231,11 +250,11 @@ class TbCloudRTE(object):
         Returns a pandas dataframe containing:
 
             tbtotal:
-                brightness temperature (K) includes cosmic background; 
+                brightness temperature (K) includes cosmic background;
                 indexed by frequency and elevation angle
 
             tbatm:
-                atmospheric brightness temperature (K), no cosmic; 
+                atmospheric brightness temperature (K), no cosmic;
                 background;indexed by frequency and elevation angle
 
             tmr:
@@ -307,10 +326,14 @@ class TbCloudRTE(object):
 
         self._init_linelist()
 
-        if self.cloudy and LiqAbsModel.model in ['R98', 'R03']:
+        if self.cloudy and LiqAbsModel.model in ["R98", "R03"]:
             warnings.warn(
                 "Model {} for liquid cloud absorption is outdated. "
-                "Use the more recent model by Rosenkranz, 2015, from R16 model onwards".format(LiqAbsModel.model), stacklevel=2)
+                "Use the more recent model by Rosenkranz, 2015, from R16 model onwards".format(
+                    LiqAbsModel.model
+                ),
+                stacklevel=2,
+            )
 
         # Set RTE
         RTEquation._from_sat = self._satellite
@@ -322,8 +345,7 @@ class TbCloudRTE(object):
         for k in range(0, self.nang):
             # Compute distance between each level (ds)
             if self.ray_tracing:
-                ds = RTEquation.ray_tracing(
-                    self.z, refindx, self.angles[k], self.z0)
+                ds = RTEquation.ray_tracing(self.z, refindx, self.angles[k], self.z0)
             else:
                 amass = 1 / np.sin(self.angles[k] * np.pi / 180)
                 ds = np.append([0], np.diff(self.z) * amass)
@@ -331,51 +353,74 @@ class TbCloudRTE(object):
 
             # Integrate over path (ds)
             self.srho[:, k], _ = RTEquation.exponential_integration(
-                True, rho, ds, 0, self.nl, 0.1)
+                True, rho, ds, 0, self.nl, 0.1
+            )
             self.swet[:, k], _ = RTEquation.exponential_integration(
-                True, wetn, ds, 0, self.nl, 0.1)
+                True, wetn, ds, 0, self.nl, 0.1
+            )
             self.sdry[:, k], _ = RTEquation.exponential_integration(
-                True, dryn, ds, 0, self.nl, 0.1)
+                True, dryn, ds, 0, self.nl, 0.1
+            )
             if self.cloudy:
                 self.sliq[:, k] = RTEquation.cloud_integrated_density(
-                    self.denliq, ds, self.beglev, self.endlev)
+                    self.denliq, ds, self.beglev, self.endlev
+                )
                 self.sice[:, k] = RTEquation.cloud_integrated_density(
-                    self.denice, ds, self.beglev, self.endlev)
+                    self.denice, ds, self.beglev, self.endlev
+                )
 
             # handle each frequency
             # this are based on NOAA RTE fortran routines
             for j in range(0, self.nf):
                 RTEquation._emissivity = self._es[j]
                 # Rosenkranz, personal communication, 2019/02/12 (email)
-                self.awet[j, k, :], self.adry[j, k, :] = RTEquation.clearsky_absorption(self.p, self.tk, e, self.frq[j],
-                                                            self.o3n, self.amu if self._uncertainty else None)
-                self.sptauwet[j, k], \
-                    self.ptauwet[j, k, :] = RTEquation.exponential_integration(
-                        True, self.awet[j, k, :], ds, 1, self.nl, 1)
-                self.sptaudry[j, k], \
-                    self.ptaudry[j, k, :] = RTEquation.exponential_integration(
-                        True, self.adry[j, k, :], ds, 1, self.nl, 1)
+                self.awet[j, k, :], self.adry[j, k, :] = RTEquation.clearsky_absorption(
+                    self.p,
+                    self.tk,
+                    e,
+                    self.frq[j],
+                    self.o3n,
+                    self.amu if self._uncertainty else None,
+                )
+                self.sptauwet[j, k], self.ptauwet[j, k, :] = (
+                    RTEquation.exponential_integration(
+                        True, self.awet[j, k, :], ds, 1, self.nl, 1
+                    )
+                )
+                self.sptaudry[j, k], self.ptaudry[j, k, :] = (
+                    RTEquation.exponential_integration(
+                        True, self.adry[j, k, :], ds, 1, self.nl, 1
+                    )
+                )
                 if self.cloudy:
                     aliq, aice = RTEquation.cloudy_absorption(
-                        self.tk, self.denliq, self.denice, self.frq[j])
-                    self.sptauliq[j, k], \
-                        self.ptauliq[j, k, :] = RTEquation.exponential_integration(
-                            False, aliq, ds, 1, self.nl, 1)
-                    self.sptauice[j, k], \
-                        self.ptauice[j, k, :] = RTEquation.exponential_integration(
-                            False, aice, ds, 1, self.nl, 1)
+                        self.tk, self.denliq, self.denice, self.frq[j]
+                    )
+                    self.sptauliq[j, k], self.ptauliq[j, k, :] = (
+                        RTEquation.exponential_integration(
+                            False, aliq, ds, 1, self.nl, 1
+                        )
+                    )
+                    self.sptauice[j, k], self.ptauice[j, k, :] = (
+                        RTEquation.exponential_integration(
+                            False, aice, ds, 1, self.nl, 1
+                        )
+                    )
 
-                self.ptaulay[j, k, :] = self.ptauwet[j, k, :] + \
-                    self.ptaudry[j, k, :] + \
-                    self.ptauice[j, k, :] + \
-                    self.ptauliq[j, k, :]
+                self.ptaulay[j, k, :] = (
+                    self.ptauwet[j, k, :]
+                    + self.ptaudry[j, k, :]
+                    + self.ptauice[j, k, :]
+                    + self.ptauliq[j, k, :]
+                )
                 # [boftotl,boftatm,boftmr,PSPtauprof,hvk] = Planck_xxx(frq(j),tk,Ptaulay(j,k,:));
-                boftotl, boftatm, boftmr, psp_tauprof, hvk, _, _ = RTEquation.planck(self.frq[j], self.tk,
-                                                                                     self.ptaulay[j, k, :])
+                boftotl, boftatm, boftmr, psp_tauprof, hvk, _, _ = RTEquation.planck(
+                    self.frq[j], self.tk, self.ptaulay[j, k, :]
+                )
                 if self.cloudy:
-                    self.tmrcld[j, k] = RTEquation.cloud_radiating_temperature(self.beglev[0], self.endlev[0], hvk,
-                                                                               psp_tauprof,
-                                                                               boftatm)
+                    self.tmrcld[j, k] = RTEquation.cloud_radiating_temperature(
+                        self.beglev[0], self.endlev[0], hvk, psp_tauprof, boftatm
+                    )
                 # assign output values
                 self.tbtotal[j, k] = RTEquation.bright(hvk, boftotl)
                 self.tbatm[j, k] = RTEquation.bright(hvk, boftatm[self.nl - 1])
@@ -383,23 +428,34 @@ class TbCloudRTE(object):
 
         df = pd.DataFrame()
         for i, a in enumerate(self.angles):
-            df_i = pd.DataFrame({'tbtotal': self.tbtotal.T[i],
-                                 'tbatm': self.tbatm.T[i],
-                                 'tmr': self.tmr.T[i],
-                                 'tmrcld': self.tmrcld.T[i],
-                                 'tauwet': self.sptauwet.T[i],
-                                 'taudry': self.sptaudry.T[i],
-                                 'tauliq': self.sptauliq.T[i],
-                                 'tauice': self.sptauice.T[i],
-                                 'angle': np.full((len(self.frq),), a)
-                                 })
+            df_i = pd.DataFrame(
+                {
+                    "tbtotal": self.tbtotal.T[i],
+                    "tbatm": self.tbatm.T[i],
+                    "tmr": self.tmr.T[i],
+                    "tmrcld": self.tmrcld.T[i],
+                    "tauwet": self.sptauwet.T[i],
+                    "taudry": self.sptaudry.T[i],
+                    "tauliq": self.sptauliq.T[i],
+                    "tauice": self.sptauice.T[i],
+                    "angle": np.full((len(self.frq),), a),
+                }
+            )
             df = pd.concat([df, df_i])
 
         if only_bt:
             return df
         else:
-            return df, {'taulaywet': self.ptauwet, 'taulaydry': self.ptaudry,
-                        'taulayliq': self.ptauliq, 'taulayice': self.ptauice,
-                        'awet': self.awet, 'adry': self.adry,
-                        'srho': self.srho, 'swet': self.swet, 'sdry': self.sdry,
-                        'sliq': self.sliq, 'sice': self.sice}
+            return df, {
+                "taulaywet": self.ptauwet,
+                "taulaydry": self.ptaudry,
+                "taulayliq": self.ptauliq,
+                "taulayice": self.ptauice,
+                "awet": self.awet,
+                "adry": self.adry,
+                "srho": self.srho,
+                "swet": self.swet,
+                "sdry": self.sdry,
+                "sliq": self.sliq,
+                "sice": self.sice,
+            }

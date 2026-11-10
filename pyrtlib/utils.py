@@ -2,9 +2,9 @@
 This module contains the utils functions.
 """
 
-__author__ = ''
-__date__ = 'March 2021'
-__copyright__ = '(C) 2021, CNR-IMAA'
+__author__ = ""
+__date__ = "March 2021"
+__copyright__ = "(C) 2021, CNR-IMAA"
 
 import types
 from typing import Tuple, Optional, Union, List
@@ -38,10 +38,11 @@ def import_lineshape(name: str) -> types.ModuleType:
         0.,  0.,  0.,  0.,  0.])
     """
     try:
-        module = __import__('pyrtlib._lineshape', globals(),
-                            locals(), [name.lower()])
+        module = __import__("pyrtlib._lineshape", globals(), locals(), [name.lower()])
     except ImportError as e:
-        print("Error: {0} ImportError occurred while trying to import {1}".format(e, name))
+        print(
+            "Error: {0} ImportError occurred while trying to import {1}".format(e, name)
+        )
         return None
     if vars(module)[name.lower()] in sys.modules.values():
         reload(vars(module)[name.lower()])
@@ -99,17 +100,17 @@ def constants(name: Optional[str] = None) -> Union[Tuple[float, str], List]:
         Tcosmicbkg = 2.736;
     """
     constants_dict = {
-        'avogadro': [6.022140857e+23, '[mol-1]'],
-        'boltzmann': [1.3806579999999998e-23, '[J K-1]'],
-        'EarthRadius': [6370.949, '[km]'],
-        'gravity': [9.80665, '[m s-2]'],
-        'light': [299792458.0, '[m s-1]'],
-        'Np2dB': [4.342944819032518, '[dB/Np]'],
-        'planck': [6.626075499999999e-34, '[J Hz-1]'],
-        'Rdry': [287.04, '[J kg-1 K-1]'],
-        'Rwatvap': [461.52, '[J kg-1 K-1]'],
-        'Tcosmicbkg': [2.728, '[K]'],
-        'R': [8.31446261815324, '[J mol-1 K-1]']
+        "avogadro": [6.022140857e23, "[mol-1]"],
+        "boltzmann": [1.3806579999999998e-23, "[J K-1]"],
+        "EarthRadius": [6370.949, "[km]"],
+        "gravity": [9.80665, "[m s-2]"],
+        "light": [299792458.0, "[m s-1]"],
+        "Np2dB": [4.342944819032518, "[dB/Np]"],
+        "planck": [6.626075499999999e-34, "[J Hz-1]"],
+        "Rdry": [287.04, "[J kg-1 K-1]"],
+        "Rwatvap": [461.52, "[J kg-1 K-1]"],
+        "Tcosmicbkg": [2.728, "[K]"],
+        "R": [8.31446261815324, "[J mol-1 K-1]"],
     }
 
     if not name:
@@ -119,8 +120,11 @@ def constants(name: Optional[str] = None) -> Union[Tuple[float, str], List]:
             cs = constants_dict[name]
         except KeyError as e:
             raise ValueError(
-                'Error:  {0} No constant avalaible with this name: {1} . Type constants() without argument to get the list of constants'.format(
-                    e, name))
+                "Error:  {0} No constant avalaible with this name: {1} . " \
+                "Type constants() without argument to get the list of constants".format(
+                    e, name
+                )
+            )
 
     return cs
 
@@ -207,10 +211,9 @@ def ppmv2gkg(ppmv: np.ndarray, gasid: int) -> np.ndarray:
     return gkg
 
 
-def mr2rh(p: np.ndarray,
-          t: np.ndarray,
-          w: np.ndarray,
-          Tconvert: np.ndarray = None) -> Tuple[np.ndarray, np.ndarray]:
+def mr2rh(
+    p: np.ndarray, t: np.ndarray, w: np.ndarray, Tconvert: np.ndarray = None
+) -> Tuple[np.ndarray, np.ndarray]:
     """Determine relative humidity (rh) given reference pressure (mbar), temperature (K), and
     water vapor mass mixing ratio (g/kg)
 
@@ -225,7 +228,7 @@ def mr2rh(p: np.ndarray,
         p (numpy.ndarray): Pressure profile (mb).
         t (numpy.ndarray): Temperature profile (K).
         w (numpy.ndarray): Water Vapor Mixing ratio (g/kg).
-        Tconvert (numpy.ndarray, optional): Threshold temperature below which saturation 
+        Tconvert (numpy.ndarray, optional): Threshold temperature below which saturation
             water pressure is calculated over ice instead of liquid water. Defaults to None.
 
     Returns:
@@ -269,11 +272,14 @@ def mr2rho(mr: np.ndarray, t: np.ndarray, p: np.ndarray) -> np.ndarray:
     # I think the above is an approximation valid within ~1#.
     # To be consistent with Vapor_xxx.m and mr2rh.m (see
     # Compute_Transmittances_for_RTTOV_dsb.m), it should be:
-    rvap = np.dot(constants('Rwatvap')[0], 1e-05)
+    rvap = np.dot(constants("Rwatvap")[0], 1e-05)
 
     eps = 0.621970585
-    rho = np.multiply(np.multiply(mr, p), 1.0) / (np.dot(
-        (np.dot(1000.0, eps) + mr), rvap)) / t
+    rho = (
+        np.multiply(np.multiply(mr, p), 1.0)
+        / (np.dot((np.dot(1000.0, eps) + mr), rvap))
+        / t
+    )
 
     return rho
 
@@ -299,7 +305,9 @@ def mr2e(p: np.ndarray, mr: np.ndarray) -> np.ndarray:
     return e
 
 
-def rho2rh(rho: np.ndarray, t: np.ndarray, p: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
+def rho2rh(
+    rho: np.ndarray, t: np.ndarray, p: np.ndarray
+) -> Tuple[np.ndarray, np.ndarray]:
     """Convert water vapor density to relative humidity.
 
     Args:
@@ -311,7 +319,7 @@ def rho2rh(rho: np.ndarray, t: np.ndarray, p: np.ndarray) -> Tuple[np.ndarray, n
         numpy.ndarray: Relative humidity using ratios of gas pressures (%)
         numpy.ndarray: Relative humidity using WMO definition (%)
     """
-    e = (rho * t)/216.7
+    e = (rho * t) / 216.7
     mr = e2mr(p, e)
 
     rh1, rh2 = mr2rh(p, t, mr)
@@ -320,7 +328,7 @@ def rho2rh(rho: np.ndarray, t: np.ndarray, p: np.ndarray) -> Tuple[np.ndarray, n
 
 
 def rho2mr(rho: np.ndarray, t: np.ndarray, p: np.ndarray) -> np.ndarray:
-    """Determine water vapor mass mixing ratio (g/kg) given reference pressure (mbar), 
+    """Determine water vapor mass mixing ratio (g/kg) given reference pressure (mbar),
     temperature (t,K), and water vapor density (:math:`g/m^3`).
 
     Args:
@@ -334,9 +342,9 @@ def rho2mr(rho: np.ndarray, t: np.ndarray, p: np.ndarray) -> np.ndarray:
 
     mr = rho * t / (p * 0.3477)
 
-    rvap = constants('Rwatvap')[0] * 1e-5  # [J kg-1 K-1] -> [hPa * m2 g-1 K-1]
+    rvap = constants("Rwatvap")[0] * 1e-5  # [J kg-1 K-1] -> [hPa * m2 g-1 K-1]
     eps = 0.621970585  # Rdry/Rvap
-    mr = rho * (1e3*eps*rvap) / (p/t - rvap * rho)
+    mr = rho * (1e3 * eps * rvap) / (p / t - rvap * rho)
 
     return mr
 
@@ -360,9 +368,9 @@ def e2mr(p: np.ndarray, e: np.ndarray) -> np.ndarray:
     return mr
 
 
-def satmix(p: np.ndarray,
-           t: np.ndarray,
-           Tconvert: Optional[np.ndarray] = None) -> np.ndarray:
+def satmix(
+    p: np.ndarray, t: np.ndarray, Tconvert: Optional[np.ndarray] = None
+) -> np.ndarray:
     """Compute saturation mixing ratio (g/kg) given reference pressure,
     p (mbar]) and temperature, T (K).  If Tconvert input, the calculation uses
     the saturation vapor pressure over ice (opposed to over water)
@@ -373,7 +381,7 @@ def satmix(p: np.ndarray,
     Args:
         p (numpy.ndarray): Pressure profile (mb).
         t (numpy.ndarray): Temperature profile (K).
-        Tconvert (Optional[numpy.ndarray], optional): Threshold temperature below which saturation 
+        Tconvert (Optional[numpy.ndarray], optional): Threshold temperature below which saturation
             water pressure is calculated over ice instead of liquid water. Defaults to None.
 
     Returns:
@@ -400,7 +408,7 @@ def satvap(t: np.ndarray, Tconvert: Optional[np.ndarray] = None) -> np.ndarray:
 
     Args:
         t (numpy.ndarray): Temperature profile (K).
-        Tconvert (Optional[numpy.ndarray], optional): Threshold temperature below which saturation 
+        Tconvert (Optional[numpy.ndarray], optional): Threshold temperature below which saturation
             water pressure is calculated over ice instead of liquid water. Defaults to None.
 
     Returns:
@@ -448,13 +456,15 @@ def eswat_goffgratch(t: np.ndarray) -> np.ndarray:
     c5 = 0.0081328
     c6 = 3.49149
 
-    tmp = (-1.0 * c1 * (t_ratio - 1.0)) + \
-          (c2 * np.log10(t_ratio)) - \
-          (c3 * (10.0 ** (c4 * (1.0 - rt_ratio)) - 1.0)) + \
-          (c5 * (10.0 ** (-1.0 * c6 * (t_ratio - 1.0)) - 1.0)) + \
-        np.log10(sl_pressure)
+    tmp = (
+        (-1.0 * c1 * (t_ratio - 1.0))
+        + (c2 * np.log10(t_ratio))
+        - (c3 * (10.0 ** (c4 * (1.0 - rt_ratio)) - 1.0))
+        + (c5 * (10.0 ** (-1.0 * c6 * (t_ratio - 1.0)) - 1.0))
+        + np.log10(sl_pressure)
+    )
 
-    svp = 10.0 ** tmp
+    svp = 10.0**tmp
 
     return svp
 
@@ -481,11 +491,14 @@ def esice_goffgratch(t: np.ndarray) -> np.ndarray:
     c2 = 3.56654
     c3 = 0.876793
     ratio = 273.15 / t
-    tmp = (np.dot(-c1,
-                  (ratio - 1.0))) - (np.dot(c2, np.log10(ratio))) + (np.dot(
-                      c3, (1.0 - (1.0 / ratio)))) + np.log10(ewi)
+    tmp = (
+        (np.dot(-c1, (ratio - 1.0)))
+        - (np.dot(c2, np.log10(ratio)))
+        + (np.dot(c3, (1.0 - (1.0 / ratio))))
+        + np.log10(ewi)
+    )
 
-    svp = 10.0 ** tmp
+    svp = 10.0**tmp
 
     return svp
 
@@ -537,8 +550,12 @@ def dilec12(f: np.ndarray, t: np.ndarray) -> np.ndarray:
     theta = 300.0 / t
     # static dielectric constant model from
     # Patek et al. (J.Phys.Chem.Ref.Data. v.38(1), 21 (2009).
-    kappa = -43.7527 * theta ** 0.05 + 299.504 * theta ** 1.47 - \
-        399.364 * theta ** 2.11 + 221.327 * theta ** 2.31
+    kappa = (
+        -43.7527 * theta**0.05
+        + 299.504 * theta**1.47
+        - 399.364 * theta**2.11
+        + 221.327 * theta**2.31
+    )
     # Debye term from
     # W. Ellison, J. Phys. Chem. Ref. Data, 36, 1-18 (2007).
     delta = 80.69715 * np.exp(-tc / 226.45)
@@ -548,16 +565,14 @@ def dilec12(f: np.ndarray, t: np.ndarray) -> np.ndarray:
     # P.W. Rosenkranz, IEEE Trans. Geosci. & Remote Sens. v.53(3) pp.1387-93 (2015).
     delta = 4.008724 * np.exp(-tc / 103.05)
     hdelta = delta / 2.0
-    f1 = 10.46012 + (0.1454962 * tc) + (0.063267156 * tc ** 2) + (0.00093786645 *
-                                                                  tc ** 3)
+    f1 = 10.46012 + (0.1454962 * tc) + (0.063267156 * tc**2) + (0.00093786645 * tc**3)
     # z1 = (-.75,1.) * f1;
     # z2 = (-4500.,2000.)
     z1 = complex(-0.75, 1.0) * f1
     z2 = complex(-4500.0, 2000.0)
     cnorm = np.log(z2 / z1)
     chip = (hdelta * np.log((z - z2) / (z - z1))) / cnorm
-    chij = (hdelta * np.log(
-        (z - np.conj(z2)) / (z - np.conj(z1)))) / np.conj(cnorm)
+    chij = (hdelta * np.log((z - np.conj(z2)) / (z - np.conj(z1)))) / np.conj(cnorm)
     dchi = chip + chij - delta
     kappa = kappa + dchi
 
@@ -588,27 +603,40 @@ def _dcerror(x: np.ndarray, y: np.ndarray) -> np.ndarray:
     # DOUBLE PRECISION X,Y,a(0:6),b(0:6)
     # DOUBLE COMPLEX ASUM,BSUM,ZH,w
 
-    a = np.asarray([
-        122.607931777104326, 214.382388694706425, 181.928533092181549,
-        93.155580458138441, 30.180142196210589, 5.912626209773153,
-        0.564189583562615
-    ])
+    a = np.asarray(
+        [
+            122.607931777104326,
+            214.382388694706425,
+            181.928533092181549,
+            93.155580458138441,
+            30.180142196210589,
+            5.912626209773153,
+            0.564189583562615,
+        ]
+    )
 
-    b = np.asarray([
-        122.607931773875350, 352.730625110963558, 457.334478783897737,
-        348.703917719495792, 170.354001821091472, 53.992906912940207,
-        10.479857114260399
-    ])
+    b = np.asarray(
+        [
+            122.607931773875350,
+            352.730625110963558,
+            457.334478783897737,
+            348.703917719495792,
+            170.354001821091472,
+            53.992906912940207,
+            10.479857114260399,
+        ]
+    )
 
     # compute w in quadrants 1 or 2
     # from eqs.(13), w(z) = [w(-z*)]*
     # expansion in terms of ZH results in conjugation of w when X changes sign.
     zh = complex(np.abs(y), -x)
-    asum = (((((a[6] * zh + a[5]) * zh + a[4]) * zh + a[3]) * zh + a[2]) * zh +
-            a[1]) * zh + a[0]
-    bsum = (((((
-        (zh + b[6]) * zh + b[5]) * zh + b[4]) * zh + b[3]) * zh + b[2]) * zh +
-        b[1]) * zh + b[0]
+    asum = (
+        ((((a[6] * zh + a[5]) * zh + a[4]) * zh + a[3]) * zh + a[2]) * zh + a[1]
+    ) * zh + a[0]
+    bsum = (
+        (((((zh + b[6]) * zh + b[5]) * zh + b[4]) * zh + b[3]) * zh + b[2]) * zh + b[1]
+    ) * zh + b[0]
     w = asum / bsum
     if y >= 0:
         dcerror = w
@@ -662,8 +690,7 @@ def height_to_pressure(height: float) -> float:
     Md = 28.96546e-3
     Rd = R / Md
 
-    return p0 * np.exp(
-        (g / (Rd * gamma)) * np.log(1 - ((height * gamma) / t0)))
+    return p0 * np.exp((g / (Rd * gamma)) * np.log(1 - ((height * gamma) / t0)))
 
 
 def virtual_temperature(t: np.ndarray, mr: np.ndarray) -> np.ndarray:
@@ -691,11 +718,12 @@ def virtual_temperature(t: np.ndarray, mr: np.ndarray) -> np.ndarray:
 
     molecular_weight_ratio = constants("Rdry")[0] / constants("Rwatvap")[0]
 
-    return t * ((mr + molecular_weight_ratio)
-                / (molecular_weight_ratio * (1 + mr)))
+    return t * ((mr + molecular_weight_ratio) / (molecular_weight_ratio * (1 + mr)))
 
 
-def _thickness_hydrostatic(p: np.ndarray, t: np.ndarray, mr: Optional[np.ndarray] = None) -> np.float32:
+def _thickness_hydrostatic(
+    p: np.ndarray, t: np.ndarray, mr: Optional[np.ndarray] = None
+) -> np.float32:
     """
     :meta private:
     """
@@ -712,12 +740,12 @@ def _thickness_hydrostatic(p: np.ndarray, t: np.ndarray, mr: Optional[np.ndarray
 
     trapz = getattr(np, "trapezoid", getattr(np, "trapz", None))
 
-    return (
-        -Rd / g * trapz(layer_virttemp, np.log(layer_p))
-    )
+    return -Rd / g * trapz(layer_virttemp, np.log(layer_p))
 
 
-def atmospheric_tickness(p: np.ndarray, t: np.ndarray, mr: Optional[np.ndarray] = None) -> np.ndarray:
+def atmospheric_tickness(
+    p: np.ndarray, t: np.ndarray, mr: Optional[np.ndarray] = None
+) -> np.ndarray:
     r"""Calculate the thickness of a layer via the hypsometric equation.
     This thickness calculation uses the pressure and temperature profiles (and optionally
     mixing ratio) via the hypsometric equation with virtual temperature adjustment.
@@ -747,16 +775,16 @@ def atmospheric_tickness(p: np.ndarray, t: np.ndarray, mr: Optional[np.ndarray] 
         if i == 0:
             continue
         hi = _thickness_hydrostatic(
-            p[0:i+1], t[0:i+1], mr[0:i+1] if mr is not None else None)
-        h[i] = hi/1e3
+            p[0 : i + 1], t[0 : i + 1], mr[0 : i + 1] if mr is not None else None
+        )
+        h[i] = hi / 1e3
 
     return h
 
 
-def dewpoint2rh(td: float,
-                t: float,
-                ice: Optional[bool] = False,
-                method: Optional[str] = 'arm') -> float:
+def dewpoint2rh(
+    td: float, t: float, ice: Optional[bool] = False, method: Optional[str] = "arm"
+) -> float:
     r"""Calculate relative humidity from temperature and dewpoint.
     Value is calculated using the August-Roche-Magnus approximation. [August-1828]_ [Magnus-1844]_.
 
@@ -779,10 +807,10 @@ def dewpoint2rh(td: float,
     ----------
     .. [1] [Alduchov-1996]_
     """
-    if method == 'arm':
+    if method == "arm":
         a = 17.625
         b = 243.04
-        rh = (np.exp((a * td) / (b + td)) / np.exp((a * t) / (b + t)))
+        rh = np.exp((a * td) / (b + td)) / np.exp((a * t) / (b + t))
     else:
         a = 7.5
         b = 237.3
@@ -836,14 +864,13 @@ def kgkg_to_kgm3(q: np.ndarray, p: np.ndarray, t: np.ndarray) -> np.ndarray:
     """
 
     eps = 0.621970585
-    rmoist = (constants('Rdry')[0]) * (1 + ((1 - eps) / eps) * q)
+    rmoist = (constants("Rdry")[0]) * (1 + ((1 - eps) / eps) * q)
     kgm3 = (1e2 * p) / (rmoist * t)
 
     return kgm3
 
 
-def ppmv_to_moleculesm3(mr: np.ndarray, p: np.ndarray,
-                        t: np.ndarray) -> np.ndarray:
+def ppmv_to_moleculesm3(mr: np.ndarray, p: np.ndarray, t: np.ndarray) -> np.ndarray:
     """For any gas, this function converts mixing ratio  (in ppmv) to number density (:math:`molecules/m^3`).
 
     Args:
@@ -854,15 +881,15 @@ def ppmv_to_moleculesm3(mr: np.ndarray, p: np.ndarray,
     Returns:
         numpy.ndarray: [description]
     """
-    av = constants('avogadro')[0]
-    rg = constants('R')[0]
+    av = constants("avogadro")[0]
+    rg = constants("R")[0]
     n_air = (av * p) / (rg * t)  # (molecules/m3)
     nr_molm3 = n_air * mr * 1e-6
 
     return nr_molm3
 
 
-def get_frequencies(instrument: Optional[str] = 'hat') -> List:
+def get_frequencies(instrument: Optional[str] = "hat") -> List:
     """Get frequencies list from main ground instrument.
 
     Args:
@@ -872,29 +899,83 @@ def get_frequencies(instrument: Optional[str] = 'hat') -> List:
         List: Frequencies list (GHz) of the radiometer chosen.
     """
     frequencies = {
-        'hat': [
-            22.2400, 23.0400, 23.8400, 25.4400, 26.2400, 27.8400, 31.4000,
-            51.2600, 52.2800, 53.8600, 54.9400, 56.6600, 57.3000, 58.0000
+        "hat": [
+            22.2400,
+            23.0400,
+            23.8400,
+            25.4400,
+            26.2400,
+            27.8400,
+            31.4000,
+            51.2600,
+            52.2800,
+            53.8600,
+            54.9400,
+            56.6600,
+            57.3000,
+            58.0000,
         ],
-        'mp3': [
-            22.234, 22.500, 23.034, 23.834, 25.000, 26.234, 28.000, 30.000,
-            51.248, 51.760, 52.280, 52.804, 53.336, 53.848, 54.400, 54.940,
-            55.500, 56.020, 56.660, 57.288, 57.964, 58.800
+        "mp3": [
+            22.234,
+            22.500,
+            23.034,
+            23.834,
+            25.000,
+            26.234,
+            28.000,
+            30.000,
+            51.248,
+            51.760,
+            52.280,
+            52.804,
+            53.336,
+            53.848,
+            54.400,
+            54.940,
+            55.500,
+            56.020,
+            56.660,
+            57.288,
+            57.964,
+            58.800,
         ],
-        'arm': [22.235, 23.035, 23.835, 26.235, 30.000, 51.250, 52.280, 53.850, 54.940,
-                56.660, 57.290, 58.800],
-        'tem': [
-            51.25, 51.75, 52.25, 52.85, 53.35, 53.85, 54.40, 54.90, 55.40,
-            56.00, 56.50, 57.00
+        "arm": [
+            22.235,
+            23.035,
+            23.835,
+            26.235,
+            30.000,
+            51.250,
+            52.280,
+            53.850,
+            54.940,
+            56.660,
+            57.290,
+            58.800,
         ],
-        'k2w': [23.8400, 31.4000, 72.5000, 82.5000, 90.0000, 150.000]
+        "tem": [
+            51.25,
+            51.75,
+            52.25,
+            52.85,
+            53.35,
+            53.85,
+            54.40,
+            54.90,
+            55.40,
+            56.00,
+            56.50,
+            57.00,
+        ],
+        "k2w": [23.8400, 31.4000, 72.5000, 82.5000, 90.0000, 150.000],
     }
 
     try:
         return np.array(frequencies[instrument.lower()])
     except KeyError:
         raise ValueError(
-            f"Invalid instrument name. Available instruments are: {list(frequencies.keys())}")
+            f"Invalid instrument name. Available instruments are: {list(frequencies.keys())}"
+        )
 
 
 def to_kelvin(t: np.ndarray) -> np.ndarray:
@@ -954,41 +1035,158 @@ def get_frequencies_sat(instrument: str) -> np.ndarray:
 
     instrument = instrument.upper()
 
-    if instrument == 'SAPHIR':
-        freq = np.array([cf-11, cf-6.8, cf-4.2, cf-2.8, cf-1.1, cf-0.2,
-                        cf+0.2, cf+1.1, cf+2.8, cf+4.2, cf+6.8, cf+11])
+    if instrument == "SAPHIR":
+        freq = np.array(
+            [
+                cf - 11,
+                cf - 6.8,
+                cf - 4.2,
+                cf - 2.8,
+                cf - 1.1,
+                cf - 0.2,
+                cf + 0.2,
+                cf + 1.1,
+                cf + 2.8,
+                cf + 4.2,
+                cf + 6.8,
+                cf + 11,
+            ]
+        )
 
-    elif instrument == 'AMSU':
-        freq = np.array([89.0, 150.0, cf-7.0, cf-3.0, cf-1.0,
-                        cf+1.0, cf+3.0, cf+7.0])  # AMSU-B
-    elif instrument == 'ATMS':
-        freq = np.array([88.2, 165.5, cf-7.0, cf-4.5, cf-3.0, cf -
-                        1.8, cf-1.0, cf+1.0, cf+1.80, cf+3.0, cf+4.5, cf+7.0])
-    elif instrument == 'MWI':
-        freq = np.array([18.7, 23.8, 31.4, 50.3, 52.61, 53.24, 53.75, 89,
-                        cf118-3.2, cf118-2.1, cf118-1.4, cf118 -
-                         1.2, cf118+1.2, cf118+1.4, cf118+2.1, cf118+3.2,
-                        cf165-0.725, cf165+0.725,
-                        cf-8.4, cf-6.1, cf-4.9, cf-3.4, cf-2.0, cf+2.0, cf+3.4, cf+4.9, cf+6.1, cf+8.4])
-    elif instrument == 'MWS':
-        freq = np.array([23.8, 31.4, 50.3, 52.8,
-                        53.246-0.08, 53.246+0.08, 53.596-0.115, 53.596+0.115, 53.948-0.081, 53.948+0.081,
-                        54.4, 54.94, 55.5, cf57,
-                        cf57-0.217, cf57-0.217,
-                        cf57-0.3222-0.048, cf57-0.3222+0.048, cf57+0.3222-0.048, cf57+0.3222+0.048,
-                        cf57-0.3222-0.022, cf57-0.3222+0.022, cf57+0.3222-0.022, cf57+0.3222+0.022,
-                        cf57-0.3222-0.010, cf57-0.3222+0.010, cf57+0.3222-0.010, cf57+0.3222+0.010,
-                        cf57-0.3222-0.045, cf57-0.3222+0.045, cf57+0.3222-0.045, cf57+0.3222+0.045,
-                        89,
-                        cf165-0.725, cf165+0.725,
-                        cf-7.0, cf-4.5, cf-3.0, cf-1.8, cf-1.0, cf+1.0, cf+1.8, cf+3.0, cf+4.5, cf+7.0,
-                        229])
-    elif instrument == 'ICI':
-        freq = np.array([cf-7.0, cf-3.4, cf-2.0, cf-0.2, cf+0.2, cf+2.0, cf+3.4, cf+7.0,
-                        cf2-2.5, cf2+2.5,
-                        cf3-9.5, cf3-3.5, cf3-1.5, cf3+1.5, cf3+3.5, cf3+9.5,
-                        cf4-7.2, cf4-3.0, cf4-1.4, cf4+1.4, cf4+3.0, cf4+7.2,
-                        cf6-4.2, cf6+4.2])
+    elif instrument == "AMSU":
+        freq = np.array(
+            [89.0, 150.0, cf - 7.0, cf - 3.0, cf - 1.0, cf + 1.0, cf + 3.0, cf + 7.0]
+        )  # AMSU-B
+    elif instrument == "ATMS":
+        freq = np.array(
+            [
+                88.2,
+                165.5,
+                cf - 7.0,
+                cf - 4.5,
+                cf - 3.0,
+                cf - 1.8,
+                cf - 1.0,
+                cf + 1.0,
+                cf + 1.80,
+                cf + 3.0,
+                cf + 4.5,
+                cf + 7.0,
+            ]
+        )
+    elif instrument == "MWI":
+        freq = np.array(
+            [
+                18.7,
+                23.8,
+                31.4,
+                50.3,
+                52.61,
+                53.24,
+                53.75,
+                89,
+                cf118 - 3.2,
+                cf118 - 2.1,
+                cf118 - 1.4,
+                cf118 - 1.2,
+                cf118 + 1.2,
+                cf118 + 1.4,
+                cf118 + 2.1,
+                cf118 + 3.2,
+                cf165 - 0.725,
+                cf165 + 0.725,
+                cf - 8.4,
+                cf - 6.1,
+                cf - 4.9,
+                cf - 3.4,
+                cf - 2.0,
+                cf + 2.0,
+                cf + 3.4,
+                cf + 4.9,
+                cf + 6.1,
+                cf + 8.4,
+            ]
+        )
+    elif instrument == "MWS":
+        freq = np.array(
+            [
+                23.8,
+                31.4,
+                50.3,
+                52.8,
+                53.246 - 0.08,
+                53.246 + 0.08,
+                53.596 - 0.115,
+                53.596 + 0.115,
+                53.948 - 0.081,
+                53.948 + 0.081,
+                54.4,
+                54.94,
+                55.5,
+                cf57,
+                cf57 - 0.217,
+                cf57 - 0.217,
+                cf57 - 0.3222 - 0.048,
+                cf57 - 0.3222 + 0.048,
+                cf57 + 0.3222 - 0.048,
+                cf57 + 0.3222 + 0.048,
+                cf57 - 0.3222 - 0.022,
+                cf57 - 0.3222 + 0.022,
+                cf57 + 0.3222 - 0.022,
+                cf57 + 0.3222 + 0.022,
+                cf57 - 0.3222 - 0.010,
+                cf57 - 0.3222 + 0.010,
+                cf57 + 0.3222 - 0.010,
+                cf57 + 0.3222 + 0.010,
+                cf57 - 0.3222 - 0.045,
+                cf57 - 0.3222 + 0.045,
+                cf57 + 0.3222 - 0.045,
+                cf57 + 0.3222 + 0.045,
+                89,
+                cf165 - 0.725,
+                cf165 + 0.725,
+                cf - 7.0,
+                cf - 4.5,
+                cf - 3.0,
+                cf - 1.8,
+                cf - 1.0,
+                cf + 1.0,
+                cf + 1.8,
+                cf + 3.0,
+                cf + 4.5,
+                cf + 7.0,
+                229,
+            ]
+        )
+    elif instrument == "ICI":
+        freq = np.array(
+            [
+                cf - 7.0,
+                cf - 3.4,
+                cf - 2.0,
+                cf - 0.2,
+                cf + 0.2,
+                cf + 2.0,
+                cf + 3.4,
+                cf + 7.0,
+                cf2 - 2.5,
+                cf2 + 2.5,
+                cf3 - 9.5,
+                cf3 - 3.5,
+                cf3 - 1.5,
+                cf3 + 1.5,
+                cf3 + 3.5,
+                cf3 + 9.5,
+                cf4 - 7.2,
+                cf4 - 3.0,
+                cf4 - 1.4,
+                cf4 + 1.4,
+                cf4 + 3.0,
+                cf4 + 7.2,
+                cf6 - 4.2,
+                cf6 + 4.2,
+            ]
+        )
     else:
         raise ValueError("Instrument not found")
 
