@@ -1,15 +1,26 @@
 """
-.. note:: *Phil* The parameters that contribute most uncertainty are related to pressure-broadening: widths, mixing, & their T dependence. The intensities and their temperature dependence are obtained (at least in my model) from HITRAN2012. B2=(Ef+Ei)/2kTo,
-    where Ef, Ei=upper and lower energy levels of the line; k=Boltzmann const; To=296K. Although HITRAN has uncertainties for six parameters, the energy level is not among them.
+.. note:: *Phil* The parameters that contribute most uncertainty are related 
+    to pressure-broadening: widths, mixing, & their T dependence. The intensities 
+    and their temperature dependence are obtained (at least in my model) 
+    from HITRAN2012. B2=(Ef+Ei)/2kTo, where Ef, Ei=upper and lower energy levels 
+    of the line; k=Boltzmann const; To=296K. Although HITRAN has uncertainties 
+    for six parameters, the energy level is not among them.
     I expect that it does not contribute significant uncertainty to the model.
 
-.. note:: *From Verdes et al 2005* For the pressure shifts, an estimated uncertainty for all lines belonging
-    to the same molecular species is assumed. This is a poor approximation as it is well known that the pressure shift is usually very different (with
-    possible change of sign) from one given transition to the next. Thus, the investigated pressure shift uncertainties were 300 kHz/Torr for
-    H2O and 50 kHz/Torr for O2 lines
+.. note:: *From Verdes et al 2005* For the pressure shifts, an estimated 
+    uncertainty for all lines belonging to the same molecular species is assumed. 
+    This is a poor approximation as it is well known that the pressure shift 
+    is usually very different (with possible change of sign) from one given 
+    transition to the next. Thus, the investigated pressure shift uncertainties 
+    were 300 kHz/Torr for H2O and 50 kHz/Torr for O2 lines
 
-.. note:: *From Makarov et al., 2011* "The fidelity of the new model to the spectrometer data is generally better than 2% between 54 and 65 GHz."
-    "It is therefore important to distinguish between the uncertainty of the calculated absorption, and uncertainties in the values of the model?s coefficients. The coefficients are adjusted to fit measurements, and underestimation of some coefficients can be counterbalanced by excess values in other coefficients when absorption is calculated."
+.. note:: *From Makarov et al., 2011* "The fidelity of the new model to the 
+    spectrometer data is generally better than 2% between 54 and 65 GHz."
+    "It is therefore important to distinguish between the uncertainty of 
+    the calculated absorption, and uncertainties in the values of the model?s 
+    coefficients. The coefficients are adjusted to fit measurements, and 
+    underestimation of some coefficients can be counterbalanced by excess 
+    values in other coefficients when absorption is calculated."
 
 """
 
