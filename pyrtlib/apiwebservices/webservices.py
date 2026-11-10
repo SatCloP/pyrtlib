@@ -1,4 +1,5 @@
 """Utility code to support making requests using HTTP.
+
 The orignal code of this class can be found in https://github.com/Unidata/siphon
 Terms and conditions are as for siphon library license (https://github.com/Unidata/siphon/blob/master/LICENSE)
 """

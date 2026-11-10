@@ -1,4 +1,5 @@
 def __getattr__(name):
+    """Pyrtlib package initialization file."""
     if name == "__version__":
         from .version import __version__
         return __version__
