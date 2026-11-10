@@ -17,7 +17,7 @@ try:
     import cdsapi
 except ModuleNotFoundError as e:
     warnings.warn(
-        "Module CDSAPI must be installed to download ERA5 Reanalysis dataset.")
+        "Error {0} Module CDSAPI must be installed to download ERA5 Reanalysis dataset.".format(e))
 import numpy as np
 # from scipy.spatial import cKDTree
 from sklearn.neighbors import BallTree

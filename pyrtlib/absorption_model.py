@@ -532,14 +532,15 @@ class H2OAbsModel(AbsModel):
             summ = 0.0
             if H2OAbsModel.model in ['R23SD', 'R24']:
                 if self.h2oll.cs > 0:
-
                     # npp_cs = np.zeros(1)
                     con = self.h2oll.cs * ti * self.h2oll.xcs
                     # for i in len(frq):
                     npp_cs = con
                 else:
-
                     npp_cs = self.h2o_continuum(frq, vx, 1)[0]
+
+                conf = self.h2oll.cf * ti**self.h2oll.xcf
+                con = (conf * pda + npp_cs * pvap) * pvap * f**2
             for i in range(0, nlines):
                 width0 = self.h2oll.w0[i] * pda * ti ** self.h2oll.x[i] + \
                     self.h2oll.w0s[i] * pvap * ti ** self.h2oll.xs[i]
@@ -665,11 +666,7 @@ class H2OAbsModel(AbsModel):
                 summ += s * res * (f / self.h2oll.fl[i]) ** 2
         # separate the following original equ. into line and continuum
         # terms, and change the units from np/km to ppm
-        # abh2o = .3183e-4*den*sum + con
-
-        if H2OAbsModel.model in ['R23SD', 'R24']:
-            conf = self.h2oll.cf * ti**self.h2oll.xcf
-            con = (conf * pda + npp_cs * pvap) * pvap * f**2
+        # abh2o = .3183e-4*den*sum + con            
 
         h20m = 2.9915075E-23  # mass of water molecule (g)
         if H2OAbsModel.model in ['R22SD', 'R23SD']:

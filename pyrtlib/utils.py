@@ -41,6 +41,7 @@ def import_lineshape(name: str) -> types.ModuleType:
         module = __import__('pyrtlib._lineshape', globals(),
                             locals(), [name.lower()])
     except ImportError as e:
+        print("Error: {0} ImportError occurred while trying to import {1}".format(e, name))
         return None
     if vars(module)[name.lower()] in sys.modules.values():
         reload(vars(module)[name.lower()])
@@ -118,8 +119,8 @@ def constants(name: Optional[str] = None) -> Union[Tuple[float, str], List]:
             cs = constants_dict[name]
         except KeyError as e:
             raise ValueError(
-                'No constant avalaible with this name: {} . Type constants() without argument to get the list of constants'.format(
-                    name))
+                'Error:  {0} No constant avalaible with this name: {1} . Type constants() without argument to get the list of constants'.format(
+                    e, name))
 
     return cs
 
@@ -135,72 +136,46 @@ def gas_mass(gasid: int) -> float:
         float: The mass of the HITRAN gas ID.
     """
 
-    if gasid == 0:
-        amus = np.dot(2, 1) + 16
-    if gasid == 1:
-        amus = 12 + np.dot(2, 16)
-    if gasid == 2:
-        amus = np.dot(3, 16)
-    if gasid == 3:
-        amus = np.dot(2, 14) + 16
-    if gasid == 4:
-        amus = 12 + 16
-    if gasid == 5:
-        amus = 12 + np.dot(4, 1)
-    if gasid == 6:
-        amus = np.dot(2, 16)
-    if gasid == 7:
-        amus = 14 + 16
-    if gasid == 8:
-        amus = 32 + np.dot(2, 16)
-    if gasid == 9:
-        amus = 14 + np.dot(2, 16)
-    if gasid == 10:
-        amus = 14 + np.dot(3, 1)
-    if gasid == 11:
-        amus = 1 + 14 + np.dot(3, 16)
-    if gasid == 12:
-        amus = 16 + 1
-    if gasid == 13:
-        amus = 1 + 19
-    if gasid == 14:
-        amus = 1 + 35
-    if gasid == 15:
-        amus = 1 + 80
-    if gasid == 16:
-        amus = 1 + 127
-    if gasid == 17:
-        amus = 35 + 16
-    if gasid == 18:
-        amus = 16 + 12 + 32
-    if gasid == 19:
-        amus = np.dot(2, 1) + 12 + 16
-    if gasid == 20:
-        amus = 1 + 16 + 35
-    if gasid == 21:
-        amus = np.dot(2, 14)
-    if gasid == 22:
-        amus = 1 + 12 + 14
-    if gasid == 23:
-        amus = 12 + np.dot(3, 1) + 35
-    if gasid == 24:
-        amus = np.dot(2, 1) + np.dot(2, 16)
-    if gasid == 25:
-        amus = np.dot(2, 12) + np.dot(2, 1)
-    if gasid == 26:
-        amus = np.dot(2, 12) + np.dot(6, 1)
-    if gasid == 27:
-        amus = 31 + np.dot(3, 1)
-    if gasid == 28:
-        amus = 12 + 16 + np.dot(2, 19)
-    if gasid == 29:
-        amus = 32 + np.dot(6, 19)
-    if gasid == 30:
-        amus = np.dot(2, 1) + 32
-    if gasid == 31:
-        amus = 1 + 12 + np.dot(2, 16) + 1
-    if gasid == 99:
-        amus = 28.9402753669
+    amus_map = {
+        0: 2 * 1 + 16,
+        1: 12 + 2 * 16,
+        2: 3 * 16,
+        3: 2 * 14 + 16,
+        4: 12 + 16,
+        5: 12 + 4 * 1,
+        6: 2 * 16,
+        7: 14 + 16,
+        8: 32 + 2 * 16,
+        9: 14 + 2 * 16,
+        10: 14 + 3 * 1,
+        11: 1 + 14 + 3 * 16,
+        12: 16 + 1,
+        13: 1 + 19,
+        14: 1 + 35,
+        15: 1 + 80,
+        16: 1 + 127,
+        17: 35 + 16,
+        18: 16 + 12 + 32,
+        19: 2 * 1 + 12 + 16,
+        20: 1 + 16 + 35,
+        21: 2 * 14,
+        22: 1 + 12 + 14,
+        23: 12 + 3 * 1 + 35,
+        24: 2 * 1 + 2 * 16,
+        25: 2 * 12 + 2 * 1,
+        26: 2 * 12 + 6 * 1,
+        27: 31 + 3 * 1,
+        28: 12 + 16 + 2 * 19,
+        29: 32 + 6 * 19,
+        30: 2 * 1 + 32,
+        31: 1 + 12 + 2 * 16 + 1,
+        99: 28.9402753669,
+    }
+
+    try:
+        amus = amus_map[gasid]
+    except KeyError:
+        raise ValueError(f"Unknown HITRAN gas ID: {gasid}")
 
     mass_proton = 1.6726485e-27
     mass_molecule = np.dot(mass_proton, amus)

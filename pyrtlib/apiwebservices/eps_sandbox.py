@@ -18,7 +18,7 @@ from typing import Optional, Tuple, Any
 try:
     import eumdac
 except ModuleNotFoundError as e:
-    warnings.warn("Module EUMDAC must be installed to download EPS dataset.")
+    warnings.warn("Error {0} Module EUMDAC must be installed to download EPS dataset.".format(e))
 import numpy as np
 # from scipy.spatial import cKDTree
 from sklearn.neighbors import BallTree

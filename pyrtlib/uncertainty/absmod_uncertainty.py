@@ -335,7 +335,7 @@ class AbsModUncertainty:
         try:
             amu_copy = deepcopy(SpectroscopicParameter.SP)
         except AttributeError as e:
-            print('Spectroscopic parameters are not defined')
+            print('Error {0} Spectroscopic parameters are not defined'.format(e))
             raise e
         if what == []:
             param = list(amu_copy.keys())
