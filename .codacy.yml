@@ -13,4 +13,5 @@ exclude_paths:
   - "Dockerfile"
   - "codecov.yml"
   - "README.md"
+  - "pyrtlib/apiwebservices/eps_sandbox.py"
 
