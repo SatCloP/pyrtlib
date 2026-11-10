@@ -1,5 +1,16 @@
 ---
-include_paths:
-  - "pyrtlib/**"
 exclude_paths:
+  - "requirements*.txt"
+  - ".github/**"
+  - "docs/**"
+  - "*.py"
+  - "setup.py"
   - "pyrtlib/tests/**"
+  - "**/__pycache__/**"
+  - ".codacy.yml"
+  - "*.yml"
+  - "CITATION.cff"
+  - "Dockerfile"
+  - "codecov.yml"
+  - "README.md"
+
