@@ -6,12 +6,51 @@ from pyrtlib.absorption_model import H2OAbsModel
 from pyrtlib.climatology import AtmosphericProfiles as atmp
 from pyrtlib.utils import (ppmv2gkg, mr2rh, gas_mass, height_to_pressure, pressure_to_height, constants,
                            to_kelvin, to_celsius, get_frequencies_sat, get_frequencies, eswat_goffgratch, satvap, satmix,
-                           import_lineshape, atmospheric_tickness, mr2rho, mr2e, esice_goffgratch, rho2mr)
+                           import_lineshape, atmospheric_tickness, mr2rho, mr2e, esice_goffgratch, rho2mr, dewpoint2rh)
 
 z, p, d, t, md = atmp.gl_atm(atmp.TROPICAL)
 
 
 class Test(TestCase):
+    def test_dewpoint2rh_arm_method(self):
+        """Test the default 'arm' method (August-Roche-Magnus)."""
+        td = 10.0
+        t = 20.0
+        rh = dewpoint2rh(td, t, method='arm')
+
+        a, b = 17.625, 243.04
+        expected = np.exp((a * td) / (b + td)) / np.exp((a * t) / (b + t))
+        assert_allclose(rh, expected)
+
+    def test_dewpoint2rh_non_arm_method_liquid(self):
+        """Test non-'arm' method with ice=False (liquid water)."""
+        td = 10.0
+        t = 20.0
+        rh = dewpoint2rh(td, t, ice=False, method='other')
+
+        a, b = 7.5, 237.3
+        ed = 6.1078 * 10 ** ((td * a) / (td + b))
+        es = 6.1078 * 10 ** ((t * a) / (t + b))
+        assert_allclose(rh, ed / es)
+
+    def test_dewpoint2rh_non_arm_method_ice(self):
+        """Test non-'arm' method with ice=True."""
+        td = -10.0
+        t = -5.0
+        rh = dewpoint2rh(td, t, ice=True, method='other')
+
+        a, b = 9.5, 265.5
+        ed = 6.1078 * 10 ** ((td * a) / (td + b))
+        es = 6.1078 * 10 ** ((t * a) / (t + b))
+        assert_allclose(rh, ed / es)
+
+    def test_dewpoint2rh_saturation(self):
+        """When td == t, RH should be 1 (100%) for all methods."""
+        t = 15.0
+        assert_allclose(dewpoint2rh(t, t, method='arm'), 1.0)
+        assert_allclose(dewpoint2rh(t, t, ice=False, method='other'), 1.0)
+        assert_allclose(dewpoint2rh(t, t, ice=True, method='other'), 1.0)
+
     def test_gas_mass(self):
         # H2O
         mass_proton = 1.6726485e-27
@@ -245,6 +284,11 @@ class Test(TestCase):
                       'R']
         assert_equal(cs_list, cs_list_ex)
 
+    def test_constants_unknown_name_raises_value_error(self):
+        with pytest.raises(ValueError) as excinfo:
+            constants(name='UNKNOWN')
+        assert 'No constant avalaible with this name' in str(excinfo.value)
+
     def test_import_linelist(self):
         H2OAbsModel.model = 'R21SD'
         h2oll = import_lineshape('h2oll')
@@ -254,6 +298,11 @@ class Test(TestCase):
         H2OAbsModel.model = 'R21SD'
         H2OAbsModel.set_ll()
         assert_almost_equal(H2OAbsModel.h2oll.aself, aself, decimal=5)
+
+    def test_gasmass_unknown_name_raises_value_error(self):
+            with pytest.raises(ValueError) as excinfo:
+                gas_mass(gasid=100)
+            assert 'Unknown HITRAN gas ID: 100' in str(excinfo.value)
 
     def test_atmospheric_tickness(self):
         z = atmospheric_tickness(np.array([1000, 500]), np.array([280, 244]))
