@@ -666,7 +666,7 @@ class H2OAbsModel(AbsModel):
                 summ += s * res * (f / self.h2oll.fl[i]) ** 2
         # separate the following original equ. into line and continuum
         # terms, and change the units from np/km to ppm
-        # abh2o = .3183e-4*den*sum + con            
+        # abh2o = .3183e-4*den*sum + con     
 
         h20m = 2.9915075E-23  # mass of water molecule (g)
         if H2OAbsModel.model in ['R22SD', 'R23SD']:
