@@ -65,4 +65,3 @@ class Test(TestCase):
         
         cs = H2OAbsModel().h2o_continuum_mwl24(22, 1.09)
         assert_allclose(cs, np.array([4.370745e-05]))
-

@@ -318,7 +318,7 @@ class AbsModUncertainty:
         return F, sF
 
     @staticmethod
-    def parameters_perturbation(what: Optional[list] = [], mode: Optional[str] = 'non', index: Optional[int] = None) -> Dict:
+    def parameters_perturbation(what: Optional[list] = None, mode: Optional[str] = 'non', index: Optional[int] = None) -> Dict:
         """This functoin execute the perturbatoin of the spectroscopic parameters provided.
 
         Args:
@@ -337,7 +337,7 @@ class AbsModUncertainty:
         except AttributeError as e:
             print('Error {0} Spectroscopic parameters are not defined'.format(e))
             raise e
-        if what == []:
+        if what is None:
             param = list(amu_copy.keys())
         else:
             param = what
