@@ -211,7 +211,8 @@ class N2AbsModel(AbsModel):
 
     @staticmethod
     def n2_absorption_mwl24(t: np.ndarray, p: np.ndarray, f: np.ndarray) -> np.ndarray:
-        """Calculation of the collision-induced absorption by N2-N2 molecular pairs 
+        """
+        Calculation of the collision-induced absorption by N2-N2 molecular pairs 
         Based on the Classic Trajectory Calcs by Vigasin/Chistikov/Finenko
 
         Args
@@ -268,7 +269,8 @@ class N2AbsModel(AbsModel):
 
     @staticmethod
     def n2_absorption(t: np.ndarray, p: np.ndarray, f: np.ndarray) -> np.ndarray:
-        """Collision-Induced Power Absorption Coefficient (Neper/km) in air with modification
+        """
+        Collision-Induced Power Absorption Coefficient (Neper/km) in air with modification
         of 1.34 to account for O2-O2 and O2-N2 collisions, as calculated by [Boissoles-2003]_.
 
         Args
@@ -862,7 +864,8 @@ class O2AbsModel(AbsModel):
         frq: float,
         amu: Optional[dict] = None,
     ) -> Tuple[np.ndarray, np.ndarray]:
-        """Returns power absorption coefficient due to oxygen in air in nepers/km.
+        """
+        Returns power absorption coefficient due to oxygen in air in nepers/km.
 
         History:
 

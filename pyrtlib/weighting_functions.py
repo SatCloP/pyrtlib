@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
-"""
-This module is  used to define the weighting functions
-"""
+"""This module is  used to define the weighting functions"""
 
 __author__ = ""
 __date__ = "May 2024"
@@ -19,8 +17,7 @@ from .absorption_model import O2AbsModel
 
 
 class WeightingFunctions(object):
-    """
-    This class is used to compute the weighting functions
+    """This class is used to compute the weighting functions
 
     .. note::
         The weighting functions are computed always using last absorption model available.
@@ -34,20 +31,22 @@ class WeightingFunctions(object):
         rh: np.ndarray,
         value_prof_interpolation: Optional[float] = 1,
     ) -> None:
-        """
-        Constructor for the WeightingFunctions class.
+        """Constructor for the WeightingFunctions class.
 
-        Args:
+        Args
+        ----
             z (np.ndarray): Height profile.
             p (np.ndarray): Pressure profile.
             t (np.ndarray): Temperature profile.
             rh (np.ndarray): Relative humidity profile.
             value_prof_interpolation (Optional[float], optional): The value for the interpolation of the profiles. Defaults to 1.
 
-        Raises:
+        Raises
+        ------
             ValueError: If the input values are not valid arrays.
 
-        Returns:
+        Returns
+        -------
             None
 
         .. note::
@@ -57,8 +56,8 @@ class WeightingFunctions(object):
                 - t: K
                 - rh: fraction
                 - value_prof_interpolation: km
-        """
 
+        """
         self.zinterp = np.arange(
             0, np.max(z) + value_prof_interpolation, value_prof_interpolation
         )
@@ -76,7 +75,8 @@ class WeightingFunctions(object):
 
     @property
     def satellite(self) -> bool:
-        """If :code:`True` computes an upward-propagating brightness-temperature spectrum
+        """
+        If :code:`True` computes an upward-propagating brightness-temperature spectrum
         otherwise a downward-propagating brightness-temperature
         spectrum at the bottom of the atmosphere will be performed.
         """
@@ -84,17 +84,19 @@ class WeightingFunctions(object):
 
     @satellite.setter
     def satellite(self, sat: bool) -> None:
-        """
-        Sets the satellite flag.
+        """Sets the satellite flag.
 
-        Parameters:
-        - sat (bool): A boolean value indicating whether the satellite flag should be set to True or False.
+        Parameters
+        ----------
+            - sat (bool): A boolean value indicating whether the satellite flag should be set to True or False.
 
-        Raises:
-        - ValueError: If the input value for `sat` is not a boolean.
+        Raises
+        ------
+        ValueError: If the input value for `sat` is not a boolean.
 
-        Returns:
-        - None
+        Returns
+        -------
+        None
         """
         if isinstance(sat, bool):
             self._satellite = sat
@@ -115,15 +117,17 @@ class WeightingFunctions(object):
         """
         Set the frequencies for the weighting function.
 
-        Parameters:
-        - frequencies: np.ndarray
-            The frequencies to be set.
+        Parameters
+        ----------
+            frequencies: np.ndarray The frequencies to be set.
 
-        Raises:
-        - ValueError: If the input is not a valid array for frequencies.
+        Raises
+        ------
+            ValueError: If the input is not a valid array for frequencies.
 
-        Returns:
-        - None
+        Returns
+        -------
+            None
         """
         if isinstance(frequencies, np.ndarray):
             self._frequencies = frequencies
@@ -154,15 +158,17 @@ class WeightingFunctions(object):
         return other
 
     def _mean_channel(self, a: np.ndarray, bandpass: np.ndarray) -> np.ndarray:
-        """
-        Compute the mean of the input array based on bandpass.
+        """Compute the mean of the input array based on bandpass.
 
-        Args:
+        Args
+        ----
             a (np.ndarray): The input array.
             bandpass (np.ndarray): The bandpass array.
 
-        Returns:
+        Returns
+        -------
             np.ndarray: The mean of the input array based on bandpass.
+
         """
 
         channel_mean = np.zeros((len(bandpass), a.shape[1]))
@@ -182,7 +188,8 @@ class WeightingFunctions(object):
         This method calculates the weighting function based on the provided data.
         It performs calculations and returns the resulting weighting function.
 
-        Returns:
+        Returns
+        -------
             np.ndarray: The calculated weighting function.
 
         """
@@ -227,10 +234,10 @@ class WeightingFunctions(object):
         normalized: Optional[bool] = False,
         **kwargs,
     ) -> None:
-        """
-        Plot the weighting functions
+        """Plot the weighting functions
 
-        Args:
+        Args
+        ----
             wgt (ndarray): The weighting functions to be plotted.
             title (Optional[str], optional): The title of the plot. Defaults to ''.
             ylim (Optional[Tuple[int, int]], optional): The y-axis limits of the plot. Defaults to None.
@@ -331,10 +338,10 @@ class WeightingFunctions(object):
         grouped_labels: List[str] = None,
         **kwargs,
     ) -> None:
-        """
-        Plot the weighting functions
+        """Plot the weighting functions
 
-        Args:
+        Args
+        ----
             wgt (ndarray): The weighting functions to be plotted.
             title (Optional[str], optional): The title of the plot. Defaults to ''.
             ylim (Optional[Tuple[int, int]], optional): The y-axis limits of the plot. Defaults to None.
@@ -343,8 +350,10 @@ class WeightingFunctions(object):
             dpi (Optional[int], optional): The dpi of the plot. Defaults to 150.
             **kwargs: Additional keyword arguments (figsize, dpi)
 
-        Raises:
+        Raises
+        ------
             ValueError: If the plot is not available for the current satellite mode.
+
         """
         if not self.satellite:
             raise ValueError("This plot is only available for satellite mode")
