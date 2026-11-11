@@ -72,10 +72,12 @@ class AbsModel:
     def implemented_models() -> Dict[str, List[str]]:
         """Return all the implemented absorption models.
 
-        Returns:
+        Returns
+        -------
             List[str]: The list the implemented absorption models
 
-        Example:
+        Example
+        -------
             .. code-block:: python
 
                 >>> from pyrtlib.absorption_model import AbsModel
@@ -102,6 +104,7 @@ class AbsModel:
                     'R21SD',
                     'R22SD'],
                     'Ozone': ['R18', 'R22']}
+
         """
         oxygen_netcdf = Dataset(
             os.path.join(PATH, "_lineshape", "o2_lineshape.nc"), mode="r"
@@ -131,12 +134,14 @@ class LiqAbsModel(AbsModel):
     ) -> np.ndarray:
         """Computes absorption in Nepers/km by suspended liquid water droplets.
 
-        Args:
+        Args
+        ----
             water (numpy.ndarray): Liquid water content (:math:`g/m^3`) - (mass of liquid water per volume of dry air).
             freq (numpy.ndarray): Frequency (GHz) - (valid from 0 to 1000 GHz).
             temp (numpy.ndarray): Temperature (K).
 
-        Returns:
+        Returns
+        -------
             np.ndarray: Liquid water particels absorption (Np/km)
 
         References
@@ -152,6 +157,7 @@ class LiqAbsModel(AbsModel):
             * PWR 08/03/92 Original Version
             * PWR 12/14/98 Temp dependence of eps2 eliminated to agree with MPM93
             * PWR 06/05/15 Using dilec12 for complex dielectric constant
+
         """
         if water <= 0:
             abliq = 0
@@ -206,20 +212,25 @@ class N2AbsModel(AbsModel):
         Calculation of the collision-induced absorption by N2-N2 molecular pairs
         Based on the Classic Trajectory Calcs by Vigasin/Chistikov/Finenko
 
-        Args:
+        Args
+        ----
             f (np.ndarray): frequency (Ghz)
             p (np.ndarray): dry air pressure (mbar) (recalculations to Torr are used inside)
             t (np.ndarray): air temperature (K)
 
-        Returns:
+        Returns
+        -------
             np.ndarray: N2-N2 absorption coefficient in 1/cm
 
-        Note:
+        Note
+        ----
             Convert to Np/km by multiplying by 1.E5.
             Convert to dry air absorption by multiplying by 0.84 (see [Meshkov-DeLucia-2007]_)
 
-        References:
+        References
+        ----------
             .. [1] [Serov-2024]_
+
         """
         t0 = 300.0
         ti = t0 / t
@@ -255,18 +266,22 @@ class N2AbsModel(AbsModel):
 
     @staticmethod
     def n2_absorption(t: np.ndarray, p: np.ndarray, f: np.ndarray) -> np.ndarray:
-        """Collision-Induced Power Absorption Coefficient (Neper/km) in air
-        with modification of 1.34 to account for O2-O2 and O2-N2 collisions, as calculated by [Boissoles-2003]_.
+        """
+        Collision-Induced Power Absorption Coefficient (Neper/km) in air with modification
+        of 1.34 to account for O2-O2 and O2-N2 collisions, as calculated by [Boissoles-2003]_.
 
-        Args:
+        Args
+        ----
             t (numpy.ndarray): Temperature (K).
             p (numpy.ndarray): Dry air pressure (mb).
             f (numpy.ndarray): Frequency (GHz) - (valid 0-2000 GHz).
 
-        Raises:
+        Raises
+        ------
             ValueError: Raises to error whether inputn model is unorrect or not available
 
-        Returns:
+        Returns
+        -------
             np.ndarray: Nitrogen continum absorption terms in Np/km
 
         References
@@ -274,6 +289,7 @@ class N2AbsModel(AbsModel):
         .. [1] See eq. 2.6 in [Mätzler-Rosenkranz-2006]_.
         .. [2] [Borysow-Frommhold-1986]_.
         .. [3] [Boissoles-2003]_.
+
         """
 
         th = 300.0 / t
@@ -398,14 +414,17 @@ class H2OAbsModel(AbsModel):
         H2O self-continuum absorption normalized to the squared water vapor pressure (1/cm)/mbar**2
         Based on the known measurements meta-analysis and theoretical calculations
 
-        Args:
+        Args
+        ----
             frq (np.ndarray): Frequency (GHz)
             vx (np.ndarray): Theta (adim) - (normalised temperature 300/t(K))
 
-        Returns:
+        Returns
+        -------
             np.ndarray: self-continuum term ((1/cm)/mbar**2), multiply by pvap**2 * 1.E5 to get Np/km
 
-        Reference:
+        References
+        ----------
             .. [1] [Tretyakov-2025]_.
             .. [2] [Odintsova-2022]_.
             .. [3] [Galanina-2022]_.
@@ -482,13 +501,15 @@ class H2OAbsModel(AbsModel):
     ) -> Union[Tuple[np.ndarray, np.ndarray], None]:
         """Compute absorption coefficients in atmosphere due to water vapor for all models.
 
-        Args:
+        Args
+        ----
             pdrykpa (numpy.ndarray): Dry air pressure (kPa).
             vx (numpy.ndarray): Theta (adim) - (normalised temperature 300/t(K)).
             ekpa (numpy.ndarray): Water vapor partial pressure (kPa).
             frq (numpy.ndarray): Frequency (GHz) - (valid 0-1000 GHz).
 
-        Returns:
+        Returns
+        -------
             Union[ Tuple[numpy.ndarray, numpy.ndarray], None]: WV line and continuum absorption terms (ppm)
 
         References
@@ -841,7 +862,8 @@ class O2AbsModel(AbsModel):
         frq: float,
         amu: Optional[dict] = None,
     ) -> Tuple[np.ndarray, np.ndarray]:
-        """Returns power absorption coefficient due to oxygen in air in nepers/km.
+        """
+        Returns power absorption coefficient due to oxygen in air in nepers/km.
 
         History:
 
@@ -858,14 +880,16 @@ class O2AbsModel(AbsModel):
         * 9/29/18  pwr - 2nd-order line mixing
         * 8/20/19  pwr - adjust intensities according to Koshelev meas.
 
-        Args:
+        Args
+        ----
             pdrykpa (numpy.ndarray): Dry air pressure (kPa).
             vx (numpy.ndarray): Theta (adim) - (normalised temperature 300/t(K)).
             ekpa (numpy.ndarray): Water vapor partial pressure (kPa).
             frq (numpy.ndarray): Frequency (GHz) - (valid 0-1000 GHz).
 
-        Returns:
-            [numpy.ndarray]: Oxigen line and continuum absorption terms (ppm)
+        Returns
+        -------
+            Tuple[numpy.ndarray, numpy.ndarray]: Oxigen line and continuum absorption terms (ppm)
 
         References
         ----------
@@ -892,6 +916,7 @@ class O2AbsModel(AbsModel):
             Mixing coeff. from Makarov's 2018 revision.
          2. The same temperature dependence (X) is used for submillimeter
             line widths as in the 60 GHz band: (1/T)**X (Koshelev et al 2016).
+
         """
 
         if amu:
@@ -1197,17 +1222,21 @@ class O3AbsModel(AbsModel):
         o3n: np.ndarray,
         amu: Optional[dict] = None,
     ) -> np.ndarray:
-        """This function computes power absorption coeff (Np/km) in the atmosphere
+        """
+        This function computes power absorption coeff (Np/km) in the atmosphere
         due to selcted lines of ozone (:math:`O_3`).
 
-        Args:
+        Args
+        ----
             t (np.ndarray): Temperature (K)
             p (np.ndarray): Total pressure (mb)
             f (np.ndarray): Frequency (GHz)
             o3n (np.ndarray): Ozone number density (molecules/m^3)
 
-        Returns:
+        Returns
+        -------
             np.ndarray: Ozone power absorption coeff. (Np/km)
+
         """
 
         if amu:
