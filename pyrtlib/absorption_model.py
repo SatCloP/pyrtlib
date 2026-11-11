@@ -345,16 +345,21 @@ class H2OAbsModel(AbsModel):
         H2OAbsModel.h2oll = import_lineshape("h2oll")
 
     def h2o_continuum(self, frq: np.ndarray, vx: np.ndarray, nfreq: int) -> np.ndarray:
-        """Compute the self-continuum absorption of water vapor.
+        """
+        Compute the self-continuum absorption of water vapor.
+
         Fit a curve to mtckd 4.1 self-continuum adapted from mt_ckd_h2o_module.f90 (March 20, 2023)
 
-        Args:
+        Args
+        ----
             frq (np.ndarray): Frequency (GHz)
             vx (np.ndarray): Theta (adim) - (normalised temperature 300/t(K))
             nfreq (int): Number of frequencies
 
-        Returns:
+        Returns
+        -------
             np.ndarray: self-continuum term ((1/cm)/mbar**2)
+
         """
         nf = 6
         deltaf = 299.792458
