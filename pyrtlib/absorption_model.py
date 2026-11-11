@@ -137,11 +137,14 @@ class LiqAbsModel(AbsModel):
     ) -> np.ndarray:
         """Computes absorption in Nepers/km by suspended liquid water droplets.
 
-        Args
-        ----
-            water (numpy.ndarray): Liquid water content (:math:`g/m^3`) - (mass of liquid water per volume of dry air).
-            freq (numpy.ndarray): Frequency (GHz) - (valid from 0 to 1000 GHz).
-            temp (numpy.ndarray): Temperature (K).
+        Parameters
+        ----------
+        water : numpy.ndarray
+            Liquid water content (:math:`g/m^3`) - (mass of liquid water per volume of dry air).
+        freq : numpy.ndarray
+            Frequency (GHz) - (valid from 0 to 1000 GHz).
+        temp : numpy.ndarray
+            Temperature (K).
 
         Returns
         -------
@@ -374,9 +377,12 @@ class H2OAbsModel(AbsModel):
 
         Parameters
         ----------
-            frq (np.ndarray): Frequency (GHz)
-            vx (np.ndarray): Theta (adim) - (normalised temperature 300/t(K))
-            nfreq (int): Number of frequencies
+        frq : np.ndarray
+            Frequency (GHz)
+        vx : np.ndarray
+            Theta (adim) - (normalised temperature 300/t(K))
+        nfreq : int
+            Number of frequencies
 
         Returns
         -------
@@ -422,8 +428,10 @@ class H2OAbsModel(AbsModel):
 
         Parameters
         ----------
-            frq (np.ndarray): Frequency (GHz)
-            vx (np.ndarray): Theta (adim) - (normalised temperature 300/t(K))
+        frq : np.ndarray
+            Frequency (GHz)
+        vx : np.ndarray
+            Theta (adim) - (normalised temperature 300/t(K))
 
         Returns
         -------
@@ -509,10 +517,14 @@ class H2OAbsModel(AbsModel):
 
         Parameters
         ----------
-            pdrykpa (numpy.ndarray): Dry air pressure (kPa).
-            vx (numpy.ndarray): Theta (adim) - (normalised temperature 300/t(K)).
-            ekpa (numpy.ndarray): Water vapor partial pressure (kPa).
-            frq (numpy.ndarray): Frequency (GHz) - (valid 0-1000 GHz).
+        pdrykpa : numpy.ndarray
+            Dry air pressure (kPa).
+        vx : numpy.ndarray
+            Theta (adim) - (normalised temperature 300/t(K)).
+        ekpa : numpy.ndarray
+            Water vapor partial pressure (kPa).
+        frq : numpy.ndarray
+            Frequency (GHz) - (valid 0-1000 GHz).
 
         Returns
         -------
@@ -1238,9 +1250,12 @@ class O3AbsModel(AbsModel):
 
         Parameters
         ----------
-            t (np.ndarray): Temperature (K)
-            p (np.ndarray): Total pressure (mb)
-            f (np.ndarray): Frequency (GHz)
+        t : np.ndarray
+            Temperature (K)
+        p : np.ndarray
+            Total pressure (mb)
+        f : np.ndarray
+            Frequency (GHz)
         o3n : np.ndarray
             Ozone number density (molecules/m^3)
         amu : Optional[dict], optional
