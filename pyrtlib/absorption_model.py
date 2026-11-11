@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
-"""
-This class contains the absorption model used in pyrtlib.
-"""
+"""This class contains the absorption model used in pyrtlib."""
 
 import types
 import os
@@ -18,9 +16,11 @@ PATH = os.path.dirname(os.path.abspath(__file__))
 class AbsModelError(Exception):
     """Exception raised for errors in the input model.
 
-    Attributes:
+    Attributes
+    ----------
         model -- input model which caused the error
         message -- explanation of the error
+
     """
 
     def __init__(self, model, message):
@@ -39,12 +39,12 @@ class AbsModel:
 
     @property
     def model(self) -> str:
-        """Getter/Setter for absorption model"""
+        """Getter/Setter for absorption model."""
         return self._model
 
     @model.setter
     def model(self, model: str) -> None:
-        """Setter for absorption model"""
+        """Setter for absorption model."""
         if model and isinstance(model, str):
             self._model = model
         else:
@@ -54,10 +54,12 @@ class AbsModel:
     def set_ll() -> None:
         """Set the linelist to the absorption model.
 
-        See also:
+        See Also
+        --------
             :py:func:`~pyrtlib.utils.import_lineshape`
 
-        Example:
+        Example
+        -------
             .. code-block:: python
 
                 from pyrtlib.absorption_model import H2OAbsModel
@@ -66,6 +68,7 @@ class AbsModel:
 
         .. note::
             Model must be set with `model` property before calling this method (see Example).
+
         """
 
     @staticmethod
@@ -208,8 +211,7 @@ class N2AbsModel(AbsModel):
 
     @staticmethod
     def n2_absorption_mwl24(t: np.ndarray, p: np.ndarray, f: np.ndarray) -> np.ndarray:
-        """
-        Calculation of the collision-induced absorption by N2-N2 molecular pairs
+        """Calculation of the collision-induced absorption by N2-N2 molecular pairs 
         Based on the Classic Trajectory Calcs by Vigasin/Chistikov/Finenko
 
         Args
@@ -266,8 +268,7 @@ class N2AbsModel(AbsModel):
 
     @staticmethod
     def n2_absorption(t: np.ndarray, p: np.ndarray, f: np.ndarray) -> np.ndarray:
-        """
-        Collision-Induced Power Absorption Coefficient (Neper/km) in air with modification
+        """Collision-Induced Power Absorption Coefficient (Neper/km) in air with modification
         of 1.34 to account for O2-O2 and O2-N2 collisions, as calculated by [Boissoles-2003]_.
 
         Args
@@ -361,8 +362,7 @@ class H2OAbsModel(AbsModel):
         H2OAbsModel.h2oll = import_lineshape("h2oll")
 
     def h2o_continuum(self, frq: np.ndarray, vx: np.ndarray, nfreq: int) -> np.ndarray:
-        """
-        Compute the self-continuum absorption of water vapor.
+        """Compute the self-continuum absorption of water vapor.
 
         Fit a curve to mtckd 4.1 self-continuum adapted from mt_ckd_h2o_module.f90 (March 20, 2023)
 
@@ -862,8 +862,7 @@ class O2AbsModel(AbsModel):
         frq: float,
         amu: Optional[dict] = None,
     ) -> Tuple[np.ndarray, np.ndarray]:
-        """
-        Returns power absorption coefficient due to oxygen in air in nepers/km.
+        """Returns power absorption coefficient due to oxygen in air in nepers/km.
 
         History:
 
