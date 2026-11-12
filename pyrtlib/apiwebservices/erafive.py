@@ -6,7 +6,7 @@ Step-by-step to create an API key can be found to https://cds.climate.copernicus
 
 __author__ = ''
 __date__ = 'March 2021'
-__copyright__ = '(C) 2021, CNR-IMAA'
+__copyright__ = '(C) 2021, CNR-IMIOT'
 
 import os
 import warnings

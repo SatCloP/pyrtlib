@@ -4,7 +4,7 @@ Main class to compute Tb.
 
 __author__ = ""
 __date__ = "March 2021"
-__copyright__ = "(C) 2021, CNR-IMAA"
+__copyright__ = "(C) 2021, CNR-IMIOT"
 
 import warnings
 from typing import Dict, Tuple, Union, Optional

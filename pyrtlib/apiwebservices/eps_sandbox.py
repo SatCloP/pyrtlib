@@ -7,7 +7,7 @@ Credentials may be found to the following link https://api.eumetsat.int/api-key/
 
 __author__ = ''
 __date__ = 'March 2023'
-__copyright__ = '(C) 2021, CNR-IMAA'
+__copyright__ = '(C) 2021, CNR-IMIOT'
 
 import os
 from pathlib import Path

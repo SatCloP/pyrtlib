@@ -25,7 +25,7 @@ sys.path.insert(0, str(cwd.parent.parent))
 # -- Project information -----------------------------------------------------
 cur_date = datetime.utcnow()
 project = 'pyrtlib'
-copyright = f'2021-{cur_date:%Y}, SatCloP - CNR-IMAA'
+copyright = f'2021-{cur_date:%Y}, SatCloP - CNR-IMIOT'
 author = 'Salvatore Larosa'
 
 # The full version, including alpha/beta/rc tags

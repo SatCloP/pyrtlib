@@ -5,7 +5,7 @@ Terms and conditions are as for siphon library license (https://github.com/Unida
 
 __author__ = ''
 __date__ = 'March 2021'
-__copyright__ = '(C) 2021, CNR-IMAA'
+__copyright__ = '(C) 2021, CNR-IMIOT'
 
 from datetime import datetime
 from io import BytesIO

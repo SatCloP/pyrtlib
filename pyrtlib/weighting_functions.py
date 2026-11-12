@@ -3,7 +3,7 @@
 
 __author__ = ""
 __date__ = "May 2024"
-__copyright__ = "(C) 2024, CNR-IMAA"
+__copyright__ = "(C) 2024, CNR-IMIOT"
 
 from typing import Dict, Tuple, Optional, List
 import warnings

@@ -4,7 +4,7 @@ This module contains the utils functions.
 
 __author__ = ""
 __date__ = "March 2021"
-__copyright__ = "(C) 2021, CNR-IMAA"
+__copyright__ = "(C) 2021, CNR-IMIOT"
 
 import types
 from typing import Tuple, Optional, Union, List
