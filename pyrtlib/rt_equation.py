@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
-"""
-This class contains the main Radiative Transfer Equation functions.
-"""
+"""This class contains the main Radiative Transfer Equation functions."""
 
 __author__ = ""
 __date__ = "March 2021"
@@ -35,14 +33,19 @@ class RTEquation:
         """Compute saturation vapor pressure (es,in mb) over water or ice at
         temperature t (kelvins), using the Goff-Gratch formulation (List,1963).
 
-        Args:
-            t (numpy.ndarray): Temperature (K).
-            rh (numpy.ndarray): Relative Humidity (fraction).
-            ice (Optional[bool], optional): Switch to calculate saturation vapor pressure over
-                        water only (True) or water and ice, depending on T. Defaults to False.
+        Parameters
+        ----------
+        t : numpy.ndarray
+            Temperature (K).
+        rh : numpy.ndarray
+            Relative Humidity (fraction).
+        ice : Optional[bool], optional
+            Switch to calculate saturation vapor pressure over
+            water only (True) or water and ice, depending on T. Defaults to False.
 
-        Returns:
-            Tuple[numpy.ndarray, numpy.ndarray]:
+        Returns
+        -------
+        tuple of numpy.ndarray
             * e (np.ndarray): Vapor pressure (mb)
             * rho (np.ndarray): Vapor density (:math:`g/m^3`)
         """
@@ -102,12 +105,17 @@ class RTEquation:
 
         .. math:: B_{\nu}(\nu,T) = \frac{1}{ e^{\frac{h\nu}{k_{B}T}}-1}\implies T_b = \frac{h\nu}{k_{B}}\times\frac{1}{\ln(1+\frac{1}{B_{\nu}(\nu,T)})}
 
-        Args:
-            hvk (numpy.ndarray): (Planck constant (J*S)] * [frequency (Hz)) / [Boltzmann constant (J/K)].
-            boft (numpy.ndarray): Modified Planck radiance - (equation (4) from [Schroeder-Westwater-1991]_).
+        Parameters
+        ----------
+        hvk : numpy.ndarray
+            (Planck constant (J*S)] * [frequency (Hz)) / [Boltzmann constant (J/K)].
+        boft : numpy.ndarray
+            Modified Planck radiance - (equation (4) from [Schroeder-Westwater-1991]_).
 
-        Returns:
-            numpy.ndarray: Temperature (K)
+        Returns
+        -------
+        numpy.ndarray
+            Temperature (K)
         """
 
         if boft != 0:
@@ -121,19 +129,24 @@ class RTEquation:
     def refractivity(
         p: np.ndarray, t: np.ndarray, e: np.ndarray
     ) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
-        """Computes profiles of wet refractivity, dry refractivity, refractive index.
+        """
+        Computes profiles of wet refractivity, dry refractivity, refractive index.
         Refractivity equations were taken from [Thayer-1974]_.
 
         These equations were intended for frequencies under 20 GHz
 
-        Args:
-            p (numpy.ndarray): Pressure profile (mb).
-            t (numpy.ndarray): Temperature profile (K).
-            e (numpy.ndarray): Vapor pressure profile (mb).
+        Parameters
+        ----------
+        p : numpy.ndarray
+            Pressure profile (mb).
+        t : numpy.ndarray
+            Temperature profile (K).
+        e : numpy.ndarray
+            Vapor pressure profile (mb).
 
-        Returns:
-            Tuple[numpy.ndarray, numpy.ndarray, numpy.ndarray]:
-
+        Returns
+        -------
+        tuple of numpy.ndarray
             * dryn (numpy.ndarray): Dry refractivity profile
             * wetn (numpy.ndarray): Wet refractivity profile
             * refindx (numpy.ndarray): Refractive index profile
@@ -179,14 +192,21 @@ class RTEquation:
         readability & attempted documentation. Based on the technique shown in Radio Meteorology
         by Bean and Dutton (Fig. 3.20 and surrounding text) [Bean-Dutton]_.
 
-        Args:
-            z (numpy.ndarray): Height profile (km above observation height, z0).
-            refindx (numpy.ndarray): Refractive index profile.
-            angle (float): Elevation angle (degrees).
-            z0 (float): Observation height (km msl).
+        Parameters
+        ----------
+        z : numpy.ndarray
+            Height profile (km above observation height, z0).
+        refindx : numpy.ndarray
+            Refractive index profile.
+        angle : float
+            Elevation angle (degrees).
+        z0 : float
+            Observation height (km msl).
 
-        Returns:
-            numpy.ndarray: Array containing slant path length profiles (km)
+        Returns
+        -------
+        numpy.ndarray
+            Array containing slant path length profiles (km)
 
         .. note::
             The algorithm assumes that x decays exponentially over each layer.
@@ -293,18 +313,28 @@ class RTEquation:
         """EXPonential INTegration: Integrate the profile in array x over the layers defined in
         array ds, saving the integrals over each layer.
 
-        Args:
-            zeroflg (bool): Flag to handle zero values (0:layer=0, 1:layer=avg).
-            x (numpy.ndarray): Profile array.
-            ds (numpy.ndarray): Array of layer depths (km).
-            ibeg (int): Lower integration limit (profile level number).
-            iend (int): Upper integration limit (profile level number).
-            factor (float): Factor by which result is multiplied (e.g., unit change).
+        Parameters
+        ----------
+        zeroflg : bool
+            Flag to handle zero values (0:layer=0, 1:layer=avg).
+        x : numpy.ndarray
+            Profile array.
+        ds : numpy.ndarray
+            Array of layer depths (km).
+        ibeg : int
+            Lower integration limit (profile level number).
+        iend : int
+            Upper integration limit (profile level number).
+        factor : float
+            Factor by which result is multiplied (e.g., unit change).
 
-        Returns:
-            Tuple[numpy.ndarray, numpy.ndarray]:
-            * xds (numpy.ndarray): Array containing integrals over each layer ds
-            * sxds (numpy.ndarray): Integral of x*ds over levels ibeg to iend
+        Returns
+        -------
+        tuple of numpy.ndarray
+            xds : numpy.ndarray
+                Array containing integrals over each layer ds
+            sxds : numpy.ndarray
+                Integral of x*ds over levels ibeg to iend
         """
 
         sxds = 0.0
@@ -349,15 +379,23 @@ class RTEquation:
         If absorption is not too big, compute tmr of lowest cloud layer (base
         at level ibase, top at level itop). Otherwise, set error flag and return.
 
-        Args:
-            ibase (float): Profile level at base of lowest cloud.
-            itop (float): Profile level at top of lowest cloud.
-            hvk (np.ndarray): (Planck constant * frequency) / Boltzmann constant.
-            tauprof (np.ndarray): Integral profile of absorption (np; i = integral (0,i)).
-            boftatm (np.ndarray): Integral profile of atmospheric planck radiance.
+        Parameters
+        ----------
+        ibase : float
+            Profile level at base of lowest cloud.
+        itop : float
+            Profile level at top of lowest cloud.
+        hvk : np.ndarray
+            (Planck constant * frequency) / Boltzmann constant.
+        tauprof : np.ndarray
+            Integral profile of absorption (np; i = integral (0,i)).
+        boftatm : np.ndarray
+            Integral profile of atmospheric planck radiance.
 
-        Returns:
-            np.ndarray | None: tmr of lowest cloud layer (k)
+        Returns
+        -------
+        np.ndarray | None
+            tmr of lowest cloud layer (k)
 
         .. note::
             This algorithm is not designed for multiple cloud layers
@@ -397,14 +435,21 @@ class RTEquation:
     ) -> np.ndarray:
         """Integrates cloud water density over path ds (linear algorithm).
 
-        Args:
-            dencld (np.ndarray): Cloud cloud water density profile (:math:`g/m^3`)
-            ds (np.ndarray): Vector containing layer depth profiles (km)
-            lbase (np.ndarray): Array containing profile levels corresponding to cloud bases.
-            ltop (np.ndarray): Array containing profile levels corresponding to cloud tops.
+        Parameters
+        ----------
+        dencld : np.ndarray
+            Cloud cloud water density profile (:math:`g/m^3`)
+        ds : np.ndarray
+            Vector containing layer depth profiles (km)
+        lbase : np.ndarray
+            Array containing profile levels corresponding to cloud bases.
+        ltop : np.ndarray
+            Array containing profile levels corresponding to cloud tops.
 
-        Returns:
-            np.ndarray: integrated cloud water density (cm)
+        Returns
+        -------
+        np.ndarray
+            integrated cloud water density (cm)
         """
 
         ncld = len(lbase)
@@ -436,14 +481,18 @@ class RTEquation:
         represents the integral from the antenna to level i.
         Also returns the cosmic background term for the rte.
 
-        Args:
-            frq (numpy.ndarray): Channel frequency (GHz).
-            t (numpy.ndarray): Temperature profile (K).
-            taulay (numpy.ndarray): Number of profile levels.
+        Parameters
+        ----------
+        frq : numpy.ndarray
+            Channel frequency (GHz).
+        t : numpy.ndarray
+            Temperature profile (K).
+        taulay : numpy.ndarray
+            Number of profile levels.
 
-        Returns:
-            Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
-
+        Returns
+        -------
+        Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
             * hvk: (Planck constant * frequency) / Boltzmann constant.
             * boft: Modified planck function for raob temperature profile.
             * bakgrnd: Background term of radiative transfer equation.
@@ -534,18 +583,25 @@ class RTEquation:
         corresponding cloud liquid and ice absorption profiles, using Rosenkranz's
         cloud liquid absorption and ice absorption by [Westwater-1972]_.
 
-        Args:
-            t (numpy.ndarray): Temperature profile (k).
-            denl (numpy.ndarray): Liquid density profile (:math:`g/m^3`).
-            deni (numpy.ndarray): Ice density profile (:math:`g/m^3`).
-            frq (numpy.ndarray): Frequency array (GHz).
+        Parameters
+        ----------
+        t : numpy.ndarray
+            Temperature profile (k).
+        denl : numpy.ndarray
+            Liquid density profile (:math:`g/m^3`).
+        deni : numpy.ndarray
+            Ice density profile (:math:`g/m^3`).
+        frq : numpy.ndarray
+            Frequency array (GHz).
 
-        Returns:
-            Tuple[numpy.ndarray, numpy.ndarray]:
+        Returns
+        -------
+        Tuple[numpy.ndarray, numpy.ndarray]
             * aliq: Liquid absorption profile (np/km)
             * aice: Ice absorption profile (np/km)
 
-        See also:
+        See Also
+        --------
             :py:func:`~pyrtlib.absorption_model.LiqAbsModel.liquid_water_absorption`
 
         """
@@ -585,18 +641,27 @@ class RTEquation:
         contain the absorption model of [Liebe-Layton]_ with oxygen
         interference coefficients from [Rosenkranz-1988]_.
 
-        Args:
-            p (numpy.ndarray): Pressure profile (mb).
-            t (numpy.ndarray): Temperature profile (K).
-            e (numpy.ndarray): Vapor pressure profile (mb).
-            frq (numpy.ndarray): Frequency (GHz).
-            o3n (numpy.ndarray, optional): Ozone Number Density (molecules/m3). Defaults to None.
+        Parameters
+        ----------
+        p : numpy.ndarray
+            Pressure profile (mb).
+        t : numpy.ndarray
+            Temperature profile (K).
+        e : numpy.ndarray
+            Vapor pressure profile (mb).
+        frq : numpy.ndarray
+            Frequency (GHz).
+        o3n : numpy.ndarray, optional
+            Ozone Number Density (molecules/m3). Defaults to None.
 
-        Raises:
-            ValueError: Raises error if absorption model is not defined.
+        Raises
+        ------
+        ValueError
+            Raises error if absorption model is not defined.
 
-        Returns:
-            Tuple[numpy.ndarray, numpy.ndarray]:
+        Returns
+        -------
+        Tuple[np.ndarray, np.ndarray]
             * awet: Water vapor absorption profile (np/km).
             * adry: Dry air absorption profile (np/km).
 
