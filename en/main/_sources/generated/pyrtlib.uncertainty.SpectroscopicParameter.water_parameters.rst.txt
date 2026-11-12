@@ -1,0 +1,12 @@
+pyrtlib.uncertainty.SpectroscopicParameter.water\_parameters
+============================================================
+
+.. currentmodule:: pyrtlib.uncertainty
+
+.. automethod:: pyrtlib.uncertainty.SpectroscopicParameter.water_parameters
+
+
+
+
+
+.. include:: gallery_backreferences/pyrtlib.uncertainty.SpectroscopicParameter.water_parameters.examples

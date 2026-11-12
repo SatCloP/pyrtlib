@@ -1,0 +1,12 @@
+pyrtlib.climatology.ProfileExtrapolation.standard\_temperature
+==============================================================
+
+.. currentmodule:: pyrtlib.climatology
+
+.. automethod:: pyrtlib.climatology.ProfileExtrapolation.standard_temperature
+
+
+
+
+
+.. include:: gallery_backreferences/pyrtlib.climatology.ProfileExtrapolation.standard_temperature.examples

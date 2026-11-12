@@ -1,0 +1,12 @@
+pyrtlib.weighting\_functions.WeightingFunctions.\_\_init\_\_
+============================================================
+
+.. currentmodule:: pyrtlib.weighting_functions
+
+.. automethod:: pyrtlib.weighting_functions.WeightingFunctions.__init__
+
+
+
+
+
+.. include:: gallery_backreferences/pyrtlib.weighting_functions.WeightingFunctions.__init__.examples

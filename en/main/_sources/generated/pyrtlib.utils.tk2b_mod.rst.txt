@@ -1,0 +1,12 @@
+pyrtlib.utils.tk2b\_mod
+=======================
+
+.. currentmodule:: pyrtlib.utils
+
+.. autofunction:: pyrtlib.utils.tk2b_mod
+
+
+
+
+
+.. include:: gallery_backreferences/pyrtlib.utils.tk2b_mod.examples

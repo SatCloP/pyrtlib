@@ -1,0 +1,39 @@
+pyrtlib.rt\_equation.RTEquation
+===============================
+
+.. currentmodule:: pyrtlib.rt_equation
+
+.. autoclass:: RTEquation
+    :show-inheritance: 
+    
+    
+    
+    .. rubric:: Methods
+
+    .. autosummary::
+        :toctree:
+        :recursive:
+    
+        ~RTEquation.__init__
+        ~RTEquation.bright
+        ~RTEquation.clearsky_absorption
+        ~RTEquation.cloud_integrated_density
+        ~RTEquation.cloud_radiating_temperature
+        ~RTEquation.cloudy_absorption
+        ~RTEquation.exponential_integration
+        ~RTEquation.planck
+        ~RTEquation.ray_tracing
+        ~RTEquation.refractivity
+        ~RTEquation.vapor
+    
+    
+
+    
+    
+    
+
+    
+    
+    
+
+.. include:: gallery_backreferences/pyrtlib.rt_equation.RTEquation.examples

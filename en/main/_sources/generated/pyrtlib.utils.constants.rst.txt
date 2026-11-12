@@ -1,0 +1,12 @@
+pyrtlib.utils.constants
+=======================
+
+.. currentmodule:: pyrtlib.utils
+
+.. autofunction:: pyrtlib.utils.constants
+
+
+
+
+
+.. include:: gallery_backreferences/pyrtlib.utils.constants.examples

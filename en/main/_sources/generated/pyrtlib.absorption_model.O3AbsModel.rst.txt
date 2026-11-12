@@ -1,0 +1,39 @@
+pyrtlib.absorption\_model.O3AbsModel
+====================================
+
+.. currentmodule:: pyrtlib.absorption_model
+
+.. autoclass:: O3AbsModel
+    :show-inheritance: 
+    
+    
+    
+    .. rubric:: Methods
+
+    .. autosummary::
+        :toctree:
+        :recursive:
+    
+        ~O3AbsModel.__init__
+        ~O3AbsModel.implemented_models
+        ~O3AbsModel.o3_absorption
+        ~O3AbsModel.set_ll
+    
+    
+
+    
+    
+    .. rubric:: Attributes
+
+    .. autosummary::
+    
+        ~O3AbsModel.model
+        ~O3AbsModel.o3ll
+    
+    
+
+    
+    
+    
+
+.. include:: gallery_backreferences/pyrtlib.absorption_model.O3AbsModel.examples

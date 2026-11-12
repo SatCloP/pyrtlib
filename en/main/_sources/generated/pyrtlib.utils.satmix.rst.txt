@@ -1,0 +1,12 @@
+pyrtlib.utils.satmix
+====================
+
+.. currentmodule:: pyrtlib.utils
+
+.. autofunction:: pyrtlib.utils.satmix
+
+
+
+
+
+.. include:: gallery_backreferences/pyrtlib.utils.satmix.examples
