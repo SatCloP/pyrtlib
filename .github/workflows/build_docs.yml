@@ -1,6 +1,7 @@
 name: build-docs-action
 
 on:
+  workflow_dispatch:
   push:
     branches: [ main ]
     paths:
