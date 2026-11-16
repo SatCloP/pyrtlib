@@ -1,0 +1,12 @@
+pyrtlib.apiwebservices.IGRAUpperAir.request\_data
+=================================================
+
+.. currentmodule:: pyrtlib.apiwebservices
+
+.. automethod:: pyrtlib.apiwebservices.IGRAUpperAir.request_data
+
+
+
+
+
+.. include:: gallery_backreferences/pyrtlib.apiwebservices.IGRAUpperAir.request_data.examples

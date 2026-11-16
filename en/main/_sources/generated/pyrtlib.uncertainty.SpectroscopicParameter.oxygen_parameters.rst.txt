@@ -1,0 +1,12 @@
+pyrtlib.uncertainty.SpectroscopicParameter.oxygen\_parameters
+=============================================================
+
+.. currentmodule:: pyrtlib.uncertainty
+
+.. automethod:: pyrtlib.uncertainty.SpectroscopicParameter.oxygen_parameters
+
+
+
+
+
+.. include:: gallery_backreferences/pyrtlib.uncertainty.SpectroscopicParameter.oxygen_parameters.examples

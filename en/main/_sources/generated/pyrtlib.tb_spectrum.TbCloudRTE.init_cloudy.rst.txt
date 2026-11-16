@@ -1,0 +1,12 @@
+pyrtlib.tb\_spectrum.TbCloudRTE.init\_cloudy
+============================================
+
+.. currentmodule:: pyrtlib.tb_spectrum
+
+.. automethod:: pyrtlib.tb_spectrum.TbCloudRTE.init_cloudy
+
+
+
+
+
+.. include:: gallery_backreferences/pyrtlib.tb_spectrum.TbCloudRTE.init_cloudy.examples

@@ -1,0 +1,12 @@
+pyrtlib.climatology.ProfileExtrapolation.water\_vapour\_density
+===============================================================
+
+.. currentmodule:: pyrtlib.climatology
+
+.. automethod:: pyrtlib.climatology.ProfileExtrapolation.water_vapour_density
+
+
+
+
+
+.. include:: gallery_backreferences/pyrtlib.climatology.ProfileExtrapolation.water_vapour_density.examples

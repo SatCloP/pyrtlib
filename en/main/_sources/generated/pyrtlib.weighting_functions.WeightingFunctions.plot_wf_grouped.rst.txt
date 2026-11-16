@@ -1,0 +1,12 @@
+pyrtlib.weighting\_functions.WeightingFunctions.plot\_wf\_grouped
+=================================================================
+
+.. currentmodule:: pyrtlib.weighting_functions
+
+.. automethod:: pyrtlib.weighting_functions.WeightingFunctions.plot_wf_grouped
+
+
+
+
+
+.. include:: gallery_backreferences/pyrtlib.weighting_functions.WeightingFunctions.plot_wf_grouped.examples

@@ -1,0 +1,12 @@
+pyrtlib.utils.esice\_goffgratch
+===============================
+
+.. currentmodule:: pyrtlib.utils
+
+.. autofunction:: pyrtlib.utils.esice_goffgratch
+
+
+
+
+
+.. include:: gallery_backreferences/pyrtlib.utils.esice_goffgratch.examples

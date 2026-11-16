@@ -1,0 +1,12 @@
+[
+    {
+        "name": "v1.0.0 (stable)",
+        "version": "1.0.0",
+        "url": "https://github.com/SatCloP/pyrtlib/releases/latest"
+    },
+    {
+        "name": "dev",
+        "version": "dev",
+        "url": "https://github.com/SatCloP/pyrtlib/tree/dev"
+    }
+]

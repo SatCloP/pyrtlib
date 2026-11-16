@@ -1,0 +1,12 @@
+pyrtlib.rt\_equation.RTEquation.bright
+======================================
+
+.. currentmodule:: pyrtlib.rt_equation
+
+.. automethod:: pyrtlib.rt_equation.RTEquation.bright
+
+
+
+
+
+.. include:: gallery_backreferences/pyrtlib.rt_equation.RTEquation.bright.examples

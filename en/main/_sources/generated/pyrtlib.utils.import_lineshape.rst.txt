@@ -1,0 +1,12 @@
+pyrtlib.utils.import\_lineshape
+===============================
+
+.. currentmodule:: pyrtlib.utils
+
+.. autofunction:: pyrtlib.utils.import_lineshape
+
+
+
+
+
+.. include:: gallery_backreferences/pyrtlib.utils.import_lineshape.examples

@@ -1,0 +1,12 @@
+pyrtlib.climatology.AtmosphericProfiles.gl\_atm\_trace
+======================================================
+
+.. currentmodule:: pyrtlib.climatology
+
+.. automethod:: pyrtlib.climatology.AtmosphericProfiles.gl_atm_trace
+
+
+
+
+
+.. include:: gallery_backreferences/pyrtlib.climatology.AtmosphericProfiles.gl_atm_trace.examples

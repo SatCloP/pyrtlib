@@ -1,0 +1,39 @@
+pyrtlib.weighting\_functions.WeightingFunctions
+===============================================
+
+.. currentmodule:: pyrtlib.weighting_functions
+
+.. autoclass:: WeightingFunctions
+    :show-inheritance: 
+    
+    
+    
+    .. rubric:: Methods
+
+    .. autosummary::
+        :toctree:
+        :recursive:
+    
+        ~WeightingFunctions.__init__
+        ~WeightingFunctions.generate_wf
+        ~WeightingFunctions.plot_wf
+        ~WeightingFunctions.plot_wf_grouped
+    
+    
+
+    
+    
+    .. rubric:: Attributes
+
+    .. autosummary::
+    
+        ~WeightingFunctions.frequencies
+        ~WeightingFunctions.satellite
+    
+    
+
+    
+    
+    
+
+.. include:: gallery_backreferences/pyrtlib.weighting_functions.WeightingFunctions.examples

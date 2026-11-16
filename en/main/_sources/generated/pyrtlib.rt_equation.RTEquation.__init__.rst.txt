@@ -1,0 +1,12 @@
+pyrtlib.rt\_equation.RTEquation.\_\_init\_\_
+============================================
+
+.. currentmodule:: pyrtlib.rt_equation
+
+.. automethod:: pyrtlib.rt_equation.RTEquation.__init__
+
+
+
+
+
+.. include:: gallery_backreferences/pyrtlib.rt_equation.RTEquation.__init__.examples

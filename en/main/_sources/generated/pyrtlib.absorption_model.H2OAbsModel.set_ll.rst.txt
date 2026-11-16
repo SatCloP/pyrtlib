@@ -1,0 +1,12 @@
+pyrtlib.absorption\_model.H2OAbsModel.set\_ll
+=============================================
+
+.. currentmodule:: pyrtlib.absorption_model
+
+.. automethod:: pyrtlib.absorption_model.H2OAbsModel.set_ll
+
+
+
+
+
+.. include:: gallery_backreferences/pyrtlib.absorption_model.H2OAbsModel.set_ll.examples

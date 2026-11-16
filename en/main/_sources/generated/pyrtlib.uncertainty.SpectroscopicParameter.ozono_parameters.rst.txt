@@ -1,0 +1,12 @@
+pyrtlib.uncertainty.SpectroscopicParameter.ozono\_parameters
+============================================================
+
+.. currentmodule:: pyrtlib.uncertainty
+
+.. automethod:: pyrtlib.uncertainty.SpectroscopicParameter.ozono_parameters
+
+
+
+
+
+.. include:: gallery_backreferences/pyrtlib.uncertainty.SpectroscopicParameter.ozono_parameters.examples

@@ -1,0 +1,12 @@
+pyrtlib.utils.eswat\_goffgratch
+===============================
+
+.. currentmodule:: pyrtlib.utils
+
+.. autofunction:: pyrtlib.utils.eswat_goffgratch
+
+
+
+
+
+.. include:: gallery_backreferences/pyrtlib.utils.eswat_goffgratch.examples
