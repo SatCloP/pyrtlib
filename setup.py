@@ -10,7 +10,7 @@ def read_file(filename):
 
 setup(
     name='pyrtlib',
-    version='1.2.0',
+    version='1.2.1',
     include_package_data=True,
     packages=find_packages(exclude=["*.tests", "*.tests.*", "tests.*", "tests"]),
     package_data={'pyrtlib': ['_lineshape/*', 'climatology/*', 'uncertainty/covariance_matrix/*/*']},
